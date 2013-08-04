@@ -8,6 +8,6 @@ nbproject
 .settings
 composer.lock
 composer.phar
-vendor/bin
+vendor
 config/autoload/local.php
 data/cache

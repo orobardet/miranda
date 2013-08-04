@@ -1,0 +1,68 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle($this->translate('Miranda'))->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0') ?>
+
+        <!-- Le styles -->
+        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+                        ->appendStylesheet($this->basePath() . '/css/bootstrap.min.css')
+                        ->appendStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
+                        ->headLink(array('rel' => 'stylesheet/less', 'type' => 'text/css', 'href' => $this->basePath() . '/css/style.less'))
+                        ?>
+
+        <!-- Scripts -->
+        <?php echo $this->headScript()->prependFile($this->basePath() . '/js/less.min.js')
+        		                      ->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                                      ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+                                      ->prependFile($this->basePath() . '/js/jquery.min.js')
+                                       ?>
+
+    </head>
+    <body>
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand" href="<?php echo $this->url('home') ?>">Miranda</a>
+                    <div class="nav-collapse collapse">
+                    <?php echo $this->navigation('navigation')->menu()
+                            ->setMinDepth(0)
+                            ->setMaxDepth(0)
+                            ->setUlClass('nav')
+                            ->render(); 
+                    ?>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </div>
+        </div>
+        <?php
+        $submenu = $this->navigation('navigation')->menu()
+        ->setOnlyActiveBranch(true)
+        ->setRenderParents(false)
+        ->setMinDepth(1)
+        ->setMaxDepth(1)
+        ->setUlClass('nav')
+        ->render();
+        if (!empty($submenu)) {
+        echo "submenu : ".$submenu;
+        }
+        ?>
+        
+        <div class="container">
+            <?php echo $this->navigation('navigation')->breadcrumbs()->setMinDepth(0); // <-- Add this!! ?>
+            <?php echo $this->content; ?>
+            <hr>
+        </div> <!-- /container -->
+        <div id="footer">
+            <div class="container">
+                <footer class="navbar navbar-invert">
+                    <p>&copy; 2013 - <?php echo date('Y') ?> <?php echo $this->translate('Compagnie Miranda.'); ?> <?php echo $this->translate('All rights reserved.') ?></p>
+                </footer>
+            </div>
+            <?php echo $this->inlineScript() ?>
+        </div>
+    </body>
+</html>
