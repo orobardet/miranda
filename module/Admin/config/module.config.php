@@ -32,9 +32,9 @@ return array(
                 									'defaults' => array(
                 											'controller' => 'Admin\Controller\User',
                 											'action'     => 'index',
-                									)
-         			    		    		)
-    		    		    		)
+                									),
+ 			    		    				),
+ 			    		    		)
 		    				)
     	    		),
  			),

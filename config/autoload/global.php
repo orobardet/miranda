@@ -37,7 +37,7 @@ return array(
 							'route' => 'admin',
 							'pages' => array(
 									array(
-											'label' => 'User',
+											'label' => 'Users',
 											'route' => 'admin/user'
 									),
 							),

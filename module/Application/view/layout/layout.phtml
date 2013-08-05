@@ -9,20 +9,15 @@
 
         <!-- Le styles -->
         <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
-                        ->appendStylesheet($this->basePath() . '/css/bootstrap.min.css')
+                        //->headLink(array('rel' => 'stylesheet/less', 'type' => 'text/css', 'href' => $this->basePath() . '/css/bootstrap.less'))
+                        //->appendStylesheet($this->basePath() . '/css/bootstrap.css')
+                        ->appendStylesheet($this->basePath() . '/css/style.css')
+                        //->headLink(array('rel' => 'stylesheet/less', 'type' => 'text/css', 'href' => $this->basePath() . '/css/style.less'))
                         ->appendStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
-                        ->headLink(array('rel' => 'stylesheet/less', 'type' => 'text/css', 'href' => $this->basePath() . '/css/style.less'))
                         ?>
-
-        <!-- Scripts -->
-        <?php echo $this->headScript()->prependFile($this->basePath() . '/js/less.min.js')
-        		                      ->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
-                                      ->prependFile($this->basePath() . '/js/bootstrap.min.js')
-                                      ->prependFile($this->basePath() . '/js/jquery.min.js')
-                                       ?>
-
     </head>
     <body>
+    <div id="wrap">
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
@@ -34,35 +29,51 @@
                             ->setUlClass('nav')
                             ->render(); 
                     ?>
+                    <ul class="nav pull-right">
+                        <li><a href="#">Mon compte</a></li>
+                        <li><a href="#">Déconnexion</a></li>
+                    </ul>
                     </div><!--/.nav-collapse -->
                 </div>
+            </div> <!-- /navbar-inner -->
+            <?php
+            $submenu = $this->navigation('navigation')->menu()
+            ->setOnlyActiveBranch(true)
+            ->setRenderParents(false)
+            ->setMinDepth(1)
+            ->setMaxDepth(1)
+            ->setUlClass('nav')
+            ->render();
+            if (!empty($submenu)): ?>
+            <div class="subnav">
+                <div class="container">
+                    <div class="nav-collapse collapse">
+                    <?php echo $submenu; ?>
+                    </div> <!--/.nav-collapse -->
+                </div>
             </div>
+            <?php endif; ?>
         </div>
-        <?php
-        $submenu = $this->navigation('navigation')->menu()
-        ->setOnlyActiveBranch(true)
-        ->setRenderParents(false)
-        ->setMinDepth(1)
-        ->setMaxDepth(1)
-        ->setUlClass('nav')
-        ->render();
-        if (!empty($submenu)) {
-        echo "submenu : ".$submenu;
-        }
-        ?>
         
         <div class="container">
-            <?php echo $this->navigation('navigation')->breadcrumbs()->setMinDepth(0); // <-- Add this!! ?>
+            <?php //echo $this->navigation('navigation')->breadcrumbs()->setMinDepth(0)->setPartial(array('partial/breadcrumb.phtml', 'Application')); ?>
             <?php echo $this->content; ?>
-            <hr>
         </div> <!-- /container -->
-        <div id="footer">
-            <div class="container">
-                <footer class="navbar navbar-invert">
-                    <p>&copy; 2013 - <?php echo date('Y') ?> <?php echo $this->translate('Compagnie Miranda.'); ?> <?php echo $this->translate('All rights reserved.') ?></p>
-                </footer>
-            </div>
-            <?php echo $this->inlineScript() ?>
+        
+        <div id="push"></div>
+    </div> <!-- /#wrap -->
+    
+    <footer id="footer">
+        <div class="container">
+            <p>&copy; 2013 - <?php echo date('Y') ?> <?php echo $this->translate('Compagnie Miranda.'); ?> <?php echo $this->translate('All rights reserved.') ?></p>
         </div>
+    </footer>
+    <!-- Scripts -->
+    <?php echo $this->headScript()->appendFile($this->basePath() . '/js/less.min.js')
+                                  ->appendFile($this->basePath() . '/js/jquery.min.js')
+                                  ->appendFile($this->basePath() . '/js/bootstrap.js')
+                                  ->appendFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                                   ?>
+    <?php echo $this->inlineScript(); ?>
     </body>
 </html>

@@ -1,37 +1,68 @@
-body {
-    padding-top: 60px;
-    padding-bottom: 40px;
-}
+@import "variables.less";
+@import "mixins.less";
 
-.btn-success {
-  background-color: #57a900;
-  background-image: -moz-linear-gradient(top, #70d900, #57a900);
-  background-image: -ms-linear-gradient(top, #70d900, #57a900);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#70d900), to(#57a900));
-  background-image: -webkit-linear-gradient(top, #70d900, #57a900);
-  background-image: -o-linear-gradient(top, #70d900, #57a900);
-  background-image: linear-gradient(top, #70d900, #57a900);
-  filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr='#70d900', endColorstr='#57a900', GradientType=0)";
-}
-
-.btn-success:hover,
-.btn-success:active,
-.btn-success.active,
-.btn-success.disabled,
-.btn-success[disabled] {
-  background-color: #57a900;
-}
-
-.btn-success:active, .btn-success.active {
-  background-color: #57a900;
+html,body {
+	/* html et body doivent rester comme ça et sans padding ni margin, pour gérer le footer en bas de page */
+	height: 100%;
 }
 
 .navbar {
-	.brand {
-		color: purple;
+	.navbar-inner {
+		border-width: 0px;
+	}
+	.nav > li > a {
+		text-shadow: none;
+	}
+
+	.subnav {
+	    min-height:20px;
+	    background-color: @navbarLinkBackgroundActive;
+	    box-shadow: none ;
+	    color: #555555;
+	    text-decoration: none;
+	
+		ul.nav li {
+	    	line-height: 2px;
+		}
+	
+		.nav > .active > a {
+			#gradient > .vertical(@navbarBackground, @navbarBackgroundHighlight);
+		    box-shadow: none;
+		    text-decoration: none;
+		}
 	}
 }
 
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	/* margin bottom négatif pour gérer le footeur, de la hauteur du footer (hauteur réelle = hauteur + border + padding ...) */
+	margin: 0 auto -41px;
+	& > .container {
+		padding-top: 65px;
+	}
+}
+
+#push,#footer {
+	height: 40px;
+}
+
 #footer {
-	background-color:grey;
+	background-color: lighten(@navbarBackground, 65%);
+	color: purple;
+	.container p {
+		color: purple;
+		margin: 10px 0;
+	}
+}
+
+/* Lastly, apply responsive CSS fixes as necessary */
+@media ( max-width : 767px) {
+	#footer {
+		margin-left: -20px;
+		margin-right: -20px;
+		padding-left: 20px;
+		padding-right: 20px;
+	}
 }
