@@ -19,13 +19,6 @@ return array(
     	'charset' => 'UTF-8',
     	'options' => array('buffer_results' => true)
     ),
-    'service_manager' => array(
-        'factories' => array(
-            'Zend\Db\Adapter\Adapter'
-                    => 'Zend\Db\Adapter\AdapterServiceFactory',
-			'Navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
-        ),
-    ),
 	'navigation' => array(
 			'default' => array(
 					array(
@@ -42,6 +35,19 @@ return array(
 									),
 							),
 					),
+			),
+	),
+	'session' => array(
+			'config' => array(
+					'class' => 'Zend\Session\Config\SessionConfig',
+					'options' => array(
+							'name' => 'miranda',
+					),
+			),
+			'storage' => 'Zend\Session\Storage\SessionArrayStorage',
+			'validators' => array(
+					'Zend\Session\Validator\RemoteAddr',
+					'Zend\Session\Validator\HttpUserAgent',
 			),
 	),
 );

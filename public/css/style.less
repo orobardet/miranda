@@ -55,7 +55,15 @@ html,body {
 		color: purple;
 		margin: 10px 0;
 	}
+	a {
+		color:purple;
+		border-bottom:dotted 1px purple;
+	}
 }
+#footer	a:hover, #footer a:active {
+		text-decoration:none;
+		border-bottom-style:solid;
+	}
 
 /* Lastly, apply responsive CSS fixes as necessary */
 @media ( max-width : 767px) {
@@ -65,4 +73,9 @@ html,body {
 		padding-left: 20px;
 		padding-right: 20px;
 	}
+}
+
+#login-form-container {
+	margin: 30px auto;
+	width: 250px;
 }

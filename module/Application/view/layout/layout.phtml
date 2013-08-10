@@ -9,8 +9,7 @@
 
         <!-- Le styles -->
         <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
-                        //->headLink(array('rel' => 'stylesheet/less', 'type' => 'text/css', 'href' => $this->basePath() . '/css/bootstrap.less'))
-                        //->appendStylesheet($this->basePath() . '/css/bootstrap.css')
+                        ->appendStylesheet($this->basePath() . '/css/bootstrap.css')
                         ->appendStylesheet($this->basePath() . '/css/style.css')
                         //->headLink(array('rel' => 'stylesheet/less', 'type' => 'text/css', 'href' => $this->basePath() . '/css/style.less'))
                         ->appendStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
@@ -18,7 +17,8 @@
     </head>
     <body>
     <div id="wrap">
-        <div class="navbar navbar-fixed-top">
+            <?php if($this->userIdentity()): ?>
+            <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
                     <a class="brand" href="<?php echo $this->url('home') ?>">Miranda</a>
@@ -30,8 +30,8 @@
                             ->render(); 
                     ?>
                     <ul class="nav pull-right">
-                        <li><a href="#">Mon compte</a></li>
-                        <li><a href="#">Déconnexion</a></li>
+                        <li><a href="#"><i class="icon-user icon-white"></i>&nbsp;Mon compte</a></li>
+                        <li><a href="<?php echo $this->url('logout') ?>"><i class="icon-off icon-white"></i>&nbsp;Déconnexion</a></li>
                     </ul>
                     </div><!--/.nav-collapse -->
                 </div>
@@ -53,7 +53,16 @@
                 </div>
             </div>
             <?php endif; ?>
-        </div>
+            </div>
+            <?php else: // userIdentity; ?>
+            <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand" href="<?php echo $this->url('login') ?>"><?php echo $this->translate('Login'); ?></a>
+                </div>
+            </div>
+            </div>        
+            <?php endif; // userIdentity; ?>
         
         <div class="container">
             <?php //echo $this->navigation('navigation')->breadcrumbs()->setMinDepth(0)->setPartial(array('partial/breadcrumb.phtml', 'Application')); ?>
@@ -65,7 +74,7 @@
     
     <footer id="footer">
         <div class="container">
-            <p>&copy; 2013 - <?php echo date('Y') ?> <?php echo $this->translate('Compagnie Miranda.'); ?> <?php echo $this->translate('All rights reserved.') ?></p>
+            <p>&copy; 2013 - <?php echo date('Y') ?> <a href="http://www.compagniemiranda.com/" target="_blank"><?php echo $this->translate('Compagnie Miranda'); ?></a>. <?php echo $this->translate('All rights reserved.') ?></p>
         </div>
     </footer>
     <!-- Scripts -->
