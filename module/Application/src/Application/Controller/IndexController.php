@@ -9,13 +9,21 @@
 
 namespace Application\Controller;
 
+use Application\ConfigAwareInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class IndexController extends AbstractActionController
+class IndexController extends AbstractActionController implements ConfigAwareInterface
 {
+    protected $config;
+ 
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+    
     public function indexAction()
     {
-        return new ViewModel(array('main_menu_item' => 'home'));
+        return new ViewModel();
     }
 }

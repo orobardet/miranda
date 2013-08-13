@@ -3,11 +3,19 @@ namespace Admin\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Application\ConfigAwareInterface;
 
-class UserController extends AbstractActionController
+class UserController extends AbstractActionController implements ConfigAwareInterface
 {
+	protected $config;
+	
 	protected $userTable;
 	
+	public function setConfig($config)
+	{
+		$this->config = $config;
+	}
+
 	public function indexAction()
 	{
 		return new ViewModel(array(

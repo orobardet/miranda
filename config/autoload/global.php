@@ -10,8 +10,21 @@
  * control, so do not include passwords or other sensitive information in this
  * file.
  */
+$env = getenv('APPLICATION_ENV') ?: 'prod';
 
 return array(
+	'application' => array(
+		'authentification' => array(
+			'not_login_page' => array('login', 'logout', 'authenticate'),
+			'bcrypt' => array(
+				'cost' => 10
+			)
+		),	
+		'db' => array(
+			'table_prefix' => ''
+		)
+	),
+		
     'db' => array(
         'driver' => 'Mysqli',
         'hostname' => 'localhost',

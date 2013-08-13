@@ -11,14 +11,23 @@ use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Mvc\MvcEvent;
 use Zend\Authentication\AuthenticationService;
-use Zend\Authentication\Adapter\DbTable as AuthDbTable;
+use Zend\Authentication\Adapter\DbTable\CallbackCheckAdapter as AuthDbTable;
+use Zend\Config\Config as ZendConfig;
+use Application\ConfigAwareInterface;
 
 class Module implements
     AutoloaderProviderInterface,
     ConfigProviderInterface,
     ServiceProviderInterface
 {
-    public function getConfig()
+	protected $config;
+	
+	public function onBootstrap(MvcEvent $e)
+	{
+		$this->config = new ZendConfig($e->getApplication()->getServiceManager()->get('config')['application']);
+	}
+	
+	public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
     }
@@ -68,7 +77,7 @@ class Module implements
                         },
                         'MirandaAuthDb' => function ($sm) {
                         	$authAdapter = new AuthDbTable($sm->get('MirandaDbAdapter'));
-                        	$authAdapter->setTableName('users')
+                        	$authAdapter->setTableName($this->config->db->get('table_prefix', '').'users')
                         	    ->setIdentityColumn('email')
                         	    ->setCredentialColumn('password');
                         	return $authAdapter;
@@ -107,4 +116,18 @@ class Module implements
             ),
         );
     }
+
+	public function getControllerConfig()
+	{
+		return array(
+			'initializers' => array(
+				function ($instance, $sm)
+				{
+					if ($instance instanceof ConfigAwareInterface) {
+						$instance->setConfig($this->config);
+					}
+				}
+			)
+		);
+	}
 }

@@ -40,12 +40,6 @@ return array(
  			),
 	),
 		
-	'service_manager' => array(
-			'aliases' => array(
-					'translator' => 'MvcTranslator',
-			),
-	),
-		
 	'translator' => array(
 			'locale' => 'fr_FR',
 			'translation_file_patterns' => array(

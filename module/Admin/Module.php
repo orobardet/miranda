@@ -9,13 +9,22 @@ use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Mvc\MvcEvent;
+use Zend\Config\Config as ZendConfig;
+use Application\ConfigAwareInterface;
 
 class Module implements
     AutoloaderProviderInterface,
     ConfigProviderInterface,
     ServiceProviderInterface
 {
-    public function getConfig()
+	protected $config;
+	
+	public function onBootstrap(MvcEvent $e)
+	{
+		$this->config = new ZendConfig($e->getApplication()->getServiceManager()->get('config')['application']);
+	}
+		
+	public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
     }
@@ -47,9 +56,23 @@ class Module implements
     						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
     						$resultSetPrototype = new ResultSet();
     						$resultSetPrototype->setArrayObjectPrototype(new User());
-    						return new TableGateway('users', $dbAdapter, null, $resultSetPrototype);
+    						return new TableGateway($this->config->db->get('table_prefix', '').'users', $dbAdapter, null, $resultSetPrototype);
     					},
     			),
     	);
     }    
+    
+	public function getControllerConfig()
+	{
+		return array(
+			'initializers' => array(
+				function ($instance, $sm)
+				{
+					if ($instance instanceof ConfigAwareInterface) {
+						$instance->setConfig($this->config);
+					}
+				}
+			)
+		);
+	}
 }

@@ -46,7 +46,6 @@ return array(
 		
 	'service_manager' => array(
 			'aliases' => array(
-					'translator' => 'MvcTranslator',
                     'user_zend_db_adapter' => 'Zend\Db\Adapter\Adapter',
 			),
 	),

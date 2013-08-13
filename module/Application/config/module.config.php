@@ -57,9 +57,6 @@ return array(
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory',
         ),
-        'aliases' => array(
-            'translator' => 'MvcTranslator',
-        ),
     ),
     'translator' => array(
         'locale' => 'fr_FR',
