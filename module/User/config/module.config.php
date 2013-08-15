@@ -2,6 +2,8 @@
 return array(
     'controllers' => array(
         'invokables' => array(
+            'User\Controller\Auth' => 'User\Controller\AuthController',
+            'User\Controller\Admin' => 'User\Controller\AdminController',
             'User\Controller\User' => 'User\Controller\UserController',
         ),
     ),
@@ -14,7 +16,7 @@ return array(
      			    				'route' => '/login',
      			    				'defaults' => array(
      			    						'__NAMESPACE__' => 'User\Controller',
-     			    						'controller' => 'User',
+     			    						'controller' => 'Auth',
      			    						'action' => 'login'
 		    						)
 		    				)
@@ -25,7 +27,7 @@ return array(
      			    				'route' => '/authenticate',
      			    				'defaults' => array(
      			    						'__NAMESPACE__' => 'User\Controller',
-     			    						'controller' => 'User',
+     			    						'controller' => 'Auth',
      			    						'action' => 'authenticate'
 		    						)
 		    				)
@@ -36,8 +38,22 @@ return array(
      			    				'route' => '/logout',
      			    				'defaults' => array(
      			    						'__NAMESPACE__' => 'User\Controller',
-     			    						'controller' => 'User',
+     			    						'controller' => 'Auth',
      			    						'action' => 'logout'
+		    						)
+		    				)
+    	    		),
+ 					'profile' => array(
+     			    		'type' => 'segment',
+     			    		'options' => array(
+     			    				'route' => '/profile[/][:action]',
+   									'constraints' => array(
+										'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
+   									),
+     			    				'defaults' => array(
+     			    						'__NAMESPACE__' => 'User\Controller',
+     			    						'controller' => 'User',
+     			    						'action' => 'show'
 		    						)
 		    				)
     	    		),

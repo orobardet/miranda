@@ -1,0 +1,4 @@
+<?php echo $this->user->getDisplayName(); ?><br/>
+<br/>
+<a href="<?php echo $this->url('admin/user', array('action'=>'edit')); ?>" >Edit my profile</a><br/>
+<a href="<?php echo $this->url('admin/user', array('action'=>'changepassword')); ?>" >Change my password</a><br/>

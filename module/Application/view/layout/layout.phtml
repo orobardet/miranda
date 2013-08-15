@@ -30,7 +30,7 @@
                             ->render(); 
                     ?>
                     <ul class="nav pull-right">
-                        <li><a href="#"><i class="icon-user icon-white"></i>&nbsp;Mon compte</a></li>
+                        <li><a href="<?php echo $this->url('profile') ?>"><i class="icon-user icon-white"></i>&nbsp;<?php echo $this->userIdentity()->getDisplayName(); ?></a></li>
                         <li><a href="<?php echo $this->url('logout') ?>"><i class="icon-off icon-white"></i>&nbsp;Déconnexion</a></li>
                     </ul>
                     </div><!--/.nav-collapse -->

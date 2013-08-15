@@ -1,8 +1,8 @@
 <?php
 namespace Admin;
 
-use Admin\Model\User;
-use Admin\Model\UserTable;
+use User\Model\User;
+use User\Model\UserTable;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
@@ -47,17 +47,6 @@ class Module implements
     {
     	return array(
     			'factories' => array(
-    					'Admin\Model\UserTable' =>  function($sm) {
-    						$tableGateway = $sm->get('UserTableGateway');
-    						$table = new UserTable($tableGateway);
-    						return $table;
-    					},
-    					'UserTableGateway' => function ($sm) {
-    						$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
-    						$resultSetPrototype = new ResultSet();
-    						$resultSetPrototype->setArrayObjectPrototype(new User());
-    						return new TableGateway($this->config->db->get('table_prefix', '').'users', $dbAdapter, null, $resultSetPrototype);
-    					},
     			),
     	);
     }    

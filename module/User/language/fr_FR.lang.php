@@ -5,5 +5,6 @@ return array(
 	'Login' => 'Connexion',		
     'Email or password are empty, malformed or invalid.' => "L'email ou le mot de passe sont manquants, malformés ou invalides.",
 	'Login failed' => 'Echec de la connexion',
+	'This user account is not activated.' => "Ce compte utilisateur n'est pas activé.",
 	'' => '',		
 );

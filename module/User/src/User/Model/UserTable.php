@@ -29,15 +29,18 @@ class UserTable
 		return $row;
 	}
 
-	public function saveUser(User $user)
+	public function saveUser(User $user, $savePassword = false)
 	{
 		$data = array(
-				'email' => $user->email,
-				'password'  => $user->password,
-				'firstname'  => $user->firstname,
-				'lastname'  => $user->lastname,
-				'active'  => $user->active,
+				'email' => $user->getEmail(),
+				'firstname'  => $user->getFirstname(),
+				'lastname'  => $user->getLastname(),
+				'active'  => $user->isActive()?1:0,
 		);
+		
+		if ($savePassword) {
+			$data['password'] = $user->getPassword();
+		}
 
 		$id = (int)$user->id;
 		if (!$id) {

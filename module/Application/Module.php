@@ -128,11 +128,7 @@ class Module
 						
 						$sessionSaveHandler = null;
 						if (isset($session['save_handler'])) {
-							// class should be fetched
-							// from service
-							// manager since it will
-							// require constructor
-							// arguments
+							// class should be fetched from service manager since it will require constructor arguments
 							$sessionSaveHandler = $sm->get($session['save_handler']);
 						}
 						

@@ -1,11 +1,11 @@
 <?php
-namespace Admin\Controller;
+namespace User\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Application\ConfigAwareInterface;
 
-class UserController extends AbstractActionController implements ConfigAwareInterface
+class AdminController extends AbstractActionController implements ConfigAwareInterface
 {
 	protected $config;
 	
@@ -38,8 +38,7 @@ class UserController extends AbstractActionController implements ConfigAwareInte
 	public function getUserTable()
 	{
 		if (!$this->userTable) {
-			$sm = $this->getServiceLocator();
-			$this->userTable = $sm->get('Admin\Model\UserTable');
+			$this->userTable = $this->getServiceLocator()->get('User\Model\UserTable');
 		}
 		return $this->userTable;
 	}

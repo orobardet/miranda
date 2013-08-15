@@ -3,7 +3,6 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Admin\Controller\Index' => 'Admin\Controller\IndexController',
-            'Admin\Controller\User' => 'Admin\Controller\UserController',
         ),
     ),
 		
@@ -30,8 +29,9 @@ return array(
                 											'id'     => '[0-9]+',
                 									),
                 									'defaults' => array(
-                											'controller' => 'Admin\Controller\User',
-                											'action'     => 'index',
+     			    									'__NAMESPACE__' => 'User\Controller',
+                										'controller' => 'User\Controller\Admin',
+                										'action'     => 'index',
                 									),
  			    		    				),
  			    		    		)
