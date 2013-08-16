@@ -28,12 +28,16 @@ class Module
 		
 		// Lecture dans la conf des page autorisées sans être connecté
 		$config = new ZendConfig($event->getApplication()->getServiceManager()->get('config')['application']);
-		$allowedPages = $config->authentification->get('not_login_page', array('login', 'authenticate', 'logout'));
-		if (!is_array($allowedPages)) 
+		$allowedPages = $config->authentification->get('not_login_page', array(
+			'login',
+			'authenticate',
+			'logout'
+		));
+		if (!is_array($allowedPages))
 			$allowedPages = $allowedPages->toArray();
-		
-		// Si on est sur une page non accessible si pas connecté, et qu'il n'y a
-		// pas d'utilisateur connecté
+			
+			// Si on est sur une page non accessible si pas connecté, et qu'il n'y a
+			// pas d'utilisateur connecté
 		if (!in_array($event->getRouteMatch()->getMatchedRouteName(), $allowedPages) && !$authService->hasIdentity()) {
 			// Calcul de l'URL demandée, pour redirection après connexion
 			$requestUri = $event->getRequest()->getUri();
@@ -43,20 +47,30 @@ class Module
 			
 			$redirect = $uriPath;
 			if (!empty($uriQuery)) {
-				$redirect .= '?'.$uriQuery;
+				$redirect .= '?' . $uriQuery;
 			}
 			if (!empty($uriFragment)) {
-				$redirect .= '#'.$uriFragment;
+				$redirect .= '#' . $uriFragment;
 			}
-
+			
 			// Redirection vers la page de login
 			if (!empty($redirect) && ($redirect != '/')) {
-				return $event->getTarget()->plugin('redirect')->toRoute('login', array(), array(
-					'query' => array('redirect' => urlencode($redirect))
-				));
-			} else {		
+				return $event->getTarget()->plugin('redirect')->toRoute('login', array(), 
+						array(
+							'query' => array(
+								'redirect' => urlencode($redirect)
+							)
+						));
+			} else {
 				return $event->getTarget()->plugin('redirect')->toRoute('login');
 			}
+		}
+		
+		// Si l'utilisateur connecté n'est plus activé, on le déconnecte
+		if ($authService->hasIdentity() && !$authService->getIdentity()->isActive() && ($event->getRouteMatch()->getMatchedRouteName() != 'logout')) {
+			$session = $event->getApplication()->getServiceManager()->get('Zend\Session\SessionManager')->getStorage();
+			$session->auth_error_message = 'This user account is not activated.';				
+			return $event->getTarget()->plugin('redirect')->toRoute('logout');
 		}
 	}
 
