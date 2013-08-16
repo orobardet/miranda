@@ -16,13 +16,39 @@ class UserController extends AbstractActionController implements ConfigAwareInte
 		$this->config = $config;
 	}
 
+	private function getProfileViewModel($action, $variables = null, $options = null) {
+		$viewModel = new ViewModel($variables + array('profile_action' => $action), $options);
+		$viewModel->setTemplate('user/user/profile-layout');
+		
+		$viewModelChild = new ViewModel($variables, $options);
+		
+		$viewModelChild->setTemplate('user/user/'.$action);
+		$viewModel->addChild($viewModelChild);
+		
+		return $viewModel;
+	}
+	
 	public function showAction()
 	{
-		return new ViewModel(array(
+		return $this->getProfileViewModel('show', array(
 				'user' => $this->userAuthentication()->getIdentity()
 		));
 	}
 
+	public function editAction()
+	{
+		return $this->getProfileViewModel('edit', array(
+				'user' => $this->userAuthentication()->getIdentity()
+		));
+	}
+	
+	public function changepasswordAction()
+	{
+		return $this->getProfileViewModel('changepassword', array(
+				'user' => $this->userAuthentication()->getIdentity()
+		));
+	}
+	
 	public function getUserTable()
 	{
 		if (!$this->userTable) {

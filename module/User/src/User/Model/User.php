@@ -33,7 +33,17 @@ class User
 	 * @var boolean
 	 */
 	private $active;
-
+	/**
+	 * Timestamp de la date de création du compte
+	 * @var integer
+	 */
+	private $creation_ts;
+	/**
+	 * Timestamp de la date de dernière modification du compte
+	 * @var integer
+	 */
+	private $modification_ts;
+	
 	/**
 	 * @return integer $id
 	 */
@@ -75,6 +85,18 @@ class User
 		return $this->lastname;
 	}
 
+	/**
+	 * @return string $lastname
+	 */
+	public function getCreationDate($format=null)
+	{
+		if (!$format) {
+			return $this->creation_ts;
+		} else {
+			return date($format, $this->creation_ts);
+		}
+	}
+	
 	/**
 	 * @return boolean $active
 	 */
@@ -136,5 +158,7 @@ class User
 		$this->firstname = (array_key_exists('firstname', $data)) ? $data['firstname'] : null;
 		$this->lastname = (array_key_exists('lastname', $data)) ? $data['lastname'] : null;
 		$this->active = (array_key_exists('active', $data)) ? $data['active'] : null;
+		$this->creation_ts = (array_key_exists('creation_ts', $data)) ? $data['creation_ts'] : null;
+		$this->modification_ts = (array_key_exists('modification_ts', $data)) ? $data['modification_ts'] : null;
 	}
 }

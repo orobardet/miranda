@@ -1,5 +1,7 @@
 <?php 
 return array(
+	'full_date_time' => 'd/m/Y H:i:s',
+	
 	'Home' => 'Accueil',
 	'All rights reserved.' => 'Tous droits réservés.',
 		

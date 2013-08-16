@@ -8,6 +8,7 @@ $this->headTitle($title);
 </p>
 
 <table class="table table-hover">
+<thead>
 <tr>
     <th><?php echo $this->translate('ID'); ?></th>
     <th><?php echo $this->translate('Name'); ?></th>
@@ -16,6 +17,8 @@ $this->headTitle($title);
     <th><?php echo $this->translate('Active?'); ?></th>
     <th>&nbsp;</th>
 </tr>
+</thead>
+<tbody>
 <?php foreach ($this->users as $user) : ?>
 <tr>
     <td><?php echo $this->escapeHtml($user->getId());?></td>
@@ -23,7 +26,7 @@ $this->headTitle($title);
     <td><?php echo $this->escapeHtml($user->getFirstname());?></td>
     <td><?php echo $this->escapeHtml($user->getEmail());?></td>
     <td><?php echo $user->isActive()?"Oui":"Non";?></td>
-    <td>
+    <td class="text-right">
         <a href="<?php echo $this->url('admin/user',
             array('action'=>'edit', 'id' => $user->getId()));?>"><i class="icon-edit icon-linkcolor"></i> <?php echo $this->translate('edit'); ?></a> | 
         <a href="<?php echo $this->url('admin/user',
@@ -31,4 +34,5 @@ $this->headTitle($title);
     </td>
 </tr>
 <?php endforeach; ?>
+</tbody>
 </table>

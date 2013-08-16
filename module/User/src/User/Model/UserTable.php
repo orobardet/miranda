@@ -36,8 +36,15 @@ class UserTable
 				'firstname'  => $user->getFirstname(),
 				'lastname'  => $user->getLastname(),
 				'active'  => $user->isActive()?1:0,
+				'modification_ts' => time(),
 		);
 		
+		// Pas de date de création, on la défini à la date courane
+		if (!$user->getCreationDate()) {
+			$data['ceation_ts'] = time();
+		}
+		
+		// S'il a été explicitement demandé de sauvegarder le mot passe, on le fait
 		if ($savePassword) {
 			$data['password'] = $user->getPassword();
 		}

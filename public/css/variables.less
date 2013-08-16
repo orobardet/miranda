@@ -153,6 +153,9 @@
 // -------------------------
 @iconSpritePath:          "../img/glyphicons-halflings.png";
 @iconWhiteSpritePath:     "../img/glyphicons-halflings-white.png";
+@iconMutedSpritePath:          "../img/glyphicons-halflings-muted.png";
+@iconLinkColorSpritePath:          "../img/glyphicons-halflings-linkcolor.png";
+@iconLinkColorHoverSpritePath:     "../img/glyphicons-halflings-linkcolor-hover.png";
 
 
 // Input placeholder text color
@@ -189,8 +192,8 @@
 @navbarLinkColor:                 #fff;
 @navbarLinkColorHover:            @navbarLinkColor;
 @navbarLinkColorActive:           @navbarLinkColor;
-@navbarLinkBackgroundHover:       black;
-@navbarLinkBackgroundActive:      #000;
+@navbarLinkBackgroundHover:       darken(@navbarBackground, 5%);
+@navbarLinkBackgroundActive:      @navbarLinkBackgroundHover;
 
 @navbarBrandColor:                @navbarLinkColorActive;
 

@@ -6,6 +6,19 @@ html,body {
 	height: 100%;
 }
 
+a > i.icon-linkcolor {
+	background-image: url("@{iconLinkColorSpritePath}");
+}
+a:hover > .icon-linkcolor {
+  background-image: url("@{iconLinkColorHoverSpritePath}");
+}
+.muted > [class^="icon-"], 
+.muted > [class*=" icon-"],
+[class^="icon-"].muted,
+[class*=" icon-"].muted {
+  background-image: url("@{iconMutedSpritePath}");
+}  
+
 .navbar {
 	.navbar-inner {
 		border-width: 0px;
@@ -25,9 +38,18 @@ html,body {
 	    	line-height: 2px;
 		}
 	
-		.nav > .active > a {
-			#gradient > .vertical(@navbarBackground, @navbarBackgroundHighlight);
-		    box-shadow: none;
+		.nav > .active > a,  .nav > :hover > a {
+			background-color: white;
+			background: white; /* Old browsers */
+			background: -moz-linear-gradient(top, @navbarBackground 0%, #ffffff 10%, #ffffff 100%); /* FF3.6+ */
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,@navbarBackground), color-stop(10%,#ffffff), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
+			background: -webkit-linear-gradient(top,  @navbarBackground 0%,#ffffff 10%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(top,  @navbarBackground 0%,#ffffff 10%,#ffffff 100%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(top,  @navbarBackground 0%,#ffffff 10%,#ffffff 100%); /* IE10+ */
+			background: linear-gradient(to bottom,  @navbarBackground 0%,#ffffff 10%,#ffffff 100%); /* W3C */
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@navbarBackground', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+			color: black;
+			box-shadow: none;
 		    text-decoration: none;
 		}
 	}
@@ -39,7 +61,7 @@ html,body {
 	height: 100%;
 	/* margin bottom négatif pour gérer le footeur, de la hauteur du footer (hauteur réelle = hauteur + border + padding ...) */
 	margin: 0 auto -41px;
-	& > .container {
+	& > .container, & > .container-fluid {
 		padding-top: 65px;
 	}
 }
@@ -59,6 +81,7 @@ html,body {
 		color:purple;
 		border-bottom:dotted 1px purple;
 	}
+	font-size:smaller;
 }
 #footer	a:hover, #footer a:active {
 		text-decoration:none;
