@@ -4,6 +4,7 @@ namespace User\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Application\ConfigAwareInterface;
+use Zend\Config\Config as ZendConfig;
 
 class AdminController extends AbstractActionController implements ConfigAwareInterface
 {
@@ -11,7 +12,7 @@ class AdminController extends AbstractActionController implements ConfigAwareInt
 	
 	protected $userTable;
 	
-	public function setConfig($config)
+	public function setConfig(ZendConfig $config)
 	{
 		$this->config = $config;
 	}

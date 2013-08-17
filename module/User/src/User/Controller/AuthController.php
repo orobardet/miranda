@@ -9,16 +9,16 @@ use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Zend\Config\Config as ZendConfig;
 use Zend\Crypt\Password\Bcrypt;
-use Zend\Session\SessionManager;
-use Zend\Session\Storage\StorageInterface as Storage;
 
 class AuthController extends AbstractActionController implements ConfigAwareInterface
 {
 
+	/**
+	 * @var ZendConfig
+	 */
 	protected $config;
 
 	/**
-	 *
 	 * @var Form
 	 */
 	protected $loginForm;
@@ -29,7 +29,7 @@ class AuthController extends AbstractActionController implements ConfigAwareInte
 	 */
 	protected $userTable;
 
-	public function setConfig($config)
+	public function setConfig(ZendConfig $config)
 	{
 		$this->config = $config;
 	}
@@ -52,12 +52,12 @@ class AuthController extends AbstractActionController implements ConfigAwareInte
 		$error_message = $session->auth_error_message;
 		unset($session->auth_error_message);
 		
-		return array(
+		return new ViewModel(array(
 			'loginForm' => $form,
 			'redirect' => $redirect,
 			'error' => $request->getQuery()->get('e', 0),
 			'error_message' => $error_message
-		);
+		));
 	}
 
 	public function authenticateAction()

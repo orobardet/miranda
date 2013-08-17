@@ -6,7 +6,6 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Session\SessionManager;
 use Zend\Session\Container;
-use Zend\EventManager;
 use Zend\Config\Config as ZendConfig;
 
 class Module

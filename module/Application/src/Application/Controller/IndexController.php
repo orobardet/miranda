@@ -12,12 +12,13 @@ namespace Application\Controller;
 use Application\ConfigAwareInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\Config\Config as ZendConfig;
 
 class IndexController extends AbstractActionController implements ConfigAwareInterface
 {
     protected $config;
  
-    public function setConfig($config)
+    public function setConfig(ZendConfig $config)
     {
         $this->config = $config;
     }

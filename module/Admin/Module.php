@@ -1,13 +1,9 @@
 <?php
 namespace Admin;
 
-use User\Model\User;
-use User\Model\UserTable;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
-use Zend\Db\ResultSet\ResultSet;
-use Zend\Db\TableGateway\TableGateway;
 use Zend\Mvc\MvcEvent;
 use Zend\Config\Config as ZendConfig;
 use Application\ConfigAwareInterface;

@@ -6,11 +6,6 @@ use Zend\Form\Element;
 
 class Login extends Form
 {
-    /**
-     * @var AuthenticationOptionsInterface
-     */
-    protected $authOptions;
-
     public function __construct($name = null, $translator)
     {
         parent::__construct($name);
@@ -51,27 +46,5 @@ class Login extends Form
         $this->add($submitElement, array(
             'priority' => -100,
         ));
-    }
-
-    /**
-     * Set Authentication-related Options
-     *
-     * @param AuthenticationOptionsInterface $authOptions
-     * @return Login
-     */
-    public function setAuthenticationOptions(AuthenticationOptionsInterface $authOptions)
-    {
-        $this->authOptions = $authOptions;
-        return $this;
-    }
-
-    /**
-     * Get Authentication-related Options
-     *
-     * @return AuthenticationOptionsInterface
-     */
-    public function getAuthenticationOptions()
-    {
-        return $this->authOptions;
     }
 }
