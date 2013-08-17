@@ -49,7 +49,7 @@ class UserTable
 			$data['password'] = $user->getPassword();
 		}
 
-		$id = (int)$user->id;
+		$id = (int)$user->getId();
 		if (!$id) {
 			$this->tableGateway->insert($data);
 		} else {
@@ -61,6 +61,28 @@ class UserTable
 		}
 	}
 
+	public function updateLastActivity(User $user, $lastLogin = false)
+	{
+		$id = (int)$user->getId();
+		if (!$id) {
+			throw new \Exception("User id $id does not exist");
+		}
+		
+		$data = array(
+			'last_activity_ts' => time(),
+		);
+		
+		if ($lastLogin) {
+			$data['last_login_ts'] = time();
+		}
+		
+		if ($this->getUser($id)) {
+			$this->tableGateway->update($data, array('id' => $id));
+		} else {
+			throw new \Exception("User id $id does not exist");
+		}
+	}
+	
 	public function deleteUser($id)
 	{
 		$this->tableGateway->delete(array('id' => $id));

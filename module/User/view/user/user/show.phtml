@@ -9,8 +9,12 @@
 	</p>
 </div>
 <p>
-<span class="muted"><i class="icon-time"></i> <?php echo $this->translate('Created on: '); ?></span><?php echo $this->user->getCreationDate($this->translate('full_date_time')); ?><br/>
-<span class="muted"><i class="icon-time"></i> <?php echo $this->translate('Last modified: '); ?></span><?php echo $this->user->getCreationDate($this->translate('full_date_time')); ?><br/>
+<span class="muted"><i class="icon-time"></i> <?php echo $this->translate('Created on: '); ?></span><?php echo $this->user->getCreationDate($this->translate('full_text_date_time')); ?><br/>
+<span class="muted"><i class="icon-time"></i> <?php echo $this->translate('Last modified: '); ?></span><?php echo $this->user->getLastModificationDate($this->translate('full_text_date_time')); ?><br/>
+</p>
+<p>
+<span class="muted"><i class="icon-time"></i> <?php echo $this->translate('Last login: '); ?></span><?php echo $this->user->getLastLoginDate($this->translate('full_text_date_time')); ?><br/>
+<span class="muted"><i class="icon-time"></i> <?php echo $this->translate('Last activity: '); ?></span><?php echo $this->user->getLastActivityDate($this->translate('full_text_date_time')); ?><br/>
 </p>
 <p>
 <span class="muted"><i class="icon-envelope"></i> <?php echo $this->translate('Email: '); ?></span><a href="mailto:<?php echo $this->user->getEmail(); ?>"><?php echo $this->user->getEmail(); ?></a><br/>

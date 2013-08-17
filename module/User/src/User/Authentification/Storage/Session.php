@@ -53,6 +53,9 @@ class Session extends AuthSessionStorage
 	protected function getUser($identity)
 	{
 		if (!$this->user) {
+			// Mise à jour de la date de dernière activité de l'utilisateur
+			$this->userTable->updateLastActivity($this->userTable->getUser($identity->id));
+			// Récupération de l'utilisateur
 			$this->user = $this->userTable->getUser($identity->id);
 		}
 		

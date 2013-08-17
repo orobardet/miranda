@@ -13,5 +13,7 @@ return array(
 	'Last modified: ' => 'Dernière modification : ',
 	'Email: ' => 'Email : ',
 	'Account enabled' => 'Compte activé',
-	'Account disabled' => 'Compte desactivé'
+	'Account disabled' => 'Compte desactivé',
+	'Last login: ' => 'Dernière connexion : ',
+	'Last activity: ' => 'Dernière activité : ',
 );

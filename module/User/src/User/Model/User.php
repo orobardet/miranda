@@ -7,42 +7,52 @@ class User
 	 * ID en BDD de l'utilisateur
 	 * @var integer
 	 */
-	private $id;
+	protected $id;
 	/**
 	 * Email (qui sert de login)
 	 * @var string
 	 */
-	private $email;
+	protected $email;
 	/**
 	 * Chaine cryptée (par bcrypt) représentant le mot de passe
 	 * @var string
 	 */
-	private $password;
+	protected $password;
 	/**
 	 * Prénom
 	 * @var string
 	 */
-	private $firstname;
+	protected $firstname;
 	/**
 	 * Nom
 	 * @var string
 	 */
-	private $lastname;
+	protected $lastname;
 	/**
 	 * Indique si le compte est activé on non
 	 * @var boolean
 	 */
-	private $active;
+	protected $active;
 	/**
 	 * Timestamp de la date de création du compte
 	 * @var integer
 	 */
-	private $creation_ts;
+	protected $creation_ts;
 	/**
 	 * Timestamp de la date de dernière modification du compte
 	 * @var integer
 	 */
-	private $modification_ts;
+	protected $modification_ts;
+	/**
+	 * Timestamp de la date de dernière activité de l'utilisateur
+	 * @var integer
+	 */
+	protected $last_activity_ts;
+	/**
+	 * Timestamp de la date de dernière connexion de l'utilisateur
+	 * @var integer
+	 */
+	protected $last_login_ts;
 	
 	/**
 	 * @return integer $id
@@ -86,14 +96,141 @@ class User
 	}
 
 	/**
-	 * @return string $lastname
+	 * Retourne la date de création du compte, éventuellement formatée
+	 * 
+	 * Si le paramètre $format est null ou faut, renvoi la date sous forme d'un timestamp (integer).
+	 * Sinon, renvoie une chaine représentant la date, formaté en utilisant la fonction PHP date() 
+	 * et selon le format du paramètre $format.
+	 * 
+	 * Si le timestamp est invalid ou null (pas un nombre positif) et qu'un format a été demandé, 
+	 * retourne la chaine "N/A".
+	 * 
+	 * __Exemples :__
+	 * 
+	 * ~~~~~~~~
+	 * $this->getCreationDate();               // Retourne le timestamp
+	 * $this->getCreationDate("d/m/Y H:i:s");  // Retourne une chaine "17/08/2013 10:16:27"
+	 * ~~~~~~~~
+	 * 
+	 * @param string $format Une chaine de formatage de date accepté par la fonction PHP date()
+	 * 
+	 * @return string|int $creation_ts
 	 */
 	public function getCreationDate($format=null)
 	{
+		return $this->getFormatedDate($this->creation_ts, $format);
+	}
+	
+	/**
+	 * Retourne la date de dernière modification du compte, éventuellement formatée
+	 * 
+	 * Si le paramètre $format est null ou faut, renvoi la date sous forme d'un timestamp (integer).
+	 * Sinon, renvoie une chaine représentant la date, formaté en utilisant la fonction PHP date() 
+	 * et selon le format du paramètre $format.
+	 * 
+	 * Si le timestamp est invalid ou null (pas un nombre positif) et qu'un format a été demandé, 
+	 * retourne la chaine "N/A".
+	 * 
+	 * __Exemples :__
+	 * 
+	 * ~~~~~~~~
+	 * $this->getLastModificationDate();               // Retourne le timestamp
+	 * $this->getLastModificationDate("d/m/Y H:i:s");  // Retourne une chaine "17/08/2013 10:16:27"
+	 * ~~~~~~~~
+	 * 
+	 * @param string $format Une chaine de formatage de date accepté par la fonction PHP date()
+	 * 
+	 * @return string|int $creation_ts
+	 */
+	public function getLastModificationDate($format=null)
+	{
+		return $this->getFormatedDate($this->modification_ts, $format);
+	}
+	
+	/**
+	 * Retourne la date de dernière activité du compte, éventuellement formatée
+	 * 
+	 * Si le paramètre $format est null ou faut, renvoi la date sous forme d'un timestamp (integer).
+	 * Sinon, renvoie une chaine représentant la date, formaté en utilisant la fonction PHP date() 
+	 * et selon le format du paramètre $format.
+	 * 
+	 * Si le timestamp est invalid ou null (pas un nombre positif) et qu'un format a été demandé, 
+	 * retourne la chaine "N/A".
+	 * 
+	 * __Exemples :__
+	 * 
+	 * ~~~~~~~~
+	 * $this->getLastActivityDate();               // Retourne le timestamp
+	 * $this->getLastActivityDate("d/m/Y H:i:s");  // Retourne une chaine "17/08/2013 10:16:27"
+	 * ~~~~~~~~
+	 * 
+	 * @param string $format Une chaine de formatage de date accepté par la fonction PHP date()
+	 * 
+	 * @return string|int $creation_ts
+	 */
+	public function getLastActivityDate($format=null)
+	{
+		return $this->getFormatedDate($this->last_activity_ts, $format);
+	}
+	
+	/**
+	 * Retourne la date de dernière connexion du compte, éventuellement formatée
+	 * 
+	 * Si le paramètre $format est null ou faut, renvoi la date sous forme d'un timestamp (integer).
+	 * Sinon, renvoie une chaine représentant la date, formaté en utilisant la fonction PHP date() 
+	 * et selon le format du paramètre $format.
+	 * 
+	 * Si le timestamp est invalid ou null (pas un nombre positif) et qu'un format a été demandé, 
+	 * retourne la chaine "N/A".
+	 * 
+	 * __Exemples :__
+	 * 
+	 * ~~~~~~~~
+	 * $this->getLastLoginDate();               // Retourne le timestamp
+	 * $this->getLastLoginDate("d/m/Y H:i:s");  // Retourne une chaine "17/08/2013 10:16:27"
+	 * ~~~~~~~~
+	 * 
+	 * @param string $format Une chaine de formatage de date accepté par la fonction PHP date()
+	 * 
+	 * @return string|int $creation_ts
+	 */
+	public function getLastLoginDate($format=null)
+	{
+		return $this->getFormatedDate($this->last_login_ts, $format);
+	}
+	
+	/**
+	 * Retourne une date stockée sous forme de timestampt, en lui appliquant un éventuelle formatage
+	 * 
+	 * Si le paramètre $format est null ou faut, renvoi la date sous forme d'un timestamp (integer).
+	 * Sinon, renvoie une chaine représentant la date, formaté en utilisant la fonction PHP date() 
+	 * et selon le format du paramètre $format.
+	 * 
+	 * Si le timestamp est invalid ou null (pas un nombre positif) et qu'un format a été demandé, 
+	 * retourne la chaine "N/A".
+	 * 
+	 * __Exemples :__
+	 * 
+	 * ~~~~~~~~
+	 * $this->getFormatedDate();               // Retourne le timestamp
+	 * $this->getFormatedDate("d/m/Y H:i:s");  // Retourne une chaine "17/08/2013 10:16:27"
+	 * ~~~~~~~~
+	 * 
+	 * @param int $ts Le timestamp représentant la date.
+	 * @param string $format Une chaine de formatage de date accepté par la fonction PHP date()
+	 * 
+	 * @return string|int $creation_ts
+	 */
+	protected function getFormatedDate($ts, $format=null)
+	{
 		if (!$format) {
-			return $this->creation_ts;
+			return $ts;
 		} else {
-			return date($format, $this->creation_ts);
+			if ($ts > 0) {
+				return date($format, $ts);
+			} else {
+				return "N/A";
+			}
 		}
 	}
 	
@@ -160,5 +297,7 @@ class User
 		$this->active = (array_key_exists('active', $data)) ? $data['active'] : null;
 		$this->creation_ts = (array_key_exists('creation_ts', $data)) ? $data['creation_ts'] : null;
 		$this->modification_ts = (array_key_exists('modification_ts', $data)) ? $data['modification_ts'] : null;
+		$this->last_activity_ts = (array_key_exists('last_activity_ts', $data)) ? $data['last_activity_ts'] : null;
+		$this->last_login_ts = (array_key_exists('last_login_ts', $data)) ? $data['last_login_ts'] : null;
 	}
 }

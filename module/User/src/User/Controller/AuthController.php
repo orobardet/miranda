@@ -106,6 +106,9 @@ class AuthController extends AbstractActionController implements ConfigAwareInte
 				// Réalisation de l'authentification par l'Auth Adapter
 				$authResult = $this->userAuthentication()->authenticate();
 				if ($authResult->isValid()) {
+					// Mise à jour de la date de dernière connexion
+					$this->getUserTable()->updateLastActivity($this->getUserTable()->getUser($authResult->getIdentity()->id), true);
+					
 					// Est-ce qu'on a reçu un redirect ?
 					if (!empty($redirectUrl)) {
 						return $this->redirect()->toUrl($redirectUrl);
@@ -160,8 +163,7 @@ class AuthController extends AbstractActionController implements ConfigAwareInte
 	public function getUserTable()
 	{
 		if (!$this->userTable) {
-			$sm = $this->getServiceLocator();
-			$this->userTable = $sm->get('User\Model\UserTable');
+			$this->userTable = $this->getServiceLocator()->get('User\Model\UserTable');
 		}
 		return $this->userTable;
 	}
