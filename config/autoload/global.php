@@ -11,9 +11,22 @@
  * file.
  */
 $env = getenv('APPLICATION_ENV') ?: 'prod';
+$app_key = 'application';
 
-return array(
-	'application' => array(
+$config = array(
+	$app_key => array(
+		'layout' => array(
+			'css' => array(
+				'css/bootstrap.css',
+				'css/style.css',
+				'css/bootstrap-responsive.min.css',
+			),
+			'js' => array(
+				'js/jquery.min.js',
+				'js/bootstrap.js',
+				'lib/jquery.passstrength.js',
+			)
+		),
 		'authentification' => array(
 			'not_login_page' => array('login', 'logout', 'authenticate'),
 			'bcrypt' => array(
@@ -44,8 +57,25 @@ return array(
 							'pages' => array(
 									array(
 											'label' => 'Users',
-											'route' => 'admin/user'
-									),
+											'route' => 'admin/user',
+											'pages' => array(
+													array(
+															'label' => 'Ajouter',
+															'route' => 'admin/user',
+															'action' => 'add'
+													),
+													array(
+															'label' => 'Modifier',
+															'route' => 'admin/user',
+															'action' => 'edit'
+													),
+													array(
+															'label' => 'Supprimer',
+															'route' => 'admin/user',
+															'action' => 'delete'
+													),
+),
+							),
 							),
 					),
 			),
@@ -64,3 +94,10 @@ return array(
 			),
 	),
 );
+
+if ($env == 'prod') {
+	$config[$app_key]['layout']['css'] = array('css/miranda-full-min.css');
+	$config[$app_key]['layout']['js'] = array('js/miranda-full-min.js');
+}
+
+return $config;

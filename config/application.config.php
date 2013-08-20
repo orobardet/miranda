@@ -30,7 +30,7 @@ return array(
         // Whether or not to enable a configuration cache.
         // If enabled, the merged configuration will be cached and used in
         // subsequent requests.
-        'config_cache_enabled' => ($env == 'production'),
+        'config_cache_enabled' => ($env == 'prod'),
 
         // The key used to create the configuration cache file name.
         'config_cache_key' => 'miranda',
@@ -38,7 +38,7 @@ return array(
         // Whether or not to enable a module class map cache.
         // If enabled, creates a module class map cache which will be used
         // by in future requests, to reduce the autoloading process.
-        'module_map_cache_enabled' => ($env == 'production'),
+        'module_map_cache_enabled' => ($env == 'prod'),
 
         // The key used to create the class map cache file name.
         'module_map_cache_key' => 'miranda_module_map',
@@ -49,7 +49,7 @@ return array(
         // Whether or not to enable modules dependency checking.
         // Enabled by default, prevents usage of modules that depend on other modules
         // that weren't loaded.
-        'check_dependencies' => ($env != 'production'),
+        'check_dependencies' => ($env != 'prod'),
     ),
 
     'service_manager' => array(
@@ -63,15 +63,4 @@ return array(
     		'MirandaDbAdapter' => 'Zend\Db\Adapter\Adapter',
         ),
     ),
-		
-	'translator' => array(
-			'locale' => 'fr_FR',
-			'translation_file_patterns' => array(
-					array(
-							'type'     => 'phparray',
-							'base_dir' => __DIR__ . '/../language',
-							'pattern'  => '%s/*.lang.php',
-					),
-			),
-	),
 );

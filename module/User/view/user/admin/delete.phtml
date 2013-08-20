@@ -1,1 +1,23 @@
 <?php
+$title = 'Delete user';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($this->translate($title)); ?></h1>
+
+<p>
+<?php echo $this->translateReplace("Are you sure that you want to delete user '%displayName%' (%email%)?", array('displayName' => $this->escapeHtml($user->getDisplayName()), 'email' => $this->escapeHtml($user->getEmail()))); ?>
+</p>
+
+<?php
+$url = $this->url('admin/user', array(
+    'action' => 'delete',
+    'id'     => $this->id,
+));
+?>
+<form action="<?php echo $url; ?>" method="post">
+<div>
+    <input type="hidden" name="id" value="<?php echo (int) $user->getId(); ?>" />
+    <button type="submit" class="btn" name="del" value="no"><?php echo $this->translate('No'); ?></button>
+    <button type="submit" class="btn btn-primary" name="del" value="yes"><?php echo $this->translate('Yes'); ?></button>
+</div>
+</form>

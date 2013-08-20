@@ -14,6 +14,7 @@ use User\Authentification\Adapter\DbCallbackCheckAdapter as AuthDbTable;
 use User\Authentification\Storage\Session as AuthSessionStorage;
 use Zend\Config\Config as ZendConfig;
 use Application\ConfigAwareInterface;
+use Zend\Crypt\Password\Bcrypt;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface
 {
@@ -61,10 +62,16 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 					$resultSetPrototype->setArrayObjectPrototype(new User());
 					return new TableGateway('users', $dbAdapter, null, $resultSetPrototype);
 				},
-				'UserLoginForm' => function ($sm)
+				'User\Form\Login' => function ($sm)
 				{
 					$form = new Form\Login(null, $sm->get('translator'));
 					$form->setInputFilter(new Form\LoginFilter());
+					return $form;
+				},
+				'User\Form\User' => function ($sm)
+				{
+					$form = new Form\User(null, $sm->get('translator'));
+					$form->setInputFilter(new Form\UserFilter($sm->get('Zend\Db\Adapter\Adapter')));
 					return $form;
 				},
 				'MirandaAuthService' => function ($sm)
@@ -81,6 +88,13 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 					$authAdapter->setTableName($this->config->db->get('table_prefix', '') . 'users')->setIdentityColumn('email')->setCredentialColumn(
 							'password');
 					return $authAdapter;
+				},
+				'MirandaAuthBCrypt' => function ($sm)
+				{
+					$bcrypt = new Bcrypt();
+					$bcrypt->setCost($this->config->authentification->bcrypt->get('cost', 14));
+					
+					return $bcrypt;
 				}
 			)
 		);

@@ -7,8 +7,12 @@ use Zend\Mvc\MvcEvent;
 use Zend\Session\SessionManager;
 use Zend\Session\Container;
 use Zend\Config\Config as ZendConfig;
+use Zend\Validator\AbstractValidator;
+use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\ModuleManager\Feature\ServiceProviderInterface;
 
-class Module
+class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface
 {
 
 	public function init()
@@ -18,6 +22,8 @@ class Module
 			$this,
 			'authPreDispatch'
 		), 110);
+		
+		$events->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', array($this, 'addLayoutViewVariables'), 201);
 	}
 
 	public function authPreDispatch($event)
@@ -73,6 +79,32 @@ class Module
 		}
 	}
 
+	/**
+	 * Method où ajouter toutes les variables à passer à la vue du layout
+	 * 
+	 * @param Zend\Mvc\MvcEvent $e
+	 */
+	public function addLayoutViewVariables($e)
+	{
+		$route = $e->getRouteMatch();
+		$viewModel = $e->getViewModel();
+		$variables = $viewModel->getVariables();
+
+		if (false === isset($variables['controller'])) {
+			$viewModel->setVariable('controller', $route->getParam('controller'));
+		}
+		if (false === isset($variables['action'])) {
+			$viewModel->setVariable('action', $route->getParam('action'));
+		}
+	
+		$viewModel->setVariable('module', strtolower(__NAMESPACE__));
+		
+		$config = new ZendConfig($e->getApplication()->getServiceManager()->get('config')['application']);
+		
+		$viewModel->setVariable('css', $config->layout->get('css', array()));
+		$viewModel->setVariable('js', $config->layout->get('js', array()));
+	}
+	
 	public function onBootstrap(MvcEvent $e)
 	{
 		$this->config = new ZendConfig($e->getApplication()->getServiceManager()->get('config')['application']);
@@ -83,6 +115,8 @@ class Module
 		
 		$translator = $e->getApplication()->getServiceManager()->get('translator');
 		$translator->setLocale(\Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']))->setFallbackLocale('fr_FR');
+		
+		AbstractValidator::setDefaultTranslator($translator);
 		
 		$this->bootstrapSession($e);
 	}
@@ -177,6 +211,15 @@ class Module
 						$instance->setConfig($this->config);
 					}
 				}
+			)
+		);
+	}
+	
+	public function getViewHelperConfig()
+	{
+		return array(
+			'invokables' => array(
+				'translateReplace' => 'Application\View\Helper\TranslateReplace'
 			)
 		);
 	}

@@ -3,7 +3,7 @@ namespace User\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 
-class UserTable
+class UserTable extends User
 {
 	protected $tableGateway;
 
@@ -14,6 +14,7 @@ class UserTable
 
 	public function fetchAll()
 	{
+		// TODO: Lors de la mise en place de la suppression logique, fitrer le select pour ne pas utiliser les comptes supprimés logiquement
 		$resultSet = $this->tableGateway->select();
 		return $resultSet;
 	}
@@ -41,7 +42,7 @@ class UserTable
 		
 		// Pas de date de création, on la défini à la date courane
 		if (!$user->getCreationDate()) {
-			$data['ceation_ts'] = time();
+			$data['creation_ts'] = time();
 		}
 		
 		// S'il a été explicitement demandé de sauvegarder le mot passe, on le fait
@@ -85,6 +86,12 @@ class UserTable
 	
 	public function deleteUser($id)
 	{
+		// TODO: Tenter un delete, et s'il échoue cause clé étrangère, réaliser une suppression logique du compte
 		$this->tableGateway->delete(array('id' => $id));
+		
+		// Suppression logique:
+		// Utiliser une colonne dédiée (bool) indiquant que le compte est supprimer logiquement.
+		// Modifier le champ email en del_ID_EMAIL où ID et l'id du compte, et EMAIL l'email actuel (pour éviter les problèmes d'unicité) 
+		// Ne pas lister les comptes supprimés logiquement dans le fetchAll et autres
 	}
 }

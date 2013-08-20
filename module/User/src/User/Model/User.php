@@ -96,6 +96,14 @@ class User
 	}
 
 	/**
+	 * @return string $lastname
+	 */
+	protected function getPassword()
+	{
+		return $this->password;
+	}
+	
+	/**
 	 * Retourne la date de création du compte, éventuellement formatée
 	 * 
 	 * Si le paramètre $format est null ou faut, renvoi la date sous forme d'un timestamp (integer).
@@ -257,10 +265,13 @@ class User
 	/**
 	 * @param string $password
 	 */
-	public function setPassword($password)
+	public function setPassword($password, $bcrypt = null)
 	{
-		// TODO: encoder en bcrypt
-		$this->password = $password;
+		if ($bcrypt) {
+			$this->password = $bcrypt->create($password);
+		} else {
+			$this->password = $password;
+		}
 	}
 
 	/**
@@ -287,11 +298,13 @@ class User
 		$this->active = $active?1:0;
 	}
 
-	public function exchangeArray($data)
+	public function exchangeArray($data, $getPassword = true)
 	{
 		$this->id = (array_key_exists('id', $data)) ? $data['id'] : null;
 		$this->email = (array_key_exists('email', $data)) ? $data['email'] : null;
-		$this->password = (array_key_exists('password', $data)) ? $data['password'] : null;
+		if ($getPassword) {
+			$this->password = (array_key_exists('password', $data)) ? $data['password'] : null;
+		}
 		$this->firstname = (array_key_exists('firstname', $data)) ? $data['firstname'] : null;
 		$this->lastname = (array_key_exists('lastname', $data)) ? $data['lastname'] : null;
 		$this->active = (array_key_exists('active', $data)) ? $data['active'] : null;

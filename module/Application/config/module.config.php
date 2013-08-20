@@ -62,10 +62,20 @@ return array(
         'locale' => 'fr_FR',
         'translation_file_patterns' => array(
             array(
+            	'type'     => 'phparray',
+            	'base_dir' => __DIR__ . '/../../../language',
+            	'pattern'  => '%s/Zend_Validate.php',
+            ),
+            array(
+            	'type'     => 'phparray',
+            	'base_dir' => __DIR__ . '/../../../language',
+            	'pattern'  => '%s/Zend_Captcha.php',
+            ),
+            array(
                 'type'     => 'phparray',
                 'base_dir' => __DIR__ . '/../language',
                 'pattern'  => '%s.lang.php',
-            ),
+            ),            
         ),
     ),
     'controllers' => array(

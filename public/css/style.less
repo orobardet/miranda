@@ -55,6 +55,14 @@ a:hover > .icon-linkcolor {
 	}
 }
 
+.breadcrumb {
+	background-color: transparent;
+	border-bottom: 2px dotted lighten(@navbarBackground, 65%);
+	border-radius: 0px;
+	margin: 0 0 10px;
+    padding: 0 15px;
+}
+
 #wrap {
 	min-height: 100%;
 	height: auto !important;
@@ -102,3 +110,27 @@ a:hover > .icon-linkcolor {
 	margin: 30px auto;
 	width: 250px;
 }
+
+.form-horizontal .control-group {
+	margin-bottom: 10px;
+}
+
+form .control-group {
+	&.required {
+		.control-label, .help-inline.required {
+			font-weight: bold;
+		}
+	}
+	.help-block > ul {
+		margin-bottom: 0px;
+	}
+}
+
+.state-error {
+	color: @errorText;
+}
+.state-success {
+	color: @successText;
+}
+
+@import "icons-sprite.less";

@@ -90,6 +90,13 @@ a:hover > .icon-linkcolor {
   box-shadow: none;
   text-decoration: none;
 }
+.breadcrumb {
+  background-color: transparent;
+  border-bottom: 2px dotted #f5d4fc;
+  border-radius: 0px;
+  margin: 0 0 10px;
+  padding: 0 15px;
+}
 #wrap {
   min-height: 100%;
   height: auto !important;
@@ -136,4 +143,38 @@ a:hover > .icon-linkcolor {
 #login-form-container {
   margin: 30px auto;
   width: 250px;
+}
+.form-horizontal .control-group {
+  margin-bottom: 10px;
+}
+form .control-group.required .control-label,
+form .control-group.required .help-inline.required {
+  font-weight: bold;
+}
+form .control-group .help-block > ul {
+  margin-bottom: 0px;
+}
+.state-error {
+  color: #b94a48;
+}
+.state-success {
+  color: #468847;
+}
+.icon-sprite {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  *margin-right: .3em;
+  line-height: 16px;
+  vertical-align: text-top;
+  background-image: url('../img/icons-sprite');
+  background-position: 0px 0px;
+  background-repeat: no-repeat;
+  margin-top: 1px;
+}
+.icon-sprite.icon-accepted {
+  background-position: 0  0;
+}
+.icon-sprite.icon-exclamation {
+  background-position: -17px 0;
 }

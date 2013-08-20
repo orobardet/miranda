@@ -22,5 +22,9 @@ return array(
     'Controller' => 'Contrôleur ',
     'resolves to %s' => 'résout en %s',
     'Exception' => 'Exception ',
-    '' => '',
+	
+	'Add' => 'Ajouter',
+    'Cancel' => 'Annuler',
+	'Yes' => 'Oui',
+	'No' => 'Non',
 );

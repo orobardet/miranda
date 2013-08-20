@@ -8,7 +8,6 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Zend\Config\Config as ZendConfig;
-use Zend\Crypt\Password\Bcrypt;
 
 class AuthController extends AbstractActionController implements ConfigAwareInterface
 {
@@ -95,8 +94,7 @@ class AuthController extends AbstractActionController implements ConfigAwareInte
 				
 				// On initialise l'objet BCrypt pour vérifier le mot de passe, et on donne à l'Authentification Adapter notre propre fonction de
 				// vérification qui utilise l'objet BCrypt
-				$bcrypt = new Bcrypt();
-				$bcrypt->setCost($this->config->authentification->bcrypt->get('salt', 14));
+				$bcrypt = $this->getServiceLocator()->get('MirandaAuthBCrypt');
 				$this->userAuthentication()->getAuthAdapter()->setCredentialValidationCallback(
 						function ($storedPass, $givenPass) use($bcrypt)
 						{
@@ -149,7 +147,7 @@ class AuthController extends AbstractActionController implements ConfigAwareInte
 	public function getLoginForm()
 	{
 		if (!$this->loginForm) {
-			$this->setLoginForm($this->getServiceLocator()->get('UserLoginForm'));
+			$this->setLoginForm($this->getServiceLocator()->get('User\Form\Login'));
 		}
 		return $this->loginForm;
 	}
