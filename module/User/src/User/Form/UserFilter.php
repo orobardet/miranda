@@ -142,16 +142,5 @@ class UserFilter extends InputFilter
 						)
 					)
 				));
-		// 		$validator = new Zend\Validator\Db\RecordExists(
-		// 				array(
-		// 					'table'   => 'users',
-		// 					'field'   => 'emailaddress',
-		// 					'adapter' => $dbAdapter
-		// 					'exclude' => array(
-		// 					            'field' => 'id',
-		// 					            'value' => $user_id
-		// 					        )
-		// 				)
-		// 		);
 	}
 }
