@@ -17,6 +17,7 @@ return array(
 	'Last login: ' => 'Dernière connexion : ',
 	'Last activity: ' => 'Dernière activité : ',
 	'Add user' => 'Ajouter un utilisateur',
+	'Edit user' => 'Modifier un utilisateur',
 	'Delete user' => 'Supprimer un utilisateur',
 	'Name' => 'Nom',
 	'Firstname' => 'Prénom',

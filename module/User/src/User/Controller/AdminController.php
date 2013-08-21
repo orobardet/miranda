@@ -38,17 +38,17 @@ class AdminController extends AbstractActionController implements ConfigAwareInt
 			'action' => 'add'
 		)));
 		$form->setAttribute('method', 'post');
-		
 		$form->get('submit')->setValue($this->getServiceLocator()->get('translator')->translate('Add'));
 		
 		$request = $this->getRequest();
 		if ($request->isPost()) {
-			$user = new User();
-			
 			$form->setData($request->getPost());
+
 			if ($form->isValid()) {
-		        $user->exchangeArray($form->getData(), false);
-		        $user->setPassword($form->getData()['password'], $bcrypt = $this->getServiceLocator()->get('MirandaAuthBCrypt'));
+				$user = new User();
+				
+				$user->exchangeArray($form->getData(), false);
+		        $user->setPassword($form->getData()['password'], $this->getServiceLocator()->get('MirandaAuthBCrypt'));
 	            $this->getUserTable()->saveUser($user, true);
 	            
                 return $this->redirect()->toRoute('admin/user');
@@ -58,12 +58,64 @@ class AdminController extends AbstractActionController implements ConfigAwareInt
 		}
 		
 		return array(
-			'form' => $form
+			'form' => $form,
+        	'cancel_url' => $this->url()->fromRoute('admin/user')
 		);
 	}
 
 	public function editAction ()
 	{
+        $id = (int) $this->params()->fromRoute('id', 0);
+        if (!$id) {
+            return $this->redirect()->toRoute('admin/user', array(
+                'action' => 'add'
+            ));
+        }
+
+        try {
+            $user = $this->getUserTable()->getUser($id);
+        }
+        catch (\Exception $ex) {
+            return $this->redirect()->toRoute('admin/user');
+        }
+
+		$form = $this->getServiceLocator()->get('User\Form\User');
+		$form->getInputFilter()->setUserId($id);
+        $form->bind($user);
+		$form->setAttribute('action', $this->url()->fromRoute('admin/user', array(
+			'action' => 'edit',
+			'id' => $id
+		)));
+		$form->setAttribute('method', 'post');
+		$form->get('submit')->setValue($this->getServiceLocator()->get('translator')->translate('Edit'));
+        
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+        	$form->setData($request->getPost());
+        	 
+        	$passwordChanged = false;
+        	if (($request->getPost('password', '') == '') && ($request->getPost('password-verification', '') == '')) {
+        		$form->getInputFilter()->noPasswordValidation();
+        		$passwordChanged = false;        		
+        	} else {
+        		$passwordChanged = true;
+        	}
+
+            if ($form->isValid()) {
+                if ($passwordChanged) {
+                	$user->setPassword($request->getPost('password'), $this->getServiceLocator()->get('MirandaAuthBCrypt'));
+                }
+                $this->getUserTable()->saveUser($user, $passwordChanged);
+                
+                return $this->redirect()->toRoute('admin/user');
+            }
+        }
+
+        return array(
+            'id' => $id,
+            'form' => $form,
+        	'cancel_url' => $this->url()->fromRoute('admin/user')
+        );
 	}
 
 	public function deleteAction ()

@@ -24,7 +24,8 @@ return array(
     'Exception' => 'Exception ',
 	
 	'Add' => 'Ajouter',
-    'Cancel' => 'Annuler',
+	'Edit' => 'Modifier',
+	'Cancel' => 'Annuler',
 	'Yes' => 'Oui',
 	'No' => 'Non',
 );

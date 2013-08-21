@@ -308,9 +308,20 @@ class User
 		$this->firstname = (array_key_exists('firstname', $data)) ? $data['firstname'] : null;
 		$this->lastname = (array_key_exists('lastname', $data)) ? $data['lastname'] : null;
 		$this->active = (array_key_exists('active', $data)) ? $data['active'] : null;
-		$this->creation_ts = (array_key_exists('creation_ts', $data)) ? $data['creation_ts'] : null;
-		$this->modification_ts = (array_key_exists('modification_ts', $data)) ? $data['modification_ts'] : null;
-		$this->last_activity_ts = (array_key_exists('last_activity_ts', $data)) ? $data['last_activity_ts'] : null;
-		$this->last_login_ts = (array_key_exists('last_login_ts', $data)) ? $data['last_login_ts'] : null;
+		$this->creation_ts = (array_key_exists('creation_ts', $data)) ? $data['creation_ts'] : $this->creation_ts;
+		$this->modification_ts = (array_key_exists('modification_ts', $data)) ? $data['modification_ts'] : $this->modification_ts;
+		$this->last_activity_ts = (array_key_exists('last_activity_ts', $data)) ? $data['last_activity_ts'] : $this->last_activity_ts;
+		$this->last_login_ts = (array_key_exists('last_login_ts', $data)) ? $data['last_login_ts'] : $this->last_login_ts;
+	}
+	
+	public function getArrayCopy()
+	{
+		return array(
+			'id' => $this->id,
+			'email' => $this->email,
+			'firstname' => $this->firstname,
+			'lastname' => $this->lastname,
+			'active' => $this->isActive()
+		);
 	}
 }

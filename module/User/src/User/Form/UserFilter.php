@@ -7,7 +7,8 @@ use Zend\Validator\Db\NoRecordExists as DbNoRecordExists;
 
 class UserFilter extends InputFilter
 {
-
+	private $emailNotExistsValidator;
+	
 	public function __construct (DbAdapter $dbAdapter)
 	{
 		$this->add(
@@ -56,6 +57,15 @@ class UserFilter extends InputFilter
 					)
 				));
 		
+		$this->emailNotExistsValidator = new DbNoRecordExists(
+								array(
+									'table' => 'users',
+									'field' => 'email',
+									'adapter' => $dbAdapter,
+									'messages' => array(
+										DbNoRecordExists::ERROR_RECORD_FOUND => "Email address already used"
+									)
+								));
 		$this->add(
 				array(
 					'name' => 'email',
@@ -64,15 +74,7 @@ class UserFilter extends InputFilter
 						array(
 							'name' => 'EmailAddress'
 						),
-						new DbNoRecordExists(
-								array(
-									'table' => 'users',
-									'field' => 'email',
-									'adapter' => $dbAdapter,
-									'messages' => array(
-										DbNoRecordExists::ERROR_RECORD_FOUND => "Email address already used"
-									)
-								))
+						$this->emailNotExistsValidator
 					),
 					'filters' => array(
 						array(
@@ -142,5 +144,18 @@ class UserFilter extends InputFilter
 						)
 					)
 				));
+	}
+	
+	public function setUserId($id)
+	{
+		$this->emailNotExistsValidator->setExclude(array(
+            'field' => 'id',
+            'value' => $id
+        ));
+	}
+	
+	public function noPasswordValidation()
+	{
+		$this->remove('password')->remove('password_verification');
 	}
 }

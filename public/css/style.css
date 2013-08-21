@@ -155,10 +155,10 @@ form .control-group .help-block > ul {
   margin-bottom: 0px;
 }
 .state-error {
-  color: #b94a48;
+  color: #b94a48 !important;
 }
 .state-success {
-  color: #468847;
+  color: #468847 !important;
 }
 .icon-sprite {
   display: inline-block;

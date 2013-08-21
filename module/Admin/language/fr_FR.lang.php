@@ -1,7 +1,7 @@
 <?php 
 return array(
 	'Users' => 'Utilisateurs',
-	'edit' => 'editer',
+	'edit' => 'modifier',
 	'delete' => 'supprimer',
 	'ID' => 'ID',
 	'Admin' => 'Administration'		

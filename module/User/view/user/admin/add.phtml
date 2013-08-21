@@ -11,8 +11,6 @@ $form->setAttribute('id', 'user-form');
 <br/>
 <?php echo $this->form()->openTag($form); ?>
 	
-	<?php echo $this->formHidden($form->get('id')); ?>
-
 	<?php $element = $form->get('firstname'); ?>
 	<div class="control-group<?php if (count($element->getMessages())) echo " error"; ?>">
 		<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
@@ -102,7 +100,10 @@ $form->setAttribute('id', 'user-form');
 	
 	<div class="control-group">
 	    <div class="controls">
-			<button type="button" class="btn"><?php echo $this->translate('Cancel'); ?></button> <?php echo $this->formElement($form->get('submit')->setAttributes(array('class' => 'btn btn-primary'))); ?>
+			<?php if ($this->cancel_url): ?>
+				<a href="<?php echo $this->cancel_url; ?>" class="btn"><?php echo $this->translate('Cancel'); ?></a>
+			<?php endif; ?>
+			<?php echo $this->formElement($form->get('submit')->setAttributes(array('class' => 'btn btn-primary'))); ?>
 		</div>
 	</div>
 
