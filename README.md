@@ -23,4 +23,4 @@ VHost Apache
         Allow from all
     </Directory>
 </VirtualHost>
-```apache
+```
