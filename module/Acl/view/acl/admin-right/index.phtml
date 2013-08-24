@@ -1,0 +1,7 @@
+<?php
+$title = $this->translate('Rights');
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<?php echo $this->partial('partial/rights-list.phtml', array('rights' => $this->rights)); ?>

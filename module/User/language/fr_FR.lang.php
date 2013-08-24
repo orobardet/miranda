@@ -32,7 +32,10 @@ return array(
 	'Password verification' => 'Vérification du mot de passe',
 	'Activated: ' => 'Activé : ',
 	'Activated' => 'Activé',
+	'Send an email' => 'Envoyer un email',
+	'User %name%' => 'Utilisateur %name%',
 	
+	'No users.' => 'Aucun utilisateurs.',
 	
 	'Recommended.' => 'Recommandé.',
 	'Mandatory. Used as login credential.' => "Obligatoire. Sert d'identifiant de connexion.",

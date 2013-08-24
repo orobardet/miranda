@@ -1,7 +1,9 @@
 <?php
-$title = $this->user->getDisplayName();
+$title = $this->translateReplace('User %name%', array('name' => $this->user->getDisplayName()));
 $this->headTitle($title);
 ?>
 <?php echo $this->partial('partial/user-info.phtml', array(
 	'user' => $this->user,
 )); ?>
+
+Roles :

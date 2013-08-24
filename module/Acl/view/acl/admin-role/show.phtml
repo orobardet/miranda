@@ -1,0 +1,17 @@
+<?php
+$title = $this->translateReplace("'%name%' role's details", array('name' => $this->role->getName()));
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($this->translate($title)); ?></h1>
+
+<p>
+<?php echo $this->escapeHtml($this->role->getDescr()); ?>
+</p>
+<p>
+<?php echo $this->partial('partial/rights-list.phtml', array(
+	'rights' => $this->all_rights,
+	'show_checked_mode' => true, 
+	'checked_rights' => $this->role->getRights()
+)); ?>
+</p>
+<a href="<?php echo $this->return_url; ?>" class="btn btn-primary"><?php echo $this->translate('Back'); ?></a>

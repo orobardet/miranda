@@ -23,7 +23,10 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 			'authPreDispatch'
 		), 110);
 		
-		$events->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', array($this, 'addLayoutViewVariables'), 201);
+		$events->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', array(
+			$this,
+			'addLayoutViewVariables'
+		), 201);
 	}
 
 	public function authPreDispatch($event)
@@ -72,31 +75,32 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		}
 		
 		// Si l'utilisateur connecté n'est plus activé, on le déconnecte
-		if ($authService->hasIdentity() && !$authService->getIdentity()->isActive() && ($event->getRouteMatch()->getMatchedRouteName() != 'logout')) {
+		if ($authService->hasIdentity() && !$authService->getIdentity()->isActive() &&
+				 ($event->getRouteMatch()->getMatchedRouteName() != 'logout')) {
 			$session = $event->getApplication()->getServiceManager()->get('Zend\Session\SessionManager')->getStorage();
-			$session->auth_error_message = 'This user account is not activated.';				
+			$session->auth_error_message = 'This user account is not activated.';
 			return $event->getTarget()->plugin('redirect')->toRoute('logout');
 		}
 	}
 
 	/**
 	 * Method où ajouter toutes les variables à passer à la vue du layout
-	 * 
-	 * @param Zend\Mvc\MvcEvent $e
+	 *
+	 * @param Zend\Mvc\MvcEvent $e        	
 	 */
 	public function addLayoutViewVariables($e)
 	{
 		$route = $e->getRouteMatch();
 		$viewModel = $e->getViewModel();
 		$variables = $viewModel->getVariables();
-
+		
 		if (false === isset($variables['controller'])) {
 			$viewModel->setVariable('controller', $route->getParam('controller'));
 		}
 		if (false === isset($variables['action'])) {
 			$viewModel->setVariable('action', $route->getParam('action'));
 		}
-	
+		
 		$viewModel->setVariable('module', strtolower(__NAMESPACE__));
 		
 		$config = new ZendConfig($e->getApplication()->getServiceManager()->get('config')['application']);
@@ -104,7 +108,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		$viewModel->setVariable('css', $config->layout->get('css', array()));
 		$viewModel->setVariable('js', $config->layout->get('js', array()));
 	}
-	
+
 	public function onBootstrap(MvcEvent $e)
 	{
 		$this->config = new ZendConfig($e->getApplication()->getServiceManager()->get('config')['application']);
@@ -119,6 +123,12 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		AbstractValidator::setDefaultTranslator($translator);
 		
 		$this->bootstrapSession($e);
+		
+		$this->initAcl($e);
+		$e->getApplication()->getEventManager()->attach('route', array(
+			$this,
+			'checkAcl'
+		));
 	}
 
 	public function bootstrapSession($e)
@@ -130,6 +140,65 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		if (!isset($container->init)) {
 			$session->regenerateId(true);
 			$container->init = 1;
+		}
+	}
+
+	public function getDbRoles(MvcEvent $e)
+	{
+		// I take it that your adapter is already configured
+//		$dbAdapter = $e->getApplication()->getServiceManager()->get('Zend\Db\Adapter\Adapter');
+//		$results = $dbAdapter->query('SELECT * FROM acl ORDER BY role_privileges DESC');
+		// making the roles array
+		$roles = array();
+//		foreach($results as $result){
+//			$roles[$result['user_role']][] = $result['resource'];
+//		}
+		return $roles;
+	}
+
+	public function initAcl(MvcEvent $e)
+	{
+		$acl = new \Zend\Permissions\Acl\Acl();
+		$roles = $this->getDbRoles($e);
+		$allResources = array();
+		foreach ($roles as $role => $resources) {
+			
+			$role = new \Zend\Permissions\Acl\Role\GenericRole($role);
+			$acl->addRole($role);
+			
+			$allResources = array_merge($resources, $allResources);
+			
+			//adding resources
+			foreach ($resources as $resource) {
+				// Edit 4
+				if (!$acl->hasResource($resource))
+					$acl->addResource(new \Zend\Permissions\Acl\Resource\GenericResource($resource));
+			}
+			//adding restrictions
+			foreach ($allResources as $resource) {
+				$acl->allow($role, $resource);
+			}
+		}
+		//testing
+		//var_dump($acl->isAllowed('admin','home'));
+		//true
+		
+
+		//setting to view
+		$e->getViewModel()->acl = $acl;
+	}
+
+	public function checkAcl(MvcEvent $e)
+	{
+		$route = $e->getRouteMatch()->getMatchedRouteName();
+		//you set your role
+		$userRole = 'guest';
+		
+		if ($e->getViewModel()->acl->hasResource($route) && !$e->getViewModel()->acl->isAllowed($userRole, $route)) {
+			$response = $e->getResponse();
+			//location to page or what ever
+			$response->getHeaders()->addHeaderLine('Location', $e->getRequest()->getBaseUrl() . '/404');
+			$response->setStatusCode(303);
 		}
 	}
 
@@ -214,7 +283,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 			)
 		);
 	}
-	
+
 	public function getViewHelperConfig()
 	{
 		return array(

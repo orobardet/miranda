@@ -31,11 +31,37 @@ return array(
                 									'defaults' => array(
      			    									'__NAMESPACE__' => 'User\Controller',
                 										'controller' => 'User\Controller\Admin',
-                										'action'     => 'index',
+                										'action'     => 'index'
                 									),
  			    		    				),
- 			    		    		)
-		    				)
+ 			    		    		),
+         			    		    'right' => array(
+         			    		    		'type' => 'Literal',
+         			    		    		'options' => array(
+         			    		    				'route' => '/right',
+                									'defaults' => array(
+     			    									'__NAMESPACE__' => 'Acl\Controller',
+                										'controller' => 'Acl\Controller\AdminRight',
+                										'action'     => 'index'
+                									),
+ 			    		    				),
+ 			    		    		),
+         			    		    'role' => array(
+         			    		    		'type' => 'segment',
+         			    		    		'options' => array(
+         			    		    				'route' => '/role[/][:action][/:id]',
+                									'constraints' => array(
+                											'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                											'id'     => '[0-9]+',
+                									),
+                									'defaults' => array(
+     			    									'__NAMESPACE__' => 'Acl\Controller',
+                										'controller' => 'Acl\Controller\AdminRole',
+                										'action'     => 'index'
+                									),
+ 			    		    				),
+ 			    		    		),
+                			)
     	    		),
  			),
 	),

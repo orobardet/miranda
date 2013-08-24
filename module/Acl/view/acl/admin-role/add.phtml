@@ -1,0 +1,56 @@
+<?php
+$title = $this->translate('Add role');
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($this->translate($title)); ?></h1>
+<?php
+$form = $this->form;
+$form->setAttribute('class', 'form-horizontal');
+$form->setAttribute('id', 'role-form');
+?>
+<br/>
+<?php echo $this->form()->openTag($form); ?>
+	
+	<?php $element = $form->get('name'); ?>
+	<div class="control-group required<?php if (count($element->getMessages())) echo " error"; ?>">
+		<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+		<div class="controls">
+			<?php echo $this->formElement($element) ?><span class="help-inline"><?php echo $this->translate("Name of the role, short, like 'Administror' or 'Costume borrower'."); ?></span>
+			<?php if (count($element->getMessages())):?>
+			<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
+			<?php endif; ?>
+		</div>
+	</div>
+
+	<?php $element = $form->get('descr'); ?>
+	<div class="control-group<?php if (count($element->getMessages())) echo " error"; ?>">
+		<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+		<div class="controls">
+			<?php echo $this->formElement($element) ?><span class="help-inline"><?php echo $this->translate('More complete description of the role.'); ?></span>
+			<?php if (count($element->getMessages())):?>
+			<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
+			<?php endif; ?>
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label class="control-label"><?php echo $this->translate('Rights: '); ?></label>
+		<div class="controls">
+		<?php echo $this->partial('partial/rights-list.phtml', array(
+			'rights' => $this->all_rights,
+			'edit_mode' => true, 
+			'checked_rights' => $this->checked_rights
+		)); ?>
+		</div>
+	</div>
+		
+	<div class="control-group">
+	    <div class="controls">
+			<?php if ($this->cancel_url): ?>
+				<a href="<?php echo $this->cancel_url; ?>" class="btn"><?php echo $this->translate('Cancel'); ?></a>
+			<?php endif; ?>
+			<?php echo $this->formElement($form->get('submit')->setAttributes(array('class' => 'btn btn-primary'))); ?>
+		</div>
+	</div>
+
+<?php echo $this->form()->closeTag(); ?>

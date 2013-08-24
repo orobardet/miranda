@@ -28,4 +28,5 @@ return array(
 	'Cancel' => 'Annuler',
 	'Yes' => 'Oui',
 	'No' => 'Non',
+	'Back' => 'Retour'
 );

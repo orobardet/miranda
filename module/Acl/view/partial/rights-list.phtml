@@ -1,0 +1,64 @@
+<ul class="rights-group">
+<?php foreach($this->rights as $group): ?>
+	<li>
+		<span class="group-name">
+		<?php if ($this->edit_mode): ?>
+			<input type="checkbox" id="rights-group-<?php echo $group->group_id; ?>" class="rights-group-checker" data-group-id="<?php echo $group->group_id; ?>"/>
+			<label for="rights-group-<?php echo $group->group_id; ?>"><?php echo $this->translate($group->descr); ?></label>
+		<?php else:?>
+			<?php echo $this->translate($group->descr); ?>
+		<?php endif; ?>
+		</span>
+		<ul class="rights-list">
+		<?php foreach($group->rights as $right): ?>
+		<li>
+		<?php if ($this->edit_mode): ?>
+			<input type="checkbox" name="rights[]" value="<?php echo $right->id; ?>" <?php if (in_array($right->id, $this->checked_rights)) echo 'checked="checked"'; ?> id="rights-group-right-<?php echo $right->id; ?>" class="rights-group-right-checker" data-group-id="<?php echo $group->group_id; ?>"/>
+			<label for="rights-group-right-<?php echo $right->id; ?>"><?php echo $this->translate($right->descr); ?></label>
+		<?php elseif ($this->show_checked_mode):?>
+			<?php if (in_array($right->id, $this->checked_rights)): ?>
+				<i class="icon-ok"></i> <?php echo $this->translate($right->descr); ?> 
+			<?php else: ?>
+				<span class="muted"><i class="icon-empty"></i> <?php echo $this->translate($right->descr); ?></span>
+			<?php endif; ?>
+		<?php else:?>
+			<?php echo $this->translate($right->descr); ?>
+		<?php endif; ?>
+		</li>
+		<?php endforeach; ?>
+		</ul>
+	</li>
+<?php endforeach;?>
+</ul>
+
+<?php if ($this->edit_mode): ?>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('input[type=checkbox].rights-group-checker').click(function() {
+		var group_id = $(this).attr('data-group-id');
+		var checked = $(this).is(':checked');
+		$('input[type=checkbox][data-group-id='+group_id+'].rights-group-right-checker').prop('checked', checked);
+	});
+	$('input[type=checkbox].rights-group-right-checker').click(function() {
+		var group_id = $(this).attr('data-group-id');
+		var checked = true;
+
+		if ($(this).is(':checked')) {
+			// Is all other checkbox of the right group checked?
+			$('input[type=checkbox][data-group-id='+group_id+'].rights-group-right-checker').each(function() {
+				if (!$(this).is(':checked')) {
+					checked = false;
+				}
+			});
+		} else {
+			checked = false;
+		}
+		
+		$('input[type=checkbox][data-group-id='+group_id+'].rights-group-checker').prop('checked', checked);
+	});
+	$('input[type=checkbox].rights-group-right-checker').each(function() {
+		$(this).triggerHandler('click');
+	});
+});
+</script>
+<?php endif; ?>

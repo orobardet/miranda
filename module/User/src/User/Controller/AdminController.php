@@ -26,6 +26,27 @@ class AdminController extends AbstractActionController implements ConfigAwareInt
 		));
 	}
 
+	public function showAction()
+	{
+        $id = (int) $this->params()->fromRoute('id', 0);
+        if (!$id) {
+            return $this->redirect()->toRoute('admin/user', array(
+                'action' => 'add'
+            ));
+        }
+
+        try {
+            $user = $this->getUserTable()->getUser($id);
+        }
+        catch (\Exception $ex) {
+            return $this->redirect()->toRoute('admin/user');
+        }
+		
+		return new ViewModel(array(
+				'user' => $user
+		));
+	}
+	
 	public function addAction ()
 	{
 		$defaultData = array(

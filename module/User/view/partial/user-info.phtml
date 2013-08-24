@@ -1,0 +1,21 @@
+<div>
+	<h2 style="vertical-align:middle;display:inline-block;"><?php echo $this->user->getDisplayName(); ?></h2>
+	<p style="display:inline-block;padding-left:20px;">
+		<?php if ($this->user->isActive()):?>
+			<span class="label label-success" style="padding:5px;"><i class="icon-ok icon-white"></i> <?php echo $this->translate('Account enabled'); ?></span>
+		<?php else:?>
+			<span class="label label-important" style="padding:5px;"><i class="icon-ban-circle icon-white"></i> <?php echo $this->translate('Account disabled'); ?></span>
+		<?php endif;?>
+	</p>
+</div>
+<p>
+<span class="muted"><i class="icon-time"></i> <?php echo $this->translate('Created on: '); ?></span><?php echo $this->user->getCreationDate($this->translate('full_text_date_time')); ?><br/>
+<span class="muted"><i class="icon-time"></i> <?php echo $this->translate('Last modified: '); ?></span><?php echo $this->user->getLastModificationDate($this->translate('full_text_date_time')); ?><br/>
+</p>
+<p>
+<span class="muted"><i class="icon-time"></i> <?php echo $this->translate('Last login: '); ?></span><?php echo $this->user->getLastLoginDate($this->translate('full_text_date_time')); ?><br/>
+<span class="muted"><i class="icon-time"></i> <?php echo $this->translate('Last activity: '); ?></span><?php echo $this->user->getLastActivityDate($this->translate('full_text_date_time')); ?><br/>
+</p>
+<p>
+<span class="muted"><i class="icon-envelope"></i> <?php echo $this->translate('Email: '); ?></span><a href="mailto:<?php echo $this->user->getEmail(); ?>"><?php echo $this->user->getEmail(); ?></a><br/>
+</p>

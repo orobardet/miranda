@@ -133,4 +133,55 @@ form .control-group {
 	color: @successText !important;
 }
 
+.admin-btn {
+	height:65px;
+	min-width:130px;
+	margin:0px 20px 20px 0px;
+	
+	& > img {
+		margin:5px;
+	}
+	.title {
+		font-weight:bold;
+		font-size: @baseFontSize * 1.25;
+	}
+}
+.rights-group {
+	list-style: none outside none;
+	margin-left:0px;
+	
+	label {
+		display:inline;
+	}
+	
+	input[type=checkbox] {
+		margin-top:-2px;
+	}
+
+	& > li {
+	   	display: inline-block;
+	    margin-bottom: 10px;
+	    margin-right: 10px;
+	    vertical-align: top;
+	}
+	
+	& > li > span.group-name {
+		&, label {
+			font-weight: bold;
+		}
+		
+	    background-color: @linkColor;
+	    border-radius: 2px 2px 2px 0;
+	    color: @white;
+	    padding: 0px 8px;
+		display:block;
+	}
+	.rights-list {
+		list-style: none outside none;
+		margin-left:0px;
+		padding-left:5px;
+		border-left:solid 3px @linkColor;
+	}
+}
+
 @import "icons-sprite.less";

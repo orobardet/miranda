@@ -250,6 +250,9 @@ class User
 		return $this->active?true:false;
 	}
 
+	/**
+	 * @param integer $id
+	 */
 	public function setId($id) {
 		$this->id = $id;
 	}

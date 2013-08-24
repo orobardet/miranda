@@ -57,7 +57,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				},
 				'UserTableGateway' => function ($sm)
 				{
-					$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$dbAdapter = $sm->get('user_zend_db_adapter');
 					$resultSetPrototype = new ResultSet();
 					$resultSetPrototype->setArrayObjectPrototype(new User());
 					return new TableGateway('users', $dbAdapter, null, $resultSetPrototype);

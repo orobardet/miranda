@@ -160,6 +160,51 @@ form .control-group .help-block > ul {
 .state-success {
   color: #468847 !important;
 }
+.admin-btn {
+  height: 65px;
+  min-width: 130px;
+  margin: 0px 20px 20px 0px;
+}
+.admin-btn > img {
+  margin: 5px;
+}
+.admin-btn .title {
+  font-weight: bold;
+  font-size: 17.5px;
+}
+.rights-group {
+  list-style: none outside none;
+  margin-left: 0px;
+}
+.rights-group label {
+  display: inline;
+}
+.rights-group input[type=checkbox] {
+  margin-top: -2px;
+}
+.rights-group > li {
+  display: inline-block;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  vertical-align: top;
+}
+.rights-group > li > span.group-name {
+  background-color: #931bbf;
+  border-radius: 2px 2px 2px 0;
+  color: #ffffff;
+  padding: 0px 8px;
+  display: block;
+}
+.rights-group > li > span.group-name,
+.rights-group > li > span.group-name label {
+  font-weight: bold;
+}
+.rights-group .rights-list {
+  list-style: none outside none;
+  margin-left: 0px;
+  padding-left: 5px;
+  border-left: solid 3px #931bbf;
+}
 .icon-sprite {
   display: inline-block;
   width: 16px;
