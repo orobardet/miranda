@@ -8,7 +8,7 @@ Gestionnaire de la compagnie Miranda
 Installation
 ------------
 
-VHost Apache
+VHost Apache :
 ```apache
 <VirtualHost *:80>
     ServerName manager.compagniemiranda.com
