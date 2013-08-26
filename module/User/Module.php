@@ -8,6 +8,7 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\TableGateway\Feature;
 use Zend\Mvc\MvcEvent;
 use Zend\Authentication\AuthenticationService;
 use User\Authentification\Adapter\DbCallbackCheckAdapter as AuthDbTable;
@@ -51,8 +52,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 			'factories' => array(
 				'User\Model\UserTable' => function ($sm)
 				{
-					$tableGateway = $sm->get('UserTableGateway');
-					$table = new UserTable($tableGateway);
+					$table = new UserTable($sm->get('UserTableGateway'), $sm->get('UsersRolesTableGateway'));
 					return $table;
 				},
 				'UserTableGateway' => function ($sm)
@@ -62,6 +62,11 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 					$resultSetPrototype->setArrayObjectPrototype(new User());
 					return new TableGateway('users', $dbAdapter, null, $resultSetPrototype);
 				},
+				'UsersRolesTableGateway' => function ($sm)
+				{
+					$dbAdapter = $sm->get('acl_zend_db_adapter');
+					return new TableGateway('users_roles', $dbAdapter, new Feature\RowGatewayFeature('user_id'));
+				},
 				'User\Form\Login' => function ($sm)
 				{
 					$form = new Form\Login(null, $sm->get('translator'));
@@ -70,7 +75,12 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				},
 				'User\Form\User' => function ($sm)
 				{
-					$form = new Form\User(null, $sm->get('translator'));
+					$roles = array();
+					$rolesResults = $sm->get('Acl\Model\RoleTable')->fetchAll();
+					foreach ($rolesResults as $role) {
+						$roles[$role->getId()] = $role->getName();
+					}
+					$form = new Form\User(null, $sm->get('translator'), $roles);
 					$form->setInputFilter(new Form\UserFilter($sm->get('Zend\Db\Adapter\Adapter')));
 					return $form;
 				},

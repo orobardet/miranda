@@ -53,6 +53,11 @@ class User
 	 * @var integer
 	 */
 	protected $last_login_ts;
+	/**
+	 * Tableau d'ID des rôles affectés à l'utilisateur
+	 * @var array
+	 */
+	protected $roles;
 	
 	/**
 	 * @return integer $id
@@ -241,6 +246,14 @@ class User
 			}
 		}
 	}
+
+	/**
+	 * @return array $roles
+	 */
+	public function getRoles()
+	{
+		return $this->roles;
+	}
 	
 	/**
 	 * @return boolean $active
@@ -301,6 +314,16 @@ class User
 		$this->active = $active?1:0;
 	}
 
+	/**
+	 * @param array $roles
+	 */
+	public function setRoles($roles)
+	{
+		if (is_array($roles) || ($roles === null)) {
+			$this->roles = $roles;
+		}
+	}
+	
 	public function exchangeArray($data, $getPassword = true)
 	{
 		$this->id = (array_key_exists('id', $data)) ? $data['id'] : null;
@@ -311,6 +334,7 @@ class User
 		$this->firstname = (array_key_exists('firstname', $data)) ? $data['firstname'] : null;
 		$this->lastname = (array_key_exists('lastname', $data)) ? $data['lastname'] : null;
 		$this->active = (array_key_exists('active', $data)) ? $data['active'] : null;
+		$this->roles = (array_key_exists('roles', $data)) ? $data['roles'] : null;
 		$this->creation_ts = (array_key_exists('creation_ts', $data)) ? $data['creation_ts'] : $this->creation_ts;
 		$this->modification_ts = (array_key_exists('modification_ts', $data)) ? $data['modification_ts'] : $this->modification_ts;
 		$this->last_activity_ts = (array_key_exists('last_activity_ts', $data)) ? $data['last_activity_ts'] : $this->last_activity_ts;
@@ -324,7 +348,8 @@ class User
 			'email' => $this->email,
 			'firstname' => $this->firstname,
 			'lastname' => $this->lastname,
-			'active' => $this->isActive()
+			'active' => $this->isActive(),
+			'roles' => $this->roles
 		);
 	}
 }

@@ -6,7 +6,7 @@ use Zend\Form\Form;
 class User extends Form
 {
 
-	public function __construct ($name = null, $translator)
+	public function __construct ($name = null, $translator = null, $roles = array())
 	{
 		parent::__construct($name);
 		
@@ -97,6 +97,20 @@ class User extends Form
 					'attributes' => array(
 						'id' => 'input-active',
 						'title' => $translator->translate('Activated')
+					)
+				));
+		
+		$this->add(
+				array(
+					'name' => 'roles',
+					'type' => 'Application\Form\Element\OptionalMultiCheckbox',
+					'options' => array(
+						'label' => 'Roles: ',
+						'value_options' => $roles,
+					),
+					'attributes' => array(
+						'id' => 'input-roles',
+						'title' => $translator->translate('Roles')
 					)
 				));
 		

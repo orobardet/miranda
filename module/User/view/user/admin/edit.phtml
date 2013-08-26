@@ -92,6 +92,17 @@ $form->setAttribute('id', 'user-form');
 		</div>
 	</div>
 	
+	<?php $element = $form->get('roles'); ?>
+	<div class="control-group<?php if (count($element->getMessages())) echo " error"; ?>">
+		<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+		<div class="controls">
+			<?php echo $this->formElement($element->setLabelAttributes(array('class'=> 'multicheckbox'))) ?>
+			<?php if (count($element->getMessages())):?>
+			<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
+			<?php endif; ?>
+		</div>
+	</div>
+	
 	<?php $element = $form->get('active'); ?>
 	<div class="control-group">
 		<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>

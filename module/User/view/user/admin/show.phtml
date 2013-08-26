@@ -6,4 +6,23 @@ $this->headTitle($title);
 	'user' => $this->user,
 )); ?>
 
-Roles :
+<div class="p">
+<?php $user_roles = $this->user->getRoles(); ?>
+<span class="muted"><i class="icon-cap"></i> <?php echo $this->translate('Roles: '); ?></span>
+<?php if (count($user_roles)): ?>
+<ul style="display:inline-block;vertical-align:top;">
+<?php foreach ($this->all_roles as $role): ?>
+	<?php if (in_array($role->getId(), $user_roles)): ?>
+		<li><a href="<?php echo $this->url('admin/role',
+            array('action'=>'show', 'id' => $role->getId()));?>" title="<?php echo $role->getDescr();?>"><?php echo $role->getName();?></a></li>
+	<?php endif;?>
+<?php endforeach; ?>
+</ul>
+<?php else: ?>
+<?php echo $this->translate('None'); ?>
+<?php endif; ?>
+</div>
+
+<p>
+<a href="<?php echo $this->return_url; ?>" class="btn btn-primary"><?php echo $this->translate('Back'); ?></a>
+</p>

@@ -49,6 +49,9 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'RightsManager' => function ($sm) {
 					return new RightsManager($sm->get('RightsTableGateway'), $sm->get('RightsGroupsTableGateway'));
 				},
+				'RolesManager' => function ($sm) {
+					return new RightsManager($sm->get('RolesTableGateway'));
+				},
 				'RightsTableGateway' => function ($sm)
 				{
 					$dbAdapter = $sm->get('acl_zend_db_adapter');

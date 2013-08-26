@@ -37,11 +37,17 @@ a > i.icon-linkcolor {
 a:hover > .icon-linkcolor {
   background-image: url("../img/glyphicons-halflings-linkcolor-hover.png");
 }
+.p {
+  margin-bottom: 10px;
+}
 .muted > [class^="icon-"],
 .muted > [class*=" icon-"],
 [class^="icon-"].muted,
 [class*=" icon-"].muted {
   background-image: url("../img/glyphicons-halflings-muted.png");
+}
+.icon-cap {
+  background-position: 0 -168px;
 }
 .navbar .navbar-inner {
   border-width: 0px;
@@ -204,6 +210,16 @@ form .control-group .help-block > ul {
   margin-left: 0px;
   padding-left: 5px;
   border-left: solid 3px #931bbf;
+}
+label.multicheckbox input[type=checkbox] {
+  margin-top: -2px;
+  margin-right: 5px;
+}
+.main-messages {
+  margin-bottom: 10px;
+}
+.main-messages ul {
+  margin: 0px 0px 0px 10px;
 }
 .icon-sprite {
   display: inline-block;

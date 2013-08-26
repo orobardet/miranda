@@ -284,11 +284,29 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		);
 	}
 
+	public function getControllerPluginConfig()
+	{
+		return array(
+			'factories' => array(
+				'resultStatus' => function ($sm)
+				{
+					return new \Application\Controller\Plugin\ResultStatus($sm->getServiceLocator()->get('Zend\Session\SessionManager')->getStorage());
+				}
+			)
+		);
+	}
+	
 	public function getViewHelperConfig()
 	{
 		return array(
 			'invokables' => array(
 				'translateReplace' => 'Application\View\Helper\TranslateReplace'
+			),
+			'factories' => array(
+				'resultStatus' => function ($sm)
+				{
+					return new \Application\View\Helper\ResultStatus($sm->getServiceLocator()->get('Zend\Session\SessionManager')->getStorage());
+				}
 			)
 		);
 	}

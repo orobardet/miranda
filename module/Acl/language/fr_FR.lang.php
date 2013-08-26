@@ -27,6 +27,7 @@ return array(
 	'Name: ' => 'Nom : ',
 	'Name' => 'Nom',
 	'Rights: ' => 'Droits : ',
+	'Roles: ' => 'Rôles : ',
 	
 	"Name of the role, short, like 'Administror' or 'Costume borrower'." => "Nom du rôle, court, comme 'Administrateur' ou 'Emprunteur de costume'.",
 	'More complete description of the role.' => 'Description plus complète du rôle.',

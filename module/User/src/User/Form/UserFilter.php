@@ -7,9 +7,10 @@ use Zend\Validator\Db\NoRecordExists as DbNoRecordExists;
 
 class UserFilter extends InputFilter
 {
+
 	private $emailNotExistsValidator;
-	
-	public function __construct (DbAdapter $dbAdapter)
+
+	public function __construct(DbAdapter $dbAdapter)
 	{
 		$this->add(
 				array(
@@ -58,14 +59,14 @@ class UserFilter extends InputFilter
 				));
 		
 		$this->emailNotExistsValidator = new DbNoRecordExists(
-								array(
-									'table' => 'users',
-									'field' => 'email',
-									'adapter' => $dbAdapter,
-									'messages' => array(
-										DbNoRecordExists::ERROR_RECORD_FOUND => "Email address already used"
-									)
-								));
+				array(
+					'table' => 'users',
+					'field' => 'email',
+					'adapter' => $dbAdapter,
+					'messages' => array(
+						DbNoRecordExists::ERROR_RECORD_FOUND => "Email address already used"
+					)
+				));
 		$this->add(
 				array(
 					'name' => 'email',
@@ -102,10 +103,10 @@ class UserFilter extends InputFilter
 								{
 									$score = 0;
 									$regexpMatch = array(
-										'/[a-z]+/',			// Au moins une lettre minuscule 
-							        	'/[A-Z]+/',			// Au moins une lettre majuscule
-							        	'/[0-9]+/',   		// Au moins un chiffre
-							   			'/[^a-zA-Z0-9 ]/' 	// Au moins un caractère spécial (c-a-d hors chiffres et lettres et l'espace)
+										'/[a-z]+/', // Au moins une lettre minuscule 
+										'/[A-Z]+/', // Au moins une lettre majuscule
+										'/[0-9]+/', // Au moins un chiffre
+										'/[^a-zA-Z0-9 ]/' // Au moins un caractère spécial (c-a-d hors chiffres et lettres et l'espace)
 									);
 									
 									foreach ($regexpMatch as $regexp) {
@@ -144,16 +145,17 @@ class UserFilter extends InputFilter
 						)
 					)
 				));
+		
 	}
-	
+
 	public function setUserId($id)
 	{
 		$this->emailNotExistsValidator->setExclude(array(
-            'field' => 'id',
-            'value' => $id
-        ));
+			'field' => 'id',
+			'value' => $id
+		));
 	}
-	
+
 	public function noPasswordValidation()
 	{
 		$this->remove('password')->remove('password_verification');

@@ -21,9 +21,16 @@ class RoleTable extends Role
 		return $this->tableGateway->select($where);
 	}
 
-	public function fetchAll()
+	public function fetchAll($where = null, $order = null)
 	{
-		return $this->tableGateway->select();
+		return $this->tableGateway->select(function ($select) use ($where, $order) {
+			if ($where) {
+				$select->where($where);
+			}
+			if ($order) {
+				$select->order($order);
+			}
+		});
 	}
 
 	public function getRole($id)

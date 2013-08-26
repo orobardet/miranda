@@ -1,0 +1,24 @@
+<?php if (count($this->results)):?>
+<div class="main-messages alert alert-<?php echo $this->type; ?>" id="main-<?php echo $this->type; ?>-messages">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	<?php if (count($this->results) > 1): ?>
+	<ul>
+	<?php foreach($this->results as $message): ?>
+		<li><?php echo $message; ?></li>
+	<?php endforeach;?>
+	</ul>
+ 	<?php else: ?>
+	<?php echo $this->results[0]; ?>
+ 	<?php endif; ?>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		setTimeout(function() {
+			$("#main-<?php echo $this->type; ?>-messages").slideUp(400, 'swing', function() {
+				$(this).remove();
+			});
+		}, <?php echo (2+(1*count($this->results))) * 1000; ?>);
+	
+	});
+	</script>
+</div>
+<?php endif; ?>

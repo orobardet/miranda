@@ -56,5 +56,6 @@ return array(
 	'Email address already used' => 'Adresse email déjà utilisée',
 	'Not strong enough' => 'Pas assez fiable',
 	
-	"Are you sure that you want to delete user '%displayName%' (%email%)?" => "Etes-vous sûr de vouloir supprimer l'utilisateur '%displayName%' (%email%) ?"
+	"Are you sure that you want to delete user '%displayName%' (%email%)?" => "Etes-vous sûr de vouloir supprimer l'utilisateur '%displayName%' (%email%) ?",
+	"User '%name%' edited." => "Utilisateur '%name%' modifié."
 );

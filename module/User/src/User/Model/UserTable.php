@@ -6,10 +6,12 @@ use Zend\Db\TableGateway\TableGateway;
 class UserTable extends User
 {
 	protected $tableGateway;
+	protected $rolesTableGateway;
 
-	public function __construct(TableGateway $tableGateway)
+	public function __construct(TableGateway $tableGateway, TableGateway $rolesTableGateway)
 	{
 		$this->tableGateway = $tableGateway;
+		$this->rolesTableGateway = $rolesTableGateway;
 	}
 
 	public function fetchAll()
@@ -27,6 +29,16 @@ class UserTable extends User
 		if (!$row) {
 			throw new \Exception("Could not find user $id");
 		}
+		
+		$roles = array();
+		$roleset = $this->rolesTableGateway->select(array(
+			'user_id' => $id
+		));
+		foreach ($roleset as $role) {
+			$roles[] = $role->role_id;
+		}
+		$row->setRoles($roles);
+		
 		return $row;
 	}
 
@@ -53,12 +65,25 @@ class UserTable extends User
 		$id = (int)$user->getId();
 		if (!$id) {
 			$this->tableGateway->insert($data);
+			$id = $this->tableGateway->getLastInsertValue();
 		} else {
 			if ($this->getUser($id)) {
 				$this->tableGateway->update($data, array('id' => $id));
 			} else {
 				throw new \Exception("User id $id does not exist");
 			}
+		}
+			
+		// Sauvegarde des droits du rôle
+		$this->rolesTableGateway->delete(array(
+			'user_id' => $id
+		));
+		$roles = $user->getRoles();
+		foreach ($roles as $role_id) {
+			$this->rolesTableGateway->insert(array(
+				'user_id' => $id,
+				'role_id' => $role_id
+			));
 		}
 	}
 
@@ -86,6 +111,11 @@ class UserTable extends User
 	
 	public function deleteUser($id)
 	{
+		// Suppression des rôles de l'utilisateur
+		$this->rolesTableGateway->delete(array(
+			'user_id' => $id
+		));
+		
 		// TODO: Tenter un delete, et s'il échoue cause clé étrangère, réaliser une suppression logique du compte
 		$this->tableGateway->delete(array('id' => $id));
 		
