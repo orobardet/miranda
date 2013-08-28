@@ -20,7 +20,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 
 	public function onBootstrap(MvcEvent $e)
 	{
-		$this->config = new ZendConfig($e->getApplication()->getServiceManager()->get('config')['application']);
+		$this->config = $e->getApplication()->getServiceManager()->get('Miranda\Service\Config');
 	}
 
 	public function getConfig()
@@ -92,10 +92,10 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 	{
 		return array(
 			'initializers' => array(
-				function ($instance, $sm)
+				function ($instance, $cm)
 				{
 					if ($instance instanceof ConfigAwareInterface) {
-						$instance->setConfig($this->config);
+					    $instance->setConfig($cm->getServiceLocator()->get('Miranda\Service\Config'));
 					}
 				}
 			)

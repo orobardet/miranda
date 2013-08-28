@@ -24,7 +24,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 
 	public function onBootstrap(MvcEvent $e)
 	{
-		$this->config = new ZendConfig($e->getApplication()->getServiceManager()->get('config')['application']);
+		$this->config = $e->getApplication()->getServiceManager()->get('Miranda\Service\Config');
 	}
 
 	public function getConfig()
@@ -95,14 +95,14 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'MirandaAuthDb' => function ($sm)
 				{
 					$authAdapter = new AuthDbTable($sm->get('MirandaDbAdapter'));
-					$authAdapter->setTableName($this->config->db->get('table_prefix', '') . 'users')->setIdentityColumn('email')->setCredentialColumn(
+					$authAdapter->setTableName($sm->get('Miranda\Service\Config')->db->get('table_prefix', '') . 'users')->setIdentityColumn('email')->setCredentialColumn(
 							'password');
 					return $authAdapter;
 				},
 				'MirandaAuthBCrypt' => function ($sm)
 				{
 					$bcrypt = new Bcrypt();
-					$bcrypt->setCost($this->config->authentification->bcrypt->get('cost', 14));
+					$bcrypt->setCost($sm->get('Miranda\Service\Config')->authentification->bcrypt->get('cost', 14));
 					
 					return $bcrypt;
 				}
@@ -147,10 +147,10 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 	{
 		return array(
 			'initializers' => array(
-				function ($instance, $sm)
+				function ($instance, $cm)
 				{
 					if ($instance instanceof ConfigAwareInterface) {
-						$instance->setConfig($this->config);
+					    $instance->setConfig($cm->getServiceLocator()->get('Miranda\Service\Config'));
 					}
 				}
 			)
