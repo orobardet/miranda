@@ -75,6 +75,14 @@ class User
 	}
 
 	/**
+	 * @return string $email
+	 */
+	public function getIdentity()
+	{
+		return $this->email;
+	}
+	
+	/**
 	 * Retourne le nom d'affichage : "prenom nom"
 	 * 
 	 * @return string Nom d'affichage

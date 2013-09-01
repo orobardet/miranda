@@ -26,7 +26,8 @@
                 <div class="container">
                     <a class="brand" href="<?php echo $this->url('home') ?>">Miranda</a>
                     <div class="nav-collapse collapse">
-                    <?php echo $this->navigation('navigation')->menu()
+                    <?php echo $this->navigation('navigation')
+                    		->menu()
                             ->setMinDepth(0)
                             ->setMaxDepth(0)
                             ->setUlClass('nav')
@@ -40,13 +41,14 @@
                 </div>
             </div> <!-- /navbar-inner -->
             <?php
-            $submenu = $this->navigation('navigation')->menu()
-            ->setOnlyActiveBranch(true)
-            ->setRenderParents(false)
-            ->setMinDepth(1)
-            ->setMaxDepth(1)
-            ->setUlClass('nav')
-            ->render();
+            $submenu = $this->navigation('navigation')
+	       		->menu()
+	            ->setOnlyActiveBranch(true)
+	            ->setRenderParents(false)
+	            ->setMinDepth(1)
+	            ->setMaxDepth(1)
+	            ->setUlClass('nav')
+	            ->render();
             if (!empty($submenu)): ?>
             <div class="subnav">
                 <div class="container">

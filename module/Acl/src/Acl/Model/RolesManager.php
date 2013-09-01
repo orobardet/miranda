@@ -16,7 +16,7 @@ class RolesManager
 
 	public function getRoles()
 	{
-		$groupsResults = $this->$rolesTable->select(function (Select $select)
+		$groupsResults = $this->rolesTable->select(function (Select $select)
 		{
 			$select->order('name');
 		});
@@ -51,6 +51,22 @@ class RolesManager
 		
 		return $groupedRoles;
 	}
-}
 
-?>
+	public function getRoleNames($roleIds = array())
+	{
+		$roleNames = array();
+		
+		$roles = $this->rolesTable->select(function (Select $select) use($roleIds)
+		{
+			$select->where(array(
+				'id' => $roleIds
+			));
+		});
+		
+		foreach ($roles as $role) {
+			$roleNames[] = $role->getName();
+		}
+		
+		return $roleNames;
+	}
+}

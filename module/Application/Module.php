@@ -11,6 +11,8 @@ use Zend\Validator\AbstractValidator;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Zend\View\HelperPluginManager;
+use Zend\EventManager\Event;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface
 {
@@ -29,7 +31,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		), 201);
 	}
 
-	public function authPreDispatch($e)
+	public function authPreDispatch(Event $e)
 	{
 		// Verification si l'utilisateur est connecté
 		$authService = $e->getApplication()->getServiceManager()->get('Miranda\Service\AuthService');
@@ -44,8 +46,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		if (!is_array($allowedPages))
 			$allowedPages = $allowedPages->toArray();
 			
-			// Si on est sur une page non accessible si pas connecté, et qu'il n'y a
-			// pas d'utilisateur connecté
+		// Si on est sur une page non accessible si pas connecté, et qu'il n'y a
+		// pas d'utilisateur connecté
 		if (!in_array($e->getRouteMatch()->getMatchedRouteName(), $allowedPages) && !$authService->hasIdentity()) {
 			// Calcul de l'URL demandée, pour redirection après connexion
 			$requestUri = $e->getRequest()->getUri();
@@ -81,7 +83,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 			return $e->getTarget()->plugin('redirect')->toRoute('logout');
 		}
 	}
-
+	
 	/**
 	 * Method où ajouter toutes les variables à passer à la vue du layout
 	 *
@@ -122,12 +124,6 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		AbstractValidator::setDefaultTranslator($translator);
 		
 		$this->bootstrapSession($e);
-		
-		$this->initAcl($e);
-		$e->getApplication()->getEventManager()->attach('route', array(
-			$this,
-			'checkAcl'
-		));
 	}
 
 	public function bootstrapSession($e)
@@ -139,65 +135,6 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		if (!isset($container->init)) {
 			$session->regenerateId(true);
 			$container->init = 1;
-		}
-	}
-
-	public function getDbRoles(MvcEvent $e)
-	{
-		// I take it that your adapter is already configured
-//		$dbAdapter = $e->getApplication()->getServiceManager()->get('Zend\Db\Adapter\Adapter');
-//		$results = $dbAdapter->query('SELECT * FROM acl ORDER BY role_privileges DESC');
-		// making the roles array
-		$roles = array();
-//		foreach($results as $result){
-//			$roles[$result['user_role']][] = $result['resource'];
-//		}
-		return $roles;
-	}
-
-	public function initAcl(MvcEvent $e)
-	{
-		$acl = new \Zend\Permissions\Acl\Acl();
-		$roles = $this->getDbRoles($e);
-		$allResources = array();
-		foreach ($roles as $role => $resources) {
-			
-			$role = new \Zend\Permissions\Acl\Role\GenericRole($role);
-			$acl->addRole($role);
-			
-			$allResources = array_merge($resources, $allResources);
-			
-			//adding resources
-			foreach ($resources as $resource) {
-				// Edit 4
-				if (!$acl->hasResource($resource))
-					$acl->addResource(new \Zend\Permissions\Acl\Resource\GenericResource($resource));
-			}
-			//adding restrictions
-			foreach ($allResources as $resource) {
-				$acl->allow($role, $resource);
-			}
-		}
-		//testing
-		//var_dump($acl->isAllowed('admin','home'));
-		//true
-		
-
-		//setting to view
-		$e->getViewModel()->acl = $acl;
-	}
-
-	public function checkAcl(MvcEvent $e)
-	{
-		$route = $e->getRouteMatch()->getMatchedRouteName();
-		//you set your role
-		$userRole = 'guest';
-		
-		if ($e->getViewModel()->acl->hasResource($route) && !$e->getViewModel()->acl->isAllowed($userRole, $route)) {
-			$response = $e->getResponse();
-			//location to page or what ever
-			$response->getHeaders()->addHeaderLine('Location', $e->getRequest()->getBaseUrl() . '/404');
-			$response->setStatusCode(303);
 		}
 	}
 
@@ -272,6 +209,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				}
 			)
 		);
+
+		
 	}
 
 	public function getControllerConfig()
@@ -307,10 +246,18 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'translateReplace' => 'Application\View\Helper\TranslateReplace'
 			),
 			'factories' => array(
-				'resultStatus' => function ($sm)
+				'resultStatus' => function (HelperPluginManager $pm)
 				{
-					return new \Application\View\Helper\ResultStatus($sm->getServiceLocator()->get('Zend\Session\SessionManager')->getStorage());
-				}
+					return new \Application\View\Helper\ResultStatus($pm->getServiceLocator()->get('Zend\Session\SessionManager')->getStorage());
+				},
+				// Surcharge la factory native du Navigation View Helper, pour obtenir une version préconfigurée
+				// avec les ACL de l'application
+                'navigation' => function(HelperPluginManager $pm) {
+                    $navigation = $pm->get('Zend\View\Helper\Navigation');
+                    $navigation->setAcl($pm->getServiceLocator()->get('Miranda\Service\Acl'))
+                               ->setRole('Miranda\CurrentUser');
+                    return $navigation;
+                }			
 			)
 		);
 	}

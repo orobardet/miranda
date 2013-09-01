@@ -81,7 +81,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 						$roles[$role->getId()] = $role->getName();
 					}
 					$form = new Form\User(null, $sm->get('translator'), $roles);
-					$form->setInputFilter(new Form\UserFilter($sm->get('Zend\Db\Adapter\Adapter'), $sm->get('Miranda\Service\Config')));
+					$form->setInputFilter(new Form\UserFilter($sm->get('user_zend_db_adapter'), $sm->get('Miranda\Service\Config')));
 					return $form;
 				},
 				'Miranda\Service\AuthService' => function ($sm)
@@ -106,6 +106,9 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 					
 					return $bcrypt;
 				}
+			),
+			'alias' => array(
+				'Zend\Authentication\AuthenticationService' => 'Miranda\Service\AuthService'
 			)
 		);
 	}

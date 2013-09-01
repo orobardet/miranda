@@ -61,52 +61,62 @@ $config = array(
 			array(
 				'label' => 'Admin',
 				'route' => 'admin',
+				'resource' => 'admin_access',
 				'pages' => array(
 					array(
 						'label' => 'Users',
 						'route' => 'admin/user',
+						'resource' => 'admin_list_users',
 						'pages' => array(
 							array(
 								'label' => 'Ajouter',
 								'route' => 'admin/user',
-								'action' => 'add'
+								'action' => 'add',
+								'resource' => 'admin_add_user',
 							),
 							array(
 								'label' => 'Modifier',
 								'route' => 'admin/user',
-								'action' => 'edit'
+								'action' => 'edit',
+								'resource' => 'admin_edit_user',
 							),
 							array(
 								'label' => 'Supprimer',
 								'route' => 'admin/user',
-								'action' => 'delete'
+								'action' => 'delete',
+								'resource' => 'admin_delete_user',
 							)
 						)
 					),
 					array(
 						'label' => 'Roles',
 						'route' => 'admin/role',
+						'resource' => 'admin_list_roles',
 						'pages' => array(
 							array(
 								'label' => 'Ajouter',
 								'route' => 'admin/role',
-								'action' => 'add'
+								'action' => 'add',
+								'resource' => 'admin_add_role',
 							),
 							array(
 								'label' => 'Modifier',
 								'route' => 'admin/role',
-								'action' => 'edit'
+								'action' => 'edit',
+								'resource' => 'admin_edit_role',
 							),
 							array(
 								'label' => 'Supprimer',
 								'route' => 'admin/role',
-								'action' => 'delete'
+								'action' => 'delete',
+								'resource' => 'admin_delete_role',
 							)
 						)
 					),
 					array(
 						'label' => 'Rights',
 						'route' => 'admin/right',
+						'resource' => 'admin_list_rights',
 					)
 				)
 			)
