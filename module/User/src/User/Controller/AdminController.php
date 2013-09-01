@@ -71,7 +71,8 @@ class AdminController extends AbstractActionController implements ConfigAwareInt
 				$user = new User();
 				
 				$user->exchangeArray($form->getData(), false);
-				$user->setPassword($form->getData()['password'], $this->getServiceLocator()->get('Miranda\Service\AuthBCrypt'));
+				$data = $form->getData();
+				$user->setPassword($data['password'], $this->getServiceLocator()->get('Miranda\Service\AuthBCrypt'));
 				$this->getUserTable()->saveUser($user, true);
 				
 				return $this->redirect()->toRoute('admin/user');

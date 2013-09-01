@@ -5,7 +5,6 @@ use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Mvc\MvcEvent;
-use Zend\Config\Config as ZendConfig;
 use Application\ConfigAwareInterface;
 
 class Module implements
@@ -17,7 +16,7 @@ class Module implements
 	
 	public function onBootstrap(MvcEvent $e)
 	{
-		$this->config = new ZendConfig($e->getApplication()->getServiceManager()->get('config')['application']);
+		$this->config = $e->getApplication()->getServiceManager()->get('Miranda\Service\Config');
 	}
 		
 	public function getConfig()
@@ -51,10 +50,10 @@ class Module implements
 	{
 		return array(
 			'initializers' => array(
-				function ($instance, $sm)
+				function ($instance, $cm)
 				{
 					if ($instance instanceof ConfigAwareInterface) {
-						$instance->setConfig($this->config);
+					    $instance->setConfig($cm->getServiceLocator()->get('Miranda\Service\Config'));
 					}
 				}
 			)
