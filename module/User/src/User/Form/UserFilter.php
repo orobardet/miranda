@@ -4,13 +4,14 @@ namespace User\Form;
 use Zend\InputFilter\InputFilter;
 use Zend\Db\Adapter\Adapter as DbAdapter;
 use Zend\Validator\Db\NoRecordExists as DbNoRecordExists;
+use Zend\Config\Config as ZendConfig;
 
 class UserFilter extends InputFilter
 {
 
 	private $emailNotExistsValidator;
 
-	public function __construct(DbAdapter $dbAdapter)
+	public function __construct(DbAdapter $dbAdapter, ZendConfig $config)
 	{
 		$this->add(
 				array(
@@ -60,7 +61,7 @@ class UserFilter extends InputFilter
 		
 		$this->emailNotExistsValidator = new DbNoRecordExists(
 				array(
-					'table' => 'users',
+					'table' => $config->db->get('table_prefix', '') . 'users',
 					'field' => 'email',
 					'adapter' => $dbAdapter,
 					'messages' => array(
@@ -145,7 +146,6 @@ class UserFilter extends InputFilter
 						)
 					)
 				));
-		
 	}
 
 	public function setUserId($id)

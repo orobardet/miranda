@@ -54,24 +54,24 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'Acl\TableGateway\Rights' => function ($sm)
 				{
 					$dbAdapter = $sm->get('acl_zend_db_adapter');
-					return new TableGateway('rights', $dbAdapter, new Feature\RowGatewayFeature('id'));
+					return new TableGateway($sm->get('Miranda\Service\Config')->db->get('table_prefix', '') . 'rights', $dbAdapter, new Feature\RowGatewayFeature('id'));
 				},
 				'Acl\TableGateway\RightsGroups' => function ($sm)
 				{
 					$dbAdapter = $sm->get('acl_zend_db_adapter');
-					return new TableGateway('rights_groups', $dbAdapter, new Feature\RowGatewayFeature('id'));
+					return new TableGateway($sm->get('Miranda\Service\Config')->db->get('table_prefix', '') . 'rights_groups', $dbAdapter, new Feature\RowGatewayFeature('id'));
 				},
 				'Acl\TableGateway\Roles' => function ($sm)
 				{
 					$dbAdapter = $sm->get('acl_zend_db_adapter');
 					$resultSetPrototype = new ResultSet();
 					$resultSetPrototype->setArrayObjectPrototype(new Model\Role());
-					return new TableGateway('roles', $dbAdapter, null, $resultSetPrototype);
+					return new TableGateway($sm->get('Miranda\Service\Config')->db->get('table_prefix', '') . 'roles', $dbAdapter, null, $resultSetPrototype);
 				},
 				'Acl\TableGateway\RolesRights' => function ($sm)
 				{
 					$dbAdapter = $sm->get('acl_zend_db_adapter');
-					return new TableGateway('roles_rights', $dbAdapter, new Feature\RowGatewayFeature('role_id'));
+					return new TableGateway($sm->get('Miranda\Service\Config')->db->get('table_prefix', '') . 'roles_rights', $dbAdapter, new Feature\RowGatewayFeature('role_id'));
 				},
 				'Acl\Model\RoleTable' => function ($sm)
 				{

@@ -51,20 +51,21 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 			'factories' => array(
 				'User\Model\UserTable' => function ($sm)
 				{
-					$table = new UserTable($sm->get('User\TableGateway\Users'), $sm->get('User\TableGateway\UsersRoles'));
-					return $table;
+					return new UserTable($sm->get('User\TableGateway\Users'), $sm->get('User\TableGateway\UsersRoles'));
 				},
 				'User\TableGateway\Users' => function ($sm)
 				{
 					$dbAdapter = $sm->get('user_zend_db_adapter');
 					$resultSetPrototype = new ResultSet();
 					$resultSetPrototype->setArrayObjectPrototype(new User());
-					return new TableGateway('users', $dbAdapter, null, $resultSetPrototype);
+					return new TableGateway($sm->get('Miranda\Service\Config')->db->get('table_prefix', '') . 'users', $dbAdapter, null, 
+							$resultSetPrototype);
 				},
 				'User\TableGateway\UsersRoles' => function ($sm)
 				{
 					$dbAdapter = $sm->get('acl_zend_db_adapter');
-					return new TableGateway('users_roles', $dbAdapter, new Feature\RowGatewayFeature('user_id'));
+					return new TableGateway($sm->get('Miranda\Service\Config')->db->get('table_prefix', '') . 'users_roles', $dbAdapter, 
+							new Feature\RowGatewayFeature('user_id'));
 				},
 				'User\Form\Login' => function ($sm)
 				{
@@ -80,7 +81,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 						$roles[$role->getId()] = $role->getName();
 					}
 					$form = new Form\User(null, $sm->get('translator'), $roles);
-					$form->setInputFilter(new Form\UserFilter($sm->get('Zend\Db\Adapter\Adapter')));
+					$form->setInputFilter(new Form\UserFilter($sm->get('Zend\Db\Adapter\Adapter'), $sm->get('Miranda\Service\Config')));
 					return $form;
 				},
 				'Miranda\Service\AuthService' => function ($sm)
@@ -149,7 +150,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				function ($instance, $cm)
 				{
 					if ($instance instanceof ConfigAwareInterface) {
-					    $instance->setConfig($cm->getServiceLocator()->get('Miranda\Service\Config'));
+						$instance->setConfig($cm->getServiceLocator()->get('Miranda\Service\Config'));
 					}
 				}
 			)
