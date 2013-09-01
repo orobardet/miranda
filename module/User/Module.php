@@ -52,17 +52,17 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 			'factories' => array(
 				'User\Model\UserTable' => function ($sm)
 				{
-					$table = new UserTable($sm->get('UserTableGateway'), $sm->get('UsersRolesTableGateway'));
+					$table = new UserTable($sm->get('User\TableGateway\Users'), $sm->get('User\TableGateway\UsersRoles'));
 					return $table;
 				},
-				'UserTableGateway' => function ($sm)
+				'User\TableGateway\Users' => function ($sm)
 				{
 					$dbAdapter = $sm->get('user_zend_db_adapter');
 					$resultSetPrototype = new ResultSet();
 					$resultSetPrototype->setArrayObjectPrototype(new User());
 					return new TableGateway('users', $dbAdapter, null, $resultSetPrototype);
 				},
-				'UsersRolesTableGateway' => function ($sm)
+				'User\TableGateway\UsersRoles' => function ($sm)
 				{
 					$dbAdapter = $sm->get('acl_zend_db_adapter');
 					return new TableGateway('users_roles', $dbAdapter, new Feature\RowGatewayFeature('user_id'));
@@ -84,22 +84,22 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 					$form->setInputFilter(new Form\UserFilter($sm->get('Zend\Db\Adapter\Adapter')));
 					return $form;
 				},
-				'MirandaAuthService' => function ($sm)
+				'Miranda\Service\AuthService' => function ($sm)
 				{
-					return new AuthenticationService($sm->get('MirandaAuthSessionStorage'), $sm->get('MirandaAuthDb'));
+					return new AuthenticationService($sm->get('Miranda\Service\AuthSessionStorage'), $sm->get('Miranda\Service\AuthDb'));
 				},
-				'MirandaAuthSessionStorage' => function ($sm)
+				'Miranda\Service\AuthSessionStorage' => function ($sm)
 				{
 					return new AuthSessionStorage($sm->get('User\Model\UserTable'), 'whoislogged', 'identity', $sm->get('Zend\Session\SessionManager'));
 				},
-				'MirandaAuthDb' => function ($sm)
+				'Miranda\Service\AuthDb' => function ($sm)
 				{
-					$authAdapter = new AuthDbTable($sm->get('MirandaDbAdapter'));
+					$authAdapter = new AuthDbTable($sm->get('Miranda\Service\DbAdapter'));
 					$authAdapter->setTableName($this->config->db->get('table_prefix', '') . 'users')->setIdentityColumn('email')->setCredentialColumn(
 							'password');
 					return $authAdapter;
 				},
-				'MirandaAuthBCrypt' => function ($sm)
+				'Miranda\Service\AuthBCrypt' => function ($sm)
 				{
 					$bcrypt = new Bcrypt();
 					$bcrypt->setCost($this->config->authentification->bcrypt->get('cost', 14));
@@ -117,8 +117,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'userAuthentication' => function ($sm)
 				{
 					$serviceLocator = $sm->getServiceLocator();
-					$authService = $serviceLocator->get('MirandaAuthService');
-					$authAdapter = $serviceLocator->get('MirandaAuthDb');
+					$authService = $serviceLocator->get('Miranda\Service\AuthService');
+					$authAdapter = $serviceLocator->get('Miranda\Service\AuthDb');
 					$controllerPlugin = new Controller\Plugin\UserAuthentication();
 					$controllerPlugin->setAuthService($authService);
 					$controllerPlugin->setAuthAdapter($authAdapter);
@@ -136,7 +136,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				{
 					$serviceLocator = $sm->getServiceLocator();
 					$viewHelper = new View\Helper\UserIdentity();
-					$viewHelper->setAuthService($serviceLocator->get('MirandaAuthService'));
+					$viewHelper->setAuthService($serviceLocator->get('Miranda\Service\AuthService'));
 					return $viewHelper;
 				}
 			)

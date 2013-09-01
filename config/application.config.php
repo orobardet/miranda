@@ -61,7 +61,7 @@ return array(
         ),
         'aliases' => array(
             'translator' => 'MvcTranslator',
-    		'MirandaDbAdapter' => 'Zend\Db\Adapter\Adapter',
+    		'Miranda\Service\DbAdapter' => 'Zend\Db\Adapter\Adapter',
         ),
     ),
 );

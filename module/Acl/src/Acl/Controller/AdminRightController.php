@@ -19,7 +19,7 @@ class AdminRightController extends AbstractActionController implements ConfigAwa
 	public function indexAction ()
 	{
 		return new ViewModel(array(
-			'rights' => $this->getServiceLocator()->get('RightsManager')->getGroupedRights()
+			'rights' => $this->getServiceLocator()->get('Acl\Model\RightsManager')->getGroupedRights()
 		));
 	}
 }

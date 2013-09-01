@@ -43,7 +43,7 @@ class AdminRoleController extends AbstractActionController implements ConfigAwar
 		return new ViewModel(array(
 			'role' => $role,
 			'return_url' => $this->url()->fromRoute('admin/role'),
-			'all_rights' => $this->getServiceLocator()->get('RightsManager')->getGroupedRights(),
+			'all_rights' => $this->getServiceLocator()->get('Acl\Model\RightsManager')->getGroupedRights(),
 		));
 	}
 	
@@ -78,7 +78,7 @@ class AdminRoleController extends AbstractActionController implements ConfigAwar
 		return array(
 			'form' => $form,
 			'cancel_url' => $this->url()->fromRoute('admin/role'),
-			'all_rights' => $this->getServiceLocator()->get('RightsManager')->getGroupedRights(),
+			'all_rights' => $this->getServiceLocator()->get('Acl\Model\RightsManager')->getGroupedRights(),
 			'checked_rights' => $checked_rights
 		);
 	}
@@ -131,7 +131,7 @@ class AdminRoleController extends AbstractActionController implements ConfigAwar
             'id' => $id,
 			'cancel_url' => $this->url()->fromRoute('admin/role'),
         	'form' => $form,
-			'all_rights' => $this->getServiceLocator()->get('RightsManager')->getGroupedRights(),
+			'all_rights' => $this->getServiceLocator()->get('Acl\Model\RightsManager')->getGroupedRights(),
 			'checked_rights' => $checked_rights
         );
 	}

@@ -31,7 +31,8 @@ $config = array(
 			'not_login_page' => array(
 				'login',
 				'logout',
-				'authenticate'
+				'authenticate',
+				'unauthorized'
 			),
 			'bcrypt' => array(
 				'cost' => 10

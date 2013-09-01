@@ -32,7 +32,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 	public function authPreDispatch($event)
 	{
 		// Verification si l'utilisateur est connecté
-		$authService = $event->getApplication()->getServiceManager()->get('MirandaAuthService');
+		$authService = $event->getApplication()->getServiceManager()->get('Miranda\Service\AuthService');
 		
 		// Lecture dans la conf des page autorisées sans être connecté
 		$config = new ZendConfig($event->getApplication()->getServiceManager()->get('config')['application']);

@@ -94,7 +94,7 @@ class AuthController extends AbstractActionController implements ConfigAwareInte
 				
 				// On initialise l'objet BCrypt pour vérifier le mot de passe, et on donne à l'Authentification Adapter notre propre fonction de
 				// vérification qui utilise l'objet BCrypt
-				$bcrypt = $this->getServiceLocator()->get('MirandaAuthBCrypt');
+				$bcrypt = $this->getServiceLocator()->get('Miranda\Service\AuthBCrypt');
 				$this->userAuthentication()->getAuthAdapter()->setCredentialValidationCallback(
 						function ($storedPass, $givenPass) use($bcrypt)
 						{

@@ -46,37 +46,37 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 	{
 		return array(
 			'factories' => array(
-				'RightsManager' => function ($sm) {
-					return new RightsManager($sm->get('RightsTableGateway'), $sm->get('RightsGroupsTableGateway'));
+				'Acl\Model\RightsManager' => function ($sm) {
+					return new RightsManager($sm->get('Acl\TableGateway\Rights'), $sm->get('Acl\TableGateway\RightsGroups'));
 				},
-				'RolesManager' => function ($sm) {
-					return new RightsManager($sm->get('RolesTableGateway'));
+				'Acl\Model\RolesManager' => function ($sm) {
+					return new RightsManager($sm->get('Acl\TableGateway\Roles'));
 				},
-				'RightsTableGateway' => function ($sm)
+				'Acl\TableGateway\Rights' => function ($sm)
 				{
 					$dbAdapter = $sm->get('acl_zend_db_adapter');
 					return new TableGateway('rights', $dbAdapter, new Feature\RowGatewayFeature('id'));
 				},
-				'RightsGroupsTableGateway' => function ($sm)
+				'Acl\TableGateway\RightsGroups' => function ($sm)
 				{
 					$dbAdapter = $sm->get('acl_zend_db_adapter');
 					return new TableGateway('rights_groups', $dbAdapter, new Feature\RowGatewayFeature('id'));
 				},
-				'RolesTableGateway' => function ($sm)
+				'Acl\TableGateway\Roles' => function ($sm)
 				{
 					$dbAdapter = $sm->get('acl_zend_db_adapter');
 					$resultSetPrototype = new ResultSet();
 					$resultSetPrototype->setArrayObjectPrototype(new Model\Role());
 					return new TableGateway('roles', $dbAdapter, null, $resultSetPrototype);
 				},
-				'RolesRightsTableGateway' => function ($sm)
+				'Acl\TableGateway\RolesRights' => function ($sm)
 				{
 					$dbAdapter = $sm->get('acl_zend_db_adapter');
 					return new TableGateway('roles_rights', $dbAdapter, new Feature\RowGatewayFeature('role_id'));
 				},
 				'Acl\Model\RoleTable' => function ($sm)
 				{
-					return new RoleTable($sm->get('RolesTableGateway'), $sm->get('RolesRightsTableGateway'));
+					return new RoleTable($sm->get('Acl\TableGateway\Roles'), $sm->get('Acl\TableGateway\RolesRights'));
 				},
 				'Acl\Form\Role' => function ($sm)
 				{
