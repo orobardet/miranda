@@ -6,7 +6,6 @@ use Acl\Model\RightsManager;
 use Acl\Model\RoleTable;
 use Acl\Model\RolesManager;
 use Application\ConfigAwareInterface;
-use Zend\EventManager\Event;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\Feature;
 use Zend\Db\TableGateway\TableGateway;
@@ -17,40 +16,65 @@ use Zend\Mvc\MvcEvent;
 use Zend\Permissions\Acl\Acl;
 use Zend\Permissions\Acl\Resource\GenericResource as Resource;
 use Zend\Permissions\Acl\Role\GenericRole as Role;
+use Acl\Controller\AclControllerInterface;
+use Zend\View\Model\ViewModel;
+use Acl\Helper\AclHelper;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface
 {
 
-	protected $config;
-
-	public function onBootstrap(MvcEvent $e)
+	public function init(\Zend\ModuleManager\ModuleManager $mm)
 	{
-		$this->config = $e->getApplication()->getServiceManager()->get('Miranda\Service\Config');
-		$acl = $e->getApplication()->getServiceManager()->get('Miranda\Service\Acl');
-		$e->getViewModel()->acl = $acl;
+		$sem = $mm->getEventManager()->getSharedManager();
 		
-		$e->getApplication()->getEventManager()->attach('route', array(
+		$sem->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', array(
 			$this,
 			'checkAcl'
-		));
+		), 90);
 	}
 
-	public function checkAcl(Event $e)
+	public function checkAcl(MvcEvent $e)
 	{
-		
 		$acl = $e->getApplication()->getServiceManager()->get('Miranda\Service\Acl');
-		// TODO: Check ACL
-		// Regarder s'il existe dans le contrôleur demandé une méthode actionAclAllowed (action a remplacer par l'action demandée).
-		// Si non, accès refusée (sécuritée max)
-		// Si oui, appeller la methode qui peut retourner true ou false selon que l'utilisateur à le droit d'accès ou non,
-		// ou un array qui contient la liste des droits tester (plusieurs possibles, considérés comme un AND)
+		$controller = $e->getTarget();
+		$route = $e->getRouteMatch();
 		
-		
-// 		if ($acl->hasResource($route) && !$acl->isAllowed($userRole, $route)) {
-// 			$response = $e->getResponse();
-// 			$response->getHeaders()->addHeaderLine('Location', $e->getRequest()->getBaseUrl() . '/404');
-// 			$response->setStatusCode(303);
-// 		}
+		$accessAllowed = true;
+		if ($controller instanceof AclControllerInterface) {
+			$accessAllowed = false;
+			
+			$neededRights = $controller->aclIsAllowed($route->getParam('action'), $acl, 'Miranda\CurrentUser');
+			if ($neededRights === true) {
+				$accessAllowed = true;
+			} else if (empty($neededRights)) {
+				$accessAllowed = false;
+			} else {
+				$accessAllowed = AclHelper::isAllowed($acl, 'Miranda\CurrentUser', $neededRights);
+			}
+			
+		}
+
+		if (!$accessAllowed) {
+			// Construction de la vue 403
+			$userIdentity = $e->getApplication()->getServiceManager()->get('Miranda\Service\AuthService')->getIdentity();
+			$viewParams = array(
+				'controller' => $route->getParam('controller'),
+				'action' => $route->getParam('action'),
+				'message' => "You've tried to access to an unauthorized resource.",
+				'user' => $userIdentity->getIdentity(),
+			);
+			$viewModel = new ViewModel($viewParams);
+			$viewModel->setTemplate('error/403');
+			$e->getViewModel()->addChild($viewModel);
+			
+			// Réponse 403
+			$response = $e->getResponse();
+			$response->setStatusCode(403);
+			$e->setResponse($response);
+			
+			// On arrête la propagation de l'évenement, pour empecher que l'action initialement demandée soient exécutée 
+			$e->stopPropagation();
+		}
 	}
 
 	public function getConfig()
@@ -127,11 +151,12 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'Acl\Model\AclManager' => function ($sm)
 				{
 					$tablePrefix = $sm->get('Miranda\Service\Config')->db->get('table_prefix', '');
-					return new AclManager($sm->get('app_zend_db_adapter'), array(
-						AclManager::TABLE_ROLES => $tablePrefix . 'roles',
-						AclManager::TABLE_RIGHTS => $tablePrefix . 'rights',
-						AclManager::TABLE_ROLES_RIGHTS => $tablePrefix . 'roles_rights'
-					));
+					return new AclManager($sm->get('app_zend_db_adapter'), 
+							array(
+								AclManager::TABLE_ROLES => $tablePrefix . 'roles',
+								AclManager::TABLE_RIGHTS => $tablePrefix . 'rights',
+								AclManager::TABLE_ROLES_RIGHTS => $tablePrefix . 'roles_rights'
+							));
 				},
 				'Acl\TableGateway\Rights' => function ($sm)
 				{

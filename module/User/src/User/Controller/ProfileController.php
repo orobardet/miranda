@@ -6,7 +6,7 @@ use Zend\View\Model\ViewModel;
 use Application\ConfigAwareInterface;
 use Zend\Config\Config as ZendConfig;
 
-class UserController extends AbstractActionController implements ConfigAwareInterface
+class ProfileController extends AbstractActionController implements ConfigAwareInterface
 {
 	protected $config;
 	
@@ -19,11 +19,11 @@ class UserController extends AbstractActionController implements ConfigAwareInte
 
 	private function getProfileViewModel($action, $variables = null, $options = null) {
 		$viewModel = new ViewModel($variables + array('profile_action' => $action), $options);
-		$viewModel->setTemplate('user/user/profile-layout');
+		$viewModel->setTemplate('user/profile/profile-layout');
 		
 		$viewModelChild = new ViewModel($variables, $options);
 		
-		$viewModelChild->setTemplate('user/user/'.$action);
+		$viewModelChild->setTemplate('user/profile/'.$action);
 		$viewModel->addChild($viewModelChild);
 		
 		return $viewModel;

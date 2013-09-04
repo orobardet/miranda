@@ -1,7 +1,6 @@
 <?php
 namespace Application;
 
-use Zend\EventManager\StaticEventManager;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Session\SessionManager;
@@ -12,78 +11,20 @@ use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\View\HelperPluginManager;
-use Zend\EventManager\Event;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface
 {
 
-	public function init()
+	public function init(\Zend\ModuleManager\ModuleManager $mm)
 	{
-		$events = StaticEventManager::getInstance();
-		$events->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', array(
-			$this,
-			'authPreDispatch'
-		), 110);
+		$sem = $mm->getEventManager()->getSharedManager();
 		
-		$events->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', array(
+		$sem->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', array(
 			$this,
 			'addLayoutViewVariables'
-		), 201);
+		), 200);
 	}
 
-	public function authPreDispatch(Event $e)
-	{
-		// Verification si l'utilisateur est connecté
-		$authService = $e->getApplication()->getServiceManager()->get('Miranda\Service\AuthService');
-		
-		// Lecture dans la conf des page autorisées sans être connecté
-		$config = $e->getApplication()->getServiceManager()->get('Miranda\Service\Config');
-		$allowedPages = $config->authentification->get('not_login_page', array(
-			'login',
-			'authenticate',
-			'logout'
-		));
-		if (!is_array($allowedPages))
-			$allowedPages = $allowedPages->toArray();
-			
-		// Si on est sur une page non accessible si pas connecté, et qu'il n'y a
-		// pas d'utilisateur connecté
-		if (!in_array($e->getRouteMatch()->getMatchedRouteName(), $allowedPages) && !$authService->hasIdentity()) {
-			// Calcul de l'URL demandée, pour redirection après connexion
-			$requestUri = $e->getRequest()->getUri();
-			$uriPath = $requestUri->getPath();
-			$uriQuery = $requestUri->getQuery();
-			$uriFragment = $requestUri->getFragment();
-			
-			$redirect = $uriPath;
-			if (!empty($uriQuery)) {
-				$redirect .= '?' . $uriQuery;
-			}
-			if (!empty($uriFragment)) {
-				$redirect .= '#' . $uriFragment;
-			}
-			
-			// Redirection vers la page de login
-			if (!empty($redirect) && ($redirect != '/')) {
-				return $e->getTarget()->plugin('redirect')->toRoute('login', array(), 
-						array(
-							'query' => array(
-								'redirect' => urlencode($redirect)
-							)
-						));
-			} else {
-				return $e->getTarget()->plugin('redirect')->toRoute('login');
-			}
-		}
-		
-		// Si l'utilisateur connecté n'est plus activé, on le déconnecte
-		if ($authService->hasIdentity() && !$authService->getIdentity()->isActive() && ($e->getRouteMatch()->getMatchedRouteName() != 'logout')) {
-			$session = $e->getApplication()->getServiceManager()->get('Zend\Session\SessionManager')->getStorage();
-			$session->auth_error_message = 'This user account is not activated.';
-			return $e->getTarget()->plugin('redirect')->toRoute('logout');
-		}
-	}
-	
 	/**
 	 * Method où ajouter toutes les variables à passer à la vue du layout
 	 *
@@ -103,17 +44,10 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		}
 		
 		$viewModel->setVariable('module', strtolower(__NAMESPACE__));
-		
-		$config = $e->getApplication()->getServiceManager()->get('Miranda\Service\Config');
-		
-		$viewModel->setVariable('css', $config->layout->get('css', array()));
-		$viewModel->setVariable('js', $config->layout->get('js', array()));
 	}
 
 	public function onBootstrap(MvcEvent $e)
 	{
-		$this->config = $e->getApplication()->getServiceManager()->get('Miranda\Service\Config');
-		
 		$eventManager = $e->getApplication()->getEventManager();
 		$moduleRouteListener = new ModuleRouteListener();
 		$moduleRouteListener->attach($eventManager);
@@ -124,6 +58,12 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		AbstractValidator::setDefaultTranslator($translator);
 		
 		$this->bootstrapSession($e);
+		
+		$config = $e->getApplication()->getServiceManager()->get('Miranda\Service\Config');
+		
+		$viewModel = $e->getViewModel();
+		$viewModel->setVariable('css', $config->layout->get('css', array()));
+		$viewModel->setVariable('js', $config->layout->get('js', array()));
 	}
 
 	public function bootstrapSession($e)
@@ -185,7 +125,6 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 						
 						$sessionSaveHandler = null;
 						if (isset($session['save_handler'])) {
-							// class should be fetched from service manager since it will require constructor arguments
 							$sessionSaveHandler = $sm->get($session['save_handler']);
 						}
 						
@@ -209,8 +148,6 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				}
 			)
 		);
-
-		
 	}
 
 	public function getControllerConfig()
@@ -252,12 +189,12 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				},
 				// Surcharge la factory native du Navigation View Helper, pour obtenir une version préconfigurée
 				// avec les ACL de l'application
-                'navigation' => function(HelperPluginManager $pm) {
-                    $navigation = $pm->get('Zend\View\Helper\Navigation');
-                    $navigation->setAcl($pm->getServiceLocator()->get('Miranda\Service\Acl'))
-                               ->setRole('Miranda\CurrentUser');
-                    return $navigation;
-                }			
+				'navigation' => function (HelperPluginManager $pm)
+				{
+					$navigation = $pm->get('Zend\View\Helper\Navigation');
+					$navigation->setAcl($pm->getServiceLocator()->get('Miranda\Service\Acl'))->setRole('Miranda\CurrentUser');
+					return $navigation;
+				}
 			)
 		);
 	}

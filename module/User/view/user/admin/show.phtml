@@ -1,20 +1,27 @@
 <?php
-$title = $this->translateReplace('User %name%', array('name' => $this->user->getDisplayName()));
+$user = $this->user;
+$title = $this->translateReplace('User %name%', array('name' => $user->getDisplayName()));
 $this->headTitle($title);
 ?>
 <?php echo $this->partial('partial/user-info.phtml', array(
-	'user' => $this->user,
+	'user' => $user,
+	'show_actions' => true
 )); ?>
-
 <div class="p">
-<?php $user_roles = $this->user->getRoles(); ?>
+<?php $user_roles = $user->getRoles(); ?>
 <span class="muted"><i class="icon-cap"></i> <?php echo $this->translate('Roles: '); ?></span>
 <?php if (count($user_roles)): ?>
 <ul style="display:inline-block;vertical-align:top;">
 <?php foreach ($this->all_roles as $role): ?>
 	<?php if (in_array($role->getId(), $user_roles)): ?>
-		<li><a href="<?php echo $this->url('admin/role',
-            array('action'=>'show', 'id' => $role->getId()));?>" title="<?php echo $role->getDescr();?>"><?php echo $role->getName();?></a></li>
+		<li>
+			<?php if ($this->acl()->isAllowed("admin_show_role")): ?>
+			<a href="<?php echo $this->url('admin/role',
+            array('action'=>'show', 'id' => $role->getId()));?>" title="<?php echo $role->getDescr();?>"><?php echo $role->getName();?></a>
+            <?php else: ?>
+            <?php echo $role->getName();?>
+            <?php endif; ?>
+        </li>
 	<?php endif;?>
 <?php endforeach; ?>
 </ul>

@@ -23,6 +23,7 @@ return array(
     'resolves to %s' => 'résout en %s',
     'Exception' => 'Exception ',
 	
+	'Show' => 'Afficher',
 	'Add' => 'Ajouter',
 	'Edit' => 'Modifier',
 	'Cancel' => 'Annuler',

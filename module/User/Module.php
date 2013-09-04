@@ -19,11 +19,67 @@ use Zend\Crypt\Password\Bcrypt;
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface
 {
 
-	protected $config;
-
-	public function onBootstrap(MvcEvent $e)
+	public function init(\Zend\ModuleManager\ModuleManager $mm)
 	{
-		$this->config = $e->getApplication()->getServiceManager()->get('Miranda\Service\Config');
+		$sem = $mm->getEventManager()->getSharedManager();
+		
+		$sem->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', array(
+			$this,
+			'checkLoggedUser'
+		), 110);
+	}
+
+	public function checkLoggedUser(MvcEvent $e)
+	{
+		// Verification si l'utilisateur est connecté
+		$authService = $e->getApplication()->getServiceManager()->get('Miranda\Service\AuthService');
+		
+		// Lecture dans la conf des page autorisées sans être connecté
+		$config = $e->getApplication()->getServiceManager()->get('Miranda\Service\Config');
+		$allowedPages = $config->authentification->get('not_login_page', array(
+			'login',
+			'authenticate',
+			'logout'
+		));
+		if (!is_array($allowedPages))
+			$allowedPages = $allowedPages->toArray();
+			
+			// Si on est sur une page non accessible si pas connecté, et qu'il n'y a
+			// pas d'utilisateur connecté
+		if (!in_array($e->getRouteMatch()->getMatchedRouteName(), $allowedPages) && !$authService->hasIdentity()) {
+			// Calcul de l'URL demandée, pour redirection après connexion
+			$requestUri = $e->getRequest()->getUri();
+			$uriPath = $requestUri->getPath();
+			$uriQuery = $requestUri->getQuery();
+			$uriFragment = $requestUri->getFragment();
+			
+			$redirect = $uriPath;
+			if (!empty($uriQuery)) {
+				$redirect .= '?' . $uriQuery;
+			}
+			if (!empty($uriFragment)) {
+				$redirect .= '#' . $uriFragment;
+			}
+			
+			// Redirection vers la page de login
+			if (!empty($redirect) && ($redirect != '/')) {
+				return $e->getTarget()->plugin('redirect')->toRoute('login', array(), 
+						array(
+							'query' => array(
+								'redirect' => urlencode($redirect)
+							)
+						));
+			} else {
+				return $e->getTarget()->plugin('redirect')->toRoute('login');
+			}
+		}
+		
+		// Si l'utilisateur connecté n'est plus activé, on le déconnecte
+		if ($authService->hasIdentity() && !$authService->getIdentity()->isActive() && ($e->getRouteMatch()->getMatchedRouteName() != 'logout')) {
+			$session = $e->getApplication()->getServiceManager()->get('Zend\Session\SessionManager')->getStorage();
+			$session->auth_error_message = 'This user account is not activated.';
+			return $e->getTarget()->plugin('redirect')->toRoute('logout');
+		}
 	}
 
 	public function getConfig()

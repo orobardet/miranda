@@ -1,0 +1,26 @@
+<h1><?php echo $this->translate('Unauthorized access (403 error)'); ?></h1>
+<h2><?php echo $this->translate($this->message); ?></h2>
+
+<?php if (isset($this->controller) && $this->controller): ?>
+<dl>
+    <dt><?php echo $this->translate('Controller') ?>:</dt>
+    <dd><?php echo $this->escapeHtml($this->controller) ?>
+</dd>
+</dl>
+<?php endif ?>
+
+<?php if (isset($this->action) && $this->action): ?>
+<dl>
+    <dt><?php echo $this->translate('Action') ?>:</dt>
+    <dd><?php echo $this->escapeHtml($this->action) ?>
+</dd>
+</dl>
+<?php endif ?>
+
+<?php if (isset($this->user) && $this->user): ?>
+<dl>
+    <dt><?php echo $this->translate('Utilisateur') ?>:</dt>
+    <dd><?php echo $this->escapeHtml($this->user) ?>
+</dd>
+</dl>
+<?php endif ?>

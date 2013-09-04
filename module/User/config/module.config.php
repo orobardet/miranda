@@ -4,7 +4,7 @@ return array(
         'invokables' => array(
             'User\Controller\Auth' => 'User\Controller\AuthController',
             'User\Controller\Admin' => 'User\Controller\AdminController',
-            'User\Controller\User' => 'User\Controller\UserController',
+            'User\Controller\Profile' => 'User\Controller\ProfileController',
         ),
     ),
 		
@@ -52,7 +52,7 @@ return array(
    									),
      			    				'defaults' => array(
      			    						'__NAMESPACE__' => 'User\Controller',
-     			    						'controller' => 'User',
+     			    						'controller' => 'Profile',
      			    						'action' => 'show'
 		    						)
 		    				)

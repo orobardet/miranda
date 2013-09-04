@@ -7,8 +7,9 @@ use Application\ConfigAwareInterface;
 use Zend\Config\Config as ZendConfig;
 use User\Model\User;
 use Application\Toolbox\String as StringTools;
+use Acl\Controller\AclControllerInterface;
 
-class AdminController extends AbstractActionController implements ConfigAwareInterface
+class AdminController extends AbstractActionController implements ConfigAwareInterface, AclControllerInterface
 {
 
 	protected $config;
@@ -20,6 +21,32 @@ class AdminController extends AbstractActionController implements ConfigAwareInt
 		$this->config = $config;
 	}
 
+	public function aclIsAllowed($action, \Zend\Permissions\Acl\Acl $acl, $user)
+	{
+		switch ($action) {
+			case "index":
+				return "admin_list_users";
+				break;
+			case "show":
+				return "admin_show_user";
+				break;
+			case "add":
+				return "admin_add_user";
+				break;
+			case "edit":
+				return "admin_edit_user";
+				break;
+			case "delete":
+				return "admin_delete_user";
+				break;
+			default:
+				return false;
+				break;
+		}
+		
+		return false;
+	}
+	
 	public function indexAction()
 	{
 		return new ViewModel(array(

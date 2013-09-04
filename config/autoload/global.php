@@ -69,19 +69,25 @@ $config = array(
 						'resource' => 'admin_list_users',
 						'pages' => array(
 							array(
-								'label' => 'Ajouter',
+								'label' => 'Show',
+								'route' => 'admin/user',
+								'action' => 'show',
+								'resource' => 'admin_show_user',
+							),
+							array(
+								'label' => 'Add',
 								'route' => 'admin/user',
 								'action' => 'add',
 								'resource' => 'admin_add_user',
 							),
 							array(
-								'label' => 'Modifier',
+								'label' => 'Edit',
 								'route' => 'admin/user',
 								'action' => 'edit',
 								'resource' => 'admin_edit_user',
 							),
 							array(
-								'label' => 'Supprimer',
+								'label' => 'Delete',
 								'route' => 'admin/user',
 								'action' => 'delete',
 								'resource' => 'admin_delete_user',
@@ -94,19 +100,25 @@ $config = array(
 						'resource' => 'admin_list_roles',
 						'pages' => array(
 							array(
-								'label' => 'Ajouter',
+								'label' => 'Show',
+								'route' => 'admin/role',
+								'action' => 'show',
+								'resource' => 'admin_show_role',
+							),
+							array(
+								'label' => 'Add',
 								'route' => 'admin/role',
 								'action' => 'add',
 								'resource' => 'admin_add_role',
 							),
 							array(
-								'label' => 'Modifier',
+								'label' => 'Edit',
 								'route' => 'admin/role',
 								'action' => 'edit',
 								'resource' => 'admin_edit_role',
 							),
 							array(
-								'label' => 'Supprimer',
+								'label' => 'Delete',
 								'route' => 'admin/role',
 								'action' => 'delete',
 								'resource' => 'admin_delete_role',

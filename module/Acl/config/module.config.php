@@ -4,6 +4,7 @@ return array(
         'invokables' => array(
             'Acl\Controller\AdminRight' => 'Acl\Controller\AdminRightController',
             'Acl\Controller\AdminRole' => 'Acl\Controller\AdminRoleController',
+            'Acl\Controller\Unauthorized' => 'Acl\Controller\UnauthorizedController',
         ),
     ),
 		

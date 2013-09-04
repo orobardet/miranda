@@ -221,6 +221,21 @@ label.multicheckbox input[type=checkbox] {
 .main-messages ul {
   margin: 0px 0px 0px 10px;
 }
+.action-bar.boundaries:before {
+  content: '[ ';
+}
+.action-bar.boundaries:after {
+  content: ' ]';
+}
+.action-bar .action-bar-item {
+  display: inline;
+}
+.action-bar .action-bar-item:before {
+  content: ' | ';
+}
+.action-bar .action-bar-item:first-child:before {
+  content: '';
+}
 .icon-sprite {
   display: inline-block;
   width: 16px;

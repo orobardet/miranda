@@ -56,15 +56,17 @@ class RolesManager
 	{
 		$roleNames = array();
 		
-		$roles = $this->rolesTable->select(function (Select $select) use($roleIds)
-		{
-			$select->where(array(
-				'id' => $roleIds
-			));
-		});
-		
-		foreach ($roles as $role) {
-			$roleNames[] = $role->getName();
+		if (!is_array($roleIds) || count($roleIds)) {
+			$roles = $this->rolesTable->select(function (Select $select) use($roleIds)
+			{
+				$select->where(array(
+					'id' => $roleIds
+				));
+			});
+			
+			foreach ($roles as $role) {
+				$roleNames[] = $role->getName();
+			}
 		}
 		
 		return $roleNames;

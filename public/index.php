@@ -23,4 +23,23 @@ if (php_sapi_name() === 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['RE
 require 'init_autoloader.php';
 
 // Run the application!
-Zend\Mvc\Application::init(require 'config/application.config.php')->run();
+try {
+	Zend\Mvc\Application::init(require 'config/application.config.php')->run();
+} catch(Exception $e) {
+	while ($e) {
+		echo "<hr/>";
+		echo $e->getFile().":".$e->getLine()."<br/>";
+		echo "Exception code '".$e->getCode()."' with message: ".$e->getMessage()."<br/>";
+		if (!$e->getPrevious()) {
+			$traces = $e->getTrace();
+			if (count($traces)) {
+				echo "<ul>";
+				foreach ($traces as $trace) {
+					echo "<li>{$trace['file']}:{$trace['line']} {$trace['class']}::{$trace['function']}</li>";
+				}
+				echo "</ul>";
+			}
+		}
+		$e = $e->getPrevious();
+	}
+}

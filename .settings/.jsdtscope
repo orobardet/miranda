@@ -14,5 +14,7 @@
 	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.baseBrowserLibrary"/>
 	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.FireFoxBrowserLibrary"/>
 	<classpathentry kind="con" path="com.zend.jsdt.support.jquery.LIBRARY"/>
+	<classpathentry kind="con" path="org.eclipse.wst.jsdt.USER_LIBRARY/JQuery 1.10"/>
+	<classpathentry kind="con" path="org.eclipse.wst.jsdt.USER_LIBRARY/JQueryUI 1.10"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

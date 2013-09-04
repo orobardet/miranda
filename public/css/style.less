@@ -206,4 +206,23 @@ label.multicheckbox {
 	}
 }
 
+.action-bar {
+	&.boundaries:before {
+		content: '[ ';
+	}
+	&.boundaries:after {
+		content: ' ]';
+	}
+	
+	.action-bar-item {
+		display: inline;
+	}
+	.action-bar-item:before {
+		content: ' | ';
+	}
+	.action-bar-item:first-child:before {
+		content: '';
+	}
+}
+
 @import "icons-sprite.less";

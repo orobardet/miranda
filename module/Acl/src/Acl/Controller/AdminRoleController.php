@@ -6,8 +6,9 @@ use Zend\View\Model\ViewModel;
 use Application\ConfigAwareInterface;
 use Zend\Config\Config as ZendConfig;
 use Acl\Model\Role;
+use Acl\Controller\AclControllerInterface;
 
-class AdminRoleController extends AbstractActionController implements ConfigAwareInterface
+class AdminRoleController extends AbstractActionController implements ConfigAwareInterface, AclControllerInterface
 {
 
 	protected $config;
@@ -18,7 +19,33 @@ class AdminRoleController extends AbstractActionController implements ConfigAwar
 	{
 		$this->config = $config;
 	}
-
+	
+	public function aclIsAllowed($action, \Zend\Permissions\Acl\Acl $acl, $user)
+	{
+		switch ($action) {
+			case "index":
+				return "admin_list_roles";
+				break;
+			case "show":
+				return "admin_show_role";
+				break;
+			case "add":
+				return "admin_add_role";
+				break;
+			case "edit":
+				return "admin_edit_role";
+				break;
+			case "delete":
+				return "admin_delete_role";
+				break;
+			default:
+				return false;
+				break;
+		}
+		
+		return false;
+	}
+	
 	public function indexAction ()
 	{
 		return new ViewModel(array(
