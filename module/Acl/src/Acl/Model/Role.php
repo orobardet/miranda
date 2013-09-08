@@ -1,7 +1,9 @@
 <?php
 namespace Acl\Model;
 
-class Role
+use Application\Model\ObjectModelBase;
+
+class Role extends ObjectModelBase
 {
 	/**
 	 * ID en BDD du rôle

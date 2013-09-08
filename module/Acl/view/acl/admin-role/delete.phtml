@@ -5,6 +5,27 @@ $user = $this->user;
 ?>
 <h1><?php echo $this->escapeHtml($this->translate($title)); ?></h1>
 
+<?php $users = $this->role->getBaseAttribute("usersWithRole"); ?>
+<?php if (count($users)): ?>
+<p class="text-warning">
+<?php echo $this->translate("Warning, this role is assigned to some users.<br/>Deleting this role will remove it and all associated access right from these users."); ?>
+</p>
+<?php if ($this->acl()->isAllowed("admin_list_users")): ?>
+	<h5><?php echo $this->translate('Users having this role:'); ?></h5>
+	<ul>
+	<?php foreach($users as $user): ?>
+	<li<?php if (!$user->isActive()) echo ' class="muted"'?>>
+		<?php if ($this->acl()->isAllowed("admin_show_user")): ?>
+			<a <?php if (!$user->isActive()) echo ' class="muted"'?> href="<?php echo $this->url('admin/user', array('action'=>'show', 'id' => $user->getId()));?>"><?php echo $user->getDisplayName(); ?></a>
+		<?php else: ?>
+			<?php echo $user->getDisplayName(); ?>
+		<?php endif; ?>
+	</li>
+	<?php endforeach; ?>
+	</ul>
+<?php endif; ?>
+<?php endif; ?>
+
 <p>
 <?php echo $this->translateReplace("Are you sure that you want to delete role '%name%'?", array('name' => $this->escapeHtml($this->role->getName()))); ?>
 </p>

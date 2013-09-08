@@ -27,4 +27,21 @@ $this->headTitle($title);
 	'checked_rights' => $this->role->getRights()
 )); ?>
 </p>
+<?php if ($this->acl()->isAllowed("admin_list_users")): ?>
+	<?php $users = $this->role->getBaseAttribute("usersWithRole"); ?>
+	<?php if (count($users)): ?>
+	<h5><?php echo $this->translate('Users having this role:'); ?></h5>
+	<ul>
+	<?php foreach($users as $user): ?>
+	<li<?php if (!$user->isActive()) echo ' class="muted"'?>>
+		<?php if ($this->acl()->isAllowed("admin_show_user")): ?>
+			<a <?php if (!$user->isActive()) echo ' class="muted"'?> href="<?php echo $this->url('admin/user', array('action'=>'show', 'id' => $user->getId()));?>"><?php echo $user->getDisplayName(); ?></a>
+		<?php else: ?>
+			<?php echo $user->getDisplayName(); ?>
+		<?php endif; ?>
+	</li>
+	<?php endforeach; ?>
+	</ul>
+	<?php endif; ?>
+<?php endif; ?>
 <a href="<?php echo $this->return_url; ?>" class="btn btn-primary"><?php echo $this->translate('Back'); ?></a>

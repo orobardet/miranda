@@ -34,5 +34,7 @@ return array(
 	
 	"'%name%' role's details" => "Détails du rôle '%name%'",
 	"Are you sure that you want to delete role '%name%'?" => "Est-vous sûr de vouloir supprimer le rôle '%name%' ?",
-	
+	"Users having this role:" => 'Utilisateurs possédants ce rôle :',
+	'Warning, this role is assigned to some users.<br/>Deleting this role will remove it and all associated access right from these users.' => "Attention, ce rôle est possédé par certains utilisateurs.<br/>Supprimer ce rôle le retirera de ces utilisateurs, ainsi que tous les droits d'accès correspondants.",
+		
 );

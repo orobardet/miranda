@@ -10,10 +10,13 @@ class RoleTable extends Role
 
 	protected $rightsTableGateway;
 
-	public function __construct(TableGateway $tableGateway, TableGateway $rightsTableGateway)
+	protected $usersRolesTableGateway;
+
+	public function __construct(TableGateway $tableGateway, TableGateway $rightsTableGateway = null, TableGateway $usersRolesTableGateway = null)
 	{
 		$this->tableGateway = $tableGateway;
 		$this->rightsTableGateway = $rightsTableGateway;
+		$this->usersRolesTableGateway = $usersRolesTableGateway;
 	}
 
 	public function select($where)
@@ -23,14 +26,16 @@ class RoleTable extends Role
 
 	public function fetchAll($where = null, $order = null)
 	{
-		return $this->tableGateway->select(function ($select) use ($where, $order) {
-			if ($where) {
-				$select->where($where);
-			}
-			if ($order) {
-				$select->order($order);
-			}
-		});
+		return $this->tableGateway->select(
+				function ($select) use($where, $order)
+				{
+					if ($where) {
+						$select->where($where);
+					}
+					if ($order) {
+						$select->order($order);
+					}
+				});
 	}
 
 	public function getRole($id)
@@ -43,13 +48,15 @@ class RoleTable extends Role
 		if (!$row) {
 			throw new \Exception("Could not find role $id");
 		}
-
+		
 		$rights = array();
-		$rightset = $this->rightsTableGateway->select(array(
-			'role_id' => $id
-		));
-		foreach ($rightset as $right) {
-			$rights[] = $right->right_id;
+		if ($this->rightsTableGateway) {
+			$rightset = $this->rightsTableGateway->select(array(
+				'role_id' => $id
+			));
+			foreach ($rightset as $right) {
+				$rights[] = $right->right_id;
+			}
 		}
 		$row->setRights($rights);
 		
@@ -78,24 +85,39 @@ class RoleTable extends Role
 		}
 		
 		// Sauvegarde des droits du rôle
-		$this->rightsTableGateway->delete(array(
-			'role_id' => $id
-		));
-		$rights = $role->getRights();
-		foreach ($rights as $right_id) {
-			$this->rightsTableGateway->insert(array(
-				'role_id' => $id,
-				'right_id' => $right_id
+		if ($this->rightsTableGateway) {
+			$this->rightsTableGateway->delete(array(
+				'role_id' => $id
 			));
+			$rights = $role->getRights();
+			foreach ($rights as $right_id) {
+				$this->rightsTableGateway->insert(array(
+					'role_id' => $id,
+					'right_id' => $right_id
+				));
+			}
 		}
 	}
 
 	public function deleteRole($id)
 	{
+		if (!$this->rightsTableGateway) {
+			throw new \Exception("Can't delete a role, no roles_rights TableGateway given.");
+		}
+		if (!$this->usersRolesTableGateway) {
+			throw new \Exception("Can't delete a role, no user_roles TableGateway given.");
+		}
+		
 		// Suppression des droits du rôle
 		$this->rightsTableGateway->delete(array(
 			'role_id' => $id
 		));
+		
+		// Suppression de l'affectation du rôle aux utilisateurs
+		$this->usersRolesTableGateway->delete(array(
+			'role_id' => $id
+		));
+		
 		// Puis suppression du rôle
 		$this->tableGateway->delete(array(
 			'id' => $id

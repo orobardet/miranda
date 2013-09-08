@@ -1,7 +1,9 @@
 <?php
 namespace User\Model;
 
-class User
+use Application\Model\ObjectModelBase;
+
+class User extends ObjectModelBase
 {
 	/**
 	 * ID en BDD de l'utilisateur

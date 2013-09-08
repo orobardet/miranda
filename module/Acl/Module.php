@@ -186,7 +186,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				},
 				'Acl\Model\RoleTable' => function ($sm)
 				{
-					return new RoleTable($sm->get('Acl\TableGateway\Roles'), $sm->get('Acl\TableGateway\RolesRights'));
+					return new RoleTable($sm->get('Acl\TableGateway\Roles'), $sm->get('Acl\TableGateway\RolesRights'), $sm->get('User\TableGateway\UsersRoles'));
 				},
 				'Acl\Form\Role' => function ($sm)
 				{

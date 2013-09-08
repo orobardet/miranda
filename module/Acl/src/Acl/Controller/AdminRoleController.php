@@ -67,6 +67,8 @@ class AdminRoleController extends AbstractActionController implements ConfigAwar
             return $this->redirect()->toRoute('admin/role');
         }
         
+        $role->setBaseAttribute("usersWithRole", $this->getServiceLocator()->get('User\Model\UserTable')->fetchByRole($role->getId()));
+        
 		return new ViewModel(array(
 			'role' => $role,
 			'return_url' => $this->url()->fromRoute('admin/role'),
@@ -170,8 +172,9 @@ class AdminRoleController extends AbstractActionController implements ConfigAwar
             return $this->redirect()->toRoute('admin/role');
         }
         
-        // TODO: Vérifier qu'aucun utilisateur n'a ce rôle avant de le supprimer
-        
+        $role = $this->getRoleTable()->getRole($id);
+        $role->setBaseAttribute("usersWithRole", $this->getServiceLocator()->get('User\Model\UserTable')->fetchByRole($role->getId()));
+                
         $request = $this->getRequest();
         if ($request->isPost()) {
             $del = $request->getPost('del', 'no');
@@ -186,7 +189,7 @@ class AdminRoleController extends AbstractActionController implements ConfigAwar
 
         return array(
             'id'    => $id,
-            'role' => $this->getRoleTable()->getRole($id)
+            'role' => $role
         );	
 	}
 	
