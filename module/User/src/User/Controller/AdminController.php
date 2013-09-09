@@ -49,6 +49,11 @@ class AdminController extends AbstractActionController implements ConfigAwareInt
 	
 	public function indexAction()
 	{
+		$this->refererUrl()->setReferer('admin-user-show');
+		$this->refererUrl()->setReferer('admin-user-add');
+		$this->refererUrl()->setReferer('admin-user-edit');
+		$this->refererUrl()->setReferer('admin-user-delete');
+		
 		return new ViewModel(array(
 			'users' => $this->getUserTable()->fetchAll()
 		));
@@ -69,10 +74,14 @@ class AdminController extends AbstractActionController implements ConfigAwareInt
 			return $this->redirect()->toRoute('admin/user');
 		}
 		
+		$this->refererUrl()->setReferer('admin-user-edit');
+		$this->refererUrl()->setReferer('admin-user-delete');
+		$this->refererUrl()->setReferer('admin-role-show');
+		
 		return new ViewModel(array(
 			'user' => $user,
 			'all_roles' => $this->getServiceLocator()->get('Acl\Model\RoleTable')->fetchAll(),
-			'return_url' => $this->url()->fromRoute('admin/user')				
+			'return_url' => $this->refererUrl('admin-user-show')				
 		));
 	}
 
@@ -110,7 +119,7 @@ class AdminController extends AbstractActionController implements ConfigAwareInt
 		
 		return array(
 			'form' => $form,
-			'cancel_url' => $this->url()->fromRoute('admin/user')
+			'cancel_url' => $this->refererUrl('admin-user-add')
 		);
 	}
 
@@ -168,7 +177,7 @@ class AdminController extends AbstractActionController implements ConfigAwareInt
 		return array(
 			'id' => $id,
 			'form' => $form,
-			'cancel_url' => $this->url()->fromRoute('admin/user')
+			'cancel_url' => $this->refererUrl('admin-user-edit')
 		);
 	}
 
@@ -189,7 +198,12 @@ class AdminController extends AbstractActionController implements ConfigAwareInt
 				$this->getUserTable()->deleteUser($id);
 			}
 			
-			return $this->redirect()->toRoute('admin/user');
+			$return_url = $this->refererUrl('admin-user-delete');
+			if ($return_url) {
+				return $this->redirect()->toUrl($return_url);
+			} else {
+				return $this->redirect()->toRoute('admin/user');
+			}
 		}
 		
 		return array(
