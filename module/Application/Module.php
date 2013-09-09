@@ -171,6 +171,10 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'resultStatus' => function ($sm)
 				{
 					return new \Application\Controller\Plugin\ResultStatus($sm->getServiceLocator()->get('Zend\Session\SessionManager')->getStorage());
+				},
+				'refererUrl' => function ($sm)
+				{
+					return new \Application\Controller\Plugin\RefererUrl($sm->getServiceLocator()->get('Zend\Session\SessionManager')->getStorage());
 				}
 			)
 		);

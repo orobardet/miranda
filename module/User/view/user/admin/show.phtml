@@ -30,6 +30,8 @@ $this->headTitle($title);
 <?php endif; ?>
 </div>
 
+<?php if ($this->return_url): ?>
 <p>
 <a href="<?php echo $this->return_url; ?>" class="btn btn-primary"><?php echo $this->translate('Back'); ?></a>
 </p>
+<?php endif; ?>
