@@ -62,7 +62,16 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		$config = $e->getApplication()->getServiceManager()->get('Miranda\Service\Config');
 		
 		$viewModel = $e->getViewModel();
-		$viewModel->setVariable('css', $config->layout->get('css', array()));
+		if ($config->layout->get('compile_less', false)) {
+			$css = array();
+			$less = $config->layout->get('less', array());
+			if (count($less)) {
+				$css = array($config->layout->get('less_compiler', 'less_compiler.php').'?f='.join(',',$less->toArray()));
+			}
+			$viewModel->setVariable('css', $css);
+		} else {
+			$viewModel->setVariable('css', $config->layout->get('css', array()));
+		}
 		$viewModel->setVariable('js', $config->layout->get('js', array()));
 	}
 

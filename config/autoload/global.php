@@ -21,6 +21,13 @@ $config = array(
 				'css/style.css',
 				'css/bootstrap-responsive.min.css'
 			),
+			'compile_less' => ($env == 'dev'),
+			'less_compiler' => 'less.php',
+			'less' => array(
+				'css/bootstrap.less',
+				'css/style.less',
+				'css/bootstrap-responsive.min.css'
+			),
 			'js' => array(
 				'js/jquery.min.js',
 				'js/bootstrap.js',
