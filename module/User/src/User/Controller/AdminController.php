@@ -177,16 +177,25 @@ class AdminController extends AbstractActionController implements ConfigAwareInt
 		return array(
 			'id' => $id,
 			'form' => $form,
+			'user' => $user,				
 			'cancel_url' => $this->refererUrl('admin-user-edit')
 		);
 	}
 
 	public function deleteAction()
 	{
-		//  TODO: empecher la suppression de son propre compte (par contrôle d'ID ici, et en retirant l'option de suppression dans la liste)
 		$id = (int)$this->params()->fromRoute('id', 0);
 		if (!$id) {
 			return $this->redirect()->toRoute('admin/user');
+		}
+		
+		// On refuse la suppression de son propre compte
+		if ($this->userAuthentication()->getIdentity()->getId() == $id) {
+			return array(
+				'own_user' => true,
+				'user' => $this->getUserTable()->getUser($id),
+				'return_url' => $this->refererUrl('admin-user-delete')
+			);
 		}
 		
 		$request = $this->getRequest();

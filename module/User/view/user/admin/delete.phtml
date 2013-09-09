@@ -3,8 +3,18 @@ $title = 'Delete user';
 $this->headTitle($title);
 $user = $this->user;
 ?>
-<h1><?php echo $this->escapeHtml($this->translate($title)); ?></h1>
+<h1><?php echo $this->translateReplace('Delete user %displayName%', array('displayName' => $this->escapeHtml($user->getDisplayName()))); ?></h1>
 
+<?php if ($this->own_user): ?>
+<div class="alert alert-error">
+	<?php echo $this->translate("You can't delete your own user account."); ?>
+</div>
+<?php if ($this->return_url): ?>
+<p>
+<a href="<?php echo $this->return_url; ?>" class="btn btn-primary"><?php echo $this->translate('Back'); ?></a>
+</p>
+<?php endif; ?>
+<?php else: ?>
 <p>
 <?php echo $this->translateReplace("Are you sure that you want to delete user '%displayName%' (%email%)?", array('displayName' => $this->escapeHtml($user->getDisplayName()), 'email' => $this->escapeHtml($user->getEmail()))); ?>
 </p>
@@ -22,3 +32,4 @@ $url = $this->url('admin/user', array(
     <button type="submit" class="btn btn-primary" name="del" value="yes"><?php echo $this->translate('Yes'); ?></button>
 </div>
 </form>
+<?php endif; ?>

@@ -2,7 +2,7 @@
 $title = $this->translate('Edit user');
 $this->headTitle($title);
 ?>
-<h1><?php echo $this->escapeHtml($this->translate($title)); ?></h1>
+<h1><?php echo $this->translateReplace('Edit user %displayName%', array('displayName' => $this->escapeHtml($this->user->getDisplayName()))); ?></h1>
 <?php
 $form = $this->form;
 $form->setAttribute('class', 'form-horizontal');
