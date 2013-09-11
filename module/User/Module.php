@@ -15,8 +15,11 @@ use User\Authentification\Adapter\DbCallbackCheckAdapter as AuthDbTable;
 use User\Authentification\Storage\Session as AuthSessionStorage;
 use Application\ConfigAwareInterface;
 use Zend\Crypt\Password\Bcrypt;
+use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
+use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
+use Zend\Console\Request as ConsoleRequest;
 
-class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface
+class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ConsoleUsageProviderInterface
 {
 
 	public function init(\Zend\ModuleManager\ModuleManager $mm)
@@ -31,6 +34,11 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 
 	public function checkLoggedUser(MvcEvent $e)
 	{
+		// Pas de vérification d'utilisateur connecté si on est en mode CLI
+		if ($e->getRequest() instanceof ConsoleRequest) {
+			return;
+		}
+		
 		// Verification si l'utilisateur est connecté
 		$authService = $e->getApplication()->getServiceManager()->get('Miranda\Service\AuthService');
 		
@@ -212,6 +220,25 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 						$instance->setConfig($cm->getServiceLocator()->get('Miranda\Service\Config'));
 					}
 				}
+			)
+		);
+	}
+
+	public function getConsoleUsage(ConsoleAdapterInterface $console)
+	{
+		return array(
+			'List and display users',
+			'show [all] users' => 'List all users',
+			'show user <id>|<email>' => 'Show a user by ID or email',
+			array(
+				'<id>',
+				'user ID',
+				'ID of the user'
+			),
+			array(
+				'<email>',
+				'user email',
+				'Full email address of the user'
 			)
 		);
 	}

@@ -26,7 +26,7 @@ return array(
 	'Firstname' => 'Prénom',
 	'Lastname' => 'Nom',
 	'Email' => 'Email',
-	'Active?' => 'Actif ?',
+	'Enabled?' => 'Activé ?',
 	'Firstname: ' => 'Prénom : ',
 	'Lastname: ' => 'Nom : ',
 	'Email: ' => 'Email : ',
@@ -60,5 +60,7 @@ return array(
 	'Not strong enough' => 'Pas assez fiable',
 	
 	"Are you sure that you want to delete user '%displayName%' (%email%)?" => "Etes-vous sûr de vouloir supprimer l'utilisateur '%displayName%' (%email%) ?",
-	"User '%name%' edited." => "Utilisateur '%name%' modifié."
+	"User '%name%' edited." => "Utilisateur '%name%' modifié.",
+	
+	'Users list:' => 'Liste des utilisateurs :',
 );

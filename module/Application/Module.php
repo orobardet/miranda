@@ -11,8 +11,10 @@ use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\View\HelperPluginManager;
+use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
+use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
 
-class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface
+class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ConsoleBannerProviderInterface
 {
 
 	public function init(\Zend\ModuleManager\ModuleManager $mm)
@@ -53,7 +55,11 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		$moduleRouteListener->attach($eventManager);
 		
 		$translator = $e->getApplication()->getServiceManager()->get('translator');
-		$translator->setLocale(\Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']))->setFallbackLocale('fr_FR');
+		$languageString = '';
+		if (isset($_SERVER) && array_key_exists('HTTP_ACCEPT_LANGUAGE', $_SERVER)) {
+			$languageString = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
+		}
+		$translator->setLocale(\Locale::acceptFromHttp($languageString))->setFallbackLocale('fr_FR');
 		
 		AbstractValidator::setDefaultTranslator($translator);
 		
@@ -184,6 +190,10 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'refererUrl' => function ($sm)
 				{
 					return new \Application\Controller\Plugin\RefererUrl($sm->getServiceLocator()->get('Zend\Session\SessionManager')->getStorage());
+				},
+				'console' => function ($sm)
+				{
+					return new \Application\Controller\Plugin\Console($sm->getServiceLocator()->get('console'));
 				}
 			)
 		);
@@ -211,4 +221,9 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 			)
 		);
 	}
+	
+	public function getConsoleBanner(ConsoleAdapterInterface $console)
+    {
+        return 'Miranda';
+    }
 }

@@ -19,6 +19,8 @@ use Zend\Permissions\Acl\Role\GenericRole as Role;
 use Acl\Controller\AclControllerInterface;
 use Zend\View\Model\ViewModel;
 use Acl\Helper\AclHelper;
+use Zend\Console\Request as ConsoleRequest;
+use Acl\Controller\AclConsoleControllerInterface;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface
 {
@@ -35,6 +37,30 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 
 	public function checkAcl(MvcEvent $e)
 	{
+		if ($e->getRequest() instanceof ConsoleRequest) {
+			$controller = $e->getTarget();
+			if (!$controller instanceof AclConsoleControllerInterface) {
+				// Le controlleur n'implémente pas l'interface qui est obligatoire pour déclarer des actions console
+				// Erreur et on arrête là
+				$console = $e->getApplication()->getServiceManager()->get('console');
+				$console->writeLine('No console access allowed for this controller!');
+				// On arrête la propagation de l'évenement, pour empecher que l'action initialement demandée soient exécutée 
+				$e->stopPropagation();
+				return;
+			}
+			$route = $e->getRouteMatch();
+			if (!$controller->aclConsoleIsAllowed($route->getParam('action'))) {
+				// L'action demandée n'est pas autorisée en mode console
+				// Erreur et on arrête là
+				$console = $e->getApplication()->getServiceManager()->get('console');
+				$console->writeLine('No console access allowed for this action!');
+				// On arrête la propagation de l'évenement, pour empecher que l'action initialement demandée soient exécutée
+				$e->stopPropagation();
+				return;
+			}
+			return;
+		}
+		
 		$acl = $e->getApplication()->getServiceManager()->get('Miranda\Service\Acl');
 		$controller = $e->getTarget();
 		$route = $e->getRouteMatch();

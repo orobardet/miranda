@@ -54,7 +54,7 @@ class UserTable extends User
 		$roles = array();
 		if ($this->rolesTableGateway) {
 			$roleset = $this->rolesTableGateway->select(array(
-				'user_id' => $id
+				'user_id' => $row->getId()
 			));
 			foreach ($roleset as $role) {
 				$roles[] = $role->role_id;
@@ -65,6 +65,28 @@ class UserTable extends User
 		return $row;
 	}
 
+	public function getUserByEmail($email)
+	{
+		$rowset = $this->tableGateway->select(array('email' => $email));
+		$row = $rowset->current();
+		if (!$row) {
+			throw new \Exception("Could not find user with email '$email'");
+		}
+		
+		$roles = array();
+		if ($this->rolesTableGateway) {
+			$roleset = $this->rolesTableGateway->select(array(
+				'user_id' => $row->getId()
+			));
+			foreach ($roleset as $role) {
+				$roles[] = $role->role_id;
+			}
+		}
+		$row->setRoles($roles);
+		
+		return $row;
+	}
+	
 	public function saveUser(User $user, $savePassword = false)
 	{
 		$data = array(
