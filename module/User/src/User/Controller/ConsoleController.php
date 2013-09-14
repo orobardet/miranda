@@ -1,25 +1,14 @@
 <?php
 namespace User\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
 use Application\ConfigAwareInterface;
-use Zend\Config\Config as ZendConfig;
 use User\Model\User;
 use Acl\Controller\AclConsoleControllerInterface;
 use Application\Toolbox\String as StringTools;
 use Zend\Console\ColorInterface;
 
-class ConsoleController extends AbstractActionController implements ConfigAwareInterface, AclConsoleControllerInterface
+class ConsoleController extends AbstractUserController implements ConfigAwareInterface, AclConsoleControllerInterface
 {
-
-	protected $config;
-
-	protected $userTable;
-
-	public function setConfig(ZendConfig $config)
-	{
-		$this->config = $config;
-	}
 
 	public function aclConsoleIsAllowed($action)
 	{
@@ -60,7 +49,7 @@ class ConsoleController extends AbstractActionController implements ConfigAwareI
 	{
 		$translator = $this->getServiceLocator()->get('translator');
 		
-		$id = $this->getRequest()->getParam('id');
+		$id = $this->getRequest()->getParam('id', 0);
 		
 		$user = null;
 		try {
@@ -81,12 +70,12 @@ class ConsoleController extends AbstractActionController implements ConfigAwareI
 				$this->console()->writeLine($translator->translate('Account disabled'), ColorInterface::RED);
 			}
 			$this->console()->writeLine();
-			$this->console()->writeLine($translator->translate("Created on: ") . $user->getCreationDate(
-					$translator->translate('full_text_date_time')));
+			$this->console()->writeLine(
+					$translator->translate("Created on: ") . $user->getCreationDate($translator->translate('full_text_date_time')));
 			$this->console()->writeLine(
 					$translator->translate("Last modified: ") . $user->getLastModificationDate($translator->translate('full_text_date_time')));
-			$this->console()->writeLine($translator->translate("Last login: ") .
-					 $user->getLastLoginDate($translator->translate('full_text_date_time')));
+			$this->console()->writeLine(
+					$translator->translate("Last login: ") . $user->getLastLoginDate($translator->translate('full_text_date_time')));
 			$this->console()->writeLine(
 					$translator->translate("Last activity: ") . $user->getLastActivityDate($translator->translate('full_text_date_time')));
 			$this->console()->writeLine();
@@ -107,13 +96,5 @@ class ConsoleController extends AbstractActionController implements ConfigAwareI
 		} else {
 			$this->console()->writeLine($translator->translate('User not found.'));
 		}
-	}
-
-	public function getUserTable()
-	{
-		if (!$this->userTable) {
-			$this->userTable = $this->getServiceLocator()->get('User\Model\UserTable');
-		}
-		return $this->userTable;
 	}
 }

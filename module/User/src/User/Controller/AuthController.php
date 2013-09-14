@@ -2,36 +2,18 @@
 namespace User\Controller;
 
 use Application\ConfigAwareInterface;
-use User\Model\UserTable;
 use User\Authentification\Adapter\DbCallbackCheckAdapter;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
-use Zend\Config\Config as ZendConfig;
 
-class AuthController extends AbstractActionController implements ConfigAwareInterface
+class AuthController extends AbstractUserController implements ConfigAwareInterface
 {
 
 	/**
-	 * @var ZendConfig
-	 */
-	protected $config;
-
-	/**
+	 *
 	 * @var Form
 	 */
 	protected $loginForm;
-
-	/**
-	 *
-	 * @var UserTable
-	 */
-	protected $userTable;
-
-	public function setConfig(ZendConfig $config)
-	{
-		$this->config = $config;
-	}
 
 	public function loginAction()
 	{
@@ -51,12 +33,13 @@ class AuthController extends AbstractActionController implements ConfigAwareInte
 		$error_message = $session->auth_error_message;
 		unset($session->auth_error_message);
 		
-		return new ViewModel(array(
-			'loginForm' => $form,
-			'redirect' => $redirect,
-			'error' => $request->getQuery()->get('e', 0),
-			'error_message' => $error_message
-		));
+		return new ViewModel(
+				array(
+					'loginForm' => $form,
+					'redirect' => $redirect,
+					'error' => $request->getQuery()->get('e', 0),
+					'error_message' => $error_message
+				));
 	}
 
 	public function authenticateAction()
@@ -156,13 +139,5 @@ class AuthController extends AbstractActionController implements ConfigAwareInte
 	{
 		$this->loginForm = $loginForm;
 		return $this;
-	}
-
-	public function getUserTable()
-	{
-		if (!$this->userTable) {
-			$this->userTable = $this->getServiceLocator()->get('User\Model\UserTable');
-		}
-		return $this->userTable;
 	}
 }

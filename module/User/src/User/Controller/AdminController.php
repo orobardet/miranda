@@ -1,27 +1,15 @@
 <?php
 namespace User\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Application\ConfigAwareInterface;
-use Zend\Config\Config as ZendConfig;
 use User\Model\User;
 use Application\Toolbox\String as StringTools;
 use Acl\Controller\AclControllerInterface;
 
-class AdminController extends AbstractActionController implements ConfigAwareInterface, AclControllerInterface
+class AdminController extends AbstractUserController implements AclControllerInterface
 {
 
-	protected $config;
-
-	protected $userTable;
-
-	public function setConfig(ZendConfig $config)
-	{
-		$this->config = $config;
-	}
-
-	public function aclIsAllowed($action, \Zend\Permissions\Acl\Acl $acl, $user)
+	public function aclIsAllowed($action,\Zend\Permissions\Acl\Acl $acl, $user)
 	{
 		switch ($action) {
 			case "index":
@@ -46,7 +34,7 @@ class AdminController extends AbstractActionController implements ConfigAwareInt
 		
 		return false;
 	}
-	
+
 	public function indexAction()
 	{
 		$this->refererUrl()->setReferer('admin-user-show');
@@ -78,11 +66,12 @@ class AdminController extends AbstractActionController implements ConfigAwareInt
 		$this->refererUrl()->setReferer('admin-user-delete');
 		$this->refererUrl()->setReferer('admin-role-show');
 		
-		return new ViewModel(array(
-			'user' => $user,
-			'all_roles' => $this->getServiceLocator()->get('Acl\Model\RoleTable')->fetchAll(),
-			'return_url' => $this->refererUrl('admin-user-show')				
-		));
+		return new ViewModel(
+				array(
+					'user' => $user,
+					'all_roles' => $this->getServiceLocator()->get('Acl\Model\RoleTable')->fetchAll(),
+					'return_url' => $this->refererUrl('admin-user-show')
+				));
 	}
 
 	public function addAction()
@@ -167,9 +156,10 @@ class AdminController extends AbstractActionController implements ConfigAwareInt
 				$this->getUserTable()->saveUser($user, $passwordChanged);
 				
 				$this->resultStatus()->addResultStatus(
-						StringTools::varprintf($this->getServiceLocator()->get('translator')->translate("User '%name%' edited."), array(
-							'name' => $user->getDisplayName()
-						)), "success");
+						StringTools::varprintf($this->getServiceLocator()->get('translator')->translate("User '%name%' edited."), 
+								array(
+									'name' => $user->getDisplayName()
+								)), "success");
 				return $this->redirect()->toRoute('admin/user');
 			}
 		}
@@ -177,7 +167,7 @@ class AdminController extends AbstractActionController implements ConfigAwareInt
 		return array(
 			'id' => $id,
 			'form' => $form,
-			'user' => $user,				
+			'user' => $user,
 			'cancel_url' => $this->refererUrl('admin-user-edit')
 		);
 	}
@@ -219,13 +209,5 @@ class AdminController extends AbstractActionController implements ConfigAwareInt
 			'id' => $id,
 			'user' => $this->getUserTable()->getUser($id)
 		);
-	}
-
-	public function getUserTable()
-	{
-		if (!$this->userTable) {
-			$this->userTable = $this->getServiceLocator()->get('User\Model\UserTable');
-		}
-		return $this->userTable;
 	}
 }
