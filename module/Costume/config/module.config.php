@@ -1,29 +1,31 @@
 <?php
 return array(
-    'controllers' => array(
-        'invokables' => array(
-            'Costume\Controller\Console' => 'Costume\Controller\ConsoleController',
-        ),
-    ),
+	'controllers' => array(
+		'invokables' => array(
+			'Costume\Controller\Console' => 'Costume\Controller\ConsoleController',
+			'Costume\Controller\Costume' => 'Costume\Controller\CostumeController'
+		)
+	),
 	
-    'router' => array(
-        'routes' => array(
-            'costume' => array(
-                'type'    => 'Literal',
-                'options' => array(
-                    'route'    => '/costume',
-                    'defaults' => array(
-                        // Change this value to reflect the namespace in which
-                        // the controllers for your module are found
-                        '__NAMESPACE__' => 'Costume\Controller',
-                        'controller'    => 'Console',
-                        'action'        => 'index',
-                    ),
-                ),
-                'may_terminate' => true
-            ),
-        ),
-    ),
+	'router' => array(
+		'routes' => array(
+			'costume' => array(
+				'type' => 'segment',
+				'options' => array(
+					'route' => '/costume[/][:action][/:id]',
+					'constraints' => array(
+						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+						'id' => '[0-9]+'
+					),
+					'defaults' => array(
+						'__NAMESPACE__' => 'Costume\Controller',
+						'controller' => 'Costume',
+						'action' => 'index'
+					)
+				)
+			)
+		)
+	),
 	
 	'console' => array(
 		'router' => array(
@@ -45,11 +47,11 @@ return array(
 							'action' => 'preparepictures'
 						)
 					)
-				),
+				)
 			)
 		)
 	),
-
+	
 	'service_manager' => array(
 		'aliases' => array(
 			'costume_zend_db_adapter' => 'Zend\Db\Adapter\Adapter'
@@ -68,8 +70,8 @@ return array(
 	),
 	
 	'view_manager' => array(
-        'template_path_stack' => array(
-            __DIR__ . '/../view',
-        ),
-    ),
+		'template_path_stack' => array(
+			__DIR__ . '/../view'
+		)
+	)
 );

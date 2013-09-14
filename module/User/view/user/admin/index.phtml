@@ -28,14 +28,14 @@ $this->headTitle($title);
 <tr>
     <td><?php echo $this->escapeHtml($user->getId());?></td>
 	<td>
-		<?php if ($this->acl()->isAllowed("admin_add_user")): ?>
+		<?php if ($this->acl()->isAllowed("admin_show_user")): ?>
 		<a href="<?php echo $this->url('admin/user', array('action'=>'show', 'id' => $user->getId()));?>"><?php echo $this->escapeHtml($user->getLastname());?></a>
 		<?php else: ?>
 		<?php echo $this->escapeHtml($user->getLastname());?>
 		<?php endif;?>
 		</td>
     <td>
-		<?php if ($this->acl()->isAllowed("admin_add_user")): ?>
+		<?php if ($this->acl()->isAllowed("admin_show_user")): ?>
     	<a href="<?php echo $this->url('admin/user', array('action'=>'show', 'id' => $user->getId()));?>"><?php echo $this->escapeHtml($user->getFirstname());?></a>
 		<?php else: ?>
 		<?php echo $this->escapeHtml($user->getFirstname());?>

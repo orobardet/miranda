@@ -101,7 +101,7 @@ class Costume extends ObjectModelBase
 	/**
 	 * @return string $state
 	 */
-	protected function getState()
+	public function getState()
 	{
 		return $this->state;
 	}
@@ -109,7 +109,7 @@ class Costume extends ObjectModelBase
 	/**
 	 * @return string $quantity
 	 */
-	protected function getQuantity()
+	public function getQuantity()
 	{
 		return $this->quantity;
 	}

@@ -26,6 +26,7 @@ return array(
 	'Show' => 'Afficher',
 	'Add' => 'Ajouter',
 	'Edit' => 'Modifier',
+	'Delete' => 'Supprimer',
 	'Cancel' => 'Annuler',
 	'Yes' => 'Oui',
 	'No' => 'Non',

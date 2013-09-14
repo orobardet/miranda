@@ -22,6 +22,13 @@ return array(
 
 	'No roles.' => 'Aucun rôles.',
 	
+	'Costumes' => 'Costumes',
+	'List costumes' => 'Lister les costumes',
+	'Show costume' => 'Afficher un costume',
+	'Add costume' => 'Ajouter un costume',
+	'Edit costume' => 'Modifier un costume',
+	'Delete costume' => 'Supprimer un costume',
+	
 	'Description: ' => 'Description : ',
 	'Description' => 'Description',
 	'Name: ' => 'Nom : ',

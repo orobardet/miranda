@@ -76,6 +76,47 @@ $config = array(
 				'route' => 'home'
 			),
 			array(
+				'label' => 'Costumes',
+				'route' => 'costume',
+				'resource' => 'list_costumes',
+				'pages' => array(
+					array(
+						'label' => 'Costumes',
+						'route' => 'costume',
+						'action' => 'index',
+						'resource' => 'list_costumes'
+				),
+					array(
+						'label' => 'Show',
+						'route' => 'costume',
+						'action' => 'show',
+						'resource' => 'show_costume',
+						'visible' => false
+					),
+					array(
+						'label' => 'Add',
+						'route' => 'costume',
+						'action' => 'add',
+						'resource' => 'add_costume',
+						'visible' => false
+					),
+					array(
+						'label' => 'Edit',
+						'route' => 'costume',
+						'action' => 'edit',
+						'resource' => 'edit_costume',
+						'visible' => false						
+					),
+					array(
+						'label' => 'Delete',
+						'route' => 'costume',
+						'action' => 'delete',
+						'resource' => 'delete_costume',
+						'visible' => false
+					)
+				)
+			),
+			array(
 				'label' => 'Admin',
 				'route' => 'admin',
 				'resource' => 'admin_access',
@@ -89,25 +130,25 @@ $config = array(
 								'label' => 'Show',
 								'route' => 'admin/user',
 								'action' => 'show',
-								'resource' => 'admin_show_user',
+								'resource' => 'admin_show_user'
 							),
 							array(
 								'label' => 'Add',
 								'route' => 'admin/user',
 								'action' => 'add',
-								'resource' => 'admin_add_user',
+								'resource' => 'admin_add_user'
 							),
 							array(
 								'label' => 'Edit',
 								'route' => 'admin/user',
 								'action' => 'edit',
-								'resource' => 'admin_edit_user',
+								'resource' => 'admin_edit_user'
 							),
 							array(
 								'label' => 'Delete',
 								'route' => 'admin/user',
 								'action' => 'delete',
-								'resource' => 'admin_delete_user',
+								'resource' => 'admin_delete_user'
 							)
 						)
 					),
@@ -120,32 +161,32 @@ $config = array(
 								'label' => 'Show',
 								'route' => 'admin/role',
 								'action' => 'show',
-								'resource' => 'admin_show_role',
+								'resource' => 'admin_show_role'
 							),
 							array(
 								'label' => 'Add',
 								'route' => 'admin/role',
 								'action' => 'add',
-								'resource' => 'admin_add_role',
+								'resource' => 'admin_add_role'
 							),
 							array(
 								'label' => 'Edit',
 								'route' => 'admin/role',
 								'action' => 'edit',
-								'resource' => 'admin_edit_role',
+								'resource' => 'admin_edit_role'
 							),
 							array(
 								'label' => 'Delete',
 								'route' => 'admin/role',
 								'action' => 'delete',
-								'resource' => 'admin_delete_role',
+								'resource' => 'admin_delete_role'
 							)
 						)
 					),
 					array(
 						'label' => 'Rights',
 						'route' => 'admin/right',
-						'resource' => 'admin_list_rights',
+						'resource' => 'admin_list_rights'
 					)
 				)
 			)

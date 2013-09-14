@@ -1,0 +1,69 @@
+<?php
+$title = $this->translate('Costumes');
+$this->headTitle($title);
+?>
+<div class="p action-bar action-bar-container">
+	<?php if ($this->acl()->isAllowed("add_costume")): ?>
+	<div class="action-bar-item">
+	<a href="<?php echo $this->url('costume', array('action'=>'add'));?>"><i class="icon-plus-sign icon-linkcolor"></i> <?php echo $this->translate('Add costume'); ?></a>
+	</div>
+	<?php endif; ?>
+</div>
+
+<?php if (count($this->costumes)): ?>
+<table class="table table-hover">
+<thead>
+<tr>
+    <th><?php echo $this->translate('Code'); ?></th>
+    <th><?php echo $this->translate('Label'); ?></th>
+    <th class="text-center"><?php echo $this->translate('Gender'); ?></th>
+    <th class="text-center"><?php echo $this->translate('Size'); ?></th>
+    <th class="text-center"><?php echo $this->translate('Quantity'); ?></th>
+    <th>&nbsp;</th>
+</tr>
+</thead>
+<tbody>
+<?php foreach ($this->costumes as $costume) : ?>
+<tr>
+	<td>
+		<?php if ($this->acl()->isAllowed("show_costume")): ?>
+		<a href="<?php echo $this->url('costume', array('action'=>'show', 'id' => $costume->getId()));?>"><?php echo $this->escapeHtml($costume->getCode());?></a>
+		<?php else: ?>
+		<?php echo $this->escapeHtml($costume->getCode());?>
+		<?php endif;?>
+		</td>
+    <td>
+		<?php echo $this->escapeHtml($costume->getLabel());?>
+    </td>
+    <td class="text-center">
+    	<?php echo $this->escapeHtml($costume->getGender());?>
+    </td>
+    <td class="text-center">
+    	<?php echo $this->escapeHtml($costume->getSize());?>
+    </td>
+    <td class="text-center">
+    	<?php echo $this->escapeHtml($costume->getQuantity());?>
+    </td>
+    <td class="text-right action-bar action-bar-container">
+		<?php if ($this->acl()->isAllowed("edit_costume")): ?>
+		<div class="action-bar-item">
+    	<a href="<?php echo $this->url('costume',
+            array('action'=>'edit', 'id' => $costume->getId()));?>" title="<?php echo $this->translate('edit'); ?>"><i class="icon-edit icon-linkcolor"></i></a>
+        </div> 
+		<?php endif;?>
+    	<?php if ($this->acl()->isAllowed("delete_costume")): ?>
+		<div class="action-bar-item">
+    	<a href="<?php echo $this->url('costume',
+            array('action'=>'delete', 'id' => $costume->getId()));?>" title="<?php echo $this->translate('delete'); ?>"><i class="icon-trash icon-linkcolor"></i></a>
+        </div> 
+    	<?php endif;?>
+    </td>
+</tr>
+<?php endforeach; ?>
+</tbody>
+</table>
+<?php else: ?>
+<div class="well">
+<?php echo $this->translate('No costumes.'); ?>
+</div>
+<?php endif; ?>
