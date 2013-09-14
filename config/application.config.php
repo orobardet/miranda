@@ -7,7 +7,7 @@ return array(
         'Application',
 		'User',
     	'Acl',
-		'Admin',
+		'Admin','Costume',
     ),
 
     // These are various options for the listeners attached to the ModuleManager

@@ -47,6 +47,16 @@ $config = array(
 		),
 		'db' => array(
 			'table_prefix' => ''
+		),
+		'data' => array(
+			'root_path' => '/home/orobardet/data/miranda'
+		),
+		'costume' => array(
+			'pictures' => array(
+				'max_width' => 1000,
+				'max_height' => 1000,
+				'store_path' => 'costumes/pictures'
+			)
 		)
 	),
 	

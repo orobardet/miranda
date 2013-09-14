@@ -5,7 +5,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Application\ConfigAwareInterface;
 use Zend\Config\Config as ZendConfig;
 
-class AbstractUserController extends AbstractActionController implements ConfigAwareInterface
+abstract class AbstractUserController extends AbstractActionController implements ConfigAwareInterface
 {
 	protected $config;
 
