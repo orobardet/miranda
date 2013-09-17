@@ -1,0 +1,67 @@
+<?php if ($this->pageCount): ?>
+	<?php
+	$route_parameters = array();
+	if (isset($this->route_parameters)) { 
+		$route_parameters = $this->route_parameters;
+	}
+	$get_parameters = array();
+	if (isset($this->get_parameters)) { 
+		$get_parameters = $this->get_parameters;
+	}
+	$context = null;
+	if (isset($this->context)) { 
+		$context = $this->context;
+	}
+	?>
+	<div class="pagination-info pagination-info-left">
+		<?php $itemsPerPageList = $this->itemsPerPage()->getItemsPerPageList($context); ?>
+		<?php if (count($itemsPerPageList)): ?>
+		<div class="dropdown pull-left" style="margin-right:10px;">
+			[ <?php echo $this->translateReplace('%count% items displayed', array('count' => '<a class="dropdown-toggle" data-toggle="dropdown" href="#">'.$this->itemCountPerPage.'</a>'))?> ]
+			<ul class="dropdown-menu dropup-menu">
+				<li class="nav-header"><?php echo $this->translate('Display:'); ?></li>
+				<?php $redirect_url = $this->url($this->route, $route_parameters, array('query' => array_merge($get_parameters, array('page' => 1 ))));?>
+				<?php foreach ($itemsPerPageList as $value => $label): ?>
+					<?php if ($value == null): ?>
+					<li class="divider"></li>
+					<li<?php if (($value == $this->itemCountPerPage) || ($this->itemCountPerPage == $this->totalItemCount)) echo ' class="active"'; ?>><a tabindex="-1" href="<?php echo $this->url('application/set-items-per-page', array('context' => $context, 'items' => 0, 'redirect' => base64_encode($redirect_url))); ?>"><?php echo $label; ?></a></li>
+					<?php else: ?>
+					<li<?php if ($value == $this->itemCountPerPage) echo ' class="active"'; ?>><a tabindex="-1" href="<?php echo $this->url('application/set-items-per-page', array('context' => $context, 'items' => $value, 'redirect' => base64_encode($redirect_url))); ?>"><?php echo $label; ?></a></li>
+					<?php endif; ?>
+				<?php endforeach; ?>
+			</ul>
+		</div>
+		<?php endif; ?>
+		<?php echo $this->translateReplace('%first% - %last% out of %total%', array('first' => $this->firstItemNumber, 'last' => $this->lastItemNumber, 'total' => $this->totalItemCount)); ?>
+	</div>
+	<div class="pagination pagination-right">
+	<!-- class="pull-left" style="line-height:20px; padding:5px 0;" -->
+		<ul>
+            <li <?php echo!isset($this->previous) ? 'class="disabled"' : ''; ?>>
+                <a href="<?php echo $this->url($this->route, $route_parameters, array('query' => array_merge($get_parameters, array('page' => $this->first)))); ?>">&laquo;</a></li>
+            <?php if ($this->firstPageInRange > $this->first): ?>
+	            <li><a href="<?php echo $this->url($this->route, $route_parameters, array('query' => array_merge($get_parameters, array('page' => $this->firstPageInRange - 1 )))); ?>">...</a></li>
+			<?php endif; ?>
+            <li <?php echo!isset($this->previous) ? 'class="disabled"' : ''; ?>>
+                <a href="<?php echo $this->url($this->route, $route_parameters, array('query' => array_merge($get_parameters, array('page' => $this->previous)))); ?>">&lsaquo;</a></li>
+
+            <?php foreach ($this->pagesInRange as $page): ?>
+                <li <?php echo $page == $this->current ? 'class="active"' : ''; ?>><a href="<?php echo $this->url($this->route, $route_parameters, array(
+							'query' => array_merge($get_parameters, array(
+								'page' => $page
+							))
+						)); ?>">
+                        <?php echo $page; ?>
+                    </a></li>
+            <?php endforeach; ?>
+
+            <li <?php echo!isset($this->next) ? 'class="disabled"' : ''; ?>>
+                <a href="<?php echo $this->url($this->route, $route_parameters, array('query' => array_merge($get_parameters, array('page' => $this->next)))); ?>">&rsaquo;</a></li>
+            <?php if ($this->lastPageInRange < $this->last): ?>
+            	<li><a href="<?php echo $this->url($this->route, $route_parameters, array('query' => array_merge($get_parameters, array('page' => $this->lastPageInRange + 1 )))); ?>">...</a></li>
+			<?php endif; ?>
+            <li <?php echo!isset($this->next) ? 'class="disabled"' : ''; ?>>
+                <a href="<?php echo $this->url($this->route, $route_parameters, array('query' => array_merge($get_parameters, array('page' => $this->last)))); ?>">&raquo;</a></li>
+        </ul>
+    </div>
+<?php endif; ?>

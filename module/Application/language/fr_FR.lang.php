@@ -31,5 +31,9 @@ return array(
 	'Yes' => 'Oui',
 	'No' => 'Non',
 	'Back' => 'Retour',
-	'None' => 'Aucun'
+	'None' => 'Aucun',
+	
+	'%first% - %last% out of %total%' => '%first% à %last% sur %total%',
+	'Display:' => 'Afficher :',
+	'%count% items displayed' => '%count% éléments affichés'
 );

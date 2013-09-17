@@ -21,6 +21,7 @@ use Zend\View\Model\ViewModel;
 use Acl\Helper\AclHelper;
 use Zend\Console\Request as ConsoleRequest;
 use Acl\Controller\AclConsoleControllerInterface;
+use Zend\View\HelperPluginManager;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface
 {
@@ -254,9 +255,17 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 	{
 		return array(
 			'factories' => array(
-				'acl' => function ($sm)
+				'acl' => function (HelperPluginManager $pm)
 				{
-					return new \Acl\View\Helper\Acl($sm->getServiceLocator()->get('Miranda\Service\Acl'));
+					return new \Acl\View\Helper\Acl($pm->getServiceLocator()->get('Miranda\Service\Acl'));
+				},
+				// Surcharge la factory native du Navigation View Helper, pour obtenir une version préconfigurée
+				// avec les ACL de l'application
+				'navigation' => function (HelperPluginManager $pm)
+				{
+					$navigation = $pm->get('Zend\View\Helper\Navigation');
+					$navigation->setAcl($pm->getServiceLocator()->get('Miranda\Service\Acl'))->setRole('Miranda\CurrentUser');
+					return $navigation;
 				}
 			)
 		);

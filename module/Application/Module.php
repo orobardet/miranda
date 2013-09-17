@@ -13,6 +13,7 @@ use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\View\HelperPluginManager;
 use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
+use Application\Model\Paginator\ItemsPerPageManager;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ConsoleBannerProviderInterface
 {
@@ -160,6 +161,9 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 					}
 					Container::setDefaultManager($sessionManager);
 					return $sessionManager;
+				},
+				'Miranda\Service\Paginator\ItemsPerPageManager' => function ($sm) {
+					return new ItemsPerPageManager($sm->get('Zend\Session\SessionManager')->getStorage());
 				}
 			)
 		);
@@ -194,6 +198,10 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'console' => function ($sm)
 				{
 					return new \Application\Controller\Plugin\Console($sm->getServiceLocator()->get('console'));
+				},
+				'itemsPerPage' => function ($sm)
+				{
+					return new \Application\Controller\Plugin\ItemsPerPage($sm->getServiceLocator()->get('Miranda\Service\Paginator\ItemsPerPageManager'));
 				}
 			)
 		);
@@ -210,13 +218,9 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				{
 					return new \Application\View\Helper\ResultStatus($pm->getServiceLocator()->get('Zend\Session\SessionManager')->getStorage());
 				},
-				// Surcharge la factory native du Navigation View Helper, pour obtenir une version préconfigurée
-				// avec les ACL de l'application
-				'navigation' => function (HelperPluginManager $pm)
+				'itemsPerPage' => function (HelperPluginManager $pm)
 				{
-					$navigation = $pm->get('Zend\View\Helper\Navigation');
-					$navigation->setAcl($pm->getServiceLocator()->get('Miranda\Service\Acl'))->setRole('Miranda\CurrentUser');
-					return $navigation;
+					return new \Application\View\Helper\ItemsPerPage($pm->getServiceLocator()->get('Miranda\Service\Paginator\ItemsPerPageManager'));
 				}
 			)
 		);

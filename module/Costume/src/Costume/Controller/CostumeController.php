@@ -4,10 +4,10 @@ namespace Costume\Controller;
 use Acl\Controller\AclControllerInterface;
 use Zend\View\Model\ViewModel;
 
-class CostumeController extends AbstractCostumeController  implements AclControllerInterface
+class CostumeController extends AbstractCostumeController implements AclControllerInterface
 {
 
-	public function aclIsAllowed($action,\Zend\Permissions\Acl\Acl $acl, $user)
+	public function aclIsAllowed($action, \Zend\Permissions\Acl\Acl $acl, $user)
 	{
 		switch ($action) {
 			case "index":
@@ -32,7 +32,7 @@ class CostumeController extends AbstractCostumeController  implements AclControl
 		
 		return false;
 	}
-	
+
 	public function indexAction()
 	{
 		$this->refererUrl()->setReferer('costume-show');
@@ -40,17 +40,27 @@ class CostumeController extends AbstractCostumeController  implements AclControl
 		$this->refererUrl()->setReferer('costume-edit');
 		$this->refererUrl()->setReferer('costume-delete');
 		
-		return new ViewModel(array(
-			'costumes' => $this->getCostumeTable()->fetchAll()
-		));
+		$page = (int)$this->getRequest()->getQuery('page', 1);
+		
+		$costumes = $this->getCostumeTable()
+			->fetchAll(true)
+			->setItemCountPerPage($this->itemsPerPage()->getItemsPerPage('costume-list', 10))
+			->setCurrentPageNumber($page)
+			->setPageRange(10);
+		
+		return new ViewModel(
+				array(
+					'page' => $page,
+					'costumes' => $costumes,
+					'get_parameters' => $this->getRequest()->getQuery()->toArray()
+				));
 	}
-	
+
 	public function addAction()
 	{
-	
 		return array(
 			'form' => null,
 			'cancel_url' => $this->refererUrl('costume-add')
 		);
-	}	
+	}
 }

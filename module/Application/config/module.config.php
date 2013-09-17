@@ -31,6 +31,21 @@ return array(
 				),
 				'may_terminate' => true,
 				'child_routes' => array(
+					'set-items-per-page' => array(
+						'type' => 'segment',
+						'options' => array(
+							'route' => '/setitemsperpage/:context/:items/:redirect',
+							'constraints' => array(
+								'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+								'id' => '[0-9]+'
+							),
+							'defaults' => array(
+								'__NAMESPACE__' => 'Application\Controller',
+								'controller' => 'Application',
+								'action' => 'setitemsperpage'
+							)
+						)
+					),
 					'default' => array(
 						'type' => 'Segment',
 						'options' => array(
@@ -77,7 +92,8 @@ return array(
 	),
 	'controllers' => array(
 		'invokables' => array(
-			'Application\Controller\Index' => 'Application\Controller\IndexController'
+			'Application\Controller\Index' => 'Application\Controller\IndexController',
+			'Application\Controller\Application' => 'Application\Controller\ApplicationController'
 		)
 	),
 	'view_manager' => array(
@@ -91,7 +107,11 @@ return array(
 			'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
 			'error/404' => __DIR__ . '/../view/error/404.phtml',
 			'error/403' => __DIR__ . '/../view/error/403.phtml',
-			'error/index' => __DIR__ . '/../view/error/index.phtml'
+			'error/index' => __DIR__ . '/../view/error/index.phtml',
+			'breadcrumb' => __DIR__ . '/../view/partial/breadcrumb.phtml',
+			'paginator/sliding' => __DIR__ . '/../view/partial/paginator-sliding.phtml',
+			'results-status' => __DIR__ . '/../view/partial/results-status.phtml',
+			'result-status' => __DIR__ . '/../view/partial/result-status.phtml'
 		),
 		'template_path_stack' => array(
 			__DIR__ . '/../view'

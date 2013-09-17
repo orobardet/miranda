@@ -62,6 +62,10 @@ $this->headTitle($title);
 <?php endforeach; ?>
 </tbody>
 </table>
+<?php if ($this->costumes instanceof Zend\Paginator\Paginator): ?>
+<?php echo $this->paginationControl($this->costumes, 'Sliding', 'paginator/sliding', 
+		array('route' => 'costume', 'route_parameters' => array(), 'get_parameters' => $this->get_parameters, 'context' => 'costume-list')); ?>
+<?php endif; ?>
 <?php else: ?>
 <div class="well">
 <?php echo $this->translate('No costumes.'); ?>

@@ -2,6 +2,8 @@
 namespace Costume\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Paginator\Adapter\DbTableGateway;
+use Zend\Paginator\Paginator;
 
 class CostumeTable extends Costume
 {
@@ -18,8 +20,29 @@ class CostumeTable extends Costume
 	 *
 	 * @return Costume[] Liste des costumes (sous forme d'un iterable)
 	 */
-	public function fetchAll()
+	public function fetchAll($usePaginator = false)
 	{
+		if ($usePaginator) {
+			$dbTableGatewayAdapter = new DbTableGateway($this->tableGateway);
+			$paginator = new Paginator($dbTableGatewayAdapter);
+// 			$select = new Select('album');
+// 			// create a new result set based on the Album entity
+// 			$resultSetPrototype = new ResultSet();
+// 			$resultSetPrototype->setArrayObjectPrototype(new Album());
+// 			// create a new pagination adapter object
+// 			$paginatorAdapter = new DbSelect(
+// 					// our configured select object
+// 					$select,
+// 					// the adapter to run it against
+// 					$this->tableGateway->getAdapter(),
+// 					// the result set to hydrate
+// 					$resultSetPrototype
+// 			);
+// 			$paginator = new Paginator($paginatorAdapter);
+			 
+			return $paginator;
+		}
+		
 		return $this->tableGateway->select();
 	}
 
