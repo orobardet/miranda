@@ -102,17 +102,18 @@ return array(
 		'doctype' => 'HTML5',
 		'not_found_template' => 'error/404',
 		'exception_template' => 'error/index',
-		'template_map' => array(
-			'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
-			'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
-			'error/404' => __DIR__ . '/../view/error/404.phtml',
-			'error/403' => __DIR__ . '/../view/error/403.phtml',
-			'error/index' => __DIR__ . '/../view/error/index.phtml',
-			'breadcrumb' => __DIR__ . '/../view/partial/breadcrumb.phtml',
-			'paginator/sliding' => __DIR__ . '/../view/partial/paginator-sliding.phtml',
-			'results-status' => __DIR__ . '/../view/partial/results-status.phtml',
-			'result-status' => __DIR__ . '/../view/partial/result-status.phtml'
-		),
+		'template_map' => array_merge(include __DIR__ . '/../template_map.php', 
+				array(
+					'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
+					'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
+					'error/404' => __DIR__ . '/../view/error/404.phtml',
+					'error/403' => __DIR__ . '/../view/error/403.phtml',
+					'error/index' => __DIR__ . '/../view/error/index.phtml',
+					'breadcrumb' => __DIR__ . '/../view/partial/breadcrumb.phtml',
+					'paginator/sliding' => __DIR__ . '/../view/partial/paginator-sliding.phtml',
+					'results-status' => __DIR__ . '/../view/partial/results-status.phtml',
+					'result-status' => __DIR__ . '/../view/partial/result-status.phtml'
+				)),
 		'template_path_stack' => array(
 			__DIR__ . '/../view'
 		)

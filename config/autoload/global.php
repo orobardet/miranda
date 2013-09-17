@@ -21,7 +21,7 @@ $config = array(
 				'css/style.css',
 				'css/bootstrap-responsive.min.css'
 			),
-			'compile_less' => ($env == 'dev'),
+			'compile_less' => false,
 			'less_compiler' => 'less.php',
 			'less' => array(
 				'css/bootstrap.less',

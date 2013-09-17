@@ -164,12 +164,12 @@ class RouteNotFoundStrategy extends AbstractListenerAggregate
      */
     public function prepareNotFoundViewModel(MvcEvent $e)
     {
-    	$vars = $e->getResult();
-    	if ($vars instanceof Response) {
+        $vars = $e->getResult();
+        if ($vars instanceof Response) {
             // Already have a response as the result
             return;
         }
-        
+
         $response = $e->getResponse();
         if ($response->getStatusCode() != 404) {
             // Only handle 404 responses
@@ -177,14 +177,14 @@ class RouteNotFoundStrategy extends AbstractListenerAggregate
         }
 
         if (!$vars instanceof ViewModel) {
-        	$model = new ViewModel();
+            $model = new ViewModel();
             if (is_string($vars)) {
                 $model->setVariable('message', $vars);
             } else {
                 $model->setVariable('message', 'Page not found.');
             }
         } else {
-        	$model = $vars;
+            $model = $vars;
             if ($model->getVariable('message') === null) {
                 $model->setVariable('message', 'Page not found.');
             }

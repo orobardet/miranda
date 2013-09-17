@@ -1,7 +1,12 @@
 <?php
 return array(
-		'db' => array(
-				'username' => 'CHANGEME',
-				'password' => 'CHANGEME',
-		),
+	'miranda' => array(
+		'layout' => array(
+			'compile_less' => false
+		)
+	),
+	'db' => array(
+			'username' => 'CHANGEME',
+			'password' => 'CHANGEME',
+	),
 );

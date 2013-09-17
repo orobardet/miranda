@@ -125,7 +125,11 @@ foreach ($l as $file) {
     $namespace = empty($file->namespace) ? '' : $file->namespace . '\\';
     $plugin    = strtolower($file->classname);
     $class     = $namespace . $file->classname;
-
+var_dump($file);
+var_dump($namespace);
+var_dump($plugin);
+var_dump($class);
+die;
     $map->{$plugin} = $class;
 }
 
