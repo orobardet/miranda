@@ -13,6 +13,11 @@ if (array_key_exists('f', $_GET) && !empty($_GET['f'])) {
 	exit(0);
 }
 
+$compiler = 'lessphp';
+if (array_key_exists('c', $_GET) && in_array(strtolower($_GET['c']), array('lessc', 'lessphp'))) {
+	$compiler = strtolower($_GET['c']);
+}
+
 if (extension_loaded('XCache')) {
 	$cache_var = 'miranda_less_' . md5($_GET['f']);
 }
@@ -48,11 +53,21 @@ if (extension_loaded('XCache')) {
 if (!$in_cache && count($less)) {
 	foreach ($less as $less_file) {
 		if (pathinfo($less_file, PATHINFO_EXTENSION) == 'less') {
-			$lessc = new lessc();
-			$compiled_css .= $lessc->compileFile($less_file) . "\n";
-			$lessc = null;
+			switch ($compiler) {
+				case 'lessphp':
+					$lessc = new lessc();
+					$compiled_css .= $lessc->compileFile($less_file) . "\n";
+					$lessc = null;
+					break;
+				case 'lessc':
+					putenv("LESSCHARSET=utf-8");
+					$output = array();
+					exec("lessc $less_file", $output);
+					$compiled_css .= join("\n", $output);
+					break;
+			}
 		} else {
-			$compiled_css .= @include $less_file . "\n";
+			$compiled_css .= file_get_contents($less_file) . "\n";
 		}
 	}
 	if (extension_loaded('XCache')) {

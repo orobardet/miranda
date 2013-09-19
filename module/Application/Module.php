@@ -73,7 +73,10 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 			$css = array();
 			$less = $config->layout->get('less', array());
 			if (count($less)) {
-				$css = array($config->layout->get('less_compiler', 'less_compiler.php').'?f='.join(',',$less->toArray()));
+				$css = array(
+					$config->layout->get('less_wrapper', 'less_wrapper.php') . '?f=' . join(',', $less->toArray()) . '&c=' .
+							 $config->layout->get('less_compiler', 'lessphp')
+				);
 			}
 			$viewModel->setVariable('css', $css);
 		} else {
@@ -165,7 +168,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 					Container::setDefaultManager($sessionManager);
 					return $sessionManager;
 				},
-				'Miranda\Service\Paginator\ItemsPerPageManager' => function ($sm) {
+				'Miranda\Service\Paginator\ItemsPerPageManager' => function ($sm)
+				{
 					return new ItemsPerPageManager($sm->get('Zend\Session\SessionManager')->getStorage());
 				}
 			)
@@ -204,7 +208,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				},
 				'itemsPerPage' => function ($sm)
 				{
-					return new \Application\Controller\Plugin\ItemsPerPage($sm->getServiceLocator()->get('Miranda\Service\Paginator\ItemsPerPageManager'));
+					return new \Application\Controller\Plugin\ItemsPerPage(
+							$sm->getServiceLocator()->get('Miranda\Service\Paginator\ItemsPerPageManager'));
 				}
 			)
 		);
@@ -228,9 +233,9 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 			)
 		);
 	}
-	
+
 	public function getConsoleBanner(ConsoleAdapterInterface $console)
-    {
-        return 'Miranda';
-    }
+	{
+		return 'Miranda';
+	}
 }
