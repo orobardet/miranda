@@ -1,7 +1,7 @@
 <?php
 $env = getenv('APPLICATION_ENV') ?: 'prod';
 
-return array(
+$config = array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
         'Application',
@@ -66,3 +66,11 @@ return array(
         ),
     ),
 );
+
+if ($env == 'dev') {
+	$config['modules'][] = 'ZendDeveloperTools';
+	$config['modules'][] = 'BjyProfiler';
+	$config['module_listener_options']['config_glob_paths'][] = 'config/autoload/{,*.}debug.php';
+	unset($config['service_manager']['factories']['Zend\Db\Adapter\Adapter']);
+}
+return $config;
