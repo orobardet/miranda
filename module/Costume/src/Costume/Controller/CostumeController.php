@@ -3,6 +3,7 @@ namespace Costume\Controller;
 
 use Acl\Controller\AclControllerInterface;
 use Zend\View\Model\ViewModel;
+use Application\Toolbox\String as StringTools;
 
 class CostumeController extends AbstractCostumeController implements AclControllerInterface
 {
@@ -44,7 +45,8 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		
 		$costumes = $this->getCostumeTable()
 			->fetchAll(true)
-			->setItemCountPerPage($this->itemsPerPage()->getItemsPerPage('costume-list', 10))
+			->setItemCountPerPage($this->itemsPerPage()
+			->getItemsPerPage('costume-list', 10))
 			->setCurrentPageNumber($page)
 			->setPageRange(10);
 		
@@ -54,6 +56,35 @@ class CostumeController extends AbstractCostumeController implements AclControll
 					'costumes' => $costumes,
 					'get_parameters' => $this->getRequest()->getQuery()->toArray()
 				));
+	}
+
+	public function showAction()
+	{
+		$id = (int)$this->params()->fromRoute('id', 0);
+		if (!$id) {
+			return $this->redirect()->toRoute('costume', array(
+				'action' => 'add'
+			));
+		}
+		
+		try {
+			$costume = $this->getCostumeTable()->getCostume($id);
+		} catch (\Exception $ex) {
+			$this->resultStatus()->addResultStatus(
+					StringTools::varprintf($this->getServiceLocator()->get('translator')->translate("Costume ID %id% does not exists."), 
+							array(
+								'id' => $id
+							)), 'error');
+			return $this->redirect()->toRoute('costume');
+		}
+		
+		$this->refererUrl()->setReferer('costume-edit');
+		$this->refererUrl()->setReferer('costume-delete');
+		
+		return new ViewModel(array(
+			'costume' => $costume,
+			'return_url' => $this->refererUrl('costume-show')
+		));
 	}
 
 	public function addAction()

@@ -24,6 +24,11 @@
             <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
                     <a class="brand" href="<?php echo $this->url('home') ?>">Miranda</a>
                     <div class="nav-collapse collapse">
                     <?php echo $this->navigation('navigation')
@@ -78,7 +83,7 @@
 	        <div id="push"></div>
 	    </div> <!-- /#wrap -->
 	    
-	    <footer id="footer">
+	    <footer id="footer" class="hidden-phone hidden-tablet">
 	        <div class="container">
 	            <p>&copy; 2013 - <?php echo date('Y') ?> <a href="http://www.compagniemiranda.com/" target="_blank"><?php echo $this->translate('Compagnie Miranda'); ?></a>. <?php echo $this->translate('All rights reserved.') ?></p>
 	        </div>

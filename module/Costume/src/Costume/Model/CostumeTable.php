@@ -8,8 +8,15 @@ use Zend\Paginator\Paginator;
 class CostumeTable extends Costume
 {
 
+	/*
+	 * @var TableGateway
+	 */
 	protected $tableGateway;
-
+	/*
+	 * @var CostumePictureTable
+	 */
+	protected $costumePictureTable;
+	
 	public function __construct(TableGateway $tableGateway)
 	{
 		$this->tableGateway = $tableGateway;
@@ -25,25 +32,19 @@ class CostumeTable extends Costume
 		if ($usePaginator) {
 			$dbTableGatewayAdapter = new DbTableGateway($this->tableGateway);
 			$paginator = new Paginator($dbTableGatewayAdapter);
-// 			$select = new Select('album');
-// 			// create a new result set based on the Album entity
-// 			$resultSetPrototype = new ResultSet();
-// 			$resultSetPrototype->setArrayObjectPrototype(new Album());
-// 			// create a new pagination adapter object
-// 			$paginatorAdapter = new DbSelect(
-// 					// our configured select object
-// 					$select,
-// 					// the adapter to run it against
-// 					$this->tableGateway->getAdapter(),
-// 					// the result set to hydrate
-// 					$resultSetPrototype
-// 			);
-// 			$paginator = new Paginator($paginatorAdapter);
 			 
 			return $paginator;
 		}
 		
-		return $this->tableGateway->select();
+		$rowset = $this->tableGateway->select();
+		
+		if (count($rowset)) {
+			foreach ($rowset as $costume) {
+				$this->populateCostumeData($costume);
+			}
+		}
+		
+		return $rowset;
 	}
 
 	public function getCostume($id, $exceptionIfNone = true)
@@ -52,8 +53,8 @@ class CostumeTable extends Costume
 		$rowset = $this->tableGateway->select(array(
 			'id' => $id
 		));
-		$row = $rowset->current();
-		if (!$row) {
+		$costume = $rowset->current();
+		if (!$costume) {
 			if ($exceptionIfNone) {
 				throw new \Exception("Could not find costume $id");
 			} else {
@@ -61,7 +62,9 @@ class CostumeTable extends Costume
 			}
 		}
 		
-		return $row;
+		$this->populateCostumeData($costume);
+		
+		return $costume;
 	}
 
 	public function getCostumeByCode($code, $exceptionIfNone = true)
@@ -69,8 +72,8 @@ class CostumeTable extends Costume
 		$rowset = $this->tableGateway->select(array(
 			'code' => $code
 		));
-		$row = $rowset->current();
-		if (!$row) {
+		$costume = $rowset->current();
+		if (!$costume) {
 			if ($exceptionIfNone) {
 				throw new \Exception("Could not find costume with code '$code'");
 			} else {
@@ -78,7 +81,9 @@ class CostumeTable extends Costume
 			}
 		}
 		
-		return $row;
+		$this->populateCostumeData($costume);
+		
+		return $costume;
 	}
 	
 	public function saveCostume(Costume $costume)
@@ -106,5 +111,21 @@ class CostumeTable extends Costume
 		$this->tableGateway->delete(array(
 			'id' => $id
 		));
+	}
+
+	public function populateCostumeData($costume)
+	{
+		if ($this->costumePictureTable) {
+			$costume->setPictures($this->costumePictureTable->getCostumePictures($costume->getId()));
+		}
+		
+	}
+	
+	/**
+	 * @param field_type $costumePictureTable
+	 */
+	public function setCostumePictureTable(CostumePictureTable $costumePictureTable)
+	{
+		$this->costumePictureTable = $costumePictureTable;
 	}
 }

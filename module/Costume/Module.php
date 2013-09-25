@@ -8,6 +8,8 @@ use Costume\Model\CostumeTable;
 use Zend\Db\ResultSet\ResultSet;
 use Costume\Model\Costume;
 use Zend\Db\TableGateway\TableGateway;
+use Costume\Model\CostumePictureTable;
+use Zend\Db\TableGateway\Feature;
 
 class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterface
 {
@@ -37,7 +39,9 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 			'factories' => array(
 				'Costume\Model\CostumeTable' => function ($sm)
 				{
-					return new CostumeTable($sm->get('Costume\TableGateway\Costumes'));
+					$costumeTable = new CostumeTable($sm->get('Costume\TableGateway\Costumes')); 
+					$costumeTable->setCostumePictureTable($sm->get('Costume\Model\CostumePictureTable'));
+					return $costumeTable;
 				},
 				'Costume\TableGateway\Costumes' => function ($sm)
 				{
@@ -46,6 +50,27 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 					$resultSetPrototype->setArrayObjectPrototype(new Costume());
 					return new TableGateway($sm->get('Miranda\Service\Config')->db->get('table_prefix', '') . 'costumes', $dbAdapter, null, 
 							$resultSetPrototype);
+				},
+				'Costume\Model\CostumePictureTable' => function ($sm)
+				{
+					$config = $sm->get('Miranda\Service\Config');
+					$picturesTableGateway = $sm->get('Miranda\TableGateway\Pictures');
+					$picturePrototype = $picturesTableGateway->getResultSetPrototype()->getArrayObjectPrototype();
+					$picturePrototype->setUrlRoot($config->costume->pictures->get('url_path', ''));
+					$rootPath = $config->data->get('root_path', '');
+					if (!empty($rootPath)) {
+						$picturePrototype->setStorageRoot(
+								rtrim($rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $config->costume->pictures->get('storage_path', ''));
+					} else {
+						$picturePrototype->setStorageRoot($config->costume->pictures->get('storage_path', ''));
+					}
+					return new CostumePictureTable($picturesTableGateway, $sm->get('Costume\TableGateway\CostumePicture'));
+				},
+				'Costume\TableGateway\CostumePicture' => function ($sm)
+				{
+					$dbAdapter = $sm->get('app_zend_db_adapter');
+					return new TableGateway($sm->get('Miranda\Service\Config')->db->get('table_prefix', '') . 'costumes_pictures', $dbAdapter, 
+							new Feature\RowGatewayFeature('costume_id'));
 				}
 			)
 		);

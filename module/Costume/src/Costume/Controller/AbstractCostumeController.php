@@ -10,7 +10,7 @@ abstract class AbstractCostumeController extends AbstractActionController implem
 	protected $config;
 
 	protected $costumeTable;
-
+	
 	public function setConfig(ZendConfig $config)
 	{
 		$this->config = $config;

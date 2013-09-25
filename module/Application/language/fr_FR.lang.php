@@ -35,5 +35,6 @@ return array(
 	
 	'%first% - %last% out of %total%' => '%first% à %last% sur %total%',
 	'Display:' => 'Afficher :',
-	'%count% items displayed' => '%count% éléments affichés'
+	'%count% items displayed' => '%count% éléments affichés',
+	'No picture' => "Pas d'image"
 );

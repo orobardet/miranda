@@ -50,6 +50,10 @@ class Costume extends ObjectModelBase
 	 * @var integer
 	 */
 	protected $quantity;
+	/**
+	 * @var Picture[]
+	 */
+	protected $pictures;
 	
 	/**
 	 * @return integer $id
@@ -115,6 +119,14 @@ class Costume extends ObjectModelBase
 	}
 	
 	/**
+	 * @return Picture[] $pictures
+	 */
+	public function getPictures()
+	{
+		return $this->pictures;
+	}
+	
+	/**
 	 * @param integer $id
 	 */
 	public function setId($id) {
@@ -175,6 +187,14 @@ class Costume extends ObjectModelBase
 	public function setQuantity($quantity)
 	{
 		$this->quantity = intval($quantity);
+	}
+	
+	/**
+	 * @param Picture[] $pictures
+	 */
+	public function setPictures($pictures)
+	{
+		$this->pictures = $pictures;
 	}
 	
 	public function exchangeArray($data)

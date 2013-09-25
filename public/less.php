@@ -51,6 +51,7 @@ if (extension_loaded('XCache')) {
 }
 
 if (!$in_cache && count($less)) {
+	$compiled_css = '';
 	foreach ($less as $less_file) {
 		if (pathinfo($less_file, PATHINFO_EXTENSION) == 'less') {
 			switch ($compiler) {

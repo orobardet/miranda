@@ -56,7 +56,6 @@ a:hover > .icon-linkcolor {
   text-shadow: none;
 }
 .navbar .subnav {
-  min-height: 20px;
   background-color: #550763;
   box-shadow: none ;
   color: #555555;
@@ -136,15 +135,6 @@ a:hover > .icon-linkcolor {
 #footer a:active {
   text-decoration: none;
   border-bottom-style: solid;
-}
-/* Lastly, apply responsive CSS fixes as necessary */
-@media (max-width: 767px) {
-  #footer {
-    margin-left: -20px;
-    margin-right: -20px;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
 }
 #login-form-container {
   margin: 30px auto;
@@ -267,6 +257,61 @@ label.multicheckbox input[type=checkbox] {
   top: 100%;
   left: 6px;
 }
+.thumbnails {
+  margin-left: 0;
+}
+.thumbnails .thumbnail[class*="span"] {
+  margin: 0;
+}
+.page-qrcode-container {
+  position: relative;
+}
+.page-qrcode-holder {
+  transition: all 300ms ease-in-out 0s;
+}
+.page-qrcode-holder:hover,
+.page-qrcode-holder:focus {
+  right: 0px;
+  position: absolute;
+  transition: all 300ms ease-in-out 0s;
+}
+.page-qrcode {
+  position: relative;
+  background: white;
+  transition: all 300ms ease-in-out 0s;
+}
+.page-qrcode img {
+  height: 30px;
+}
+.page-qrcode:hover,
+.page-qrcode:focus {
+  z-index: 10;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+}
+.page-qrcode:hover img,
+.page-qrcode:focus img {
+  padding: 0 20px;
+  height: auto;
+}
+@media (max-width: 767px) {
+  body {
+    background-color: red;
+  }
+  #footer {
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 0px;
+  }
+  .navbar-fixed-top {
+    margin-bottom: 0;
+  }
+  #wrap > .container,
+  #wrap > .container-fluid {
+    padding-top: 0px;
+  }
+}
 .icon-sprite {
   display: inline-block;
   width: 16px;
@@ -284,4 +329,8 @@ label.multicheckbox input[type=checkbox] {
 }
 .icon-sprite.icon-exclamation {
   background-position: -17px 0;
+}
+.zoom-in-cursor {
+  cursor: -webkit-zoom-in;
+  cursor: -moz-zoom-in;
 }

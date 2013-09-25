@@ -1,0 +1,80 @@
+<?php
+$costume = $this->costume;
+$title = $this->translateReplace('Costume: %label%', array('label' => $costume->getLabel()));
+$this->headTitle($title);
+?>
+<div class="page-qrcode-container hidden-phone hidden-tablet">
+	<div class="page-qrcode-holder">
+		<div class="thumbnail text-center pull-right page-qrcode">
+			<img src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=<?php echo urlencode($this->serverUrl(true)); ?>"/>
+			<small><?php echo $costume->getCode(); ?></small>
+		</div>
+	</div>
+</div>
+<h1><?php echo $this->escapeHtml($costume->getLabel()); ?></h1>
+<div class="p action-bar action-bar-container" style="margin-bottom:20px;">
+		<?php if ($this->acl()->isAllowed("edit_costume")): ?>
+		<div class="action-bar-item">
+    	<a href="<?php echo $this->url('costume',
+            array('action'=>'edit', 'id' => $costume->getId()));?>"><i class="icon-edit icon-linkcolor"></i> <?php echo $this->translate('edit'); ?></a>
+        </div> 
+		<?php endif;?>
+    	<?php if ($this->acl()->isAllowed("delete_costume")): ?>
+		<div class="action-bar-item">
+    	<a href="<?php echo $this->url('costume',
+            array('action'=>'delete', 'id' => $costume->getId()));?>"><i class="icon-trash icon-linkcolor"></i> <?php echo $this->translate('delete'); ?></a>
+        </div> 
+    	<?php endif;?>
+</div>
+<div class="row-fluid">
+	<?php if (count($costume->getPictures())): ?>
+	<?php $mainPicture = $costume->getPictures()->current(); ?>
+	<?php $landscapePicture = ($mainPicture->getOrientation() == Application\Model\Picture::ORIENTATION_LANDSCAPE); ?>
+	<a class="thumbnail pull-left zoom-in-cursor span<?php echo $landscapePicture?4:3; ?>" href="<?php echo $mainPicture->getUrlPath(); ?>" target="_blank">
+		<img class="media-object" src="<?php echo $mainPicture->getUrlPath(); ?>">
+	</a>
+	<?php else: ?>
+	<?php $landscapePicture = true; ?>
+	<div class="thumbnail pull-left span4 no-picture text-center">
+		<img class="media-object" src="/img/costume/no-costume.png">
+		<small><?php echo $this->translate('No picture'); ?></small>
+	</div>
+	<?php endif; ?>
+	<div class="span<?php echo $landscapePicture?4:5; ?>">
+		<?php echo $costume->getDescr(); ?>
+	</div>
+	<div class="span4">
+		<div class="row-fluid">
+			<div class="span6">
+				<dl class="no-margin">
+					<dt><?php echo $this->translate('Gender'); ?></dt>
+					<dd><?php echo $costume->getGender(); ?>&nbsp;</dd>
+					<dt><?php echo $this->translate('Size'); ?></dt>
+					<dd><?php echo $costume->getSize(); ?>&nbsp;</dd>
+					<dt><?php echo $this->translate('State'); ?></dt>
+					<dd><?php echo $costume->getState(); ?>&nbsp;</dd>
+					<dt><?php echo $this->translate('Quantity'); ?></dt>
+					<dd><?php echo $costume->getQuantity(); ?>&nbsp;</dd>
+				</dl>		
+			</div>
+			<div class="span6">
+				<dl class="no-margin">
+					<dt><?php echo $this->translate('Material'); ?></dt>
+					<dd>&nbsp;</dd>
+					<dt><?php echo $this->translate('Primary color'); ?></dt>
+					<dd>&nbsp;</dd>
+					<dt><?php echo $this->translate('Secondary color'); ?></dt>
+					<dd>&nbsp;</dd>
+					<dt><?php echo $this->translate('Type'); ?></dt>
+					<dd>&nbsp;</dd>
+				</dl>		
+			</div>
+		</div>
+	</div>
+</div>
+<?php if ($this->return_url): ?>
+<p style="margin-top:20px;">
+<a href="<?php echo $this->return_url; ?>" class="btn btn-primary"><?php echo $this->translate('Back'); ?></a>
+</p>
+<?php endif; ?>
+

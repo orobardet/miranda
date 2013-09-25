@@ -18,16 +18,16 @@ $config = array(
 		'layout' => array(
 			'css' => array(
 				'css/bootstrap.css',
+				'css/bootstrap-responsive.min.css',
 				'css/style.css',
-				'css/bootstrap-responsive.min.css'
 			),
 			'compile_less' => false,
 			'less_wrapper' => 'less.php',
 			'less_compiler' => 'lessphp',
 			'less' => array(
 				'css/bootstrap.less',
+				'css/bootstrap-responsive.min.css',
 				'css/style.less',
-				'css/bootstrap-responsive.min.css'
 			),
 			'js' => array(
 				'js/jquery.min.js',
@@ -56,7 +56,8 @@ $config = array(
 			'pictures' => array(
 				'max_width' => 1000,
 				'max_height' => 1000,
-				'store_path' => 'costumes/pictures'
+				'store_path' => 'pictures/costumes',
+				'url_path' => '/pictures/costumes'
 			)
 		)
 	),

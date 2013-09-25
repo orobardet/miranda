@@ -14,6 +14,10 @@ use Zend\View\HelperPluginManager;
 use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
 use Application\Model\Paginator\ItemsPerPageManager;
+use Application\Model\PictureTable;
+use Application\Model\Picture;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\TableGateway\TableGateway;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ConsoleBannerProviderInterface
 {
@@ -171,6 +175,18 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'Miranda\Service\Paginator\ItemsPerPageManager' => function ($sm)
 				{
 					return new ItemsPerPageManager($sm->get('Zend\Session\SessionManager')->getStorage());
+				},
+				'Miranda\Model\PictureTable' => function ($sm)
+				{
+					return new PictureTable($sm->get('Miranda\TableGateway\Pictures'));
+				},
+				'Miranda\TableGateway\Pictures' => function ($sm)
+				{
+					$dbAdapter = $sm->get('app_zend_db_adapter');
+					$resultSetPrototype = new ResultSet();
+					$resultSetPrototype->setArrayObjectPrototype(new Picture());
+					return new TableGateway($sm->get('Miranda\Service\Config')->db->get('table_prefix', '') . 'pictures', $dbAdapter, null, 
+							$resultSetPrototype);
 				}
 			)
 		);

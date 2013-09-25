@@ -33,7 +33,11 @@ $this->headTitle($title);
 		<?php endif;?>
 		</td>
     <td>
-		<?php echo $this->escapeHtml($costume->getLabel());?>
+		<?php if ($this->acl()->isAllowed("show_costume")): ?>
+		<a href="<?php echo $this->url('costume', array('action'=>'show', 'id' => $costume->getId()));?>"><?php echo $this->escapeHtml($costume->getLabel());?></a>
+		<?php else: ?>
+    	<?php echo $this->escapeHtml($costume->getLabel());?>
+		<?php endif;?>
     </td>
     <td class="text-center">
     	<?php echo $this->escapeHtml($costume->getGender());?>
