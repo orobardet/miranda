@@ -31,17 +31,15 @@ class CostumeTable extends Costume
 	{
 		if ($usePaginator) {
 			$dbTableGatewayAdapter = new DbTableGateway($this->tableGateway);
-			$paginator = new Paginator($dbTableGatewayAdapter);
-			 
-			return $paginator;
+			$rowset = new Paginator($dbTableGatewayAdapter);
+		} else {
+			$rowset = $this->tableGateway->select();
 		}
-		
-		$rowset = $this->tableGateway->select();
-		
+
 		if (count($rowset)) {
-			foreach ($rowset as $costume) {
-				$this->populateCostumeData($costume);
-			}
+ 			foreach ($rowset as $costume) {
+ 				$this->populateCostumeData($costume);
+ 			}
 		}
 		
 		return $rowset;
