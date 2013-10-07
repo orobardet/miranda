@@ -3,7 +3,10 @@ return array(
 	'controllers' => array(
 		'invokables' => array(
 			'Costume\Controller\Console' => 'Costume\Controller\ConsoleController',
-			'Costume\Controller\Costume' => 'Costume\Controller\CostumeController'
+			'Costume\Controller\Costume' => 'Costume\Controller\CostumeController',
+			'Costume\Controller\Admin' => 'Costume\Controller\AdminController',
+			'Costume\Controller\AdminColor' => 'Costume\Controller\AdminColorController',
+			'Costume\Controller\AdminMaterial' => 'Costume\Controller\AdminMaterialController'
 		)
 	),
 	
@@ -21,6 +24,50 @@ return array(
 						'__NAMESPACE__' => 'Costume\Controller',
 						'controller' => 'Costume',
 						'action' => 'index'
+					)
+				)
+			),
+			'costume-admin' => array(
+				'type' => 'Literal',
+				'options' => array(
+					'route' => '/costume-admin',
+					'defaults' => array(
+						'__NAMESPACE__' => 'Costume\Controller',
+						'controller' => 'Admin',
+						'action' => 'index'
+					)
+				),
+				'may_terminate' => true,
+				'child_routes' => array(
+					'color' => array(
+						'type' => 'segment',
+						'options' => array(
+							'route' => '/color[/][:action][/:id]',
+							'constraints' => array(
+								'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+								'id' => '[0-9]+'
+							),
+							'defaults' => array(
+								'__NAMESPACE__' => 'Costume\Controller',
+								'controller' => 'Costume\Controller\AdminColor',
+								'action' => 'index'
+							)
+						)
+					),
+					'material' => array(
+						'type' => 'segment',
+						'options' => array(
+							'route' => '/material[/][:action][/:id]',
+							'constraints' => array(
+								'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+								'id' => '[0-9]+'
+							),
+							'defaults' => array(
+								'__NAMESPACE__' => 'Costume\Controller',
+								'controller' => 'Costume\Controller\AdminMaterial',
+								'action' => 'index'
+							)
+						)
 					)
 				)
 			)
@@ -73,6 +120,6 @@ return array(
 		'template_path_stack' => array(
 			__DIR__ . '/../view'
 		),
-		'template_map' => include __DIR__  .'/../template_map.php',
+		'template_map' => include __DIR__ . '/../template_map.php'
 	)
 );

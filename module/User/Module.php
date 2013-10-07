@@ -44,7 +44,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		
 		// Lecture dans la conf des page autorisées sans être connecté
 		$config = $e->getApplication()->getServiceManager()->get('Miranda\Service\Config');
-		$allowedPages = $config->authentification->get('not_login_page', array(
+		$allowedPages = $config->get('authentification->not_login_page', array(
 			'login',
 			'authenticate',
 			'logout'
@@ -122,13 +122,13 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 					$dbAdapter = $sm->get('user_zend_db_adapter');
 					$resultSetPrototype = new ResultSet();
 					$resultSetPrototype->setArrayObjectPrototype(new User());
-					return new TableGateway($sm->get('Miranda\Service\Config')->db->get('table_prefix', '') . 'users', $dbAdapter, null, 
+					return new TableGateway($sm->get('Miranda\Service\Config')->get('db->table_prefix', '') . 'users', $dbAdapter, null, 
 							$resultSetPrototype);
 				},
 				'User\TableGateway\UsersRoles' => function ($sm)
 				{
 					$dbAdapter = $sm->get('acl_zend_db_adapter');
-					return new TableGateway($sm->get('Miranda\Service\Config')->db->get('table_prefix', '') . 'users_roles', $dbAdapter, 
+					return new TableGateway($sm->get('Miranda\Service\Config')->get('db->table_prefix', '') . 'users_roles', $dbAdapter, 
 							new Feature\RowGatewayFeature('user_id'));
 				},
 				'User\Form\Login' => function ($sm)
@@ -159,14 +159,14 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'Miranda\Service\AuthDb' => function ($sm)
 				{
 					$authAdapter = new AuthDbTable($sm->get('Miranda\Service\DbAdapter'));
-					$authAdapter->setTableName($sm->get('Miranda\Service\Config')->db->get('table_prefix', '') . 'users')->setIdentityColumn('email')->setCredentialColumn(
+					$authAdapter->setTableName($sm->get('Miranda\Service\Config')->get('db->table_prefix', '') . 'users')->setIdentityColumn('email')->setCredentialColumn(
 							'password');
 					return $authAdapter;
 				},
 				'Miranda\Service\AuthBCrypt' => function ($sm)
 				{
 					$bcrypt = new Bcrypt();
-					$bcrypt->setCost($sm->get('Miranda\Service\Config')->authentification->bcrypt->get('cost', 14));
+					$bcrypt->setCost($sm->get('Miranda\Service\Config')->get('authentification->bcrypt->cost', 14));
 					
 					return $bcrypt;
 				}

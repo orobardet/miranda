@@ -5,7 +5,6 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Session\SessionManager;
 use Zend\Session\Container;
-use Zend\Config\Config as ZendConfig;
 use Zend\Validator\AbstractValidator;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
@@ -73,20 +72,20 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		$config = $e->getApplication()->getServiceManager()->get('Miranda\Service\Config');
 		
 		$viewModel = $e->getViewModel();
-		if ($config->layout->get('compile_less', false)) {
+		if ($config->get('layout->compile_less', false)) {
 			$css = array();
-			$less = $config->layout->get('less', array());
+			$less = $config->get('layout->less', array());
 			if (count($less)) {
 				$css = array(
-					$config->layout->get('less_wrapper', 'less_wrapper.php') . '?f=' . join(',', $less->toArray()) . '&c=' .
-							 $config->layout->get('less_compiler', 'lessphp')
+					$config->get('layout->less_wrapper', 'less_wrapper.php') . '?f=' . join(',', $less->toArray()) . '&c=' .
+							 $config->get('layout->less_compiler', 'lessphp')
 				);
 			}
 			$viewModel->setVariable('css', $css);
 		} else {
-			$viewModel->setVariable('css', $config->layout->get('css', array()));
+			$viewModel->setVariable('css', $config->get('layout->css', array())->toArray());
 		}
-		$viewModel->setVariable('js', $config->layout->get('js', array()));
+		$viewModel->setVariable('js', $config->get('layout->js', array())->toArray());
 	}
 
 	public function bootstrapSession($e)
@@ -126,7 +125,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 			'factories' => array(
 				'Miranda\Service\Config' => function ($sm)
 				{
-					$config = new ZendConfig($sm->get('config'));
+					$config = new TraversableConfig($sm->get('config'));
 					return $config->application;
 				},
 				'Zend\Session\SessionManager' => function ($sm)
@@ -185,7 +184,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 					$dbAdapter = $sm->get('app_zend_db_adapter');
 					$resultSetPrototype = new ResultSet();
 					$resultSetPrototype->setArrayObjectPrototype(new Picture());
-					return new TableGateway($sm->get('Miranda\Service\Config')->db->get('table_prefix', '') . 'pictures', $dbAdapter, null, 
+					return new TableGateway($sm->get('Miranda\Service\Config')->get('db->table_prefix', '') . 'pictures', $dbAdapter, null, 
 							$resultSetPrototype);
 				}
 			)
@@ -209,6 +208,9 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 	public function getControllerPluginConfig()
 	{
 		return array(
+			'invokables' => array(
+				'requestAcceptJson' => 'Application\Controller\Plugin\RequestAcceptJson'
+			),
 			'factories' => array(
 				'resultStatus' => function ($sm)
 				{

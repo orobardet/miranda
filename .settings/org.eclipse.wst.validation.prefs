@@ -5,4 +5,6 @@ USER_PREFERENCE=overrideGlobalPreferencesfalse
 eclipse.preferences.version=1
 override=false
 suspend=false
+vals/org.eclipse.php.core.org.eclipse.php.core.PHPTaskValidator/global=TF01
+vals/org.pdtextensions.core.validation.PEXValidator/global=TF01
 vf.version=3

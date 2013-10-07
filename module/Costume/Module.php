@@ -1,15 +1,17 @@
 <?php
 namespace Costume;
 
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
-use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
-use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
+use Costume\Model\Color;
+use Costume\Model\ColorTable;
+use Costume\Model\Costume;
+use Costume\Model\CostumePictureTable;
 use Costume\Model\CostumeTable;
 use Zend\Db\ResultSet\ResultSet;
-use Costume\Model\Costume;
-use Zend\Db\TableGateway\TableGateway;
-use Costume\Model\CostumePictureTable;
 use Zend\Db\TableGateway\Feature;
+use Zend\Db\TableGateway\TableGateway;
+use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
+use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 
 class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterface
 {
@@ -48,7 +50,7 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 					$dbAdapter = $sm->get('costume_zend_db_adapter');
 					$resultSetPrototype = new ResultSet();
 					$resultSetPrototype->setArrayObjectPrototype(new Costume());
-					return new TableGateway($sm->get('Miranda\Service\Config')->db->get('table_prefix', '') . 'costumes', $dbAdapter, null, 
+					return new TableGateway($sm->get('Miranda\Service\Config')->get('db->table_prefix', '') . 'costumes', $dbAdapter, null, 
 							$resultSetPrototype);
 				},
 				'Costume\Model\CostumePictureTable' => function ($sm)
@@ -56,22 +58,34 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 					$config = $sm->get('Miranda\Service\Config');
 					$picturesTableGateway = $sm->get('Miranda\TableGateway\Pictures');
 					$picturePrototype = $picturesTableGateway->getResultSetPrototype()->getArrayObjectPrototype();
-					$picturePrototype->setUrlRoot($config->costume->pictures->get('url_path', ''));
-					$rootPath = $config->data->get('root_path', '');
+					$picturePrototype->setUrlRoot($config->get('costume->pictures->url_path', ''));
+					$rootPath = $config->get('data->root_path', '');
 					if (!empty($rootPath)) {
 						$picturePrototype->setStorageRoot(
-								rtrim($rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $config->costume->pictures->get('storage_path', ''));
+								rtrim($rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $config->get('costume->pictures->storage_path', ''));
 					} else {
-						$picturePrototype->setStorageRoot($config->costume->pictures->get('storage_path', ''));
+						$picturePrototype->setStorageRoot($config->get('costume->pictures->storage_path', ''));
 					}
 					return new CostumePictureTable($picturesTableGateway, $sm->get('Costume\TableGateway\CostumePicture'));
 				},
 				'Costume\TableGateway\CostumePicture' => function ($sm)
 				{
 					$dbAdapter = $sm->get('app_zend_db_adapter');
-					return new TableGateway($sm->get('Miranda\Service\Config')->db->get('table_prefix', '') . 'costumes_pictures', $dbAdapter, 
+					return new TableGateway($sm->get('Miranda\Service\Config')->get('db->table_prefix', '') . 'costumes_pictures', $dbAdapter, 
 							new Feature\RowGatewayFeature('costume_id'));
-				}
+				},
+				'Costume\Model\ColorTable' => function ($sm)
+				{
+					return new ColorTable($sm->get('Costume\TableGateway\Color'));
+				},
+				'Costume\TableGateway\Color' => function ($sm)
+				{
+					$dbAdapter = $sm->get('costume_zend_db_adapter');
+					$resultSetPrototype = new ResultSet();
+					$resultSetPrototype->setArrayObjectPrototype(new Color());
+					return new TableGateway($sm->get('Miranda\Service\Config')->get('db->table_prefix', '') . 'costume_colors', $dbAdapter, null, 
+							$resultSetPrototype);
+				},
 			)
 		);
 	}

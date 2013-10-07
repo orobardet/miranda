@@ -11,9 +11,13 @@ return array(
   'Application\Controller\Plugin\RefererUrl'        => __DIR__ . '/src/Application/Controller/Plugin/RefererUrl.php',
   'Application\Controller\Plugin\Console'           => __DIR__ . '/src/Application/Controller/Plugin/Console.php',
   'Application\Controller\Plugin\ItemsPerPage'      => __DIR__ . '/src/Application/Controller/Plugin/ItemsPerPage.php',
+  'Application\Controller\Plugin\RequestAcceptJson' => __DIR__ . '/src/Application/Controller/Plugin/RequestAcceptJson.php',
   'Application\Controller\Plugin\ResultStatus'      => __DIR__ . '/src/Application/Controller/Plugin/ResultStatus.php',
   'Application\Controller\ApplicationController'    => __DIR__ . '/src/Application/Controller/ApplicationController.php',
   'Application\Controller\IndexController'          => __DIR__ . '/src/Application/Controller/IndexController.php',
+  'Application\Model\PictureTable'                  => __DIR__ . '/src/Application/Model/PictureTable.php',
+  'Application\Model\Picture'                       => __DIR__ . '/src/Application/Model/Picture.php',
   'Application\Model\Paginator\ItemsPerPageManager' => __DIR__ . '/src/Application/Model/Paginator/ItemsPerPageManager.php',
   'Application\Model\ObjectModelBase'               => __DIR__ . '/src/Application/Model/ObjectModelBase.php',
+  'Application\TraversableConfig'                   => __DIR__ . '/src/Application/TraversableConfig.php',
 );

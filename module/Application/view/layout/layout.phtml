@@ -9,12 +9,12 @@
 
         <!-- CSS -->
         <?php $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico')); ?>
-        <?php if (count($this->css)) foreach ($this->css as $css) $this->headLink()->appendStylesheet($this->basePath() . '/' . $css); ?>
+        <?php if (count($this->css)) foreach (array_reverse($this->css) as $css) $this->headLink()->prependStylesheet($this->basePath() . '/' . $css); ?>
         <?php echo $this->headLink(); ?>
         
 	    <!-- JS Scripts -->
-        <?php if (count($this->js)) foreach ($this->js as $js) $this->headScript()->appendFile($this->basePath() . '/' . $js); ?>
-	    <?php $this->headScript()->appendFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9')); ?>
+	    <?php $this->headScript()->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9')); ?>
+        <?php if (count($this->js)) foreach (array_reverse($this->js) as $js) $this->headScript()->prependFile($this->basePath() . '/' . $js); ?>
 	    <?php echo $this->headScript(); ?>
 
     </head>

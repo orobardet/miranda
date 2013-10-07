@@ -19,18 +19,23 @@ $config = array(
 			'css' => array(
 				'css/bootstrap.css',
 				'css/bootstrap-responsive.min.css',
-				'css/style.css',
+				'css/jquery-ui-bootstrap/jquery-ui.css',
+				'css/style.css'
 			),
 			'compile_less' => false,
 			'less_wrapper' => 'less.php',
 			'less_compiler' => 'lessphp',
 			'less' => array(
+				'css/jquery-ui-bootstrap/jquery-ui.css',
 				'css/bootstrap.less',
 				'css/bootstrap-responsive.min.css',
-				'css/style.less',
+				'css/style.less'
 			),
 			'js' => array(
 				'js/jquery.min.js',
+				'js/json2.js',
+				'js/jquery-ui.min.js',
+				'js/jquery.loadmask.min.js',
 				'js/bootstrap.js',
 				'lib/jquery.passstrength.js'
 			)
@@ -87,7 +92,7 @@ $config = array(
 						'route' => 'costume',
 						'action' => 'index',
 						'resource' => 'list_costumes'
-				),
+					),
 					array(
 						'label' => 'Show',
 						'route' => 'costume',
@@ -107,7 +112,7 @@ $config = array(
 						'route' => 'costume',
 						'action' => 'edit',
 						'resource' => 'edit_costume',
-						'visible' => false						
+						'visible' => false
 					),
 					array(
 						'label' => 'Delete',
@@ -115,6 +120,26 @@ $config = array(
 						'action' => 'delete',
 						'resource' => 'delete_costume',
 						'visible' => false
+					),
+					array(
+						'label' => 'Administration',
+						'route' => 'costume-admin',
+						'action' => 'index',
+						'resource' => 'admin_costumes',
+						'pages' => array(
+							array(
+								'label' => 'Colors',
+								'route' => 'costume-admin/color',
+								'action' => 'index',
+								'resource' => 'admin_costumes_colors'
+							),
+							array(
+								'label' => 'Materials',
+								'route' => 'costume-admin/material',
+								'action' => 'index',
+								'resource' => 'admin_costumes_materials'
+							)
+						)
 					)
 				)
 			),

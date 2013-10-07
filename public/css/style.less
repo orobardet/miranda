@@ -17,6 +17,54 @@ a:hover > .icon-linkcolor {
 	margin-bottom: 10px;
 }
 
+.loadmask {
+    z-index: 100;
+    position: absolute;
+    top:0;
+    left:0;
+    -moz-opacity: 0.5;
+    opacity: .50;
+    filter: alpha(opacity=50);
+    background-color: lighten(@linkColor, 50%);
+    width: 100%;
+    height: 100%;
+    zoom: 1;
+	border-radius: @baseBorderRadius;
+}
+.loadmask-msg {
+    z-index: 20001;
+    position: absolute;
+    top: 0;
+    left: 0;
+    #gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
+  	border: 1px solid @navbarBorder;
+  	.border-radius(@baseBorderRadius);
+  	.box-shadow(0 1px 4px rgba(0,0,0,.065));
+	padding:2px;
+
+	div {
+	    padding:5px 10px 5px 25px;
+	    background: url('../img/loading.gif') no-repeat 5px 5px;
+	    line-height: 16px;
+		font-weight: bold;
+		color: @navbarBrandColor;
+		text-shadow: 0 1px 0 @navbarBackgroundHighlight;
+	    font-size:11px;
+	    cursor:wait;
+	}
+	border-radius: @baseBorderRadius;
+}
+.masked {
+    overflow: hidden !important;
+}
+.masked-relative {
+    position: relative !important;
+}
+.masked-hidden {
+    visibility: hidden !important;
+}
+
+
 .muted > [class^="icon-"], 
 .muted > [class*=" icon-"],
 [class^="icon-"].muted,
@@ -310,4 +358,19 @@ label.multicheckbox {
 	}
 }
 
+.sort-handle {
+	cursor: move;
+	background: url('../img/sort-handle.png') repeat;
+}
+.table-sort-placeholder {
+	background: url('../img/empty-placeholder.png') repeat;
+	> * {
+		visibility: hidden;
+	}
+}
+.table-sort-helper {
+	> td {
+		background-color:white;
+	}
+}
 @import "icons-sprite.less";

@@ -11,6 +11,12 @@ if (getenv('APPLICATION_ENV') == 'dev') {
 	ini_set("display_startup_errors", 1);
 }
 
+// Pour transformer les messages d'erreurs PHP standards en exception
+function exception_error_handler($errno, $errstr, $errfile, $errline ) {
+	throw new ErrorException($errstr, $errno, 0, $errfile, $errline);
+}
+set_error_handler("exception_error_handler");
+
 // On change le répertoire courant pour le parent, qui est la racine des sources du produit
 // Ainsi tous les chemins sont relatifs
 chdir(dirname(__DIR__));

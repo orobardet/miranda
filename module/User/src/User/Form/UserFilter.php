@@ -61,7 +61,7 @@ class UserFilter extends InputFilter
 		
 		$this->emailNotExistsValidator = new DbNoRecordExists(
 				array(
-					'table' => $config->db->get('table_prefix', '') . 'users',
+					'table' => $config->get('db->table_prefix', '') . 'users',
 					'field' => 'email',
 					'adapter' => $dbAdapter,
 					'messages' => array(

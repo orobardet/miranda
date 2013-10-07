@@ -29,10 +29,10 @@ class Console extends AbstractPlugin
 	 * Permet de rediriger l'appel des méthodes de l'objet Console Zend.
 	 *
 	 * Ainsi le plugin console() est également un Helper d'accès aux méthodes standard de la Console Zend (write, writeLine, ...)
-	 * 
+	 *
 	 * @param unknown $name
 	 * @param unknown $arguments
-	 * 
+	 *
 	 * @throws \Exception
 	 */
 	public function __call($name, $arguments)
@@ -52,10 +52,10 @@ class Console extends AbstractPlugin
 	 *
 	 * Affiche un tableau de la forme :
 	 *
-	 * Col1 | Col2 | Col3
+	 * Col1 | Col2    | Col3
 	 * -----------------------
-	 * x | yz | p
-	 * ab | cdefghi | xzf
+	 * x    | yz      | p
+	 * ab   | cdefghi | xzf
 	 *
 	 * A partir d'un tableau à 2 dimension de données, et éventuellement d'un tableau d'en-tête.
 	 *

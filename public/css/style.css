@@ -40,6 +40,61 @@ a:hover > .icon-linkcolor {
 .p {
   margin-bottom: 10px;
 }
+.loadmask {
+  z-index: 100;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -moz-opacity: 0.5;
+  opacity: .50;
+  filter: alpha(opacity=50);
+  background-color: #f3dffa;
+  width: 100%;
+  height: 100%;
+  zoom: 1;
+  border-radius: 4px;
+}
+.loadmask-msg {
+  z-index: 20001;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #8214a4;
+  background-image: -moz-linear-gradient(top, #931bbf, #69097b);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#931bbf), to(#69097b));
+  background-image: -webkit-linear-gradient(top, #931bbf, #69097b);
+  background-image: -o-linear-gradient(top, #931bbf, #69097b);
+  background-image: linear-gradient(to bottom, #931bbf, #69097b);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff931bbf', endColorstr='#ff69097b', GradientType=0);
+  border: 1px solid #800080;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
+  padding: 2px;
+  border-radius: 4px;
+}
+.loadmask-msg div {
+  padding: 5px 10px 5px 25px;
+  background: url('../img/loading.gif') no-repeat 5px 5px;
+  line-height: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0 1px 0 #931bbf;
+  font-size: 11px;
+  cursor: wait;
+}
+.masked {
+  overflow: hidden !important;
+}
+.masked-relative {
+  position: relative !important;
+}
+.masked-hidden {
+  visibility: hidden !important;
+}
 .muted > [class^="icon-"],
 .muted > [class*=" icon-"],
 [class^="icon-"].muted,
@@ -293,15 +348,18 @@ label.multicheckbox input[type=checkbox] {
   padding: 0 20px;
   height: auto;
 }
-@media (max-width: 767px) {
-  body {
-    background-color: red;
-  }
+.no-margin {
+  margin: 0;
+}
+@media (max-width: 979px) {
   #footer {
     margin-left: -20px;
     margin-right: -20px;
     padding-left: 20px;
     padding-right: 20px;
+  }
+  #footer,
+  #push {
     height: 0px;
   }
   .navbar-fixed-top {
@@ -311,6 +369,19 @@ label.multicheckbox input[type=checkbox] {
   #wrap > .container-fluid {
     padding-top: 0px;
   }
+}
+.sort-handle {
+  cursor: move;
+  background: url('../img/sort-handle.png') repeat;
+}
+.table-sort-placeholder {
+  background: url('../img/empty-placeholder.png') repeat;
+}
+.table-sort-placeholder > * {
+  visibility: hidden;
+}
+.table-sort-helper > td {
+  background-color: white;
 }
 .icon-sprite {
   display: inline-block;

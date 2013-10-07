@@ -12,10 +12,6 @@ class CostumeTable extends Costume
 	 * @var TableGateway
 	 */
 	protected $tableGateway;
-	/*
-	 * @var CostumePictureTable
-	 */
-	protected $costumePictureTable;
 	
 	public function __construct(TableGateway $tableGateway)
 	{
@@ -104,6 +100,11 @@ class CostumeTable extends Costume
 		}
 	}
 
+	public function removeColor($colorId)
+	{
+		// TODO: retirer la couleur de tous les costumes l'utilisant (primary et secondary color)
+	}
+	
 	public function deleteCostume($id)
 	{
 		$this->tableGateway->delete(array(
