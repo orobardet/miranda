@@ -12,6 +12,8 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapterInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
+use Costume\Model\TagTable;
+use Costume\Model\Tag;
 
 class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterface
 {
@@ -44,6 +46,7 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 					$costumeTable = new CostumeTable($sm->get('Costume\TableGateway\Costumes')); 
 					$costumeTable->setCostumePictureTable($sm->get('Costume\Model\CostumePictureTable'));
 					$costumeTable->setColorTable($sm->get('Costume\Model\ColorTable'));
+					$costumeTable->setTagTable($sm->get('Costume\Model\TagTable'));
 					return $costumeTable;
 				},
 				'Costume\TableGateway\Costumes' => function ($sm)
@@ -87,6 +90,24 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 					return new TableGateway($sm->get('Miranda\Service\Config')->get('db->table_prefix', '') . 'costume_colors', $dbAdapter, null, 
 							$resultSetPrototype);
 				},
+				'Costume\Model\TagTable' => function ($sm)
+				{
+					return new TagTable($sm->get('Costume\TableGateway\Tag'), $sm->get('Costume\TableGateway\CostumeTag'));
+				},
+				'Costume\TableGateway\Tag' => function ($sm)
+				{
+					$dbAdapter = $sm->get('costume_zend_db_adapter');
+					$resultSetPrototype = new ResultSet();
+					$resultSetPrototype->setArrayObjectPrototype(new Tag());
+					return new TableGateway($sm->get('Miranda\Service\Config')->get('db->table_prefix', '') . 'costume_tags', $dbAdapter, null, 
+							$resultSetPrototype);
+				},
+				'Costume\TableGateway\CostumeTag' => function ($sm)
+				{
+					$dbAdapter = $sm->get('costume_zend_db_adapter');
+					return new TableGateway($sm->get('Miranda\Service\Config')->get('db->table_prefix', '') . 'costumes_tags', $dbAdapter, 
+							new Feature\RowGatewayFeature(array('costume_id', 'tag_id')));
+				},
 			)
 		);
 	}
@@ -106,10 +127,14 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 				'Output directory for prepared pictures',
 				'Will be cleared at begining of the picture preparation. After preparation, contains all pictures files'
 			),
-			'import costumes <csv_file> [--picture-dir=<picture_dir>] [--log-file=<log_file>] [--error-file=<error_file>]' => 'Import costume CSV file, with picture (from prepared pictures directory)',
+			'import costumes <csv_file> [--picture-dir=<picture_dir>] [--tags=<tags>] [--log-file=<log_file>] [--error-file=<error_file>]' => 'Import costume CSV file, with picture (from prepared pictures directory)',
 			array(
 				'--picture-dir=<picture_dir>',
 				'Directory containing prepared pictures for import.'
+			),
+			array(
+				'--tags=<tags>',
+				'Comma-separated list of tags to add to each imported costumes (do not forget to enclose between " ou \' if contains spaces).'
 			),
 			array(
 				'--log-file=<log_file>',

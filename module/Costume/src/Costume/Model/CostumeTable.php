@@ -25,6 +25,12 @@ class CostumeTable extends Costume
 	 */
 	protected $colorTable;
 
+	/**
+	 *
+	 * @var \Costume\Model\TagTable
+	 */
+	protected $tagTable;
+	
 	public function __construct(TableGateway $tableGateway)
 	{
 		$this->tableGateway = $tableGateway;
@@ -45,12 +51,6 @@ class CostumeTable extends Costume
 			$rowset = $this->tableGateway->select();
 		}
 		
-		if (count($rowset)) {
-			foreach ($rowset as $costume) {
-				//$this->populateCostumeData($costume);
-			}
-		}
-
 		return $rowset;
 	}
 
@@ -69,8 +69,6 @@ class CostumeTable extends Costume
 			}
 		}
 		
-		//$this->populateCostumeData($costume);
-		
 		return $costume;
 	}
 
@@ -88,13 +86,25 @@ class CostumeTable extends Costume
 			}
 		}
 		
-		//$this->populateCostumeData($costume);
-		
 		return $costume;
 	}
 
 	public function saveCostume(Costume $costume)
 	{
+		// On enregistre les couleurs qui seraient nouvelles
+		if ($this->colorTable) {
+			$primaryColor = $costume->getPrimaryColor();
+			if ($primaryColor && !$primaryColor->getId()) {
+				$this->colorTable->saveColor($primaryColor);
+				$costume->setPrimaryColor($primaryColor);
+			}  
+			$secondaryColor = $costume->getSecondaryColor();
+			if ($secondaryColor && !$secondaryColor->getId()) {
+				$this->colorTable->saveColor($secondaryColor);
+				$costume->setSecondaryColor($secondaryColor);
+			}  
+		}
+		
 		$data = $costume->getArrayCopy();
 		
 		// Mise à jour de la date de modification
@@ -123,6 +133,11 @@ class CostumeTable extends Costume
 		// Sauvegarde des images
 		if ($this->costumePictureTable) {
 			$this->costumePictureTable->saveCostumePictures($costume);
+		}
+		
+		// Sauvegarde des tags
+		if ($this->tagTable) {
+			$this->tagTable->saveCostumeTags($costume);
 		}
 	}
 
@@ -153,6 +168,7 @@ class CostumeTable extends Costume
 		if ($this->costumePictureTable) {
 			$costume->setPictures($this->costumePictureTable->getCostumePictures($costume->getId()));
 		}
+		
 		if ($this->colorTable) {
 			$primaryColorId = $costume->getPrimaryColorId();
 			if ($primaryColorId) {
@@ -173,6 +189,10 @@ class CostumeTable extends Costume
 				}
 			}
 		}
+		
+		if ($this->tagTable) {
+			$costume->setTags($this->tagTable->getCostumeTags($costume->getId()));
+		}
 	}
 
 	/**
@@ -186,10 +206,19 @@ class CostumeTable extends Costume
 
 	/**
 	 *
-	 * @param \Costume\Model\CostumePictureTable $costumePictureTable
+	 * @param \Costume\Model\ColorTable $colorTable
 	 */
 	public function setColorTable(ColorTable $colorTable)
 	{
 		$this->colorTable = $colorTable;
+	}
+	
+	/**
+	 *
+	 * @param \Costume\Model\TagTable $tagTable
+	 */
+	public function setTagTable(TagTable $tagTable)
+	{
+		$this->tagTable = $tagTable;
 	}
 }

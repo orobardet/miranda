@@ -47,9 +47,19 @@ $this->headTitle($title);
 		<small><?php echo $this->translate('No picture'); ?></small>
 	</div>
 	<?php endif; ?>
+	
 	<div class="span<?php echo $landscapePicture?4:5; ?>">
 		<?php echo $costume->getDescr(); ?>
+		<?php $tags = $costume->getTags(); ?>
+		<?php if (count($tags)): ?>
+		<ul class="unstyled" style="margin-top:10px;">
+		<?php foreach ($tags as $tag): ?>
+		<li><i class="icon-tag"></i> <?php echo $tag; ?></li>
+		<?php endforeach; ?>
+		</ul>
+		<?php endif; ?>
 	</div>
+	
 	<div class="span4">
 		<div class="row-fluid">
 			<div class="span6">

@@ -17,10 +17,11 @@ class Costume extends ObjectModelBase
 	const GENDER_NONE = null;
 
 	/**
+	 *
 	 * @var \Costume\Model\CostumeTable
 	 */
 	protected $costumeTable;
-	
+
 	/**
 	 * ID en BDD du costume
 	 *
@@ -125,6 +126,13 @@ class Costume extends ObjectModelBase
 	 * @var \Costume\Model\Color
 	 */
 	protected $secondary_color;
+
+	/**
+	 * Liste des tags
+	 *
+	 * @var Tag[] Tableau de Tag ou de chaine
+	 */
+	protected $tags;
 
 	/**
 	 *
@@ -297,6 +305,19 @@ class Costume extends ObjectModelBase
 
 	/**
 	 *
+	 * @return Tag[]:
+	 */
+	public function getTags()
+	{
+		if ($this->tags) {
+			return $this->tags;
+		} else {
+			return array();
+		}
+	}
+
+	/**
+	 *
 	 * @param integer $id
 	 */
 	public function setId($id)
@@ -425,12 +446,12 @@ class Costume extends ObjectModelBase
 	 */
 	public function addPicture(Picture $picture)
 	{
-		if (!is_array($this->pictures)) {
+		if (!$this->pictures) {
 			$this->pictures = array();
 		}
 		$this->pictures[] = $picture;
 	}
-	
+
 	/**
 	 *
 	 * @param \Application\Model\Picture $pictures
@@ -440,10 +461,58 @@ class Costume extends ObjectModelBase
 		$this->pictures = $pictures;
 	}
 
-	public function setCostumeTable($costumeTable) {
-		$this->costumeTable = $costumeTable;
+	/**
+	 *
+	 * @param array $tags Tableau de Tag ou de chaine
+	 */
+	public function setTags($tags)
+	{
+		$this->tags = array();
+		if (count($tags)) {
+			foreach ($tags as $tag) {
+				$this->tags[] = $tag;
+			}
+		}
+	}
+
+	/**
+	 *
+	 * @param Tag[] $tag
+	 */
+	public function addTags($tags)
+	{
+		if (!$this->tags) {
+			$this->tags = array();
+		}
+		
+		if (count($tags)) {
+			$addTags = array();
+			foreach($tags as $tag) {
+				$addTags[] = $tag;
+			}
+				
+			$this->tags = array_unique(array_merge($this->tags, $addTags)); 
+		}
 	}
 	
+	/**
+	 *
+	 * @param Tag $tag
+	 */
+	public function addTag($tag)
+	{
+		if (!$this->tags) {
+			$this->tags = array();
+		}
+		
+		$this->tags[] = $tag;
+	}
+
+	public function setCostumeTable($costumeTable)
+	{
+		$this->costumeTable = $costumeTable;
+	}
+
 	public function exchangeArray($data)
 	{
 		$this->id = (array_key_exists('id', $data)) ? $data['id'] : null;

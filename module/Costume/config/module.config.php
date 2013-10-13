@@ -79,7 +79,7 @@ return array(
 			'routes' => array(
 				'costume-import' => array(
 					'options' => array(
-						'route' => 'import (costume|costumes) <csv_file> [--picture-dir=] [--log-file=] [--error-file=]',
+						'route' => 'import (costume|costumes) <csv_file> [--picture-dir=] [--log-file=] [--error-file=] [--tags=]',
 						'defaults' => array(
 							'controller' => 'Costume\Controller\Console',
 							'action' => 'import'

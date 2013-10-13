@@ -5,6 +5,7 @@ use Costume\Model\Import\OldExcel as OldExcelImport;
 use Acl\Controller\AclConsoleControllerInterface;
 use Costume\Model\Costume;
 use Costume\Model\Color;
+use Costume\Model\Tag;
 
 class ConsoleController extends AbstractCostumeController implements AclConsoleControllerInterface
 {
@@ -25,8 +26,20 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 		
 		$csvFile = $this->getRequest()->getParam('csv_file', null);
 		$pictureDir = $this->getRequest()->getParam('picture-dir', null);
+		$tags = $this->getRequest()->getParam('tags', null);
 		$logFile = $this->getRequest()->getParam('log-file', '/dev/null');
 		$errorFile = $this->getRequest()->getParam('error-file', '/dev/null');
+		
+		$globalTags = array();
+		$tagsList = explode(',', $tags);
+		if (count($tagsList)) {
+			foreach ($tagsList as $tag) {
+				$tag = trim($tag);
+				if ($tag != '') {
+					$globalTags[] = new Tag(ucfirst(strtolower($tag)));
+				}
+			}
+		}
 		
 		if (!is_file($csvFile) || !is_readable($csvFile)) {
 			$this->console()->writeLine("$csvFile is not a valid or readable file");
@@ -38,14 +51,14 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 		
 		$importer = new OldExcelImport();
 		
-		$costumesTab = $importer->readCsvFile($csvFile, $logHandle, $errorHandle);
+		$importer->readCsvFile($csvFile, $logHandle, $errorHandle);
 		
-		$this->console()->writeLine("Costume lus : " . count($costumesTab));
+		$this->console()->writeLine("Costume lus : " . count($importer));
 		fwrite($logHandle, "----- Debut d'enregistrement des costumes ---------------\n");
 		$costumeImported = 0;
-		if (count($costumesTab)) {
+		if (count($importer)) {
 			$this->console()->write("Importation des costumes : 0...");
-			foreach ($costumesTab as $costumeLine) {
+			foreach ($importer as $costumeLine) {
 				if (count($costumeLine) > 2) {
 					// Lecture du code
 					$code = trim($costumeLine[2]);
@@ -115,13 +128,13 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 					$pictureSource = null;
 					if (is_file($pictureDir . '/' . $code . '.jpg')) {
 						$picturePath = $code . '.jpg';
-						$pictureSource = $pictureDir . '/' .$picturePath;
+						$pictureSource = $pictureDir . '/' . $picturePath;
 					} else {
 						// On tente en enlevant la dernière partie après un . du code (qui pourrait être un numéro si quantité de l'article > 1)
 						$tmpCode = preg_replace('/\.[^\.]*$/', '', $code);
 						if (is_file($pictureDir . '/' . $tmpCode . '.jpg')) {
 							$picturePath = $tmpCode . '.jpg';
-							$pictureSource = $pictureDir . '/' .$picturePath;
+							$pictureSource = $pictureDir . '/' . $picturePath;
 						} else {
 							fwrite($errorHandle, "Pas de fichier image trouvé pour $code\n");
 						}
@@ -137,7 +150,7 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 								if ($currentPicture->getPath() == $picturePath) {
 									$alreadyExists = true;
 									// Mise à jour du fichier image
-									$currentPicture->copyFromFile($pictureSource);									
+									$currentPicture->copyFromFile($pictureSource);
 									break;
 								}
 							}
@@ -150,14 +163,15 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 							}
 						}
 					}
-
+					
 					// Détection des couleurs
 					$colors = explode('+', $costumeLine[6]);
 					if (count($colors)) {
 						$color = ucfirst(strtolower(trim(array_shift($colors))));
 						if ($color != '') {
 							if (count($colors)) {
-								fwrite($errorHandle, "Précisions de couleur principale non importé pour ".$costume->getCode()." : +".join('+', $colors). "\n");
+								fwrite($errorHandle, 
+										"Précisions de couleur principale non importé pour " . $costume->getCode() . " : +" . join('+', $colors) . "\n");
 							}
 							// Si la couleur existe déjà en BDD, on l'utilise
 							$colorObject = $colorTable->getColorByName($color, true, false);
@@ -167,10 +181,10 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 								$colorObject->setName($color);
 								$colorObject->setColorCode('FFFFFF');
 								$colorTable->saveColor($colorObject);
-								fwrite($errorHandle, "Ajout d'une nouvelle couleur pour ".$costume->getCode()." : $color\n");
+								fwrite($errorHandle, "Ajout d'une nouvelle couleur pour " . $costume->getCode() . " : $color\n");
 							}
 							$costume->setPrimaryColor($colorObject);
-						}	
+						}
 					}
 					
 					$colors = explode('+', $costumeLine[7]);
@@ -178,7 +192,8 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 						$color = ucfirst(strtolower(trim(array_shift($colors))));
 						if ($color != '') {
 							if (count($colors)) {
-								fwrite($errorHandle, "Précisions de couleur secondaire non importé pour ".$costume->getCode()." : +".join('+', $colors). "\n");
+								fwrite($errorHandle, 
+										"Précisions de couleur secondaire non importé pour " . $costume->getCode() . " : +" . join('+', $colors) . "\n");
 							}
 							// Si la couleur existe déjà en BDD, on l'utilise
 							$colorObject = $colorTable->getColorByName($color, true, false);
@@ -188,12 +203,15 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 								$colorObject->setName($color);
 								$colorObject->setColorCode('FFFFFF');
 								$colorTable->saveColor($colorObject);
-								fwrite($errorHandle, "Ajout d'une nouvelle couleur pour ".$costume->getCode()." : $color\n");
+								fwrite($errorHandle, "Ajout d'une nouvelle couleur pour " . $costume->getCode() . " : $color\n");
 							}
 							$costume->setSecondaryColor($colorObject);
-						}	
+						}
 					}
 					
+					// Ajout des tags
+					$costume->setTags(array_unique(array_merge($globalTags, $importer->localTags)));
+						
 					// Sauvegarde du costume
 					$this->getCostumeTable()->saveCostume($costume);
 					

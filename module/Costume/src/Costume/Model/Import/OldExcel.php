@@ -1,17 +1,58 @@
 <?php
 namespace Costume\Model\Import;
 
-class OldExcel
+use Costume\Model\Tag;
+class OldExcel implements \Iterator, \Countable 
 {
-	public $localTags = array();
+	public $localTags;
+	protected $fileData;
+
+	public function count()
+	{
+		return count($this->fileData);
+	}
+	
+	public function rewind() {
+		$line = reset($this->fileData);
+	}
+	
+	public function current() {
+		$line = current($this->fileData);
+		if ($line) {
+			$this->localTags = $line->tags;
+			return $line->data;
+		}
+	
+		return false;
+	}
+	
+	public function key() {
+		return key($this->fileData);
+	}
+	
+	public function next() {
+		$line = next($this->fileData);
+		if ($line) {
+			$this->localTags = $line->tags;
+			return $line->data;
+		}
+	
+		return false;
+	}
+	
+	public function valid() {
+		return current($this->fileData)?true:false;
+	}
 	
 	public function readCsvFile($file, $logFile, $errorFile)
 	{
-		$data = array();
+		$this->fileData = array();
+		$this->costumesCount = 0;
 		
 		fwrite($logFile, "----- Debut de lecture du fichier CSV $file ---------------\n");
 		fwrite($errorFile, "----- Debut de lecture du fichier CSV $file ---------------\n");
 		
+		$localTags = array();
 		$handle = fopen($file, "r");
 		if ($handle) {
 			$row = 1;
@@ -33,17 +74,16 @@ class OldExcel
 					if (count($tags)) {
 						// Retrait du ! dans le premier tag
 						$tags[0] = ltrim($tags[0], '!');
-						$this->localTags = array();
+						$localTags = array();
 						foreach ($tags as $tag) {
 							$tag = trim($tag);
 							if ($tag != '') {
-								$this->localTags[] = ucfirst(strtolower($tag));
+								$localTags[] = new Tag(ucfirst(strtolower($tag)));
 							}
 						}
 					}
 					
-					fwrite($logFile, "Nouveaux tags locaux (#$row) : ".join(',', $this->localTags)."\n");
-						
+					fwrite($logFile, "Nouveaux tags locaux (#$row) : ".join(',', $tags)."\n");
 					$line = fgets($handle);
 					$row++;
 					continue;
@@ -64,7 +104,10 @@ class OldExcel
 				}
 				
 				$tabLine = str_getcsv($line, ';');
-				$data[] = $tabLine;
+				$lineObject = new \stdClass();
+				$lineObject->data = $tabLine;
+				$lineObject->tags = $localTags;
+				$this->fileData[] = $lineObject;
 				
 				$line = fgets($handle);
 				$row++;
@@ -73,8 +116,6 @@ class OldExcel
 		}
 		fwrite($logFile, "----- Fin de lecture du fichier CSV $file ---------------\n\n");
 		fwrite($errorFile, "----- Fin de lecture du fichier CSV $file ---------------\n\n");
-		
-		return $data;
 	}
 
 	public function deleteDirectoyContent($dir)

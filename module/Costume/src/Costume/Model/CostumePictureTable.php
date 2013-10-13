@@ -16,18 +16,6 @@ class CostumePictureTable extends PictureTable
 		parent::__construct($tableGateway);
 	}
 
-	public function fetchAll()
-	{
-		$result = $this->select(
-				function (Select $select)
-				{
-					$select->join('users', 'blogs_settings.owner_id = users.user_id', array(
-						'username'
-					));
-				});
-		return $result;
-	}
-
 	/**
 	 *
 	 * @param integer $id ID du costume dont on veut les images
@@ -85,9 +73,9 @@ class CostumePictureTable extends PictureTable
 		}
 		
 		// On ajoute tous les ID qui sont nouveaux dans la liste actuelle
-		$removedPictures = array_diff($picturesIds, $currentPicturesIds);
-		if (count($removedPictures)) {
-			foreach ($removedPictures as $id) {
+		$newPictures = array_diff($picturesIds, $currentPicturesIds);
+		if (count($newPictures)) {
+			foreach ($newPictures as $id) {
 				$this->costumePictureGateway->insert(array('costume_id' => $costumeId, 'picture_id' => $id));
 			}
 		}
