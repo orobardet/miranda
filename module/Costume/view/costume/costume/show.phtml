@@ -12,6 +12,12 @@ $this->headTitle($title);
 		</div>
 	</div>
 </div>
+<div class="pull-right hidden-phone hidden-tablet text-right muted" style="margin-right:20px;">
+<small>
+<?php echo $this->translate('Record created '); ?><?php echo $costume->getCreationDate($this->translate('full_text_date_time')) ?><br/>
+<?php echo $this->translate('Record modified '); ?><?php echo $costume->getLastModificationDate($this->translate('full_text_date_time')) ?>
+</small>
+</div>
 <h1><?php echo $this->escapeHtml($costume->getLabel()); ?></h1>
 <div class="p action-bar action-bar-container" style="margin-bottom:20px;">
 		<?php if ($this->acl()->isAllowed("edit_costume")): ?>

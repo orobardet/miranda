@@ -122,7 +122,7 @@ $config = array(
 						'visible' => false
 					),
 					array(
-						'label' => 'Administration',
+						'label' => 'Management',
 						'route' => 'costume-admin',
 						'action' => 'index',
 						'resource' => 'admin_costumes',

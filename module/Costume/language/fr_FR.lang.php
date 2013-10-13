@@ -31,4 +31,7 @@ return array(
 	'Color: ' => 'Couleur : ',
 	'Do you really want to delete this color?' => 'Voulez-vous vraiment supprimer cette couleur ?',
 	'The color will be removed from all costumes using it.' => "La couleur sera retirée de tous les costumes qui l'utilisent.",
+	'Record created ' => 'Fiche créée ',
+	'Record modified ' => 'Fiche modifiée ',
+	'Management' => 'Gestion'	
 );
