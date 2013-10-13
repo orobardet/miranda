@@ -19,6 +19,7 @@ return array(
 	'Materials' => 'Matières',
 	"Costumes' colors" => 'Couleurs des costumes',
 	'No colors.' => 'Aucune couleur.',
+	'No color' => 'Pas de couleur',
 	'Color ID %id% does not exists.' => "La couleur ID %id% n'existe pas.",
 	'Invalid values' => 'Valeurs invalides',
 	'color' => 'Couleur',

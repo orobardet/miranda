@@ -15,6 +15,7 @@ $(function() {
 	}
 	
 	function costume_color_hide_edit_color() {
+		$('#colors-list .color-row').removeClass('info');
 		if (gCostumeColorXhrRequest) {
 			gCostumeColorXhrRequest.abort();
 			gCostumeColorXhrRequest = null;
@@ -104,7 +105,6 @@ $(function() {
 	$('#colors-list').delegate('.color-row', 'click', function() {
 		if ($(this).hasClass('info')) {
 			costume_color_hide_edit_color();
-			$(this).removeClass('info');
 		} else {
 			$('#colors-list .color-row.info').removeClass('info');
 			$(this).addClass('info');
@@ -114,7 +114,6 @@ $(function() {
 	
 	$('#edit-color a.cancel-link').click(function() {
 		costume_color_hide_edit_color();
-		$('#colors-list .color-row').removeClass('info');
 	});
 	
 	$('#edit-color').submit(function() {
@@ -158,7 +157,6 @@ $(function() {
 				$('#edit-color .edit-error').html(textStatus + ' ' + errorThrown).show();
 			}
 		});
-		$('#colors-list .color-row').removeClass('info');
 		return false;
 	});
 	
@@ -252,7 +250,6 @@ $(function() {
 				$('#add-color .add-error').html(textStatus + ' ' + errorThrown).show();
 			}
 		});
-		$('#colors-list .color-row').removeClass('info');
 		return false;
 	});
 });

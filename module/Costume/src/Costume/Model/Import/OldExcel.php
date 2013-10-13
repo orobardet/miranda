@@ -3,7 +3,8 @@ namespace Costume\Model\Import;
 
 class OldExcel
 {
-
+	public $localTags = array();
+	
 	public function readCsvFile($file, $logFile, $errorFile)
 	{
 		$data = array();
@@ -16,7 +17,7 @@ class OldExcel
 			$row = 1;
 			$line = fgets($handle);
 			while ($line) {
-				$line = utf8_encode(rtrim($line, "\r\n"));
+				$line = rtrim($line, "\r\n");
 				
 				// Si la ligne commence par #####, fin de chargement du fichier
 				if (preg_match('/^"?#####/u', $line)) {
@@ -25,6 +26,28 @@ class OldExcel
 					continue;
 				}
 				
+				// Si la ligne commence par !, c'est une nouvelle section à utiliser comme tag
+				if (preg_match('/^"?!/u', $line)) {
+					$tags = str_getcsv($line, ';');
+					
+					if (count($tags)) {
+						// Retrait du ! dans le premier tag
+						$tags[0] = ltrim($tags[0], '!');
+						$this->localTags = array();
+						foreach ($tags as $tag) {
+							$tag = trim($tag);
+							if ($tag != '') {
+								$this->localTags[] = ucfirst(strtolower($tag));
+							}
+						}
+					}
+					
+					fwrite($logFile, "Nouveaux tags locaux (#$row) : ".join(',', $this->localTags)."\n");
+						
+					$line = fgets($handle);
+					$row++;
+					continue;
+				}
 				// Si la ligne commence par #, on l'ignore
 				if (preg_match('/^"?#/u', $line)) {
 					fwrite($logFile, "Ligne ignorée (#$row) : $line\n");

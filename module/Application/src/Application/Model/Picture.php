@@ -196,6 +196,37 @@ class Picture extends ObjectModelBase
 		}
 	}
 
+	public function copyFromFile($sourceFile)
+	{
+		$result = copy($sourceFile, $this->getStoragePath());
+		if ($result) {
+			$this->updatePictureInfoFromFile();			
+		}
+		
+		return $result;
+	}
+	
+	public function updatePictureInfoFromFile()
+	{
+		$file = $this->getStoragePath();
+		if (file_exists($file) && is_file($file) && is_readable($file)) {
+			$src = imagecreatefromjpeg($file);
+			list($width, $height) = getimagesize($file);
+			imagedestroy($src);
+			$this->setWidth($width);
+			$this->setHeight($height);
+		}
+	}
+	
+	public function deleteFile()
+	{
+		$file = $this->getStoragePath();
+		
+		if (file_exists($file) && is_file($file) && is_writable($file)) {
+			unlink($file);
+		}
+	}
+
 	public function exchangeArray($data)
 	{
 		$this->id = (array_key_exists('id', $data)) ? $data['id'] : null;

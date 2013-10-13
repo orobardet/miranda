@@ -1,4 +1,5 @@
 <?php
+/* @var $costume \Costume\Model\Costume */
 $costume = $this->costume;
 $title = $this->translateReplace('Costume: %label%', array('label' => $costume->getLabel()));
 $this->headTitle($title);
@@ -62,9 +63,25 @@ $this->headTitle($title);
 					<dt><?php echo $this->translate('Material'); ?></dt>
 					<dd>&nbsp;</dd>
 					<dt><?php echo $this->translate('Primary color'); ?></dt>
-					<dd>&nbsp;</dd>
+					<dd>
+						<?php $primaryColor = $costume->getPrimaryColor(); ?>
+						<?php if ($primaryColor): ?>
+							<div class="costume-color-preview" style="background-color:#<?php echo $primaryColor->getColorCode(); ?>;"></div>
+							<?php echo $this->escapeHtml($this->translate($primaryColor->getName())); ?>
+						<?php else: ?>
+							&nbsp;
+						<?php endif;?>
+					</dd>
 					<dt><?php echo $this->translate('Secondary color'); ?></dt>
-					<dd>&nbsp;</dd>
+					<dd>
+						<?php $secondaryColor = $costume->getSecondaryColor(); ?>
+						<?php if ($secondaryColor): ?>
+							<div class="costume-color-preview" style="background-color:#<?php echo $secondaryColor->getColorCode(); ?>;"></div>
+							<?php echo $this->escapeHtml($this->translate($secondaryColor->getName())); ?>
+						<?php else: ?>
+							&nbsp;
+						<?php endif;?>
+					</dd>
 					<dt><?php echo $this->translate('Type'); ?></dt>
 					<dd>&nbsp;</dd>
 				</dl>		

@@ -13,6 +13,20 @@ class PictureTable extends Picture
 	}
 	
 	/**
+	 * Retourne un nouvel objet Picture pour les costumes
+	 *
+	 * (avec les bons root path et url root déjà défini)
+	 *
+	 * @return \Application\Model\Picture
+	 */
+	public function pictureFactory()
+	{
+		$picturePrototype = $this->tableGateway->getResultSetPrototype()->getArrayObjectPrototype();
+		$newPicture = clone $picturePrototype;
+		return $newPicture;
+	}
+
+	/**
 	 * Retoune toutes les images existantes
 	 *
 	 * @return Picture[] Liste des images (sous forme d'un iterable)
@@ -62,6 +76,10 @@ class PictureTable extends Picture
 
 	public function deletePicture($id)
 	{
+		$picture = $this->getPicture($id, false);
+		if ($picture) {
+			$picture->deleteFile();
+		}
 		$this->tableGateway->delete(array(
 			'id' => $id
 		));

@@ -43,6 +43,7 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 				{
 					$costumeTable = new CostumeTable($sm->get('Costume\TableGateway\Costumes')); 
 					$costumeTable->setCostumePictureTable($sm->get('Costume\Model\CostumePictureTable'));
+					$costumeTable->setColorTable($sm->get('Costume\Model\ColorTable'));
 					return $costumeTable;
 				},
 				'Costume\TableGateway\Costumes' => function ($sm)
@@ -59,12 +60,12 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 					$picturesTableGateway = $sm->get('Miranda\TableGateway\Pictures');
 					$picturePrototype = $picturesTableGateway->getResultSetPrototype()->getArrayObjectPrototype();
 					$picturePrototype->setUrlRoot($config->get('costume->pictures->url_path', ''));
-					$rootPath = $config->get('data->root_path', '');
+					$rootPath = $config->get('data_storage->root_path', '');
 					if (!empty($rootPath)) {
 						$picturePrototype->setStorageRoot(
-								rtrim($rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $config->get('costume->pictures->storage_path', ''));
+								rtrim($rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $config->get('costume->pictures->store_path', ''));
 					} else {
-						$picturePrototype->setStorageRoot($config->get('costume->pictures->storage_path', ''));
+						$picturePrototype->setStorageRoot($config->get('costume->pictures->store_path', ''));
 					}
 					return new CostumePictureTable($picturesTableGateway, $sm->get('Costume\TableGateway\CostumePicture'));
 				},

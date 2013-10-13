@@ -4,8 +4,9 @@ namespace Costume\Controller;
 use Costume\Model\Import\OldExcel as OldExcelImport;
 use Acl\Controller\AclConsoleControllerInterface;
 use Costume\Model\Costume;
+use Costume\Model\Color;
 
-class ConsoleController extends AbstractCostumeController  implements AclConsoleControllerInterface
+class ConsoleController extends AbstractCostumeController implements AclConsoleControllerInterface
 {
 
 	public function aclConsoleIsAllowed($action)
@@ -16,6 +17,11 @@ class ConsoleController extends AbstractCostumeController  implements AclConsole
 	public function importAction()
 	{
 		$translator = $this->getServiceLocator()->get('translator');
+		$config = $this->getServiceLocator()->get('Miranda\Service\Config');
+		/* @var $pictureTable \Application\Model\PictureTable */
+		$pictureTable = $this->getServiceLocator()->get('Miranda\Model\PictureTable');
+		$costumePictureTable = $this->getServiceLocator()->get('Costume\Model\CostumePictureTable');
+		$colorTable = $this->getServiceLocator()->get('Costume\Model\ColorTable');
 		
 		$csvFile = $this->getRequest()->getParam('csv_file', null);
 		$pictureDir = $this->getRequest()->getParam('picture-dir', null);
@@ -44,7 +50,7 @@ class ConsoleController extends AbstractCostumeController  implements AclConsole
 					// Lecture du code
 					$code = trim($costumeLine[2]);
 					if (empty($code)) {
-						fwrite($errorHandle, "Non importé : code vide pour ".join(' | ', $costumeLine)."\n");
+						fwrite($errorHandle, "Non importé : code vide pour " . join(' | ', $costumeLine) . "\n");
 						continue;
 					}
 					
@@ -53,37 +59,39 @@ class ConsoleController extends AbstractCostumeController  implements AclConsole
 						continue;
 					}
 					
-					if ($this->getCostumeTable()->getCostumeByCode($code, false)) {
-						fwrite($errorHandle, "Non importé : le code '$code' existe déjà pour ".join(' | ', $costumeLine)."\n");
-						continue;
+					$costume = $this->getCostumeTable()->getCostumeByCode($code, false);
+					if ($costume) {
+						fwrite($logHandle, "Mise à jour : le code '$code' existe déjà pour " . join(' | ', $costumeLine) . "\n");
+					} else {
+						$costume = new Costume();
+						$costume->setCode($code);
 					}
 					
-					$costume = new Costume();
-					$costume->setCode($code);
-						
 					// Libellé et description
 					$label = $costumeLine[0];
 					$descr = "";
 					if (strlen($label) > 255) {
-						$descr = $label."\n";
+						$descr = $label . "\n";
 						$label = substr($label, 0, 255);
 					}
 					$descr .= $costumeLine[10];
 					$costume->setLabel($label);
 					$costume->setDescr($descr);
-								
+					
 					// Détection du genre
 					$genderRaw = str_split(preg_replace('/[^hf]/', '', strtolower($costumeLine[3])));
 					if (in_array('f', $genderRaw) && in_array('h', $genderRaw)) {
 						$costume->setGender(Costume::GENDER_MIXED);
-					} else if (in_array('f', $genderRaw)) {
-						$costume->setGender(Costume::GENDER_WOMAN);
-					} else if (in_array('h', $genderRaw)) {
-						$costume->setGender(Costume::GENDER_MAN);
-					} else {
-						$costume->setGender(Costume::GENDER_NONE);
-					}
-
+					} else 
+						if (in_array('f', $genderRaw)) {
+							$costume->setGender(Costume::GENDER_WOMAN);
+						} else 
+							if (in_array('h', $genderRaw)) {
+								$costume->setGender(Costume::GENDER_MAN);
+							} else {
+								$costume->setGender(Costume::GENDER_NONE);
+							}
+					
 					// Détection de la taille du costume
 					if (!empty($costumeLine[5])) {
 						$costume->setSize(substr($costumeLine[5], 0, 20));
@@ -93,7 +101,7 @@ class ConsoleController extends AbstractCostumeController  implements AclConsole
 					if (!empty($costumeLine[11])) {
 						$costume->setState(substr($costumeLine[11], 0, 255));
 					}
-
+					
 					// Détection de quantité de costume
 					$quantity = intval($costumeLine[4]);
 					if (!empty($quantity)) {
@@ -101,28 +109,99 @@ class ConsoleController extends AbstractCostumeController  implements AclConsole
 					} else {
 						$costume->setQuantity(1);
 					}
-						
+					
 					// Détection de l'image
-					$pictureFile = 'none';
+					$picturePath = null;
+					$pictureSource = null;
 					if (is_file($pictureDir . '/' . $code . '.jpg')) {
-						$pictureFile = $pictureDir . '/' . $code . '.jpg';
+						$picturePath = $code . '.jpg';
+						$pictureSource = $pictureDir . '/' .$picturePath;
 					} else {
 						// On tente en enlevant la dernière partie après un . du code (qui pourrait être un numéro si quantité de l'article > 1)
 						$tmpCode = preg_replace('/\.[^\.]*$/', '', $code);
 						if (is_file($pictureDir . '/' . $tmpCode . '.jpg')) {
-							$pictureFile = $pictureDir . '/' . $tmpCode . '.jpg';
+							$picturePath = $tmpCode . '.jpg';
+							$pictureSource = $pictureDir . '/' .$picturePath;
 						} else {
 							fwrite($errorHandle, "Pas de fichier image trouvé pour $code\n");
 						}
 					}
+					if ($pictureSource && $picturePath) {
+						// Image trouvée, on l'utilise
+						
+						// Est-ce que le costume dispose déjà de la même image ?
+						$currentPictures = $costume->getPictures();
+						$alreadyExists = false;
+						if (count($currentPictures)) {
+							foreach ($currentPictures as $currentPicture) {
+								if ($currentPicture->getPath() == $picturePath) {
+									$alreadyExists = true;
+									// Mise à jour du fichier image
+									$currentPicture->copyFromFile($pictureSource);									
+									break;
+								}
+							}
+						}
+						if (!$alreadyExists) {
+							$picture = $costumePictureTable->pictureFactory();
+							$picture->setPath($picturePath);
+							if ($picture->copyFromFile($pictureSource)) {
+								$costume->addPicture($picture);
+							}
+						}
+					}
+
+					// Détection des couleurs
+					$colors = explode('+', $costumeLine[6]);
+					if (count($colors)) {
+						$color = ucfirst(strtolower(trim(array_shift($colors))));
+						if ($color != '') {
+							if (count($colors)) {
+								fwrite($errorHandle, "Précisions de couleur principale non importé pour ".$costume->getCode()." : +".join('+', $colors). "\n");
+							}
+							// Si la couleur existe déjà en BDD, on l'utilise
+							$colorObject = $colorTable->getColorByName($color, true, false);
+							// Sinon on la crée
+							if (!$colorObject) {
+								$colorObject = new Color();
+								$colorObject->setName($color);
+								$colorObject->setColorCode('FFFFFF');
+								$colorTable->saveColor($colorObject);
+								fwrite($errorHandle, "Ajout d'une nouvelle couleur pour ".$costume->getCode()." : $color\n");
+							}
+							$costume->setPrimaryColor($colorObject);
+						}	
+					}
+					
+					$colors = explode('+', $costumeLine[7]);
+					if (count($colors)) {
+						$color = ucfirst(strtolower(trim(array_shift($colors))));
+						if ($color != '') {
+							if (count($colors)) {
+								fwrite($errorHandle, "Précisions de couleur secondaire non importé pour ".$costume->getCode()." : +".join('+', $colors). "\n");
+							}
+							// Si la couleur existe déjà en BDD, on l'utilise
+							$colorObject = $colorTable->getColorByName($color, true, false);
+							// Sinon on la crée
+							if (!$colorObject) {
+								$colorObject = new Color();
+								$colorObject->setName($color);
+								$colorObject->setColorCode('FFFFFF');
+								$colorTable->saveColor($colorObject);
+								fwrite($errorHandle, "Ajout d'une nouvelle couleur pour ".$costume->getCode()." : $color\n");
+							}
+							$costume->setSecondaryColor($colorObject);
+						}	
+					}
+					
+					// Sauvegarde du costume
+					$this->getCostumeTable()->saveCostume($costume);
+					
+					$costumeImported++;
 				} else {
 					fwrite($errorHandle, "Pas assez de colonnes pour " . join(' | ', $costumeLine) . "\n");
 				}
-
-				// Sauvegarde du costume
-				$this->getCostumeTable()->saveCostume($costume);
 				
-				$costumeImported++;
 				$this->console()->clearLine();
 				$this->console()->write("Importation des costumes : $costumeImported...");
 			}
@@ -136,7 +215,7 @@ class ConsoleController extends AbstractCostumeController  implements AclConsole
 		
 		return;
 	}
-	
+
 	public function preparepicturesAction()
 	{
 		$translator = $this->getServiceLocator()->get('translator');

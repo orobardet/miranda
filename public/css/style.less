@@ -373,4 +373,21 @@ label.multicheckbox {
 		background-color:white;
 	}
 }
+
+.costume-color-preview {
+	display:inline-block;
+	height:15px;
+	width:15px;
+	border:solid 1px #DDD;
+	border-radius:4px;
+	margin-left:10px;
+	vertical-align:middle;
+	&.no-margin {
+		margin: 0px;
+	}
+	&.no-color {
+		background: url('../img/empty-placeholder') repeat transparent;
+		border-color: transparent;
+	}
+}
 @import "icons-sprite.less";

@@ -3,6 +3,7 @@ namespace Costume\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Expression;
+use Zend\Db\Sql\Predicate\Expression as PredicateExpression;
 
 class ColorTable extends Color
 {
@@ -25,7 +26,7 @@ class ColorTable extends Color
 		$select = $sql->select()->columns(array(
 			'max_ord' => new Expression('MAX(ord)')
 		));
-			
+		
 		$results = $adapter->query($sql->getSqlStringForSqlObject($select), $adapter::QUERY_MODE_EXECUTE);
 		if (count($results)) {
 			$row = $results->current();
@@ -36,15 +37,17 @@ class ColorTable extends Color
 		
 		return null;
 	}
-	
+
 	public function reorderColors(array $newOrder)
 	{
 		if (count($newOrder)) {
 			$ord = 1;
 			foreach ($newOrder as $id) {
-				$id = (int) $id;
+				$id = (int)$id;
 				if ($id) {
-					$this->tableGateway->update(array('ord' => $ord), array(
+					$this->tableGateway->update(array(
+						'ord' => $ord
+					), array(
 						'id' => $id
 					));
 					$ord++;
@@ -52,7 +55,7 @@ class ColorTable extends Color
 			}
 		}
 	}
-	
+
 	/**
 	 * Retoune toutes les couleurs existantes
 	 *
@@ -62,7 +65,10 @@ class ColorTable extends Color
 	{
 		return $this->tableGateway->select(function ($select)
 		{
-			$select->order(array('ord', 'name'));
+			$select->order(array(
+				'ord',
+				'name'
+			));
 		});
 	}
 
@@ -76,6 +82,29 @@ class ColorTable extends Color
 		if (!$color) {
 			if ($exceptionIfNone) {
 				throw new \Exception("Could not find color $id");
+			} else {
+				return false;
+			}
+		}
+		
+		return $color;
+	}
+
+	public function getColorByName($name, $caseInsensitive = false, $exceptionIfNone = true)
+	{
+		if ($caseInsensitive) {
+			$rowset = $this->tableGateway->select(function ($select) use($name) {
+				$select->where->addPredicate(new PredicateExpression('LOWER(name) = ?', strtolower($name)));
+			});
+		} else {
+			$rowset = $this->tableGateway->select(array(
+				'name' => $name
+			));
+		}
+		$color = $rowset->current();
+		if (!$color) {
+			if ($exceptionIfNone) {
+				throw new \Exception("Could not find color with name $name");
 			} else {
 				return false;
 			}
@@ -99,7 +128,7 @@ class ColorTable extends Color
 			}
 			$nextOrd = true;
 		}
-
+		
 		$id = (int)$color->getId();
 		if (!$id) {
 			$this->tableGateway->insert($data);

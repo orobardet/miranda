@@ -7,15 +7,28 @@ use Zend\Paginator\Paginator;
 
 class CostumeTable extends Costume
 {
-
+	
 	/*
 	 * @var TableGateway
 	 */
 	protected $tableGateway;
-	
+
+	/**
+	 *
+	 * @var \Costume\Model\CostumePictureTable
+	 */
+	protected $costumePictureTable;
+
+	/**
+	 *
+	 * @var \Costume\Model\ColorTable
+	 */
+	protected $colorTable;
+
 	public function __construct(TableGateway $tableGateway)
 	{
 		$this->tableGateway = $tableGateway;
+		$this->tableGateway->getResultSetPrototype()->getArrayObjectPrototype()->setCostumeTable($this);
 	}
 
 	/**
@@ -31,13 +44,13 @@ class CostumeTable extends Costume
 		} else {
 			$rowset = $this->tableGateway->select();
 		}
-
-		if (count($rowset)) {
- 			foreach ($rowset as $costume) {
- 				$this->populateCostumeData($costume);
- 			}
-		}
 		
+		if (count($rowset)) {
+			foreach ($rowset as $costume) {
+				//$this->populateCostumeData($costume);
+			}
+		}
+
 		return $rowset;
 	}
 
@@ -56,7 +69,7 @@ class CostumeTable extends Costume
 			}
 		}
 		
-		$this->populateCostumeData($costume);
+		//$this->populateCostumeData($costume);
 		
 		return $costume;
 	}
@@ -75,14 +88,22 @@ class CostumeTable extends Costume
 			}
 		}
 		
-		$this->populateCostumeData($costume);
+		//$this->populateCostumeData($costume);
 		
 		return $costume;
 	}
-	
+
 	public function saveCostume(Costume $costume)
 	{
 		$data = $costume->getArrayCopy();
+		
+		// Mise à jour de la date de modification
+		$data['modification_ts'] = time();
+		
+		// Pas de date de création, on la défini à la date courane
+		if (!$costume->getCreationDate()) {
+			$data['creation_ts'] = time();
+		}
 		
 		$id = (int)$costume->getId();
 		if (!$id) {
@@ -98,13 +119,28 @@ class CostumeTable extends Costume
 				throw new \Exception("Costume id $id does not exist");
 			}
 		}
+		
+		// Sauvegarde des images
+		if ($this->costumePictureTable) {
+			$this->costumePictureTable->saveCostumePictures($costume);
+		}
 	}
 
 	public function removeColor($colorId)
 	{
-		// TODO: retirer la couleur de tous les costumes l'utilisant (primary et secondary color)
+		$this->tableGateway->update(array(
+			'primary_color_id' => null
+		), array(
+			'primary_color_id' => $colorId
+		));
+		
+		$this->tableGateway->update(array(
+			'secondary_color_id' => null
+		), array(
+			'secondary_color_id' => $colorId
+		));
 	}
-	
+
 	public function deleteCostume($id)
 	{
 		$this->tableGateway->delete(array(
@@ -112,19 +148,48 @@ class CostumeTable extends Costume
 		));
 	}
 
-	public function populateCostumeData($costume)
+	public function populateCostumeData(Costume $costume)
 	{
 		if ($this->costumePictureTable) {
 			$costume->setPictures($this->costumePictureTable->getCostumePictures($costume->getId()));
 		}
-		
+		if ($this->colorTable) {
+			$primaryColorId = $costume->getPrimaryColorId();
+			if ($primaryColorId) {
+				$primaryColor = $this->colorTable->getColor($primaryColorId, false);
+				if ($primaryColor) {
+					$costume->setPrimaryColor($primaryColor);
+				} else {
+					$costume->setPrimaryColorId(null);
+				}
+			}
+			$secondaryColorId = $costume->getSecondaryColorId();
+			if ($secondaryColorId) {
+				$secondaryColor = $this->colorTable->getColor($secondaryColorId);
+				if ($secondaryColor) {
+					$costume->setSecondaryColor($secondaryColor);
+				} else {
+					$costume->setSecondaryColorId(null);
+				}
+			}
+		}
 	}
-	
+
 	/**
-	 * @param field_type $costumePictureTable
+	 *
+	 * @param \Costume\Model\CostumePictureTable $costumePictureTable
 	 */
 	public function setCostumePictureTable(CostumePictureTable $costumePictureTable)
 	{
 		$this->costumePictureTable = $costumePictureTable;
+	}
+
+	/**
+	 *
+	 * @param \Costume\Model\CostumePictureTable $costumePictureTable
+	 */
+	public function setColorTable(ColorTable $colorTable)
+	{
+		$this->colorTable = $colorTable;
 	}
 }

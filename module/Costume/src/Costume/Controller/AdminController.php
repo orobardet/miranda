@@ -1,9 +1,6 @@
 <?php
 namespace Costume\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Application\ConfigAwareInterface;
-use Zend\Config\Config as ZendConfig;
 use Zend\View\Model\ViewModel;
 use Acl\Controller\AclControllerInterface;
 
