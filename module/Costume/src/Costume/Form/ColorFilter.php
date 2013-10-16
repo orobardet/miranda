@@ -27,15 +27,8 @@ class ColorFilter extends InputFilter
 						),
 						array(
 							'name' => 'StringTrim'
-						),
-						array(
-							'name' => 'PregReplace',
-							'options' => array(
-								'pattern' => '/[^0-9A-Za-z\-\s\']/',
-								'replacement' => ''
-							)
 						)
-		)
+					)
 				));
 		
 		$this->add(
