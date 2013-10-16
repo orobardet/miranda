@@ -4,8 +4,9 @@ namespace Costume\Model;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Paginator\Adapter\DbTableGateway;
 use Zend\Paginator\Paginator;
+use Application\Model\DataCache\AbstractDataCachePopulator;
 
-class CostumeTable extends Costume
+class CostumeTable extends AbstractDataCachePopulator
 {
 	
 	/*
@@ -44,6 +45,8 @@ class CostumeTable extends Costume
 	 */
 	public function fetchAll($usePaginator = false)
 	{
+		$this->populateCaches();
+		
 		if ($usePaginator) {
 			$dbTableGatewayAdapter = new DbTableGateway($this->tableGateway);
 			$rowset = new Paginator($dbTableGatewayAdapter);
@@ -211,6 +214,7 @@ class CostumeTable extends Costume
 	public function setColorTable(ColorTable $colorTable)
 	{
 		$this->colorTable = $colorTable;
+		$this->addCachedCollection($colorTable);
 	}
 	
 	/**
@@ -220,5 +224,6 @@ class CostumeTable extends Costume
 	public function setTagTable(TagTable $tagTable)
 	{
 		$this->tagTable = $tagTable;
+		$this->addCachedCollection($tagTable);
 	}
 }

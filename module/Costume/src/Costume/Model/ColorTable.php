@@ -4,8 +4,10 @@ namespace Costume\Model;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Expression;
 use Zend\Db\Sql\Predicate\Expression as PredicateExpression;
+use Application\Model\DataCache\DataCacheAwareInterface;
+use Application\Model\DataCache\AbstractDataCacher;
 
-class ColorTable extends Color
+class ColorTable extends AbstractDataCacher implements DataCacheAwareInterface
 {
 	
 	/*
@@ -75,6 +77,9 @@ class ColorTable extends Color
 	public function getColor($id, $exceptionIfNone = true)
 	{
 		$id = (int)$id;
+		if ($this->dataCacheIs($id)) {
+			return $this->dataCacheGet($id);
+		}
 		$rowset = $this->tableGateway->select(array(
 			'id' => $id
 		));
@@ -154,5 +159,16 @@ class ColorTable extends Color
 		$this->tableGateway->delete(array(
 			'id' => $id
 		));
+	}
+
+	public function populateCache()
+	{
+		$colors = $this->fetchAll();
+		if (count($colors)) {
+			foreach ($colors as $color) {
+				$this->dataCacheAdd($color->getId(), $color);
+			}
+		}
+		
 	}
 }

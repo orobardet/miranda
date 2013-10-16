@@ -2,8 +2,10 @@
 namespace Costume\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+use Application\Model\DataCache\AbstractDataCacher;
+use Application\Model\DataCache\DataCacheAwareInterface;
 
-class TagTable extends Tag
+class TagTable
 {
 	
 	/*
@@ -38,10 +40,10 @@ class TagTable extends Tag
 
 	public function getTag($id, $exceptionIfNone = true)
 	{
-		$id = (int)$id;
-		$rowset = $this->tableGateway->select(array(
-			'id' => $id
-		));
+		if ($this->dataCacheIs($id)) {
+			return $this->dataCacheGet($id);
+		}
+		
 		$tag = $rowset->current();
 		if (!$tag) {
 			if ($exceptionIfNone) {

@@ -17,6 +17,8 @@ use Application\Model\PictureTable;
 use Application\Model\Picture;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
+use Application\Model\DataCache\DataCacheAwareInterface;
+use Application\Model\DataCache\DataCacher;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ConsoleBannerProviderInterface
 {
