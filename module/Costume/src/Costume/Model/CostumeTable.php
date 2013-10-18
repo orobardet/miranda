@@ -63,6 +63,7 @@ class CostumeTable extends AbstractDataCachePopulator
 		$rowset = $this->tableGateway->select(array(
 			'id' => $id
 		));
+		
 		$costume = $rowset->current();
 		if (!$costume) {
 			if ($exceptionIfNone) {

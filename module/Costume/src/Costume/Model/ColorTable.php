@@ -80,6 +80,8 @@ class ColorTable extends AbstractDataCacher implements DataCacheAwareInterface
 		if ($this->dataCacheIs($id)) {
 			return $this->dataCacheGet($id);
 		}
+
+				
 		$rowset = $this->tableGateway->select(array(
 			'id' => $id
 		));

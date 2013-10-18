@@ -16,7 +16,7 @@ abstract class AbstractDataCacher
 
 	protected function dataCacheGet($key)
 	{
-		if (array_key_exists($key, $this->_cacheData)) {
+		if (is_array($this->_cacheData) && array_key_exists($key, $this->_cacheData)) {
 			return $this->_cacheData[$key];
 		}
 		
@@ -25,7 +25,11 @@ abstract class AbstractDataCacher
 
 	protected function dataCacheIs($key)
 	{
-		return array_key_exists($key, $this->_cacheData);
+		if (is_array($this->_cacheData)) {
+			return array_key_exists($key, $this->_cacheData);
+		}
+		
+		return false;
 	}
 
 	protected function dataCacheRemove($key)

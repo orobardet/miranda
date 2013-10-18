@@ -67,9 +67,8 @@ class CostumeController extends AbstractCostumeController implements AclControll
 			));
 		}
 		
-		try {
-			$costume = $this->getCostumeTable()->getCostume($id);
-		} catch (\Exception $ex) {
+		$costume = $this->getCostumeTable()->getCostume($id, false);
+		if (!$costume) {
 			$this->resultStatus()->addResultStatus(
 					StringTools::varprintf($this->getServiceLocator()->get('translator')->translate("Costume ID %id% does not exists."), 
 							array(
