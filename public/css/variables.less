@@ -6,6 +6,7 @@
 // Global values
 // --------------------------------------------------
 
+@mirandaBase:			#931BBF;
 
 // Grays
 // -------------------------
@@ -38,7 +39,7 @@
 
 // Links
 // -------------------------
-@linkColor:             #931BBF; //#0ac;
+@linkColor:             @mirandaBase; //#0ac;
 @linkColorHover:        darken(@linkColor, 15%);
 
 
@@ -184,8 +185,8 @@
 @navbarCollapseDesktopWidth:      @navbarCollapseWidth + 1;
 
 @navbarHeight:                    40px;
-@navbarBackgroundHighlight:       #931BBF;
-@navbarBackground:                #69097B;
+@navbarBackgroundHighlight:       @mirandaBase;
+@navbarBackground:                darken(@navbarBackgroundHighlight, 15%);
 @navbarBorder:                    purple;
 
 @navbarText:                      #ccc;

@@ -10,7 +10,9 @@ use Costume\Model\Tag;
 
 class ConsoleController extends AbstractCostumeController implements AclConsoleControllerInterface
 {
-
+	private $colorsTableReference;
+	private $dbColorsTableReference;
+	
 	public function aclConsoleIsAllowed($action)
 	{
 		return true;
@@ -181,7 +183,7 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 							if (!$colorObject) {
 								$colorObject = new Color();
 								$colorObject->setName($color);
-								$colorObject->setColorCode('FFFFFF');
+								$colorObject->setColorCode($this->searchColorCodeByName($color));
 								$colorTable->saveColor($colorObject);
 								fwrite($errorHandle, "Ajout d'une nouvelle couleur pour " . $costume->getCode() . " : $color\n");
 							}
@@ -203,7 +205,7 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 							if (!$colorObject) {
 								$colorObject = new Color();
 								$colorObject->setName($color);
-								$colorObject->setColorCode('FFFFFF');
+								$colorObject->setColorCode($this->searchColorCodeByName($color));
 								$colorTable->saveColor($colorObject);
 								fwrite($errorHandle, "Ajout d'une nouvelle couleur pour " . $costume->getCode() . " : $color\n");
 							}
@@ -322,5 +324,82 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 		$this->console()->writeLine("All pictures prepared in $outputDir !");
 		
 		return;
+	}
+	
+	private function searchColorCodeByName($name)
+	{
+		$colorCode = "#FFFFFF";
+
+		$name = trim(preg_replace('/\(.*\)/', '', $name));
+		
+		if (!$this->colorsTableReference) {
+			$this->colorsTableReference = array(); 
+			$colors = include ('lib/reference_colors_table.php');
+			if (count($colors)) {
+				foreach ($colors as $name => $code) {
+					$this->colorsTableReference[$this->stripAccents(strtolower($name))] = $code;
+				}
+			}
+		}
+			
+		if (extension_loaded('sqlite3')) {
+			if (!$this->dbColorsTableReference) {
+				$this->dbColorsTableReference = new \SQLite3(':memory:');
+				$this->dbColorsTableReference->exec('CREATE TABLE colors (name COLLATE NOCASE, code STRING)');
+				$this->dbColorsTableReference->exec('CREATE INDEX idx_name ON colors (name)');
+				
+				if (count($this->colorsTableReference)) {
+					foreach ($this->colorsTableReference as $name => $code) {
+						$this->dbColorsTableReference->exec("INSERT INTO colors (name, code) VALUES ('".$this->dbColorsTableReference->escapeString($name)."', '".$this->dbColorsTableReference->escapeString($code)."')");
+					}
+				}
+				
+				$this->dbColorsTableReference->exec('PRAGMA case_sensitive_like=OFF;');
+			}
+			
+			$code = $this->dbColorsTableReference->querySingle("SELECT code FROM colors WHERE name LIKE '".$this->dbColorsTableReference->escapeString($this->stripAccents(strtolower($name)))."'");
+			if ($code) {
+				$colorCode = $code;
+			}
+		} else {
+			if (array_key_exists($name, $this->colorsTableReference)) {
+				$colorCode = $this->colorsTableReference[$name];
+			}
+		}
+		
+		return $colorCode;
+	}
+	
+	private function stripAccents($texte) {
+		$texte = str_replace(
+			array(
+				'à', 'â', 'ä', 'á', 'ã', 'å',
+				'î', 'ï', 'ì', 'í', 
+				'ô', 'ö', 'ò', 'ó', 'õ', 'ø', 
+				'ù', 'û', 'ü', 'ú', 
+				'é', 'è', 'ê', 'ë', 
+				'ç', 'ÿ', 'ñ',
+				'À', 'Â', 'Ä', 'Á', 'Ã', 'Å',
+				'Î', 'Ï', 'Ì', 'Í', 
+				'Ô', 'Ö', 'Ò', 'Ó', 'Õ', 'Ø', 
+				'Ù', 'Û', 'Ü', 'Ú', 
+				'É', 'È', 'Ê', 'Ë', 
+				'Ç', 'Ÿ', 'Ñ', 
+			),
+			array(
+				'a', 'a', 'a', 'a', 'a', 'a', 
+				'i', 'i', 'i', 'i', 
+				'o', 'o', 'o', 'o', 'o', 'o', 
+				'u', 'u', 'u', 'u', 
+				'e', 'e', 'e', 'e', 
+				'c', 'y', 'n', 
+				'A', 'A', 'A', 'A', 'A', 'A', 
+				'I', 'I', 'I', 'I', 
+				'O', 'O', 'O', 'O', 'O', 'O', 
+				'U', 'U', 'U', 'U', 
+				'E', 'E', 'E', 'E', 
+				'C', 'Y', 'N', 
+			),$texte);
+		return $texte;
 	}
 }

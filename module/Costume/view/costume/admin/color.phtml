@@ -24,7 +24,7 @@ $this->headscript()->offsetSetFile(101, $this->basePath() . '/js/costume/colors_
 			<td class="name">
 				<?php echo $this->escapeHtml($color->getName()); ?>
 			</td>
-			<td style="width:20px;background-color:#<?php echo $this->escapeHtmlAttr($color->getColorCode()); ?>;" class="color"></td>
+			<td style="width:20px;background-color:#<?php echo $this->escapeHtmlAttr($color->getColorCode()); ?>;" class="color" title="#<?php echo $this->escapeHtmlAttr($color->getColorCode()); ?>"></td>
 			<td class="delete-color text-center" style="width:20px;"><a href="#"><i class="icon-trash icon-linkcolor"></i></a></td>
 		</tr>
 		<?php endforeach; ?>

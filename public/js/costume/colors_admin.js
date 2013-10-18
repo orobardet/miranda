@@ -138,7 +138,7 @@ $(function() {
 					var color = data.color.color;
 					var row = $('#colors-list .color-row[data-id='+id+']');
 					row.find('.name').html(name);
-					row.find('.color').css('background-color', '#'+color);
+					row.find('.color').css('background-color', '#'+color).attr('title', '#'+color);
 					row.attr('data-name', name);
 					row.attr('data-color', color);
 				} else {
@@ -232,7 +232,7 @@ $(function() {
 					row.attr('data-name', name);
 					row.attr('data-color', color);
 					row.find('.name').html(name);
-					row.find('.color').css('background-color', '#'+color);
+					row.find('.color').css('background-color', '#'+color).attr('title', '#'+color);
 					$('#colors-list > tbody').append(row);
 				} else {
 					var errorMsg = '<strong>'+data.message+'</strong><br/>';
