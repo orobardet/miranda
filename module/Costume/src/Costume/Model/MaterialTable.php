@@ -1,0 +1,119 @@
+<?php
+namespace Costume\Model;
+
+use Zend\Db\TableGateway\TableGateway;
+use Application\Model\DataCache\DataCacheAwareInterface;
+use Application\Model\DataCache\AbstractDataCacher;
+
+class MaterialTable extends AbstractDataCacher implements DataCacheAwareInterface
+{
+	
+	/*
+	 * @var TableGateway
+	 */
+	protected $tableGateway;
+
+	public function __construct(TableGateway $tableGateway)
+	{
+		$this->tableGateway = $tableGateway;
+	}
+
+	/**
+	 * Retourne toutes les matières existantes
+	 *
+	 * @return Material[] Liste des matières (sous forme d'un iterable)
+	 */
+	public function fetchAll()
+	{
+		return $this->tableGateway->select(function ($select)
+		{
+			$select->order(array(
+				'name'
+			));
+		});
+	}
+
+	public function getMaterial($id, $exceptionIfNone = true)
+	{
+		$id = (int)$id;
+		if ($this->dataCacheIs($id)) {
+			return $this->dataCacheGet($id);
+		}
+		
+		$rowset = $this->tableGateway->select(array(
+			'id' => $id
+		));
+		$material = $rowset->current();
+		if (!$material) {
+			if ($exceptionIfNone) {
+				throw new \Exception("Could not find material $id");
+			} else {
+				return false;
+			}
+		}
+		
+		return $material;
+	}
+
+	public function getMaterialByName($name, $caseInsensitive = false, $exceptionIfNone = true)
+	{
+		if ($caseInsensitive) {
+			$rowset = $this->tableGateway->select(
+					function ($select) use($name)
+					{
+						$select->where->like('name', $name);
+					});
+		} else {
+			$rowset = $this->tableGateway->select(array(
+				'name' => $name
+			));
+		}
+		$material = $rowset->current();
+		if (!$material) {
+			if ($exceptionIfNone) {
+				throw new \Exception("Could not find material with name $name");
+			} else {
+				return false;
+			}
+		}
+		
+		return $material;
+	}
+
+	public function saveMaterial(Material $material)
+	{
+		$data = $material->getArrayCopy();
+		
+		$id = (int)$material->getId();
+		if (!$id) {
+			$this->tableGateway->insert($data);
+			$id = $this->tableGateway->getLastInsertValue();
+			$material->setId($id);
+		} else {
+			if ($this->getMaterial($id)) {
+				$this->tableGateway->update($data, array(
+					'id' => $id
+				));
+			} else {
+				throw new \Exception("Material id $id does not exist");
+			}
+		}
+	}
+
+	public function deleteMaterial($id)
+	{
+		$this->tableGateway->delete(array(
+			'id' => $id
+		));
+	}
+
+	public function populateCache()
+	{
+		$materials = $this->fetchAll();
+		if (count($materials)) {
+			foreach ($materials as $material) {
+				$this->dataCacheAdd($material->getId(), $material);
+			}
+		}
+	}
+}

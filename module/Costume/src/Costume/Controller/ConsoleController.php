@@ -5,6 +5,7 @@ use Costume\Model\Import\OldExcel as OldExcelImport;
 use Acl\Controller\AclConsoleControllerInterface;
 use Costume\Model\Costume;
 use Costume\Model\Color;
+use Costume\Model\Material;
 use Costume\Model\Tag;
 
 class ConsoleController extends AbstractCostumeController implements AclConsoleControllerInterface
@@ -23,6 +24,7 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 		$pictureTable = $this->getServiceLocator()->get('Miranda\Model\PictureTable');
 		$costumePictureTable = $this->getServiceLocator()->get('Costume\Model\CostumePictureTable');
 		$colorTable = $this->getServiceLocator()->get('Costume\Model\ColorTable');
+		$materialTable = $this->getServiceLocator()->get('Costume\Model\MaterialTable');
 		
 		$csvFile = $this->getRequest()->getParam('csv_file', null);
 		$pictureDir = $this->getRequest()->getParam('picture-dir', null);
@@ -209,9 +211,47 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 						}
 					}
 					
+					// Détection des matières
+					$rawMaterials = preg_split('#[+/]+#ui', $costumeLine[8]);
+					$materials = array_filter($rawMaterials, function ($material)
+					{
+						$material = trim($material);
+						if (empty($material)) {
+							return false;
+						} else {
+							return true;
+						}						 
+					});
+					if (count($materials)) {
+						$primaryMaterial = ucfirst(strtolower(trim(array_shift($materials))));
+						$materialObject = $materialTable->getMaterialByName($primaryMaterial, true, false);
+						if (!$materialObject) {
+							$materialObject = new Material();
+							$materialObject->setName($primaryMaterial);
+							$materialTable->saveMaterial($materialObject);
+							fwrite($errorHandle, "Ajout d'une nouvelle matière pour " . $costume->getCode() . " : $primaryMaterial\n");
+						}
+						$costume->setPrimaryMaterial($materialObject);
+					}
+					if (count($materials)) {
+						$secondaryMaterial = ucfirst(strtolower(trim(array_shift($materials))));
+						$materialObject = $materialTable->getMaterialByName($secondaryMaterial, true, false);
+						if (!$materialObject) {
+							$materialObject = new Material();
+							$materialObject->setName($secondaryMaterial);
+							$materialTable->saveMaterial($materialObject);
+							fwrite($errorHandle, "Ajout d'une nouvelle matière pour " . $costume->getCode() . " : $secondaryMaterial\n");
+						}
+						$costume->setSecondaryMaterial($materialObject);
+					}
+					if (count($materials)) {
+						fwrite($errorHandle, 
+								"Matière(s) supplémentaire(s) non importée(s) pour " . $costume->getCode() . " : " . join(' + ', $materials) . "\n");
+					}
+					
 					// Ajout des tags
 					$costume->setTags(array_unique(array_merge($globalTags, $importer->localTags)));
-						
+					
 					// Sauvegarde du costume
 					$this->getCostumeTable()->saveCostume($costume);
 					

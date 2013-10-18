@@ -15,10 +15,11 @@ $this->headTitle($title);
 <thead>
 <tr>
     <th><?php echo $this->translate('Code'); ?></th>
-    <th><?php echo $this->translate('Label'); ?></th>
+    <th><?php echo $this->translate('Name'); ?></th>
     <th class="text-center"><?php echo $this->translate('Gender'); ?></th>
     <th class="text-center"><?php echo $this->translate('Size'); ?></th>
     <th class="text-center"><?php echo $this->translate('Colors'); ?></th>
+    <th class="text-center"><?php echo $this->translate('Materials'); ?></th>
     <th class="text-center"><?php echo $this->translate('Quantity'); ?></th>
     <th>&nbsp;</th>
 </tr>
@@ -59,8 +60,23 @@ $this->headTitle($title);
 		<?php else: ?>
 			<div class="costume-color-preview no-margin no-color" title="<?php echo $this->escapeHtmlAttr($this->translate('No color')); ?>"></div>
 		<?php endif;?>
-		</td>
+	</td>
     <td class="text-center">
+    	<?php $materials = array();
+		$primaryMaterial = $costume->getPrimaryMaterial();
+		if ($primaryMaterial) {
+			$materials[] = $this->escapeHtml($primaryMaterial->getName());
+		}
+		$secondaryMaterial = $costume->getSecondaryMaterial();
+		if ($secondaryMaterial) {
+			if (!$primaryMaterial) {
+				$materials[] = $this->translate('N/A');
+			}
+			$materials[] = $this->escapeHtml($secondaryMaterial->getName());
+		} ?>
+		<small><?php echo join(' / ', $materials); ?></small>
+	</td>
+	<td class="text-center">
     	<?php echo $this->escapeHtml($costume->getQuantity());?>
     </td>
     <td class="text-right action-bar action-bar-container">

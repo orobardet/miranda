@@ -14,6 +14,8 @@ use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 use Costume\Model\TagTable;
 use Costume\Model\Tag;
+use Costume\Model\MaterialTable;
+use Costume\Model\Material;
 
 class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterface
 {
@@ -43,9 +45,10 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 			'factories' => array(
 				'Costume\Model\CostumeTable' => function ($sm)
 				{
-					$costumeTable = new CostumeTable($sm->get('Costume\TableGateway\Costumes')); 
+					$costumeTable = new CostumeTable($sm->get('Costume\TableGateway\Costumes'));
 					$costumeTable->setCostumePictureTable($sm->get('Costume\Model\CostumePictureTable'));
 					$costumeTable->setColorTable($sm->get('Costume\Model\ColorTable'));
+					$costumeTable->setMaterialTable($sm->get('Costume\Model\MaterialTable'));
 					$costumeTable->setTagTable($sm->get('Costume\Model\TagTable'));
 					return $costumeTable;
 				},
@@ -90,6 +93,18 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 					return new TableGateway($sm->get('Miranda\Service\Config')->get('db->table_prefix', '') . 'costume_colors', $dbAdapter, null, 
 							$resultSetPrototype);
 				},
+				'Costume\Model\MaterialTable' => function ($sm)
+				{
+					return new MaterialTable($sm->get('Costume\TableGateway\Material'));
+				},
+				'Costume\TableGateway\Material' => function ($sm)
+				{
+					$dbAdapter = $sm->get('costume_zend_db_adapter');
+					$resultSetPrototype = new ResultSet();
+					$resultSetPrototype->setArrayObjectPrototype(new Material());
+					return new TableGateway($sm->get('Miranda\Service\Config')->get('db->table_prefix', '') . 'costume_materials', $dbAdapter, null, 
+							$resultSetPrototype);
+				},
 				'Costume\Model\TagTable' => function ($sm)
 				{
 					return new TagTable($sm->get('Costume\TableGateway\Tag'), $sm->get('Costume\TableGateway\CostumeTag'));
@@ -106,8 +121,11 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 				{
 					$dbAdapter = $sm->get('costume_zend_db_adapter');
 					return new TableGateway($sm->get('Miranda\Service\Config')->get('db->table_prefix', '') . 'costumes_tags', $dbAdapter, 
-							new Feature\RowGatewayFeature(array('costume_id', 'tag_id')));
-				},
+							new Feature\RowGatewayFeature(array(
+								'costume_id',
+								'tag_id'
+							)));
+				}
 			)
 		);
 	}

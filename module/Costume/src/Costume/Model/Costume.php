@@ -128,6 +128,34 @@ class Costume extends ObjectModelBase
 	protected $secondary_color;
 
 	/**
+	 * ID de la matière principale
+	 *
+	 * @var integer
+	 */
+	protected $primary_material_id;
+
+	/**
+	 * Matière principale
+	 *
+	 * @var \Costume\Model\Material
+	 */
+	protected $primary_material;
+
+	/**
+	 * ID de la matière secondaire
+	 *
+	 * @var integer
+	 */
+	protected $secondary_material_id;
+
+	/**
+	 * Matière secondaire
+	 *
+	 * @var \Costume\Model\Material
+	 */
+	protected $secondary_material;
+
+	/**
 	 * Liste des tags
 	 *
 	 * @var Tag[] Tableau de Tag ou de chaine
@@ -296,6 +324,42 @@ class Costume extends ObjectModelBase
 
 	/**
 	 *
+	 * @return integer $primary_material_id
+	 */
+	public function getPrimaryMaterialId()
+	{
+		return $this->primary_material_id;
+	}
+
+	/**
+	 *
+	 * @return \Costume\Model\Material $primary_material
+	 */
+	public function getPrimaryMaterial()
+	{
+		return $this->primary_material;
+	}
+
+	/**
+	 *
+	 * @return integer $secondary_material_id
+	 */
+	public function getSecondaryMaterialId()
+	{
+		return $this->secondary_material_id;
+	}
+
+	/**
+	 *
+	 * @return \Costume\Model\Material $secondary_material
+	 */
+	public function getSecondaryMaterial()
+	{
+		return $this->secondary_material;
+	}
+
+	/**
+	 *
 	 * @return Picture[] $pictures
 	 */
 	public function getPictures()
@@ -442,6 +506,58 @@ class Costume extends ObjectModelBase
 
 	/**
 	 *
+	 * @param integer $material
+	 */
+	public function setPrimaryMaterialId($materialId)
+	{
+		$this->primary_material_id = $materialId;
+		if ($this->primary_material) {
+			if ($this->primary_material->getId() !== $this->primary_material_id) {
+				$this->primary_material = null;
+			}
+		}
+	}
+
+	/**
+	 *
+	 * @param \Costume\Model\Material $material
+	 */
+	public function setPrimaryMaterial(Material $material)
+	{
+		$this->primary_material = $material;
+		if ($this->primary_material) {
+			$this->primary_material_id = $material->getId();
+		}
+	}
+
+	/**
+	 *
+	 * @param integer $material
+	 */
+	public function setSecondaryMaterialId($materialId)
+	{
+		$this->secondary_material_id = $materialId;
+		if ($this->secondary_material) {
+			if ($this->secondary_material->getId() !== $this->secondary_material_id) {
+				$this->secondary_material = null;
+			}
+		}
+	}
+
+	/**
+	 *
+	 * @param \Costume\Model\Material $material
+	 */
+	public function setSecondaryMaterial(Material $material)
+	{
+		$this->secondary_material = $material;
+		if ($this->secondary_material) {
+			$this->secondary_material_id = $material->getId();
+		}
+	}
+
+	/**
+	 *
 	 * @param \Application\Model\Picture $pictures
 	 */
 	public function addPicture(Picture $picture)
@@ -487,14 +603,14 @@ class Costume extends ObjectModelBase
 		
 		if (count($tags)) {
 			$addTags = array();
-			foreach($tags as $tag) {
+			foreach ($tags as $tag) {
 				$addTags[] = $tag;
 			}
-				
-			$this->tags = array_unique(array_merge($this->tags, $addTags)); 
+			
+			$this->tags = array_unique(array_merge($this->tags, $addTags));
 		}
 	}
-	
+
 	/**
 	 *
 	 * @param Tag $tag
@@ -527,6 +643,8 @@ class Costume extends ObjectModelBase
 		$this->quantity = (array_key_exists('quantity', $data)) ? $data['quantity'] : $this->quantity;
 		$this->primary_color_id = (array_key_exists('primary_color_id', $data)) ? $data['primary_color_id'] : $this->primary_color_id;
 		$this->secondary_color_id = (array_key_exists('secondary_color_id', $data)) ? $data['secondary_color_id'] : $this->secondary_color_id;
+		$this->primary_material_id = (array_key_exists('primary_material_id', $data)) ? $data['primary_material_id'] : $this->primary_material_id;
+		$this->secondary_material_id = (array_key_exists('secondary_material_id', $data)) ? $data['secondary_material_id'] : $this->secondary_material_id;
 		
 		if ($this->costumeTable) {
 			$this->costumeTable->populateCostumeData($this);
@@ -545,7 +663,9 @@ class Costume extends ObjectModelBase
 			'state' => $this->state,
 			'quantity' => $this->quantity,
 			'primary_color_id' => $this->primary_color_id,
-			'secondary_color_id' => $this->secondary_color_id
+			'secondary_color_id' => $this->secondary_color_id,
+			'primary_material_id' => $this->primary_material_id,
+			'secondary_material_id' => $this->secondary_material_id
 		);
 	}
 }

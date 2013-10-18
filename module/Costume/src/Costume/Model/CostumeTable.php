@@ -28,10 +28,16 @@ class CostumeTable extends AbstractDataCachePopulator
 
 	/**
 	 *
+	 * @var \Costume\Model\MaterialTable
+	 */
+	protected $materialTable;
+
+	/**
+	 *
 	 * @var \Costume\Model\TagTable
 	 */
 	protected $tagTable;
-	
+
 	public function __construct(TableGateway $tableGateway)
 	{
 		$this->tableGateway = $tableGateway;
@@ -101,12 +107,26 @@ class CostumeTable extends AbstractDataCachePopulator
 			if ($primaryColor && !$primaryColor->getId()) {
 				$this->colorTable->saveColor($primaryColor);
 				$costume->setPrimaryColor($primaryColor);
-			}  
+			}
 			$secondaryColor = $costume->getSecondaryColor();
 			if ($secondaryColor && !$secondaryColor->getId()) {
 				$this->colorTable->saveColor($secondaryColor);
 				$costume->setSecondaryColor($secondaryColor);
-			}  
+			}
+		}
+		
+		// On enregistre les matières qui seraient nouvelles
+		if ($this->materialTable) {
+			$primaryMaterial = $costume->getPrimaryMaterial();
+			if ($primaryMaterial && !$primaryMaterial->getId()) {
+				$this->materialTable->saveMaterial($primaryMaterial);
+				$costume->setPrimaryMaterial($primaryMaterial);
+			}
+			$secondaryMaterial = $costume->getSecondaryMaterial();
+			if ($secondaryMaterial && !$secondaryMaterial->getId()) {
+				$this->materialTable->saveMaterial($secondaryMaterial);
+				$costume->setSecondaryMaterial($secondaryMaterial);
+			}
 		}
 		
 		$data = $costume->getArrayCopy();
@@ -160,6 +180,21 @@ class CostumeTable extends AbstractDataCachePopulator
 		));
 	}
 
+	public function removeMaterial($materialId)
+	{
+		$this->tableGateway->update(array(
+			'primary_material_id' => null
+		), array(
+			'primary_material_id' => $materialId
+		));
+		
+		$this->tableGateway->update(array(
+			'secondary_material_id' => null
+		), array(
+			'secondary_material_id' => $materialId
+		));
+	}
+
 	public function deleteCostume($id)
 	{
 		$this->tableGateway->delete(array(
@@ -194,6 +229,27 @@ class CostumeTable extends AbstractDataCachePopulator
 			}
 		}
 		
+		if ($this->materialTable) {
+			$primaryMaterialId = $costume->getPrimaryMaterialId();
+			if ($primaryMaterialId) {
+				$primaryMaterial = $this->materialTable->getMaterial($primaryMaterialId, false);
+				if ($primaryMaterial) {
+					$costume->setPrimaryMaterial($primaryMaterial);
+				} else {
+					$costume->setPrimaryMaterialId(null);
+				}
+			}
+			$secondaryMaterialId = $costume->getSecondaryMaterialId();
+			if ($secondaryMaterialId) {
+				$secondaryMaterial = $this->materialTable->getMaterial($secondaryMaterialId);
+				if ($secondaryMaterial) {
+					$costume->setSecondaryMaterial($secondaryMaterial);
+				} else {
+					$costume->setSecondaryMaterialId(null);
+				}
+			}
+		}
+		
 		if ($this->tagTable) {
 			$costume->setTags($this->tagTable->getCostumeTags($costume->getId()));
 		}
@@ -217,7 +273,17 @@ class CostumeTable extends AbstractDataCachePopulator
 		$this->colorTable = $colorTable;
 		$this->addCachedCollection($colorTable);
 	}
-	
+
+	/**
+	 *
+	 * @param \Costume\Model\MaterialTable $materialTable
+	 */
+	public function setMaterialTable(MaterialTable $materialTable)
+	{
+		$this->materialTable = $materialTable;
+		$this->addCachedCollection($materialTable);
+	}
+
 	/**
 	 *
 	 * @param \Costume\Model\TagTable $tagTable

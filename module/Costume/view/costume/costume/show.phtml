@@ -65,19 +65,19 @@ $this->headTitle($title);
 			<div class="span6">
 				<dl class="no-margin">
 					<dt><?php echo $this->translate('Gender'); ?></dt>
-					<dd><?php echo $costume->getGender(); ?>&nbsp;</dd>
+					<dd><?php echo $this->escapeHtml($this->translate($costume->getGender())); ?>&nbsp;</dd>
 					<dt><?php echo $this->translate('Size'); ?></dt>
-					<dd><?php echo $costume->getSize(); ?>&nbsp;</dd>
+					<dd><?php echo $this->escapeHtml($costume->getSize()); ?>&nbsp;</dd>
 					<dt><?php echo $this->translate('State'); ?></dt>
-					<dd><?php echo $costume->getState(); ?>&nbsp;</dd>
+					<dd><?php echo $this->escapeHtml($costume->getState()); ?>&nbsp;</dd>
 					<dt><?php echo $this->translate('Quantity'); ?></dt>
-					<dd><?php echo $costume->getQuantity(); ?>&nbsp;</dd>
+					<dd><?php echo $this->escapeHtml($costume->getQuantity()); ?>&nbsp;</dd>
+					<dt><?php echo $this->translate('Type'); ?></dt>
+					<dd>&nbsp;</dd>
 				</dl>		
 			</div>
 			<div class="span6">
 				<dl class="no-margin">
-					<dt><?php echo $this->translate('Material'); ?></dt>
-					<dd>&nbsp;</dd>
 					<dt><?php echo $this->translate('Primary color'); ?></dt>
 					<dd>
 						<?php $primaryColor = $costume->getPrimaryColor(); ?>
@@ -98,8 +98,24 @@ $this->headTitle($title);
 							&nbsp;
 						<?php endif;?>
 					</dd>
-					<dt><?php echo $this->translate('Type'); ?></dt>
-					<dd>&nbsp;</dd>
+					<dt><?php echo $this->translate('Primary material'); ?></dt>
+					<dd>
+						<?php $primaryMaterial = $costume->getPrimaryMaterial(); ?>
+						<?php if ($primaryMaterial): ?>
+							<?php echo $this->escapeHtml($this->translate($primaryMaterial->getName())); ?>
+						<?php else: ?>
+							&nbsp;
+						<?php endif;?>
+					</dd>
+					<dt><?php echo $this->translate('Secondary material'); ?></dt>
+					<dd>
+						<?php $secondaryMaterial = $costume->getSecondaryMaterial(); ?>
+						<?php if ($secondaryMaterial): ?>
+							<?php echo $this->escapeHtml($this->translate($secondaryMaterial->getName())); ?>
+						<?php else: ?>
+							&nbsp;
+						<?php endif;?>
+					</dd>
 				</dl>		
 			</div>
 		</div>

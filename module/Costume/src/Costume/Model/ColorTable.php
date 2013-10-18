@@ -3,7 +3,6 @@ namespace Costume\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Expression;
-use Zend\Db\Sql\Predicate\Expression as PredicateExpression;
 use Application\Model\DataCache\DataCacheAwareInterface;
 use Application\Model\DataCache\AbstractDataCacher;
 
@@ -80,8 +79,7 @@ class ColorTable extends AbstractDataCacher implements DataCacheAwareInterface
 		if ($this->dataCacheIs($id)) {
 			return $this->dataCacheGet($id);
 		}
-
-				
+		
 		$rowset = $this->tableGateway->select(array(
 			'id' => $id
 		));
@@ -100,9 +98,11 @@ class ColorTable extends AbstractDataCacher implements DataCacheAwareInterface
 	public function getColorByName($name, $caseInsensitive = false, $exceptionIfNone = true)
 	{
 		if ($caseInsensitive) {
-			$rowset = $this->tableGateway->select(function ($select) use($name) {
-				$select->where->addPredicate(new PredicateExpression('LOWER(name) = ?', strtolower($name)));
-			});
+			$rowset = $this->tableGateway->select(
+					function ($select) use($name)
+					{
+						$select->where->like('name', $name);
+					});
 		} else {
 			$rowset = $this->tableGateway->select(array(
 				'name' => $name
@@ -171,6 +171,5 @@ class ColorTable extends AbstractDataCacher implements DataCacheAwareInterface
 				$this->dataCacheAdd($color->getId(), $color);
 			}
 		}
-		
 	}
 }
