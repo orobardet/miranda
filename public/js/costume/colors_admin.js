@@ -5,7 +5,7 @@ $(function() {
 	function costume_color_show_edit_color(color_row) {
 		costume_color_hide_add_color();
 		$("#edit-color").unmask();
-		$('#edit-color .edit-error').hide().html('');
+		$('#edit-color .edit-error').hide().text('');
 		$('#edit-color input[name=id]').val(color_row.attr('data-id')).focus();
 		$('#edit-color input[name=name]').val(color_row.attr('data-name'));
 		$('#edit-color-picker').colorpicker('setValue', '#'+color_row.attr('data-color'));
@@ -24,13 +24,13 @@ $(function() {
 		$('#edit-color input[name=id]').val('');
 		$('#edit-color input[name=name]').val('');
 		$('#edit-color-picker').colorpicker('setValue', '#000000');
-		$('#edit-color .edit-error').hide().html('');
+		$('#edit-color .edit-error').hide().text('');
 	}
 	
 	function costume_color_show_add_color() {
 		costume_color_hide_edit_color();
 		$("#add-color").unmask();
-		$('#add-color .add-error').hide().html('');
+		$('#add-color .add-error').hide().text('');
 		$('#add-color input[name=name]').val('');
 		$('#add-color-picker').colorpicker('setValue', '#000000');
 		$('#add-color-picker').colorpicker('update');
@@ -46,7 +46,7 @@ $(function() {
 		$('#add-color').hide();
 		$('#add-color input[name=name]').val('');
 		$('#add-color-picker').colorpicker('setValue', '');
-		$('#add-color .add-error').hide().html('');
+		$('#add-color .add-error').hide().text('');
 	}
 
 	$('.color-picker').colorpicker();
@@ -117,7 +117,7 @@ $(function() {
 	});
 	
 	$('#edit-color').submit(function() {
-		$('#edit-color .edit-error').hide().html('');
+		$('#edit-color .edit-error').hide().text('');
 		gCostumeColorXhrRequest = $.ajax({
 			url: '/costume-admin/color/edit/'+$('#edit-color input[name=id]').val(),
 			type:'POST',
@@ -137,7 +137,7 @@ $(function() {
 					var name = data.color.name;
 					var color = data.color.color;
 					var row = $('#colors-list .color-row[data-id='+id+']');
-					row.find('.name').html(name);
+					row.find('.name').text(name);
 					row.find('.color').css('background-color', '#'+color).attr('title', '#'+color);
 					row.attr('data-name', name);
 					row.attr('data-color', color);
@@ -154,7 +154,7 @@ $(function() {
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown ) {
-				$('#edit-color .edit-error').html(textStatus + ' ' + errorThrown).show();
+				$('#edit-color .edit-error').text(textStatus + ' ' + errorThrown).show();
 			}
 		});
 		return false;
@@ -208,7 +208,7 @@ $(function() {
 	});
 	
 	$('#add-color').submit(function() {
-		$('#add-color .edit-error').hide().html('');
+		$('#add-color .edit-error').hide().text('');
 		gCostumeColorXhrRequest = $.ajax({
 			url: '/costume-admin/color/add',
 			type:'POST',
@@ -231,7 +231,7 @@ $(function() {
 					row.attr('data-id', id);
 					row.attr('data-name', name);
 					row.attr('data-color', color);
-					row.find('.name').html(name);
+					row.find('.name').text(name);
 					row.find('.color').css('background-color', '#'+color).attr('title', '#'+color);
 					$('#colors-list > tbody').append(row);
 				} else {
@@ -247,7 +247,7 @@ $(function() {
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown ) {
-				$('#add-color .add-error').html(textStatus + ' ' + errorThrown).show();
+				$('#add-color .add-error').text(textStatus + ' ' + errorThrown).show();
 			}
 		});
 		return false;
