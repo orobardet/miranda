@@ -3,7 +3,9 @@ $title = $this->translate("Costumes' colors");
 $this->headTitle($title);
 $this->headLink()->offsetSetStylesheet(100, $this->basePath() . '/css/bootstrap-colorpicker.min.css');
 $this->headscript()->offsetSetFile(100, $this->basePath() . '/js/bootstrap-colorpicker.min.js');
-$this->headscript()->offsetSetFile(101, $this->basePath() . '/js/costume/colors_admin.js');
+if ($this->acl()->isAllowed("admin_costumes_colors")) {
+	$this->headscript()->offsetSetFile(101, $this->basePath() . '/js/costume/colors_admin.js');
+}
 ?>
 
 <div class="row-fluid">
@@ -30,7 +32,7 @@ $this->headscript()->offsetSetFile(101, $this->basePath() . '/js/costume/colors_
 		<?php endforeach; ?>
 		<?php endif;?>
 		</tbody>
-	</table>
+		</table>
 	<div class="well" <?php if (count($this->colors)) echo ' style="display:none"'; ?>>
 	<?php echo $this->translate('No colors.'); ?>
 	</div>

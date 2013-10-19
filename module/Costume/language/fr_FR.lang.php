@@ -36,4 +36,7 @@ return array(
 	'Record modified ' => 'Fiche modifiée ',
 	'Management' => 'Gestion',
 	'Tags' => 'Etiquettes',
+	"Costumes' materials" => 'Matières des costumes',
+	'No materials.' => 'Aucune matière.',
+	"A material with name '%name%' already exists." => "Une matière nommée '%name%' existe déjà.",
 );

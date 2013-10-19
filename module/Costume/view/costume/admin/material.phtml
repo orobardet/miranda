@@ -1,1 +1,38 @@
-Administration des matières
+<?php
+$title = $this->translate("Costumes' materials");
+$this->headTitle($title);
+if ($this->acl()->isAllowed("admin_costumes_materials")) {
+	$this->headscript()->offsetSetFile(101, $this->basePath() . '/js/costume/materials_admin.js');
+}
+?>
+
+<?php if (count($this->materials)): ?>
+	<form id="material-edit-form-template" class="material-edit-form" style="display:none;margin-bottom:0px;">
+		<div class="input-append" style="margin-bottom:0px;">
+			<input type="hidden" name="id"/>
+			<input name="name" type="text"/>
+			<button class="btn btn-primary" type="submit"><i class="icon-ok icon-white"></i></button>
+			<button class="btn btn-default" type="button" name="cancel"><i class="icon-remove"></i></button>
+		</div>
+		<span class="text-error edit-error"></span>
+	</form>
+	
+	<table class="table table-hover table-bordered" id="materials-list">
+	<tbody>
+	<?php foreach ($this->materials as $material) : ?>
+	<tr class="material-row" data-id="<?php echo $this->escapeHtmlAttr($material->getId()); ?>" data-name="<?php echo $this->escapeHtmlAttr($material->getName()); ?>">
+		<td class="name">
+			<?php echo $this->escapeHtml($material->getName()); ?>
+		</td>
+	</tr>
+	<?php endforeach; ?>
+	</tbody>
+	</table>
+<?php else: ?>
+	<div class="well">
+	<?php echo $this->translate('No materials.'); ?>
+	</div>
+<?php endif;?>
+<script type="text/javascript">
+	var gTransLoading = '<?php echo $this->escapeJs($this->translate('Saving...')); ?>';
+</script>
