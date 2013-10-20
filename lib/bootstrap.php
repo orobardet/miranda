@@ -3,6 +3,8 @@
  * Ce fichier contient le bootstrap de l'application Miranda.
  * Il doit être inclus dans tous les points d'entrée de l'application, que ce soit des scripts Web ou CLI 
  */
+// On défini le fuseau horaire par défaut de l'application
+date_default_timezone_set('Europe/Paris');
 
 // Si on est en environnement de dev, affichage d'un maximum d'info en cas d'erreur
 if (getenv('APPLICATION_ENV') == 'dev') {
