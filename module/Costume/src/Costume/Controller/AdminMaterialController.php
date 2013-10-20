@@ -15,6 +15,7 @@ class AdminMaterialController extends AdminController
 		switch ($action) {
 			case "index":
 			case "edit":
+			case "delete":
 				return "admin_costumes_materials";
 				break;
 			default:
@@ -100,6 +101,55 @@ class AdminMaterialController extends AdminController
 			}
 		}
 		
+		if ($isAjax) {
+			return new JsonModel($ajaxVariables);
+		} else {
+			return $this->getProfileViewModel('material', $viewVariables);
+		}
+	}
+	
+	public function deleteAction()
+	{
+		$translator = $this->getServiceLocator()->get('translator');
+	
+		$isAjax = $this->requestAcceptJson();
+		$ajaxVariables = array(
+			'status' => 1,
+			'message' => ''
+		);
+		$viewVariables = array();
+	
+		$id = (int)$this->params()->fromRoute('id', 0);
+		if (!$id) {
+			if ($isAjax) {
+				$ajaxVariables['status'] = 0;
+				$ajaxVariables['message'] = 'Invalid id $id';
+			} else {
+				return $this->redirect()->toRoute('costume-admin/material');
+			}
+		}
+	
+		/* @var $material \Costume\Model\Material */
+		$material = $this->getMaterialTable()->getMaterial($id, false);
+		if (!$material) {
+			$message = StringTools::varprintf($translator->translate("Material ID %id% does not exists."),
+					array(
+						'id' => $id
+					));
+			if ($isAjax) {
+				$ajaxVariables['status'] = 0;
+				$ajaxVariables['message'] = $message;
+			} else {
+				$this->resultStatus()->addResultStatus($message, 'error');
+				return $this->redirect()->toRoute('costume-admin/material');
+			}
+		}
+	
+		$materialId = $material->getId();
+		$this->getCostumeTable()->removeMaterial($materialId);
+		$this->getMaterialTable()->deleteMaterial($materialId);
+		$ajaxVariables['deleted_material_id'] = $materialId;
+	
 		if ($isAjax) {
 			return new JsonModel($ajaxVariables);
 		} else {

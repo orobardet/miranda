@@ -108,4 +108,43 @@ $(function() {
 		costume_material_hide_all_edit_material();
 		costume_material_show_edit_material($(this));
 	});
+
+
+	$('#delete-material-dialog a.button-yes').click(function () {
+		var material_id = $('#delete-material-dialog input[name=material_delete_id]').val();
+		$.ajax({
+			url: '/costume-admin/material/delete/'+material_id,
+			type:'GET',
+			dataType:'json',
+			beforeSend: function () {
+				$("#delete-material-dialog").mask(gTransLoading, 100);
+			},
+			complete: function () {
+				$("#delete-material-dialog").unmask();
+			},
+			success: function(data, textStatus) {
+				if (data.status) {
+					var id = data.deleted_material_id;
+					var row = $('#materials-list .material-row[data-id='+id+']');
+					row.remove();
+				}
+				$('#delete-material-dialog').modal('hide');
+			},
+			error: function(jqXHR, textStatus, errorThrown ) {
+				$('#delete-material-dialog').modal('hide');
+			}
+		});
+
+		return false;
+	});
+	$('#delete-material-dialog').modal({
+		'show' : false
+	});
+	$('#materials-list').delegate('.delete-material', 'click', function() {
+		$('#delete-material-dialog input[name=material_delete_id]').val($(this).parents('.material-row').first().attr('data-id'));
+		$('#delete-material-dialog .delete-material-name').text($(this).parents('.material-row').first().attr('data-name'));
+		$('#delete-material-dialog').modal('show');
+		return false;
+	});
+
 });

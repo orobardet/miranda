@@ -39,4 +39,7 @@ return array(
 	"Costumes' materials" => 'Matières des costumes',
 	'No materials.' => 'Aucune matière.',
 	"A material with name '%name%' already exists." => "Une matière nommée '%name%' existe déjà.",
+	'Delete a material' => 'Supprimer une matière',
+	'Do you really want to delete this material?' => 'Voulez-vous vraiment supprimer cette matière ?',
+	'The material will be removed from all costumes using it.' => "La matière sera retirée de tous les costumes qui l'utilisent."
 );

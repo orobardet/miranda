@@ -24,6 +24,7 @@ if ($this->acl()->isAllowed("admin_costumes_materials")) {
 		<td class="name">
 			<?php echo $this->escapeHtml($material->getName()); ?>
 		</td>
+		<td class="delete-material text-center vertical-center" style="width:20px;"><a href="#"><i class="icon-trash icon-linkcolor"></i></a></td>
 	</tr>
 	<?php endforeach; ?>
 	</tbody>
@@ -33,6 +34,26 @@ if ($this->acl()->isAllowed("admin_costumes_materials")) {
 	<?php echo $this->translate('No materials.'); ?>
 	</div>
 <?php endif;?>
+
+<div class="modal hide" id="delete-material-dialog">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <h3><?php echo $this->translate('Delete a material'); ?></h3>
+  </div>
+  <div class="modal-body">
+    <p><?php echo $this->translate('Do you really want to delete this material?'); ?></p>
+    <input type="hidden" name="material_delete_id"/>
+    <div class="text-center">
+    	<h4 class="delete-material-name" style="display:inline-block;vertical-align:middle;"></h4>
+    </div>
+    <p class="alert alert-info" style="margin-bottom:0px;margin-top:20px;"><i class="icon-info-sign"></i> <?php echo $this->translate('The material will be removed from all costumes using it.'); ?></p>
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal" ><?php echo $this->translate('No'); ?></a>
+    <a href="#" class="btn btn-primary button-yes"><?php echo $this->translate('Yes'); ?></a>
+  </div>
+</div>
+
 <script type="text/javascript">
 	var gTransLoading = '<?php echo $this->escapeJs($this->translate('Saving...')); ?>';
 </script>
