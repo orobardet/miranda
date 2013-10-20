@@ -19,7 +19,9 @@ return array(
   'Costume\Model\MaterialTable'                  => __DIR__ . '/src/Costume/Model/MaterialTable.php',
   'Costume\Model\CostumeTable'                   => __DIR__ . '/src/Costume/Model/CostumeTable.php',
   'Costume\Model\TagTable'                       => __DIR__ . '/src/Costume/Model/TagTable.php',
+  'Costume\Model\Type'                           => __DIR__ . '/src/Costume/Model/Type.php',
   'Costume\Model\Material'                       => __DIR__ . '/src/Costume/Model/Material.php',
   'Costume\Model\CostumePictureTable'            => __DIR__ . '/src/Costume/Model/CostumePictureTable.php',
+  'Costume\Model\TypeTable'                      => __DIR__ . '/src/Costume/Model/TypeTable.php',
   'Costume\Model\Color'                          => __DIR__ . '/src/Costume/Model/Color.php',
 );

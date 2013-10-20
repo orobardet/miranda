@@ -18,7 +18,7 @@ $this->headTitle($title);
 <?php echo $this->translate('Record modified '); ?><?php echo $costume->getLastModificationDate($this->translate('full_text_date_time')) ?>
 </small>
 </div>
-<h1><?php echo $this->escapeHtml($costume->getLabel()); ?></h1>
+<h2><?php echo $this->escapeHtml($costume->getLabel()); ?></h2>
 <div class="p action-bar action-bar-container" style="margin-bottom:20px;">
 		<?php if ($this->acl()->isAllowed("edit_costume")): ?>
 		<div class="action-bar-item">
@@ -54,31 +54,48 @@ $this->headTitle($title);
 		<?php if (count($tags)): ?>
 		<ul class="unstyled" style="margin-top:10px;">
 		<?php foreach ($tags as $tag): ?>
-		<li><i class="icon-tag"></i> <?php echo $tag; ?></li>
+		<li><i class="icon-tag"></i> <?php echo $this->escapeHtml($tag->getName()); ?></li>
 		<?php endforeach; ?>
 		</ul>
 		<?php endif; ?>
+		<div class="p no-margin">
+			<b><?php echo $this->translate('Type:'); ?></b>
+				<?php $type = $costume->getType(); ?>
+				<?php if ($type): ?>
+					<?php echo $this->escapeHtml($this->translate($type->getName())); ?>
+				<?php else: ?>
+					&nbsp;
+				<?php endif;?>
+			<?php $parts = $costume->getParts();?>
+			<?php if (count($parts)): ?>
+			<br/>
+			<b><?php echo $this->translate('Parts:'); ?></b>
+			<ul style="margin-bottom:0px;">
+			<?php foreach ($parts as $part): ?>
+			<li><?php echo $this->escapeHtml($part->getName()); ?></li>
+			<?php endforeach; ?>
+			</ul>
+			<?php endif; // count($parts) ?>
+		</div>		
 	</div>
 	
 	<div class="span4">
 		<div class="row-fluid">
 			<div class="span6">
 				<dl class="no-margin">
-					<dt><?php echo $this->translate('Gender'); ?></dt>
+					<dt><?php echo $this->translate('Gender:'); ?></dt>
 					<dd><?php echo $this->escapeHtml($this->translate($costume->getGender())); ?>&nbsp;</dd>
-					<dt><?php echo $this->translate('Size'); ?></dt>
+					<dt><?php echo $this->translate('Size:'); ?></dt>
 					<dd><?php echo $this->escapeHtml($costume->getSize()); ?>&nbsp;</dd>
-					<dt><?php echo $this->translate('State'); ?></dt>
+					<dt><?php echo $this->translate('State:'); ?></dt>
 					<dd><?php echo $this->escapeHtml($costume->getState()); ?>&nbsp;</dd>
-					<dt><?php echo $this->translate('Quantity'); ?></dt>
+					<dt><?php echo $this->translate('Quantity:'); ?></dt>
 					<dd><?php echo $this->escapeHtml($costume->getQuantity()); ?>&nbsp;</dd>
-					<dt><?php echo $this->translate('Type'); ?></dt>
-					<dd>&nbsp;</dd>
 				</dl>		
 			</div>
 			<div class="span6">
 				<dl class="no-margin">
-					<dt><?php echo $this->translate('Primary color'); ?></dt>
+					<dt><?php echo $this->translate('Primary color:'); ?></dt>
 					<dd>
 						<?php $primaryColor = $costume->getPrimaryColor(); ?>
 						<?php if ($primaryColor): ?>
@@ -88,7 +105,7 @@ $this->headTitle($title);
 							&nbsp;
 						<?php endif;?>
 					</dd>
-					<dt><?php echo $this->translate('Secondary color'); ?></dt>
+					<dt><?php echo $this->translate('Secondary color:'); ?></dt>
 					<dd>
 						<?php $secondaryColor = $costume->getSecondaryColor(); ?>
 						<?php if ($secondaryColor): ?>
@@ -98,7 +115,7 @@ $this->headTitle($title);
 							&nbsp;
 						<?php endif;?>
 					</dd>
-					<dt><?php echo $this->translate('Primary material'); ?></dt>
+					<dt><?php echo $this->translate('Primary material:'); ?></dt>
 					<dd>
 						<?php $primaryMaterial = $costume->getPrimaryMaterial(); ?>
 						<?php if ($primaryMaterial): ?>
@@ -107,7 +124,7 @@ $this->headTitle($title);
 							&nbsp;
 						<?php endif;?>
 					</dd>
-					<dt><?php echo $this->translate('Secondary material'); ?></dt>
+					<dt><?php echo $this->translate('Secondary material:'); ?></dt>
 					<dd>
 						<?php $secondaryMaterial = $costume->getSecondaryMaterial(); ?>
 						<?php if ($secondaryMaterial): ?>

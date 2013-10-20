@@ -158,9 +158,30 @@ class Costume extends ObjectModelBase
 	/**
 	 * Liste des tags
 	 *
-	 * @var Tag[] Tableau de Tag ou de chaine
+	 * @var \Costume\Model\Tag[] Tableau de Tag ou de chaine
 	 */
 	protected $tags;
+
+	/**
+	 * ID du type
+	 *
+	 * @var integer
+	 */
+	protected $type_id;
+
+	/**
+	 * Type du costume
+	 *
+	 * @var \Costume\Model\Type
+	 */
+	protected $type;
+
+	/**
+	 * Types d'éléments composant le costume
+	 *
+	 * @var \Costume\Model\Type[]
+	 */
+	protected $parts;
 
 	/**
 	 *
@@ -369,12 +390,43 @@ class Costume extends ObjectModelBase
 
 	/**
 	 *
-	 * @return Tag[]:
+	 * @return \Costume\Model\Tag[]:
 	 */
 	public function getTags()
 	{
 		if ($this->tags) {
 			return $this->tags;
+		} else {
+			return array();
+		}
+	}
+
+	/**
+	 *
+	 * @return integer $type_id
+	 */
+	public function getTypeId()
+	{
+		return $this->type_id;
+	}
+
+	/**
+	 *
+	 * @return \Costume\Model\Type $type
+	 */
+	public function getType()
+	{
+		return $this->type;
+	}
+
+	/**
+	 *
+	 * @return \Costume\Model\Type[]:
+	 */
+	public function getParts()
+	{
+		if ($this->parts) {
+			return $this->parts;
 		} else {
 			return array();
 		}
@@ -558,6 +610,32 @@ class Costume extends ObjectModelBase
 
 	/**
 	 *
+	 * @param integer $typeId
+	 */
+	public function setTypeId($typeId)
+	{
+		$this->type_id = $typeId;
+		if ($this->type) {
+			if ($this->type->getId() !== $this->type_id) {
+				$this->type = null;
+			}
+		}
+	}
+
+	/**
+	 *
+	 * @param \Costume\Model\Type $type
+	 */
+	public function setType(Type $type)
+	{
+		$this->type = $type;
+		if ($this->type) {
+			$this->type_id = $type->getId();
+		}
+	}
+
+	/**
+	 *
 	 * @param \Application\Model\Picture $pictures
 	 */
 	public function addPicture(Picture $picture)
@@ -579,7 +657,7 @@ class Costume extends ObjectModelBase
 
 	/**
 	 *
-	 * @param array $tags Tableau de Tag ou de chaine
+	 * @param \Costume\Model\Tag[] $tags Tableau de Tag ou de chaine
 	 */
 	public function setTags($tags)
 	{
@@ -593,7 +671,7 @@ class Costume extends ObjectModelBase
 
 	/**
 	 *
-	 * @param Tag[] $tag
+	 * @param \Costume\Model\Tag[] $tag
 	 */
 	public function addTags($tags)
 	{
@@ -613,7 +691,7 @@ class Costume extends ObjectModelBase
 
 	/**
 	 *
-	 * @param Tag $tag
+	 * @param \Costume\Model\Tag $tag
 	 */
 	public function addTag($tag)
 	{
@@ -622,6 +700,53 @@ class Costume extends ObjectModelBase
 		}
 		
 		$this->tags[] = $tag;
+	}
+
+	/**
+	 *
+	 * @param \Costume\Model\Type[] $parts Tableau de Type ou de chaine
+	 */
+	public function setParts($parts)
+	{
+		$this->parts = array();
+		if (count($parts)) {
+			foreach ($parts as $part) {
+				$this->parts[] = $part;
+			}
+		}
+	}
+
+	/**
+	 *
+	 * @param \Costume\Model\Type[] $parts
+	 */
+	public function addTypes($parts)
+	{
+		if (!$this->parts) {
+			$this->parts = array();
+		}
+		
+		if (count($parts)) {
+			$addParts = array();
+			foreach ($parts as $part) {
+				$addParts[] = $part;
+			}
+			
+			$this->parts = array_unique(array_merge($this->parts, $addParts));
+		}
+	}
+
+	/**
+	 *
+	 * @param \Costume\Model\Type $part
+	 */
+	public function addType($part)
+	{
+		if (!$this->parts) {
+			$this->parts = array();
+		}
+		
+		$this->parts[] = $part;
 	}
 
 	public function setCostumeTable($costumeTable)
@@ -645,6 +770,7 @@ class Costume extends ObjectModelBase
 		$this->secondary_color_id = (array_key_exists('secondary_color_id', $data)) ? $data['secondary_color_id'] : $this->secondary_color_id;
 		$this->primary_material_id = (array_key_exists('primary_material_id', $data)) ? $data['primary_material_id'] : $this->primary_material_id;
 		$this->secondary_material_id = (array_key_exists('secondary_material_id', $data)) ? $data['secondary_material_id'] : $this->secondary_material_id;
+		$this->type_id = (array_key_exists('type_id', $data)) ? $data['type_id'] : $this->type_id;
 		
 		if ($this->costumeTable) {
 			$this->costumeTable->populateCostumeData($this);
@@ -665,7 +791,8 @@ class Costume extends ObjectModelBase
 			'primary_color_id' => $this->primary_color_id,
 			'secondary_color_id' => $this->secondary_color_id,
 			'primary_material_id' => $this->primary_material_id,
-			'secondary_material_id' => $this->secondary_material_id
+			'secondary_material_id' => $this->secondary_material_id,
+			'type_id' => $this->type_id
 		);
 	}
 }

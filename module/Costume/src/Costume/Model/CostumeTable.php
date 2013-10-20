@@ -38,6 +38,12 @@ class CostumeTable extends AbstractDataCachePopulator
 	 */
 	protected $tagTable;
 
+	/**
+	 *
+	 * @var \Costume\Model\TypeTable
+	 */
+	protected $typeTable;
+
 	public function __construct(TableGateway $tableGateway)
 	{
 		$this->tableGateway = $tableGateway;
@@ -129,6 +135,15 @@ class CostumeTable extends AbstractDataCachePopulator
 			}
 		}
 		
+		// On enregistre les type qui seraient nouveaux
+		if ($this->typeTable) {
+			$type = $costume->getType();
+			if ($type && !$type->getId()) {
+				$this->typeTable->saveType($type);
+				$costume->setType($type);
+			}
+		}
+		
 		$data = $costume->getArrayCopy();
 		
 		// Mise à jour de la date de modification
@@ -162,6 +177,11 @@ class CostumeTable extends AbstractDataCachePopulator
 		// Sauvegarde des tags
 		if ($this->tagTable) {
 			$this->tagTable->saveCostumeTags($costume);
+		}
+
+		// Sauvegarde des parts
+		if ($this->typeTable) {
+			$this->typeTable->saveCostumeParts($costume);
 		}
 	}
 
@@ -199,10 +219,9 @@ class CostumeTable extends AbstractDataCachePopulator
 	{
 		if ($this->tagTable) {
 			$this->tagTable->removeTagFromCostumes($tagId);
-		}	
+		}
 	}
-	
-	
+
 	public function deleteCostume($id)
 	{
 		$this->tableGateway->delete(array(
@@ -261,6 +280,20 @@ class CostumeTable extends AbstractDataCachePopulator
 		if ($this->tagTable) {
 			$costume->setTags($this->tagTable->getCostumeTags($costume->getId()));
 		}
+		
+		if ($this->typeTable) {
+			$typeId = $costume->getTypeId();
+			if ($typeId) {
+				$type = $this->typeTable->getType($typeId, false);
+				if ($type) {
+					$costume->setType($type);
+				} else {
+					$costume->setTypeId(null);
+				}
+			}
+			
+			$costume->setParts($this->typeTable->getCostumeParts($costume->getId()));
+		}
 	}
 
 	/**
@@ -300,5 +333,15 @@ class CostumeTable extends AbstractDataCachePopulator
 	{
 		$this->tagTable = $tagTable;
 		$this->addCachedCollection($tagTable);
+	}
+
+	/**
+	 *
+	 * @param \Costume\Model\TypeTable $typeTable
+	 */
+	public function setTypeTable(TypeTable $typeTable)
+	{
+		$this->typeTable = $typeTable;
+		$this->addCachedCollection($typeTable);
 	}
 }

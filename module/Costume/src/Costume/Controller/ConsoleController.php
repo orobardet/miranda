@@ -7,12 +7,15 @@ use Costume\Model\Costume;
 use Costume\Model\Color;
 use Costume\Model\Material;
 use Costume\Model\Tag;
+use Costume\Model\Type;
 
 class ConsoleController extends AbstractCostumeController implements AclConsoleControllerInterface
 {
+
 	private $colorsTableReference;
+
 	private $dbColorsTableReference;
-	
+
 	public function aclConsoleIsAllowed($action)
 	{
 		return true;
@@ -27,6 +30,7 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 		$costumePictureTable = $this->getServiceLocator()->get('Costume\Model\CostumePictureTable');
 		$colorTable = $this->getServiceLocator()->get('Costume\Model\ColorTable');
 		$materialTable = $this->getServiceLocator()->get('Costume\Model\MaterialTable');
+		$typeTable = $this->getServiceLocator()->get('Costume\Model\TypeTable');
 		
 		$csvFile = $this->getRequest()->getParam('csv_file', null);
 		$pictureDir = $this->getRequest()->getParam('picture-dir', null);
@@ -215,15 +219,16 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 					
 					// Détection des matières
 					$rawMaterials = preg_split('#[+/]+#ui', $costumeLine[8]);
-					$materials = array_filter($rawMaterials, function ($material)
-					{
-						$material = trim($material);
-						if (empty($material)) {
-							return false;
-						} else {
-							return true;
-						}						 
-					});
+					$materials = array_filter($rawMaterials, 
+							function ($material)
+							{
+								$material = trim($material);
+								if (empty($material)) {
+									return false;
+								} else {
+									return true;
+								}
+							});
 					if (count($materials)) {
 						$primaryMaterial = ucfirst(strtolower(trim(array_shift($materials))));
 						$materialObject = $materialTable->getMaterialByName($primaryMaterial, true, false);
@@ -249,6 +254,39 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 					if (count($materials)) {
 						fwrite($errorHandle, 
 								"Matière(s) supplémentaire(s) non importée(s) pour " . $costume->getCode() . " : " . join(' + ', $materials) . "\n");
+					}
+					
+					// Type
+					$type = trim($costumeLine[1]);
+					if (!empty($type)) {
+						$type = ucfirst(strtolower($type));
+						$typeObject = $typeTable->getTypeByName($type, false);
+						if (!$typeObject) {
+							$typeObject = new Type($type);
+							$typeTable->saveType($typeObject);
+						}
+						$costume->setType($typeObject);
+					}
+					
+					// Composition
+					$rawParts = preg_split('#[+/]+#ui', $costumeLine[9]);
+					$parts = array_filter($rawParts, 
+							function ($part)
+							{
+								$part = trim($part);
+								if (empty($part)) {
+									return false;
+								} else {
+									return true;
+								}
+							});
+					if (count($parts)) {
+						array_walk($parts, 
+								function (&$part)
+								{
+									$part = new Type(ucfirst(strtolower(trim($part))));
+								});
+						$costume->setParts($parts);
 					}
 					
 					// Ajout des tags
@@ -325,15 +363,15 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 		
 		return;
 	}
-	
+
 	private function searchColorCodeByName($name)
 	{
 		$colorCode = "#FFFFFF";
-
+		
 		$name = trim(preg_replace('/\(.*\)/', '', $name));
 		
 		if (!$this->colorsTableReference) {
-			$this->colorsTableReference = array(); 
+			$this->colorsTableReference = array();
 			$colors = include ('lib/reference_colors_table.php');
 			if (count($colors)) {
 				foreach ($colors as $name => $code) {
@@ -341,7 +379,7 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 				}
 			}
 		}
-			
+		
 		if (extension_loaded('sqlite3')) {
 			if (!$this->dbColorsTableReference) {
 				$this->dbColorsTableReference = new \SQLite3(':memory:');
@@ -350,14 +388,18 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 				
 				if (count($this->colorsTableReference)) {
 					foreach ($this->colorsTableReference as $name => $code) {
-						$this->dbColorsTableReference->exec("INSERT INTO colors (name, code) VALUES ('".$this->dbColorsTableReference->escapeString($name)."', '".$this->dbColorsTableReference->escapeString($code)."')");
+						$this->dbColorsTableReference->exec(
+								"INSERT INTO colors (name, code) VALUES ('" . $this->dbColorsTableReference->escapeString($name) . "', '" .
+										 $this->dbColorsTableReference->escapeString($code) . "')");
 					}
 				}
 				
 				$this->dbColorsTableReference->exec('PRAGMA case_sensitive_like=OFF;');
 			}
 			
-			$code = $this->dbColorsTableReference->querySingle("SELECT code FROM colors WHERE name LIKE '".$this->dbColorsTableReference->escapeString($this->stripAccents(strtolower($name)))."'");
+			$code = $this->dbColorsTableReference->querySingle(
+					"SELECT code FROM colors WHERE name LIKE '" . $this->dbColorsTableReference->escapeString($this->stripAccents(strtolower($name))) .
+							 "'");
 			if ($code) {
 				$colorCode = $code;
 			}
@@ -369,37 +411,122 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 		
 		return $colorCode;
 	}
-	
-	private function stripAccents($texte) {
+
+	private function stripAccents($texte)
+	{
 		$texte = str_replace(
-			array(
-				'à', 'â', 'ä', 'á', 'ã', 'å',
-				'î', 'ï', 'ì', 'í', 
-				'ô', 'ö', 'ò', 'ó', 'õ', 'ø', 
-				'ù', 'û', 'ü', 'ú', 
-				'é', 'è', 'ê', 'ë', 
-				'ç', 'ÿ', 'ñ',
-				'À', 'Â', 'Ä', 'Á', 'Ã', 'Å',
-				'Î', 'Ï', 'Ì', 'Í', 
-				'Ô', 'Ö', 'Ò', 'Ó', 'Õ', 'Ø', 
-				'Ù', 'Û', 'Ü', 'Ú', 
-				'É', 'È', 'Ê', 'Ë', 
-				'Ç', 'Ÿ', 'Ñ', 
-			),
-			array(
-				'a', 'a', 'a', 'a', 'a', 'a', 
-				'i', 'i', 'i', 'i', 
-				'o', 'o', 'o', 'o', 'o', 'o', 
-				'u', 'u', 'u', 'u', 
-				'e', 'e', 'e', 'e', 
-				'c', 'y', 'n', 
-				'A', 'A', 'A', 'A', 'A', 'A', 
-				'I', 'I', 'I', 'I', 
-				'O', 'O', 'O', 'O', 'O', 'O', 
-				'U', 'U', 'U', 'U', 
-				'E', 'E', 'E', 'E', 
-				'C', 'Y', 'N', 
-			),$texte);
+				array(
+					'à',
+					'â',
+					'ä',
+					'á',
+					'ã',
+					'å',
+					'î',
+					'ï',
+					'ì',
+					'í',
+					'ô',
+					'ö',
+					'ò',
+					'ó',
+					'õ',
+					'ø',
+					'ù',
+					'û',
+					'ü',
+					'ú',
+					'é',
+					'è',
+					'ê',
+					'ë',
+					'ç',
+					'ÿ',
+					'ñ',
+					'À',
+					'Â',
+					'Ä',
+					'Á',
+					'Ã',
+					'Å',
+					'Î',
+					'Ï',
+					'Ì',
+					'Í',
+					'Ô',
+					'Ö',
+					'Ò',
+					'Ó',
+					'Õ',
+					'Ø',
+					'Ù',
+					'Û',
+					'Ü',
+					'Ú',
+					'É',
+					'È',
+					'Ê',
+					'Ë',
+					'Ç',
+					'Ÿ',
+					'Ñ'
+				), 
+				array(
+					'a',
+					'a',
+					'a',
+					'a',
+					'a',
+					'a',
+					'i',
+					'i',
+					'i',
+					'i',
+					'o',
+					'o',
+					'o',
+					'o',
+					'o',
+					'o',
+					'u',
+					'u',
+					'u',
+					'u',
+					'e',
+					'e',
+					'e',
+					'e',
+					'c',
+					'y',
+					'n',
+					'A',
+					'A',
+					'A',
+					'A',
+					'A',
+					'A',
+					'I',
+					'I',
+					'I',
+					'I',
+					'O',
+					'O',
+					'O',
+					'O',
+					'O',
+					'O',
+					'U',
+					'U',
+					'U',
+					'U',
+					'E',
+					'E',
+					'E',
+					'E',
+					'C',
+					'Y',
+					'N'
+				), $texte);
 		return $texte;
 	}
 }

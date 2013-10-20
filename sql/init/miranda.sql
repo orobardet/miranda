@@ -3,10 +3,11 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Ven 18 Octobre 2013 à 21:11
+-- Généré le: Dim 20 Octobre 2013 à 23:57
 -- Version du serveur: 5.5.32-0ubuntu0.13.04.1
 -- Version de PHP: 5.4.9-4ubuntu2.3
 
+SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
@@ -36,13 +37,15 @@ CREATE TABLE IF NOT EXISTS `costumes` (
   `secondary_color_id` bigint(20) unsigned DEFAULT NULL COMMENT 'ID de la couleur secondaire',
   `primary_material_id` bigint(20) unsigned DEFAULT NULL COMMENT 'ID de la matière principale du costume',
   `secondary_material_id` bigint(20) unsigned DEFAULT NULL COMMENT 'ID de la matière secondaire du costume',
+  `type_id` bigint(20) unsigned DEFAULT NULL COMMENT 'ID du type (principal) d''un costume',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`),
   KEY `genre` (`gender`),
   KEY `primary_color_id` (`primary_color_id`),
   KEY `secondary_color_id` (`secondary_color_id`),
   KEY `primary_material_id` (`primary_material_id`,`secondary_material_id`),
-  KEY `secondary_material_id` (`secondary_material_id`)
+  KEY `secondary_material_id` (`secondary_material_id`),
+  KEY `type` (`type_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -76,6 +79,20 @@ CREATE TABLE IF NOT EXISTS `costumes_tags` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `costumes_types`
+--
+
+DROP TABLE IF EXISTS `costumes_types`;
+CREATE TABLE IF NOT EXISTS `costumes_types` (
+  `costume_id` bigint(20) unsigned NOT NULL COMMENT 'ID du costume',
+  `type_id` bigint(20) unsigned NOT NULL COMMENT 'ID du type',
+  PRIMARY KEY (`costume_id`,`type_id`),
+  KEY `type_id` (`type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Table d''association des types aux costumes pour former la composition d''un costu';
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `costume_colors`
 --
 
@@ -100,8 +117,8 @@ CREATE TABLE IF NOT EXISTS `costume_materials` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID de la matière de costume',
   `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Nom de la matière',
   PRIMARY KEY (`id`),
-  KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Matières possible pour un costume';
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Matières possible pour un costume';
 
 -- --------------------------------------------------------
 
@@ -116,6 +133,20 @@ CREATE TABLE IF NOT EXISTS `costume_tags` (
   PRIMARY KEY (`id`),
   KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Table contentant la liste des tags associés aux costumes';
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `costume_types`
+--
+
+DROP TABLE IF EXISTS `costume_types`;
+CREATE TABLE IF NOT EXISTS `costume_types` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID BDD du type de costume',
+  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Nom du type de costume',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Défini la liste des type de costume, utilisée également pour la composition des ';
 
 -- --------------------------------------------------------
 
@@ -238,10 +269,11 @@ CREATE TABLE IF NOT EXISTS `users_roles` (
 -- Contraintes pour la table `costumes`
 --
 ALTER TABLE `costumes`
-  ADD CONSTRAINT `costumes_ibfk_4` FOREIGN KEY (`secondary_material_id`) REFERENCES `costume_materials` (`id`),
+  ADD CONSTRAINT `costumes_ibfk_5` FOREIGN KEY (`type_id`) REFERENCES `costume_types` (`id`),
   ADD CONSTRAINT `costumes_ibfk_1` FOREIGN KEY (`primary_color_id`) REFERENCES `costume_colors` (`id`),
   ADD CONSTRAINT `costumes_ibfk_2` FOREIGN KEY (`secondary_color_id`) REFERENCES `costume_colors` (`id`),
-  ADD CONSTRAINT `costumes_ibfk_3` FOREIGN KEY (`primary_material_id`) REFERENCES `costume_materials` (`id`);
+  ADD CONSTRAINT `costumes_ibfk_3` FOREIGN KEY (`primary_material_id`) REFERENCES `costume_materials` (`id`),
+  ADD CONSTRAINT `costumes_ibfk_4` FOREIGN KEY (`secondary_material_id`) REFERENCES `costume_materials` (`id`);
 
 --
 -- Contraintes pour la table `costumes_pictures`
@@ -256,6 +288,13 @@ ALTER TABLE `costumes_pictures`
 ALTER TABLE `costumes_tags`
   ADD CONSTRAINT `costumes_tags_ibfk_2` FOREIGN KEY (`tag_id`) REFERENCES `costume_tags` (`id`),
   ADD CONSTRAINT `costumes_tags_ibfk_1` FOREIGN KEY (`costume_id`) REFERENCES `costumes` (`id`);
+
+--
+-- Contraintes pour la table `costumes_types`
+--
+ALTER TABLE `costumes_types`
+  ADD CONSTRAINT `costumes_types_ibfk_2` FOREIGN KEY (`type_id`) REFERENCES `costume_types` (`id`),
+  ADD CONSTRAINT `costumes_types_ibfk_1` FOREIGN KEY (`costume_id`) REFERENCES `costumes` (`id`);
 
 --
 -- Contraintes pour la table `rights`
@@ -276,3 +315,4 @@ ALTER TABLE `roles_rights`
 ALTER TABLE `users_roles`
   ADD CONSTRAINT `users_roles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `users_roles_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
+SET FOREIGN_KEY_CHECKS=1;

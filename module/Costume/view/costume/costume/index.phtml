@@ -16,6 +16,7 @@ $this->headTitle($title);
 <tr>
     <th><?php echo $this->translate('Code'); ?></th>
     <th><?php echo $this->translate('Name'); ?></th>
+    <th class="text-center"><?php echo $this->translate('Type'); ?></th>
     <th class="text-center"><?php echo $this->translate('Gender'); ?></th>
     <th class="text-center"><?php echo $this->translate('Size'); ?></th>
     <th class="text-center"><?php echo $this->translate('Colors'); ?></th>
@@ -41,6 +42,12 @@ $this->headTitle($title);
     	<?php echo $this->escapeHtml($costume->getLabel());?>
 		<?php endif;?>
     </td>
+    <td class="text-center">
+    	<?php $type = $costume->getType(); ?>
+		<?php if ($type): ?>
+		<?php echo $this->escapeHtml($type->getName()); ?>
+		<?php endif; ?>
+	</td>
     <td class="text-center">
     	<?php echo $this->escapeHtml($costume->getGender());?>
     </td>
