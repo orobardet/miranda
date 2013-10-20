@@ -41,12 +41,12 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		if ($e->getRequest() instanceof ConsoleRequest) {
 			$controller = $e->getTarget();
 			if (!$controller instanceof AclConsoleControllerInterface) {
-				// Le controlleur n'implémente pas l'interface qui est obligatoire pour déclarer des actions console
+				/*// Le controlleur n'implémente pas l'interface qui est obligatoire pour déclarer des actions console
 				// Erreur et on arrête là
 				$console = $e->getApplication()->getServiceManager()->get('console');
 				$console->writeLine('No console access allowed for this controller!');
 				// On arrête la propagation de l'évenement, pour empecher que l'action initialement demandée soient exécutée 
-				$e->stopPropagation();
+				$e->stopPropagation();*/
 				return;
 			}
 			$route = $e->getRouteMatch();
