@@ -5,4 +5,4 @@ if (php_sapi_name() === 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['RE
 	return false;
 }
 
-require dirname(__DIR__).'/lib/bootstrap.php';
+require dirname(__DIR__).'/bootstrap.php';

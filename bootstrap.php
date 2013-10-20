@@ -21,10 +21,10 @@ set_error_handler("exception_error_handler");
 
 // On change le répertoire courant pour le parent, qui est la racine des sources du produit
 // Ainsi tous les chemins sont relatifs
-chdir(dirname(__DIR__));
+chdir(__DIR__);
 
 // Initialisation de l'autoloader
-require 'init_autoloader.php';
+require 'init_autoload.php';
 
 // Lancement de l'application
 try {

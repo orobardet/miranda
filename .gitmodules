@@ -1,0 +1,3 @@
+[submodule "vendor/ZFTool"]
+	path = vendor/ZFTool
+	url = https://github.com/zendframework/ZFTool.git
