@@ -2,8 +2,10 @@
 namespace Costume\Model;
 
 use Zend\Db\TableGateway\TableGateway;
+use Application\Model\DataCache\AbstractDataCacher;
+use Application\Model\DataCache\DataCacheAwareInterface;
 
-class TagTable
+class TagTable extends AbstractDataCacher implements DataCacheAwareInterface
 {
 	
 	/*
@@ -173,7 +175,15 @@ class TagTable
 			}
 		}
 	}
-
+	
+	public function removeTagFromCostumes($id)
+	{
+		// On supprime le tag de tous les costumes
+		$this->costumeTagGateway->delete(array(
+			'tag_id' => $id
+		));
+	}
+	
 	public function deleteTag($id)
 	{
 		// On ne supprime que si le tag n'est plus utilisé
@@ -184,6 +194,16 @@ class TagTable
 			$this->tableGateway->delete(array(
 				'id' => $id
 			));
+		}
+	}
+	
+	public function populateCache()
+	{
+		$tags = $this->fetchAll();
+		if (count($tags)) {
+			foreach ($tags as $tag) {
+				$this->dataCacheAdd($tag->getId(), $tag);
+			}
 		}
 	}
 }

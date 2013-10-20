@@ -1,6 +1,7 @@
 <?php 
 return array(
 	'Costumes' => 'Costumes',
+	'Catalog' => 'Catalogue',
 	'No costumes.' => 'Aucun costume.',
 	'Code' => 'Code',
 	'Label' => 'Libellé',
@@ -38,8 +39,14 @@ return array(
 	'Tags' => 'Etiquettes',
 	"Costumes' materials" => 'Matières des costumes',
 	'No materials.' => 'Aucune matière.',
+	'Material ID %id% does not exists.' => "La matière ID %id% n'existe pas.",
 	"A material with name '%name%' already exists." => "Une matière nommée '%name%' existe déjà.",
 	'Delete a material' => 'Supprimer une matière',
 	'Do you really want to delete this material?' => 'Voulez-vous vraiment supprimer cette matière ?',
-	'The material will be removed from all costumes using it.' => "La matière sera retirée de tous les costumes qui l'utilisent."
+	'The material will be removed from all costumes using it.' => "La matière sera retirée de tous les costumes qui l'utilisent.",
+	'Tag ID %id% does not exists.' => "L'étiquette ID %id% n'existe pas.",
+	"A tag with name '%name%' already exists." => "Une étiquette nommée '%name%' existe déjà.",
+	'Delete a tag' => 'Supprimer une étiquette',
+	'Do you really want to delete this tag?' => 'Voulez-vous vraiment supprimer cette étiquette ?',
+	'The tag will be removed from all costumes using it.' => "L'étiquette sera retirée de tous les costumes qui l'utilisent.",
 );

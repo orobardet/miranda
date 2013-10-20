@@ -88,38 +88,40 @@ $config = array(
 				'resource' => 'list_costumes',
 				'pages' => array(
 					array(
-						'label' => 'Costumes',
+						'label' => 'Catalog',
 						'route' => 'costume',
 						'action' => 'index',
-						'resource' => 'list_costumes'
-					),
-					array(
-						'label' => 'Show',
-						'route' => 'costume',
-						'action' => 'show',
-						'resource' => 'show_costume',
-						'visible' => false
-					),
-					array(
-						'label' => 'Add',
-						'route' => 'costume',
-						'action' => 'add',
-						'resource' => 'add_costume',
-						'visible' => false
-					),
-					array(
-						'label' => 'Edit',
-						'route' => 'costume',
-						'action' => 'edit',
-						'resource' => 'edit_costume',
-						'visible' => false
-					),
-					array(
-						'label' => 'Delete',
-						'route' => 'costume',
-						'action' => 'delete',
-						'resource' => 'delete_costume',
-						'visible' => false
+						'resource' => 'list_costumes',
+						'pages' => array(
+							array(
+								'label' => 'Show',
+								'route' => 'costume',
+								'action' => 'show',
+								'resource' => 'show_costume',
+								'visible' => false
+							),
+							array(
+								'label' => 'Add',
+								'route' => 'costume',
+								'action' => 'add',
+								'resource' => 'add_costume',
+								'visible' => false
+							),
+							array(
+								'label' => 'Edit',
+								'route' => 'costume',
+								'action' => 'edit',
+								'resource' => 'edit_costume',
+								'visible' => false
+							),
+							array(
+								'label' => 'Delete',
+								'route' => 'costume',
+								'action' => 'delete',
+								'resource' => 'delete_costume',
+								'visible' => false
+							),	
+						)
 					),
 					array(
 						'label' => 'Management',
@@ -138,8 +140,14 @@ $config = array(
 								'route' => 'costume-admin/material',
 								'action' => 'index',
 								'resource' => 'admin_costumes_materials'
+							),
+							array(
+								'label' => 'Tags',
+								'route' => 'costume-admin/tag',
+								'action' => 'index',
+								'resource' => 'admin_costumes_tags'
 							)
-						)
+)
 					)
 				)
 			),
@@ -232,7 +240,8 @@ $config = array(
 			'Zend\Session\Validator\HttpUserAgent'
 		)
 	)
-);
+)
+;
 
 if ($env == 'prod') {
 	$config[$app_key]['layout']['css'] = array(

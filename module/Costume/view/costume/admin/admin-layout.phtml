@@ -4,7 +4,8 @@
 			<ul class="nav nav-list">
 				<li<?php if ($this->admin_action == 'color') echo ' class="active"'; ?>><a href="<?php echo $this->url('costume-admin/color'); ?>"><i class="icon-tint icon-linkcolor"></i> <?php echo $this->translate('Colors'); ?></a></li>
 				<li<?php if ($this->admin_action == 'material') echo ' class="active"'; ?>><a href="<?php echo $this->url('costume-admin/material'); ?>"><i class="icon-leaf icon-linkcolor"></i> <?php echo $this->translate('Materials'); ?></a></li>
-				</ul>
+				<li<?php if ($this->admin_action == 'tag') echo ' class="active"'; ?>><a href="<?php echo $this->url('costume-admin/tag'); ?>"><i class="icon-tags icon-linkcolor"></i> <?php echo $this->translate('Tags'); ?></a></li>
+			</ul>
 		</div>
 	</div>
 	<div class="span10">

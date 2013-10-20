@@ -195,6 +195,14 @@ class CostumeTable extends AbstractDataCachePopulator
 		));
 	}
 
+	public function removeTag($tagId)
+	{
+		if ($this->tagTable) {
+			$this->tagTable->removeTagFromCostumes($tagId);
+		}	
+	}
+	
+	
 	public function deleteCostume($id)
 	{
 		$this->tableGateway->delete(array(

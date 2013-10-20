@@ -6,7 +6,8 @@ return array(
 			'Costume\Controller\Costume' => 'Costume\Controller\CostumeController',
 			'Costume\Controller\Admin' => 'Costume\Controller\AdminController',
 			'Costume\Controller\AdminColor' => 'Costume\Controller\AdminColorController',
-			'Costume\Controller\AdminMaterial' => 'Costume\Controller\AdminMaterialController'
+			'Costume\Controller\AdminMaterial' => 'Costume\Controller\AdminMaterialController',
+			'Costume\Controller\AdminTag' => 'Costume\Controller\AdminTagController'
 		)
 	),
 	
@@ -68,8 +69,24 @@ return array(
 								'action' => 'index'
 							)
 						)
+					),
+					'tag' => array(
+						'type' => 'segment',
+						'options' => array(
+							'route' => '/tag[/][:action][/:id]',
+							'constraints' => array(
+								'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+								'id' => '[0-9]+'
+							),
+							'defaults' => array(
+								'__NAMESPACE__' => 'Costume\Controller',
+								'controller' => 'Costume\Controller\AdminTag',
+								'action' => 'index'
+							)
+						)
 					)
 				)
+				
 			)
 		)
 	),
