@@ -7,6 +7,7 @@ return array(
   'Application\Form\Element\OptionalMultiCheckbox'         => __DIR__ . '/src/Application/Form/Element/OptionalMultiCheckbox.php',
   'Application\View\Helper\ItemsPerPage'                   => __DIR__ . '/src/Application/View/Helper/ItemsPerPage.php',
   'Application\View\Helper\TranslateReplace'               => __DIR__ . '/src/Application/View/Helper/TranslateReplace.php',
+  'Application\View\Helper\Text2Html'                      => __DIR__ . '/src/Application/View/Helper/Text2Html.php',
   'Application\View\Helper\ResultStatus'                   => __DIR__ . '/src/Application/View/Helper/ResultStatus.php',
   'Application\Controller\Plugin\RefererUrl'               => __DIR__ . '/src/Application/Controller/Plugin/RefererUrl.php',
   'Application\Controller\Plugin\Console'                  => __DIR__ . '/src/Application/Controller/Plugin/Console.php',

@@ -58,7 +58,7 @@ $this->headTitle($title);
 		<?php endforeach; ?>
 		</ul>
 		<?php endif; ?>
-		<div class="p no-margin">
+		<div class="p">
 			<b><?php echo $this->translate('Type:'); ?></b>
 				<?php $type = $costume->getType(); ?>
 				<?php if ($type): ?>
@@ -76,7 +76,14 @@ $this->headTitle($title);
 			<?php endforeach; ?>
 			</ul>
 			<?php endif; // count($parts) ?>
-		</div>		
+		</div>
+		<?php $history = $costume->getHistory(); ?>
+		<?php if (!empty($history)): ?>
+		<div class="p">
+			<b><?php echo $this->translate('History:'); ?></b><br/>
+			<?php echo $this->text2html($history); ?>
+		</div>
+		<?php endif; ?>
 	</div>
 	
 	<div class="span4">

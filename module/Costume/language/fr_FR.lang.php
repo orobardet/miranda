@@ -65,7 +65,10 @@ return array(
 	'Delete a part' => 'Supprimer une pièce',
 	'Do you really want to delete this part?' => 'Voulez-vous vraiment supprimer cette pièce ?',
 	'The part will be removed from all costumes using it, as type or part.' => "La pièce sera retirée de tous les costumes qui l'utilisent, comme type ou composition.",
+	'Origin' => 'Origine',
+	'Origin:' => 'Origine :',
 	'creation' => 'Création',
 	'purchase' => 'Achat',
 	'other' => 'Autre',
+	'History:' => 'Historique :',
 );

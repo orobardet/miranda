@@ -237,6 +237,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 	{
 		return array(
 			'invokables' => array(
+				'text2Html' => 'Application\View\Helper\Text2Html',
 				'translateReplace' => 'Application\View\Helper\TranslateReplace'
 			),
 			'factories' => array(

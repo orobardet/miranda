@@ -300,6 +300,16 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 						}
 					}
 					
+					// Historique
+					$history = trim($costumeLine[13]);
+					if (!empty($history)) {
+						$otherHistory = trim($costumeLine[14]);
+						if (!empty($otherHistory)) {
+							$history .= "\n".$otherHistory;
+						}
+						$costume->setHistory($history);
+					}
+					
 					// Ajout des tags
 					$costume->setTags(array_unique(array_merge($globalTags, $importer->localTags)));
 					

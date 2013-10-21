@@ -201,6 +201,7 @@ class Costume extends ObjectModelBase
 	 * Origine du costume (creation, achat, .
 	 *
 	 *
+	 *
 	 * ..)
 	 *
 	 * Peut prendre comme valeur les constantes :
@@ -221,6 +222,13 @@ class Costume extends ObjectModelBase
 	 * @var string
 	 */
 	protected $origin_details;
+
+	/**
+	 * Historique d'utilisation du costume
+	 *
+	 * @var string
+	 */
+	protected $history;
 
 	/**
 	 *
@@ -487,6 +495,15 @@ class Costume extends ObjectModelBase
 	public function getOriginDetails()
 	{
 		return $this->origin_details;
+	}
+
+	/**
+	 *
+	 * @return string $history
+	 */
+	public function getHistory()
+	{
+		return $this->history;
 	}
 
 	/**
@@ -814,6 +831,7 @@ class Costume extends ObjectModelBase
 	}
 
 	/**
+	 *
 	 * @param string $origin
 	 */
 	public function setOrigin($origin)
@@ -827,13 +845,23 @@ class Costume extends ObjectModelBase
 			$this->origin = $origin;
 		}
 	}
-	
+
 	/**
+	 *
 	 * @param string $origin_details
 	 */
 	public function setOriginDetails($origin_details)
 	{
 		$this->origin_details = $origin_details;
+	}
+
+	/**
+	 *
+	 * @param string $history
+	 */
+	public function setHistory($history)
+	{
+		$this->history = $history;
 	}
 
 	public function setCostumeTable($costumeTable)
@@ -860,6 +888,7 @@ class Costume extends ObjectModelBase
 		$this->type_id = (array_key_exists('type_id', $data)) ? $data['type_id'] : $this->type_id;
 		$this->origin = (array_key_exists('origin', $data)) ? $data['origin'] : $this->origin;
 		$this->origin_details = (array_key_exists('origin_details', $data)) ? $data['origin_details'] : $this->origin_details;
+		$this->history = (array_key_exists('history', $data)) ? $data['history'] : $this->history;
 		
 		if ($this->costumeTable) {
 			$this->costumeTable->populateCostumeData($this);
@@ -883,7 +912,8 @@ class Costume extends ObjectModelBase
 			'secondary_material_id' => $this->secondary_material_id,
 			'type_id' => $this->type_id,
 			'origin' => $this->origin,
-			'origin_details' => $this->origin_details
+			'origin_details' => $this->origin_details,
+			'history' => $this->history
 		);
 	}
 }
