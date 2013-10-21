@@ -1,4 +1,22 @@
 <h1>Bienvenue sur le backoffice de la Compagnie Miranda</h1>
-<p>blu</p>
-<p>blu</p>
-<p>blu</p>
+
+
+<big class="text-warning text-lg" style="font-style:italic;"><i class="icon-warning-sign"></i> Page temporaire, contenu à définir (dashboard, messsage d'accueil). <i class="icon-warning-sign"></i></big>
+
+
+<?php if ($this->acl()->isAllowed("admin_access")): ?>
+<p style="margin-top:30px;">
+<a class="admin-btn btn" href="<?php echo $this->url('costume'); ?>">
+<i class="icon-list icon-3x"></i><br/>
+<span class="title">Consulter le catalog des costumes</span>
+</a>
+<?php endif; ?>
+
+
+<?php if ($this->acl()->isAllowed("admin_access")): ?>
+<p style="margin-top:30px;">
+<a class="admin-btn btn" href="<?php echo $this->url('admin'); ?>">
+<i class="icon-gears icon-3x"></i><br/>
+<span class="title">Administrer le site</span>
+</a>
+<?php endif; ?>
