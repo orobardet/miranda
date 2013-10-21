@@ -9,7 +9,7 @@ $this->headTitle($title);
 )); ?>
 <div class="p">
 <?php $user_roles = $user->getRoles(); ?>
-<span class="muted"><i class="icon-cap"></i> <?php echo $this->translate('Roles: '); ?></span>
+<span class="muted"><i class="icon-suitcase"></i> <?php echo $this->translate('Roles: '); ?></span>
 <?php if (count($user_roles)): ?>
 <ul style="display:inline-block;vertical-align:top;">
 <?php foreach ($this->all_roles as $role): ?>

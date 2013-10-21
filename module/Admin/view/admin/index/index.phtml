@@ -7,21 +7,21 @@ $this->headTitle($title);
 <?php if ($this->acl()->isAllowed("admin_list_users")): ?>
 <p style="margin-top:30px;">
 <a class="admin-btn btn" href="<?php echo $this->url('admin/user'); ?>">
-<img src="img/admin/icon-users.png" alt="<?php echo $this->translate('Users'); ?>"/><br/>
+<i class="icon-user icon-3x"></i><br/>
 <span class="title"><?php echo $this->translate('Users'); ?></span>
 </a>
 <?php endif; ?>
 
 <?php if ($this->acl()->isAllowed("admin_list_roles")): ?>
 <a class="admin-btn btn" href="<?php echo $this->url('admin/role'); ?>">
-<img src="img/admin/icon-roles.png" alt="<?php echo $this->translate('Roles'); ?>"/><br/>
+<i class="icon-suitcase icon-3x"></i><br/>
 <span class="title"><?php echo $this->translate('Roles'); ?></span>
 </a>
 <?php endif; ?>
 
 <?php if ($this->acl()->isAllowed("admin_list_rights")): ?>
 <a class="admin-btn btn" href="<?php echo $this->url('admin/right'); ?>">
-<img src="img/admin/icon-rights.png" alt="<?php echo $this->translate('Rights'); ?>"/><br/>
+<i class="icon-key icon-3x"></i><br/>
 <span class="title"><?php echo $this->translate('Rights'); ?></span>
 </a>
 </p>

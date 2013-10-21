@@ -19,6 +19,7 @@ $config = array(
 			'css' => array(
 				'css/bootstrap.css',
 				'css/bootstrap-responsive.min.css',
+				'css/font-awesome.min.css',
 				'css/jquery-ui-bootstrap/jquery-ui.css',
 				'css/style.css'
 			),
@@ -29,6 +30,8 @@ $config = array(
 				'css/jquery-ui-bootstrap/jquery-ui.css',
 				'css/bootstrap.less',
 				'css/bootstrap-responsive.min.css',
+				'css/font-awesome.min.css',
+				'css/jquery-ui-bootstrap/jquery-ui.css',
 				'css/style.less'
 			),
 			'js' => array(
