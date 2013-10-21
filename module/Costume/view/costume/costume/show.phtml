@@ -135,6 +135,21 @@ $this->headTitle($title);
 					</dd>
 				</dl>		
 			</div>
+			<dl class="no-margin">
+				<dt><?php echo $this->translate('Origin:'); ?></dt>
+				<dd>
+					<?php $origin = $costume->getOrigin(); ?>
+					<?php if ($origin): ?>
+						<?php echo $this->escapeHtml($this->translate($origin)); ?>
+						<?php $originDetails = $costume->getOriginDetails(); ?> 
+						<?php if (!empty($originDetails)): ?>
+							<br/><?php echo $this->escapeHtml($originDetails); ?>
+						<?php endif; ?>
+					<?php else: ?>
+						&nbsp;
+					<?php endif; ?>
+				</dd>
+			</dl>		
 		</div>
 	</div>
 </div>

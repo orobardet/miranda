@@ -6,6 +6,7 @@ return array(
     'costume/costume/show'       => __DIR__ . '/view/costume/costume/show.phtml',
     'costume/admin/tag'          => __DIR__ . '/view/costume/admin/tag.phtml',
     'costume/admin/admin-layout' => __DIR__ . '/view/costume/admin/admin-layout.phtml',
+    'costume/admin/part'         => __DIR__ . '/view/costume/admin/part.phtml',
     'costume/admin/material'     => __DIR__ . '/view/costume/admin/material.phtml',
     'costume/admin/color'        => __DIR__ . '/view/costume/admin/color.phtml',
 );

@@ -289,6 +289,17 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 						$costume->setParts($parts);
 					}
 					
+					// Origine
+					$origin = trim($costumeLine[12]);
+					if (!empty($origin)) {
+						if ($this->stripAccents(strtolower($origin)) == "creation") {
+							$costume->setOrigin(Costume::ORIGIN_CREATION);
+						} else {
+							$costume->setOrigin(Costume::ORIGIN_PURCHASE);
+							$costume->setOriginDetails($origin);
+						}
+					}
+					
 					// Ajout des tags
 					$costume->setTags(array_unique(array_merge($globalTags, $importer->localTags)));
 					

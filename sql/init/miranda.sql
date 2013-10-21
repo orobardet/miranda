@@ -38,6 +38,8 @@ CREATE TABLE IF NOT EXISTS `costumes` (
   `primary_material_id` bigint(20) unsigned DEFAULT NULL COMMENT 'ID de la matière principale du costume',
   `secondary_material_id` bigint(20) unsigned DEFAULT NULL COMMENT 'ID de la matière secondaire du costume',
   `type_id` bigint(20) unsigned DEFAULT NULL COMMENT 'ID du type (principal) d''un costume',
+  `origin` enum('creation','purchase','other') COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Origine du costume',
+  `origin_details` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Détail libre de l''origine du costume (lieu d''achat par exemple)',
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`),
   KEY `genre` (`gender`),
@@ -46,6 +48,8 @@ CREATE TABLE IF NOT EXISTS `costumes` (
   KEY `primary_material_id` (`primary_material_id`,`secondary_material_id`),
   KEY `secondary_material_id` (`secondary_material_id`),
   KEY `type` (`type_id`)
+  KEY `origin` (`origin`),
+  KEY `origin_details` (`origin_details`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------

@@ -16,6 +16,14 @@ class Costume extends ObjectModelBase
 
 	const GENDER_NONE = null;
 
+	const ORIGIN_CREATION = 'creation';
+
+	const ORIGIN_PURCHASE = 'purchase';
+
+	const ORIGIN_OTHER = 'other';
+
+	const ORIGIN_NONE = null;
+
 	/**
 	 *
 	 * @var \Costume\Model\CostumeTable
@@ -66,6 +74,12 @@ class Costume extends ObjectModelBase
 
 	/**
 	 * Genre (Homme/Femme/Mixte)
+	 *
+	 * Peut prendre comme valeur les constantes :
+	 * - GENDER_MIXED
+	 * - GENDER_MAN
+	 * - GENDER_WOMAN
+	 * - GENDER_NONE
 	 *
 	 * @var string
 	 */
@@ -182,6 +196,31 @@ class Costume extends ObjectModelBase
 	 * @var \Costume\Model\Type[]
 	 */
 	protected $parts;
+
+	/**
+	 * Origine du costume (creation, achat, .
+	 *
+	 *
+	 * ..)
+	 *
+	 * Peut prendre comme valeur les constantes :
+	 * - ORIGIN_CREATION
+	 * - ORIGIN_PURCHASE
+	 * - ORIGIN_OTHER
+	 * - ORIGIN_NONE
+	 *
+	 * @var string
+	 */
+	protected $origin;
+
+	/**
+	 * Détail de l'origine du costume.
+	 *
+	 * Champ de saisie libre.
+	 *
+	 * @var string
+	 */
+	protected $origin_details;
 
 	/**
 	 *
@@ -434,6 +473,24 @@ class Costume extends ObjectModelBase
 
 	/**
 	 *
+	 * @return string $origin
+	 */
+	public function getOrigin()
+	{
+		return $this->origin;
+	}
+
+	/**
+	 *
+	 * @return string $origin_details
+	 */
+	public function getOriginDetails()
+	{
+		return $this->origin_details;
+	}
+
+	/**
+	 *
 	 * @param integer $id
 	 */
 	public function setId($id)
@@ -474,7 +531,14 @@ class Costume extends ObjectModelBase
 	 */
 	public function setGender($gender)
 	{
-		$this->gender = $gender;
+		if (in_array($gender, array(
+			self::GENDER_MIXED,
+			self::GENDER_MAN,
+			self::GENDER_WOMAN,
+			self::GENDER_NONE
+		))) {
+			$this->gender = $gender;
+		}
 	}
 
 	/**
@@ -749,6 +813,29 @@ class Costume extends ObjectModelBase
 		$this->parts[] = $part;
 	}
 
+	/**
+	 * @param string $origin
+	 */
+	public function setOrigin($origin)
+	{
+		if (in_array($origin, array(
+			self::ORIGIN_CREATION,
+			self::ORIGIN_PURCHASE,
+			self::ORIGIN_OTHER,
+			self::ORIGIN_NONE
+		))) {
+			$this->origin = $origin;
+		}
+	}
+	
+	/**
+	 * @param string $origin_details
+	 */
+	public function setOriginDetails($origin_details)
+	{
+		$this->origin_details = $origin_details;
+	}
+
 	public function setCostumeTable($costumeTable)
 	{
 		$this->costumeTable = $costumeTable;
@@ -771,6 +858,8 @@ class Costume extends ObjectModelBase
 		$this->primary_material_id = (array_key_exists('primary_material_id', $data)) ? $data['primary_material_id'] : $this->primary_material_id;
 		$this->secondary_material_id = (array_key_exists('secondary_material_id', $data)) ? $data['secondary_material_id'] : $this->secondary_material_id;
 		$this->type_id = (array_key_exists('type_id', $data)) ? $data['type_id'] : $this->type_id;
+		$this->origin = (array_key_exists('origin', $data)) ? $data['origin'] : $this->origin;
+		$this->origin_details = (array_key_exists('origin_details', $data)) ? $data['origin_details'] : $this->origin_details;
 		
 		if ($this->costumeTable) {
 			$this->costumeTable->populateCostumeData($this);
@@ -792,7 +881,9 @@ class Costume extends ObjectModelBase
 			'secondary_color_id' => $this->secondary_color_id,
 			'primary_material_id' => $this->primary_material_id,
 			'secondary_material_id' => $this->secondary_material_id,
-			'type_id' => $this->type_id
+			'type_id' => $this->type_id,
+			'origin' => $this->origin,
+			'origin_details' => $this->origin_details
 		);
 	}
 }

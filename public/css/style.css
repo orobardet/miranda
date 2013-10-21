@@ -31,12 +31,12 @@ body {
 
   height: 100%;
 }
-a > i.icon-linkcolor {
-  background-image: url("../img/glyphicons-halflings-linkcolor.png");
+/*a > i.icon-linkcolor {
+	background-image: url("@{iconLinkColorSpritePath}");
 }
 a:hover > .icon-linkcolor {
-  background-image: url("../img/glyphicons-halflings-linkcolor-hover.png");
-}
+  background-image: url("@{iconLinkColorHoverSpritePath}");
+}*/
 .p {
   margin-bottom: 10px;
 }
@@ -98,15 +98,15 @@ a:hover > .icon-linkcolor {
 .vertical-center {
   vertical-align: middle !important;
 }
-.muted > [class^="icon-"],
+/*.muted > [class^="icon-"], 
 .muted > [class*=" icon-"],
 [class^="icon-"].muted,
 [class*=" icon-"].muted {
-  background-image: url("../img/glyphicons-halflings-muted.png");
-}
-.icon-cap {
-  background-position: 0 -168px;
-}
+  background-image: url("@{iconMutedSpritePath}");
+}  
+
+.icon-cap                     { background-position: 0      -168px; }
+*/
 .navbar .navbar-inner {
   border-width: 0px;
 }
@@ -269,6 +269,9 @@ label.multicheckbox input[type=checkbox] {
 .main-messages ul {
   margin: 0px 0px 0px 10px;
 }
+.action-bar a:hover {
+  text-decoration: none;
+}
 .action-bar.boundaries:before {
   content: '[ ';
 }
@@ -408,7 +411,9 @@ label.multicheckbox input[type=checkbox] {
   background: url('../img/empty-placeholder') repeat transparent;
   border-color: transparent;
 }
-#materials-list {
+#materials-list,
+#tags-list,
+#parts-list {
   max-width: 500px;
 }
 .icon-sprite {
