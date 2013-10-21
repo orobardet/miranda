@@ -222,6 +222,18 @@ class CostumeTable extends AbstractDataCachePopulator
 		}
 	}
 
+	public function removeType($typeId)
+	{
+		$this->tableGateway->update(array(
+			'type_id' => null
+		), array(
+			'type_id' => $typeId
+		));
+		if ($this->typeTable) {
+			$this->typeTable->removeTypeFromCostumes($typeId);
+		}
+	}
+
 	public function deleteCostume($id)
 	{
 		$this->tableGateway->delete(array(

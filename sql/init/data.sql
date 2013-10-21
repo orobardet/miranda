@@ -40,7 +40,8 @@ INSERT INTO `rights` (`id`, `name`, `descr`, `group_id`, `ord`) VALUES
 (18, 'admin_costumes', 'Costumes administration', 7, 1),
 (19, 'admin_costumes_colors', 'Colors', 7, 2),
 (20, 'admin_costumes_materials', 'Materials', 7, 3),
-(21, 'admin_costumes_tags', 'Tags', 7, 3);
+(21, 'admin_costumes_tags', 'Tags', 7, 3),
+(22, 'admin_costumes_parts', 'Parts & types', 7, 3);
 --
 -- Contenu de la table `rights_groups`
 --
@@ -102,7 +103,9 @@ INSERT INTO `roles_rights` (`role_id`, `right_id`) VALUES
 (4, 20),
 (9, 20),
 (4, 21),
-(9, 21);
+(9, 21),
+(4, 22),
+(9, 22);
 
 --
 -- Contenu de la table `users`

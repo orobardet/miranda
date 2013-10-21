@@ -123,7 +123,7 @@ $config = array(
 								'action' => 'delete',
 								'resource' => 'delete_costume',
 								'visible' => false
-							),	
+							)
 						)
 					),
 					array(
@@ -149,8 +149,14 @@ $config = array(
 								'route' => 'costume-admin/tag',
 								'action' => 'index',
 								'resource' => 'admin_costumes_tags'
+							),
+							array(
+								'label' => 'Parts & types',
+								'route' => 'costume-admin/part',
+								'action' => 'index',
+								'resource' => 'admin_costumes_parts'
 							)
-)
+						)
 					)
 				)
 			),
@@ -243,8 +249,7 @@ $config = array(
 			'Zend\Session\Validator\HttpUserAgent'
 		)
 	)
-)
-;
+);
 
 if ($env == 'prod') {
 	$config[$app_key]['layout']['css'] = array(

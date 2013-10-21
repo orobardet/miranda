@@ -46,6 +46,7 @@ return array(
 	'The material will be removed from all costumes using it.' => "La matière sera retirée de tous les costumes qui l'utilisent.",
 	'Tag ID %id% does not exists.' => "L'étiquette ID %id% n'existe pas.",
 	"A tag with name '%name%' already exists." => "Une étiquette nommée '%name%' existe déjà.",
+	"Costumes' tags" => 'Etiquettes des costumes',
 	'Delete a tag' => 'Supprimer une étiquette',
 	'Do you really want to delete this tag?' => 'Voulez-vous vraiment supprimer cette étiquette ?',
 	'The tag will be removed from all costumes using it.' => "L'étiquette sera retirée de tous les costumes qui l'utilisent.",
@@ -59,4 +60,9 @@ return array(
 	'Primary material:' => 'Matière principale :',
 	'Secondary material:' => 'Matière secondaire :',
 	'Parts:' => 'Composition :',
+	'Parts & types' => 'Pièces & types',
+	"Costumes' parts & types" => 'Pièces & types des costumes',
+	'Delete a part' => 'Supprimer une pièce',
+	'Do you really want to delete this part?' => 'Voulez-vous vraiment supprimer cette pièce ?',
+	'The part will be removed from all costumes using it, as type or part.' => "La pièce sera retirée de tous les costumes qui l'utilisent, comme type ou composition.",
 );
