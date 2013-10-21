@@ -17,10 +17,10 @@ $config = array(
 	$app_key => array(
 		'layout' => array(
 			'css' => array(
+				'css/jquery-ui-bootstrap/jquery-ui.css',
 				'css/bootstrap.css',
 				'css/bootstrap-responsive.min.css',
 				'css/font-awesome.min.css',
-				'css/jquery-ui-bootstrap/jquery-ui.css',
 				'css/style.css'
 			),
 			'compile_less' => false,
@@ -31,7 +31,6 @@ $config = array(
 				'css/bootstrap.less',
 				'css/bootstrap-responsive.min.css',
 				'css/font-awesome.min.css',
-				'css/jquery-ui-bootstrap/jquery-ui.css',
 				'css/style.less'
 			),
 			'js' => array(
