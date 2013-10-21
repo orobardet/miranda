@@ -93,4 +93,20 @@ class CostumeController extends AbstractCostumeController implements AclControll
 			'cancel_url' => $this->refererUrl('costume-add')
 		);
 	}
+	
+	public function editAction()
+	{
+		return array(
+			'form' => null,
+			'cancel_url' => $this->refererUrl('costume-edit')
+		);
+	}
+	
+	public function deleteAction()
+	{
+		return array(
+			'form' => null,
+			'cancel_url' => $this->refererUrl('costume-delete')
+		);
+	}
 }
