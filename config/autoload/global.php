@@ -57,7 +57,7 @@ $config = array(
 			'table_prefix' => ''
 		),
 		'data_storage' => array(
-			'root_path' => '/home/orobardet/data/miranda'
+			'root_path' => '../data/miranda'
 		),
 		'costume' => array(
 			'pictures' => array(
