@@ -68,255 +68,263 @@ class ConsoleController extends AbstractCostumeController implements AclConsoleC
 			$this->console()->write("Importation des costumes : 0...");
 			foreach ($importer as $costumeLine) {
 				if (count($costumeLine) > 2) {
-					// Lecture du code
-					$code = trim($costumeLine[2]);
-					if (empty($code)) {
-						fwrite($errorHandle, "Non importé : code vide pour " . join(' | ', $costumeLine) . "\n");
-						continue;
-					}
-					
-					if (strlen($code > 20)) {
-						fwrite($errorHandle, "Non importé : code '$code' trop long\n");
-						continue;
-					}
-					
-					$costume = $this->getCostumeTable()->getCostumeByCode($code, false);
-					if ($costume) {
-						fwrite($logHandle, "Mise à jour : le code '$code' existe déjà pour " . join(' | ', $costumeLine) . "\n");
-					} else {
-						$costume = new Costume();
-						$costume->setCode($code);
-					}
-					
-					// Libellé et description
-					$label = $costumeLine[0];
-					$descr = "";
-					if (strlen($label) > 255) {
-						$descr = $label . "\n";
-						$label = substr($label, 0, 255);
-					}
-					$descr .= $costumeLine[10];
-					$costume->setLabel($label);
-					$costume->setDescr($descr);
-					
-					// Détection du genre
-					$genderRaw = str_split(preg_replace('/[^hf]/', '', strtolower($costumeLine[3])));
-					if (in_array('f', $genderRaw) && in_array('h', $genderRaw)) {
-						$costume->setGender(Costume::GENDER_MIXED);
-					} else 
-						if (in_array('f', $genderRaw)) {
-							$costume->setGender(Costume::GENDER_WOMAN);
+					$this->dbTransaction()->begin();
+					try {
+						// Lecture du code
+						$code = trim($costumeLine[2]);
+						if (empty($code)) {
+							fwrite($errorHandle, "Non importé : code vide pour " . join(' | ', $costumeLine) . "\n");
+							continue;
+						}
+						
+						if (strlen($code > 20)) {
+							fwrite($errorHandle, "Non importé : code '$code' trop long\n");
+							continue;
+						}
+						
+						$costume = $this->getCostumeTable()->getCostumeByCode($code, false);
+						if ($costume) {
+							fwrite($logHandle, "Mise à jour : le code '$code' existe déjà pour " . join(' | ', $costumeLine) . "\n");
+						} else {
+							$costume = new Costume();
+							$costume->setCode($code);
+						}
+						
+						// Libellé et description
+						$label = $costumeLine[0];
+						$descr = "";
+						if (strlen($label) > 255) {
+							$descr = $label . "\n";
+							$label = substr($label, 0, 255);
+						}
+						$descr .= $costumeLine[10];
+						$costume->setLabel($label);
+						$costume->setDescr($descr);
+						
+						// Détection du genre
+						$genderRaw = str_split(preg_replace('/[^hf]/', '', strtolower($costumeLine[3])));
+						if (in_array('f', $genderRaw) && in_array('h', $genderRaw)) {
+							$costume->setGender(Costume::GENDER_MIXED);
 						} else 
-							if (in_array('h', $genderRaw)) {
-								$costume->setGender(Costume::GENDER_MAN);
-							} else {
-								$costume->setGender(Costume::GENDER_NONE);
-							}
-					
-					// Détection de la taille du costume
-					if (!empty($costumeLine[5])) {
-						$costume->setSize(substr($costumeLine[5], 0, 20));
-					}
-					
-					// Détection de l'état du costume
-					if (!empty($costumeLine[11])) {
-						$costume->setState(substr($costumeLine[11], 0, 255));
-					}
-					
-					// Détection de quantité de costume
-					$quantity = intval($costumeLine[4]);
-					if (!empty($quantity)) {
-						$costume->setQuantity($quantity);
-					} else {
-						$costume->setQuantity(1);
-					}
-					
-					// Détection de l'image
-					$picturePath = null;
-					$pictureSource = null;
-					if (is_file($pictureDir . '/' . $code . '.jpg')) {
-						$picturePath = $code . '.jpg';
-						$pictureSource = $pictureDir . '/' . $picturePath;
-					} else {
-						// On tente en enlevant la dernière partie après un . du code (qui pourrait être un numéro si quantité de l'article > 1)
-						$tmpCode = preg_replace('/\.[^\.]*$/', '', $code);
-						if (is_file($pictureDir . '/' . $tmpCode . '.jpg')) {
-							$picturePath = $tmpCode . '.jpg';
+							if (in_array('f', $genderRaw)) {
+								$costume->setGender(Costume::GENDER_WOMAN);
+							} else 
+								if (in_array('h', $genderRaw)) {
+									$costume->setGender(Costume::GENDER_MAN);
+								} else {
+									$costume->setGender(Costume::GENDER_NONE);
+								}
+						
+						// Détection de la taille du costume
+						if (!empty($costumeLine[5])) {
+							$costume->setSize(substr($costumeLine[5], 0, 20));
+						}
+						
+						// Détection de l'état du costume
+						if (!empty($costumeLine[11])) {
+							$costume->setState(substr($costumeLine[11], 0, 255));
+						}
+						
+						// Détection de quantité de costume
+						$quantity = intval($costumeLine[4]);
+						if (!empty($quantity)) {
+							$costume->setQuantity($quantity);
+						} else {
+							$costume->setQuantity(1);
+						}
+						
+						// Détection de l'image
+						$picturePath = null;
+						$pictureSource = null;
+						if (is_file($pictureDir . '/' . $code . '.jpg')) {
+							$picturePath = $code . '.jpg';
 							$pictureSource = $pictureDir . '/' . $picturePath;
 						} else {
-							fwrite($errorHandle, "Pas de fichier image trouvé pour $code\n");
+							// On tente en enlevant la dernière partie après un . du code (qui pourrait être un numéro si quantité de l'article > 1)
+							$tmpCode = preg_replace('/\.[^\.]*$/', '', $code);
+							if (is_file($pictureDir . '/' . $tmpCode . '.jpg')) {
+								$picturePath = $tmpCode . '.jpg';
+								$pictureSource = $pictureDir . '/' . $picturePath;
+							} else {
+								fwrite($errorHandle, "Pas de fichier image trouvé pour $code\n");
+							}
 						}
-					}
-					if ($pictureSource && $picturePath) {
-						// Image trouvée, on l'utilise
+						if ($pictureSource && $picturePath) {
+							// Image trouvée, on l'utilise
+							
+							// Est-ce que le costume dispose déjà de la même image ?
+							$currentPictures = $costume->getPictures();
+							$alreadyExists = false;
+							if (count($currentPictures)) {
+								foreach ($currentPictures as $currentPicture) {
+									if ($currentPicture->getPath() == $picturePath) {
+										$alreadyExists = true;
+										// Mise à jour du fichier image
+										$currentPicture->copyFromFile($pictureSource);
+										break;
+									}
+								}
+							}
+							if (!$alreadyExists) {
+								$picture = $costumePictureTable->pictureFactory();
+								$picture->setPath($picturePath);
+								if ($picture->copyFromFile($pictureSource)) {
+									$costume->addPicture($picture);
+								}
+							}
+						}
 						
-						// Est-ce que le costume dispose déjà de la même image ?
-						$currentPictures = $costume->getPictures();
-						$alreadyExists = false;
-						if (count($currentPictures)) {
-							foreach ($currentPictures as $currentPicture) {
-								if ($currentPicture->getPath() == $picturePath) {
-									$alreadyExists = true;
-									// Mise à jour du fichier image
-									$currentPicture->copyFromFile($pictureSource);
-									break;
+						// Détection des couleurs
+						$colors = explode('+', $costumeLine[6]);
+						if (count($colors)) {
+							$color = ucfirst(strtolower(trim(array_shift($colors))));
+							if ($color != '') {
+								if (count($colors)) {
+									fwrite($errorHandle, 
+											"Précisions de couleur principale non importé pour " . $costume->getCode() . " : +" . join('+', $colors) . "\n");
 								}
-							}
-						}
-						if (!$alreadyExists) {
-							$picture = $costumePictureTable->pictureFactory();
-							$picture->setPath($picturePath);
-							if ($picture->copyFromFile($pictureSource)) {
-								$costume->addPicture($picture);
-							}
-						}
-					}
-					
-					// Détection des couleurs
-					$colors = explode('+', $costumeLine[6]);
-					if (count($colors)) {
-						$color = ucfirst(strtolower(trim(array_shift($colors))));
-						if ($color != '') {
-							if (count($colors)) {
-								fwrite($errorHandle, 
-										"Précisions de couleur principale non importé pour " . $costume->getCode() . " : +" . join('+', $colors) . "\n");
-							}
-							// Si la couleur existe déjà en BDD, on l'utilise
-							$colorObject = $colorTable->getColorByName($color, true, false);
-							// Sinon on la crée
-							if (!$colorObject) {
-								$colorObject = new Color();
-								$colorObject->setName($color);
-								$colorObject->setColorCode($this->searchColorCodeByName($color));
-								$colorTable->saveColor($colorObject);
-								fwrite($errorHandle, "Ajout d'une nouvelle couleur pour " . $costume->getCode() . " : $color\n");
-							}
-							$costume->setPrimaryColor($colorObject);
-						}
-					}
-					
-					$colors = explode('+', $costumeLine[7]);
-					if (count($colors)) {
-						$color = ucfirst(strtolower(trim(array_shift($colors))));
-						if ($color != '') {
-							if (count($colors)) {
-								fwrite($errorHandle, 
-										"Précisions de couleur secondaire non importé pour " . $costume->getCode() . " : +" . join('+', $colors) . "\n");
-							}
-							// Si la couleur existe déjà en BDD, on l'utilise
-							$colorObject = $colorTable->getColorByName($color, true, false);
-							// Sinon on la crée
-							if (!$colorObject) {
-								$colorObject = new Color();
-								$colorObject->setName($color);
-								$colorObject->setColorCode($this->searchColorCodeByName($color));
-								$colorTable->saveColor($colorObject);
-								fwrite($errorHandle, "Ajout d'une nouvelle couleur pour " . $costume->getCode() . " : $color\n");
-							}
-							$costume->setSecondaryColor($colorObject);
-						}
-					}
-					
-					// Détection des matières
-					$rawMaterials = preg_split('#[+/]+#ui', $costumeLine[8]);
-					$materials = array_filter($rawMaterials, 
-							function ($material)
-							{
-								$material = trim($material);
-								if (empty($material)) {
-									return false;
-								} else {
-									return true;
+								// Si la couleur existe déjà en BDD, on l'utilise
+								$colorObject = $colorTable->getColorByName($color, true, false);
+								// Sinon on la crée
+								if (!$colorObject) {
+									$colorObject = new Color();
+									$colorObject->setName($color);
+									$colorObject->setColorCode($this->searchColorCodeByName($color));
+									$colorTable->saveColor($colorObject);
+									fwrite($errorHandle, "Ajout d'une nouvelle couleur pour " . $costume->getCode() . " : $color\n");
 								}
-							});
-					if (count($materials)) {
-						$primaryMaterial = ucfirst(strtolower(trim(array_shift($materials))));
-						$materialObject = $materialTable->getMaterialByName($primaryMaterial, true, false);
-						if (!$materialObject) {
-							$materialObject = new Material();
-							$materialObject->setName($primaryMaterial);
-							$materialTable->saveMaterial($materialObject);
-							fwrite($errorHandle, "Ajout d'une nouvelle matière pour " . $costume->getCode() . " : $primaryMaterial\n");
+								$costume->setPrimaryColor($colorObject);
+							}
 						}
-						$costume->setPrimaryMaterial($materialObject);
-					}
-					if (count($materials)) {
-						$secondaryMaterial = ucfirst(strtolower(trim(array_shift($materials))));
-						$materialObject = $materialTable->getMaterialByName($secondaryMaterial, true, false);
-						if (!$materialObject) {
-							$materialObject = new Material();
-							$materialObject->setName($secondaryMaterial);
-							$materialTable->saveMaterial($materialObject);
-							fwrite($errorHandle, "Ajout d'une nouvelle matière pour " . $costume->getCode() . " : $secondaryMaterial\n");
-						}
-						$costume->setSecondaryMaterial($materialObject);
-					}
-					if (count($materials)) {
-						fwrite($errorHandle, 
-								"Matière(s) supplémentaire(s) non importée(s) pour " . $costume->getCode() . " : " . join(' + ', $materials) . "\n");
-					}
-					
-					// Type
-					$type = trim($costumeLine[1]);
-					if (!empty($type)) {
-						$type = ucfirst(strtolower($type));
-						$typeObject = $typeTable->getTypeByName($type, false);
-						if (!$typeObject) {
-							$typeObject = new Type($type);
-							$typeTable->saveType($typeObject);
-						}
-						$costume->setType($typeObject);
-					}
-					
-					// Composition
-					$rawParts = preg_split('#[+/]+#ui', $costumeLine[9]);
-					$parts = array_filter($rawParts, 
-							function ($part)
-							{
-								$part = trim($part);
-								if (empty($part)) {
-									return false;
-								} else {
-									return true;
+						
+						$colors = explode('+', $costumeLine[7]);
+						if (count($colors)) {
+							$color = ucfirst(strtolower(trim(array_shift($colors))));
+							if ($color != '') {
+								if (count($colors)) {
+									fwrite($errorHandle, 
+											"Précisions de couleur secondaire non importé pour " . $costume->getCode() . " : +" . join('+', $colors) . "\n");
 								}
-							});
-					if (count($parts)) {
-						array_walk($parts, 
-								function (&$part)
+								// Si la couleur existe déjà en BDD, on l'utilise
+								$colorObject = $colorTable->getColorByName($color, true, false);
+								// Sinon on la crée
+								if (!$colorObject) {
+									$colorObject = new Color();
+									$colorObject->setName($color);
+									$colorObject->setColorCode($this->searchColorCodeByName($color));
+									$colorTable->saveColor($colorObject);
+									fwrite($errorHandle, "Ajout d'une nouvelle couleur pour " . $costume->getCode() . " : $color\n");
+								}
+								$costume->setSecondaryColor($colorObject);
+							}
+						}
+						
+						// Détection des matières
+						$rawMaterials = preg_split('#[+/]+#ui', $costumeLine[8]);
+						$materials = array_filter($rawMaterials, 
+								function ($material)
 								{
-									$part = new Type(ucfirst(strtolower(trim($part))));
+									$material = trim($material);
+									if (empty($material)) {
+										return false;
+									} else {
+										return true;
+									}
 								});
-						$costume->setParts($parts);
-					}
-					
-					// Origine
-					$origin = trim($costumeLine[12]);
-					if (!empty($origin)) {
-						if ($this->stripAccents(strtolower($origin)) == "creation") {
-							$costume->setOrigin(Costume::ORIGIN_CREATION);
-						} else {
-							$costume->setOrigin(Costume::ORIGIN_PURCHASE);
-							$costume->setOriginDetails($origin);
+						if (count($materials)) {
+							$primaryMaterial = ucfirst(strtolower(trim(array_shift($materials))));
+							$materialObject = $materialTable->getMaterialByName($primaryMaterial, true, false);
+							if (!$materialObject) {
+								$materialObject = new Material();
+								$materialObject->setName($primaryMaterial);
+								$materialTable->saveMaterial($materialObject);
+								fwrite($errorHandle, "Ajout d'une nouvelle matière pour " . $costume->getCode() . " : $primaryMaterial\n");
+							}
+							$costume->setPrimaryMaterial($materialObject);
 						}
-					}
-					
-					// Historique
-					$history = trim($costumeLine[13]);
-					if (!empty($history)) {
-						$otherHistory = trim($costumeLine[14]);
-						if (!empty($otherHistory)) {
-							$history .= "\n".$otherHistory;
+						if (count($materials)) {
+							$secondaryMaterial = ucfirst(strtolower(trim(array_shift($materials))));
+							$materialObject = $materialTable->getMaterialByName($secondaryMaterial, true, false);
+							if (!$materialObject) {
+								$materialObject = new Material();
+								$materialObject->setName($secondaryMaterial);
+								$materialTable->saveMaterial($materialObject);
+								fwrite($errorHandle, "Ajout d'une nouvelle matière pour " . $costume->getCode() . " : $secondaryMaterial\n");
+							}
+							$costume->setSecondaryMaterial($materialObject);
 						}
-						$costume->setHistory($history);
+						if (count($materials)) {
+							fwrite($errorHandle, 
+									"Matière(s) supplémentaire(s) non importée(s) pour " . $costume->getCode() . " : " . join(' + ', $materials) . "\n");
+						}
+						
+						// Type
+						$type = trim($costumeLine[1]);
+						if (!empty($type)) {
+							$type = ucfirst(strtolower($type));
+							$typeObject = $typeTable->getTypeByName($type, false);
+							if (!$typeObject) {
+								$typeObject = new Type($type);
+								$typeTable->saveType($typeObject);
+							}
+							$costume->setType($typeObject);
+						}
+						
+						// Composition
+						$rawParts = preg_split('#[+/]+#ui', $costumeLine[9]);
+						$parts = array_filter($rawParts, 
+								function ($part)
+								{
+									$part = trim($part);
+									if (empty($part)) {
+										return false;
+									} else {
+										return true;
+									}
+								});
+						if (count($parts)) {
+							array_walk($parts, 
+									function (&$part)
+									{
+										$part = new Type(ucfirst(strtolower(trim($part))));
+									});
+							$costume->setParts($parts);
+						}
+						
+						// Origine
+						$origin = trim($costumeLine[12]);
+						if (!empty($origin)) {
+							if ($this->stripAccents(strtolower($origin)) == "creation") {
+								$costume->setOrigin(Costume::ORIGIN_CREATION);
+							} else {
+								$costume->setOrigin(Costume::ORIGIN_PURCHASE);
+								$costume->setOriginDetails($origin);
+							}
+						}
+						
+						// Historique
+						$history = trim($costumeLine[13]);
+						if (!empty($history)) {
+							$otherHistory = trim($costumeLine[14]);
+							if (!empty($otherHistory)) {
+								$history .= "\n".$otherHistory;
+							}
+							$costume->setHistory($history);
+						}
+						
+						// Ajout des tags
+						$costume->setTags(array_unique(array_merge($globalTags, $importer->localTags)));
+						
+						// Sauvegarde du costume
+						$this->getCostumeTable()->saveCostume($costume);
+						
+						$this->dbTransaction()->commit();
+						
+						$costumeImported++;
+					} catch (\Exception $ex) {
+						$this->dbTransaction()->rollback();
+						throw $ex;
 					}
-					
-					// Ajout des tags
-					$costume->setTags(array_unique(array_merge($globalTags, $importer->localTags)));
-					
-					// Sauvegarde du costume
-					$this->getCostumeTable()->saveCostume($costume);
-					
-					$costumeImported++;
 				} else {
 					fwrite($errorHandle, "Pas assez de colonnes pour " . join(' | ', $costumeLine) . "\n");
 				}

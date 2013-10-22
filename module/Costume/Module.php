@@ -71,8 +71,8 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 					$picturePrototype->setUrlRoot($config->get('costume->pictures->url_path', ''));
 					$rootPath = $config->get('data_storage->root_path', '');
 					if (!empty($rootPath)) {
-						$picturePrototype->setStorageRoot(
-								rtrim($rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $config->get('costume->pictures->store_path', ''));
+						$storagePath = realpath(rtrim($rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $config->get('costume->pictures->store_path', ''));
+						$picturePrototype->setStorageRoot($storagePath);
 					} else {
 						$picturePrototype->setStorageRoot($config->get('costume->pictures->store_path', ''));
 					}

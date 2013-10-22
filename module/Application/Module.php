@@ -228,6 +228,10 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				{
 					return new \Application\Controller\Plugin\ItemsPerPage(
 							$sm->getServiceLocator()->get('Miranda\Service\Paginator\ItemsPerPageManager'));
+				},
+				'dbTransaction' => function ($sm)
+				{
+					return new \Application\Controller\Plugin\DbTransaction($sm->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
 				}
 			)
 		);
