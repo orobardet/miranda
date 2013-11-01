@@ -21,7 +21,7 @@ class DbCallbackCheckAdapter extends CallbackCheckAdapter
     {
 		$result = parent::authenticateValidateResult($resultIdentity);
 
-		if (!array_key_exists('active', $this->resultRow) || !$this->resultRow['active']) {
+		if (!is_array($this->resultRow) || !array_key_exists('active', $this->resultRow) || !$this->resultRow['active']) {
 			$this->resultRow = null;
 			$this->authenticateResultInfo['code']       = self::FAILURE_NOT_ACTIVE;
 			$this->authenticateResultInfo['messages'][] = 'User account is not activated.';
