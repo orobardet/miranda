@@ -42,6 +42,13 @@ class ResultStatus extends AbstractPlugin
 				$this->session->warningResults[] = $message;
 				break;
 			
+			case "info":
+				if (!isset($this->session->infoResults)) {
+					$this->session->infoResults = array();
+				}
+				$this->session->infoResults[] = $message;
+				break;
+			
 			case "success":
 			default:
 				if (!isset($this->session->successResults)) {
@@ -55,6 +62,7 @@ class ResultStatus extends AbstractPlugin
 	public function clearResultsStatus()
 	{
 		unset($this->session->successResults);
+		unset($this->session->infoResults);
 		unset($this->session->warningResults);
 		unset($this->session->errorResults);
 	}

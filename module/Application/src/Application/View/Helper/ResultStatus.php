@@ -42,6 +42,13 @@ class ResultStatus extends AbstractHelper
 				}
 				break;
 
+			case "info":
+				if (isset($this->session->infoResults) && count($this->session->infoResults)) {
+					$messages = $this->session->infoResults;
+					unset($this->session->infoResults);
+				}
+				break;
+			
 			case "success":
 			default:
 				if (isset($this->session->successResults) && count($this->session->successResults)) {
@@ -57,6 +64,7 @@ class ResultStatus extends AbstractHelper
 	public function clearResultsStatus()
 	{
 		unset($this->session->successResults);
+		unset($this->session->infoResults);
 		unset($this->session->warningResults);
 		unset($this->session->errorResults);
 	}
