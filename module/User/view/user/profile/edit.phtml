@@ -1,2 +1,59 @@
-Edition du compte
-<big class="text-warning text-lg" style="font-style:italic;"><br/><br/><i class="icon-warning-sign"></i> Fonctionnalité en cours de développement. <i class="icon-warning-sign"></i></big>
+<?php
+$title = $this->translate('Edit my profile');
+$this->headTitle($title);
+?>
+<h1><?php echo $title; ?></h1>
+<?php
+$form = $this->form;
+$form->setAttribute('class', 'form-horizontal');
+$form->setAttribute('id', 'user-form');
+?>
+<br/>
+<?php echo $this->form()->openTag($form); ?>
+	
+	<?php echo $this->formHidden($form->get('id')); ?>
+
+	<?php $element = $form->get('firstname'); ?>
+	<div class="control-group<?php if (count($element->getMessages())) echo " error"; ?>">
+		<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+		<div class="controls">
+			<?php echo $this->formElement($element) ?><span class="help-inline"><?php echo $this->translate('Recommended.'); ?></span>
+			<?php if (count($element->getMessages())):?>
+			<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
+			<?php endif; ?>
+		</div>
+	</div>
+
+	<?php $element = $form->get('lastname'); ?>
+	<div class="control-group<?php if (count($element->getMessages())) echo " error"; ?>">
+		<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+		<div class="controls">
+			<?php echo $this->formElement($element) ?><span class="help-inline"><?php echo $this->translate('Recommended.'); ?></span>
+			<?php if (count($element->getMessages())):?>
+			<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
+			<?php endif; ?>
+		</div>
+	</div>
+
+	<?php $element = $form->get('email'); ?>
+	<div class="control-group required<?php if (count($element->getMessages())) echo " error"; ?>">
+		<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+		<div class="controls">
+			<?php echo $this->formElement($element) ?><span class="help-inline"><?php echo $this->translate('Mandatory. Used as login credential.'); ?></span>
+			<?php if (count($element->getMessages())):?>
+			<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
+			<?php endif; ?>
+		</div>
+	</div>
+
+	<div class="control-group">
+	    <div class="controls">
+			<?php if ($this->cancel_url): ?>
+				<a href="<?php echo $this->cancel_url; ?>" class="btn"><?php echo $this->translate('Cancel'); ?></a>
+			<?php endif; ?>
+			<?php echo $this->formElement($form->get('submit')->setAttributes(array('class' => 'btn btn-primary'))); ?>
+		</div>
+	</div>
+
+<?php echo $this->form()->closeTag(); ?>
+

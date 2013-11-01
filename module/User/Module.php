@@ -148,6 +148,12 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 					$form->setInputFilter(new Form\UserFilter($sm->get('user_zend_db_adapter'), $sm->get('Miranda\Service\Config')));
 					return $form;
 				},
+				'User\Form\Profile' => function ($sm)
+				{
+					$form = new Form\User(null, $sm->get('translator'), null, 'profile');
+					$form->setInputFilter(new Form\UserFilter($sm->get('user_zend_db_adapter'), $sm->get('Miranda\Service\Config'), 'profile'));
+					return $form;
+				},
 				'Miranda\Service\AuthService' => function ($sm)
 				{
 					return new AuthenticationService($sm->get('Miranda\Service\AuthSessionStorage'), $sm->get('Miranda\Service\AuthDb'));

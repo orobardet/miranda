@@ -6,20 +6,19 @@ use Zend\Form\Form;
 class User extends Form
 {
 
-	public function __construct ($name = null, $translator = null, $roles = array())
+	public function __construct($name = null, $translator = null, $roles = array(), $formType = 'admin')
 	{
 		parent::__construct($name);
 		
 		$this->setAttribute('method', 'post');
 		
-		$this->add(
-				array(
-					'name' => 'id',
-					'type' => 'Hidden',
-					'attributes' => array(
-						'id' => 'input-id'
-					)
-				));
+		$this->add(array(
+			'name' => 'id',
+			'type' => 'Hidden',
+			'attributes' => array(
+				'id' => 'input-id'
+			)
+		));
 		
 		$this->add(
 				array(
@@ -61,58 +60,60 @@ class User extends Form
 					)
 				));
 		
-		$this->add(
-				array(
-					'name' => 'password',
-					'type' => 'Password',
-					'options' => array(
-						'label' => 'Password: '
-					),
-					'attributes' => array(
-						'id' => 'input-password',
-						'title' => $translator->translate('Password')
-					)
-				));
-		
-		$this->add(
-				array(
-					'name' => 'password_verification',
-					'type' => 'Password',
-					'options' => array(
-						'label' => 'Password verification: '
-					),
-					'attributes' => array(
-						'id' => 'input-password-verification',
-						'title' => $translator->translate('Password verification')
-					)
-				));
-		
-		$this->add(
-				array(
-					'name' => 'active',
-					'type' => 'Checkbox',
-					'options' => array(
-						'label' => 'Activated: ',
-					),
-					'attributes' => array(
-						'id' => 'input-active',
-						'title' => $translator->translate('Activated')
-					)
-				));
-		
-		$this->add(
-				array(
-					'name' => 'roles',
-					'type' => 'Application\Form\Element\OptionalMultiCheckbox',
-					'options' => array(
-						'label' => 'Roles: ',
-						'value_options' => $roles,
-					),
-					'attributes' => array(
-						'id' => 'input-roles',
-						'title' => $translator->translate('Roles')
-					)
-				));
+		if ($formType == 'admin') {
+			$this->add(
+					array(
+						'name' => 'password',
+						'type' => 'Password',
+						'options' => array(
+							'label' => 'Password: '
+						),
+						'attributes' => array(
+							'id' => 'input-password',
+							'title' => $translator->translate('Password')
+						)
+					));
+			
+			$this->add(
+					array(
+						'name' => 'password_verification',
+						'type' => 'Password',
+						'options' => array(
+							'label' => 'Password verification: '
+						),
+						'attributes' => array(
+							'id' => 'input-password-verification',
+							'title' => $translator->translate('Password verification')
+						)
+					));
+			
+			$this->add(
+					array(
+						'name' => 'active',
+						'type' => 'Checkbox',
+						'options' => array(
+							'label' => 'Activated: '
+						),
+						'attributes' => array(
+							'id' => 'input-active',
+							'title' => $translator->translate('Activated')
+						)
+					));
+			
+			$this->add(
+					array(
+						'name' => 'roles',
+						'type' => 'Application\Form\Element\OptionalMultiCheckbox',
+						'options' => array(
+							'label' => 'Roles: ',
+							'value_options' => $roles
+						),
+						'attributes' => array(
+							'id' => 'input-roles',
+							'title' => $translator->translate('Roles')
+						)
+					));
+		}
 		
 		$this->add(
 				array(

@@ -336,15 +336,15 @@ class User extends ObjectModelBase
 	
 	public function exchangeArray($data, $getPassword = true)
 	{
-		$this->id = (array_key_exists('id', $data)) ? $data['id'] : null;
-		$this->email = (array_key_exists('email', $data)) ? $data['email'] : null;
+		$this->id = (array_key_exists('id', $data)) ? $data['id'] : $this->id;
+		$this->email = (array_key_exists('email', $data)) ? $data['email'] : $this->email;
 		if ($getPassword) {
-			$this->password = (array_key_exists('password', $data)) ? $data['password'] : null;
+			$this->password = (array_key_exists('password', $data)) ? $data['password'] : $this->password;
 		}
-		$this->firstname = (array_key_exists('firstname', $data)) ? $data['firstname'] : null;
-		$this->lastname = (array_key_exists('lastname', $data)) ? $data['lastname'] : null;
-		$this->active = (array_key_exists('active', $data)) ? $data['active'] : null;
-		$this->roles = (array_key_exists('roles', $data)) ? $data['roles'] : null;
+		$this->firstname = (array_key_exists('firstname', $data)) ? $data['firstname'] : $this->firstname;
+		$this->lastname = (array_key_exists('lastname', $data)) ? $data['lastname'] : $this->lastname;
+		$this->active = (array_key_exists('active', $data)) ? $data['active'] : $this->active;
+		$this->roles = (array_key_exists('roles', $data)) ? $data['roles'] : $this->roles;
 		$this->creation_ts = (array_key_exists('creation_ts', $data)) ? $data['creation_ts'] : $this->creation_ts;
 		$this->modification_ts = (array_key_exists('modification_ts', $data)) ? $data['modification_ts'] : $this->modification_ts;
 		$this->last_activity_ts = (array_key_exists('last_activity_ts', $data)) ? $data['last_activity_ts'] : $this->last_activity_ts;

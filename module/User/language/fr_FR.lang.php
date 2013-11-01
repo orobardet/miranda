@@ -63,4 +63,6 @@ return array(
 	"User '%name%' edited." => "Utilisateur '%name%' modifié.",
 	
 	'Users list:' => 'Liste des utilisateurs :',
+	
+	'Profile edited.' => 'Profil modifié.',
 );
