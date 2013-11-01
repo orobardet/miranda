@@ -65,8 +65,53 @@ class ProfileController extends AbstractUserController implements ConfigAwareInt
 
 	public function changepasswordAction()
 	{
-		return $this->getProfileViewModel('changepassword', array(
-			'user' => $this->userAuthentication()->getIdentity()
-		));
+		/* @var $user \User\Model\User */
+		$user = $this->userAuthentication()->getIdentity();
+		$id = $user->getId();
+		
+		$form = $this->getServiceLocator()->get('User\Form\Password');
+		$form->setAttribute('action', $this->url()->fromRoute('profile', array(
+			'action' => 'changepassword'
+		)));
+		$form->setAttribute('method', 'post');
+		$form->get('submit')->setValue($this->getServiceLocator()->get('translator')->translate('Edit'));
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			$form->setData($request->getPost());
+
+			$passwordChanged = false;
+			if (($request->getPost('password', '') == '') && ($request->getPost('password-verification', '') == '')) {
+				$passwordChanged = false;
+			} else {
+				$passwordChanged = true;
+			}
+			
+			if ($passwordChanged) {
+				if ($form->isValid()) {
+					$bcrypt = $this->getServiceLocator()->get('Miranda\Service\AuthBCrypt');
+					if ($user->verifyPassword($request->getPost('current_password'), $bcrypt)) {
+						$user->setPassword($request->getPost('password'), $bcrypt);
+						$this->getUserTable()->saveUser($user, true);
+						
+						$this->resultStatus()->addResultStatus($this->getServiceLocator()->get('translator')->translate("New password defined."), "success");
+						return $this->redirect()->toRoute('profile');
+					} else {
+						$form->setMessages(array('current_password' => array('Invalid password')));
+					}
+				}
+			} else {
+				$this->resultStatus()->addResultStatus($this->getServiceLocator()->get('translator')->translate("No password change."), "info");
+				return $this->redirect()->toRoute('profile');
+			}
+		}
+		
+		return $this->getProfileViewModel('changepassword', 
+				array(
+					'id' => $id,
+					'form' => $form,
+					'user' => $user,
+					'cancel_url' => $this->refererUrl('profile-edit')
+				));
 	}
 }

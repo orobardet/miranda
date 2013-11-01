@@ -152,10 +152,12 @@ class UserFilter extends InputFilter
 
 	public function setUserId($id)
 	{
-		$this->emailNotExistsValidator->setExclude(array(
-			'field' => 'id',
-			'value' => $id
-		));
+		if (isset($this->emailNotExistsValidator)) {
+			$this->emailNotExistsValidator->setExclude(array(
+				'field' => 'id',
+				'value' => $id
+			));
+		}
 	}
 
 	public function noPasswordValidation()

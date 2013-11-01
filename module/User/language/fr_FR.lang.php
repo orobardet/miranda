@@ -1,7 +1,7 @@
 <?php 
 return array(
 	'Sign In' => 'Connexion',		
-	'Password' => 'Mot de passe',		
+	'Password' => 'Mot de passe',
 	'Login' => 'Connexion',		
     'Email or password are empty, malformed or invalid.' => "L'email ou le mot de passe sont manquants, malformés ou invalides.",
 	'Login failed' => 'Echec de la connexion',
@@ -31,6 +31,7 @@ return array(
 	'Lastname: ' => 'Nom : ',
 	'Email: ' => 'Email : ',
 	'Password: ' => 'Mot de passe : ',
+	'New password: ' => 'Nouveau mot de passe : ',		
 	'Password verification: ' => 'Vérification du mot de passe : ',
 	'Password verification' => 'Vérification du mot de passe',
 	'Activated: ' => 'Activé : ',
@@ -65,4 +66,7 @@ return array(
 	'Users list:' => 'Liste des utilisateurs :',
 	
 	'Profile edited.' => 'Profil modifié.',
+	'New password defined.' => 'Nouveau mot de passe défini.',
+	'No password change.' => 'Pas de changement du mot de passe.',
+	'Invalid password' => 'Mot de passe invalide',
 );

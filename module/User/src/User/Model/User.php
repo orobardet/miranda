@@ -333,6 +333,19 @@ class User extends ObjectModelBase
 			$this->roles = $roles;
 		}
 	}
+
+	/**
+	 * Verifie si un mot de passe donnée (non crypté) correspond à 
+	 * celui de l'utilisateur
+	 * 
+	 * @param string $password
+	 * @param \Zend\Crypt\Password\Bcrypt $bcrypt
+	 */
+	public function verifyPassword($password, $bcrypt)
+	{
+		return $bcrypt->verify($password, $this->password);
+	}
+	
 	
 	public function exchangeArray($data, $getPassword = true)
 	{
