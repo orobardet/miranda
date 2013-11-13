@@ -3,9 +3,12 @@
 return array(
   'Costume\Module'                               => __DIR__ . '/Module.php',
   'Costume\Form\PartFilter'                      => __DIR__ . '/src/Costume/Form/PartFilter.php',
+  'Costume\Form\Costume'                         => __DIR__ . '/src/Costume/Form/Costume.php',
   'Costume\Form\TagFilter'                       => __DIR__ . '/src/Costume/Form/TagFilter.php',
+  'Costume\Form\View\Helper\FormColorSelect'     => __DIR__ . '/src/Costume/Form/View/Helper/FormColorSelect.php',
   'Costume\Form\MaterialFilter'                  => __DIR__ . '/src/Costume/Form/MaterialFilter.php',
   'Costume\Form\ColorFilter'                     => __DIR__ . '/src/Costume/Form/ColorFilter.php',
+  'Costume\Form\CostumeFilter'                   => __DIR__ . '/src/Costume/Form/CostumeFilter.php',
   'Costume\Controller\AdminPartController'       => __DIR__ . '/src/Costume/Controller/AdminPartController.php',
   'Costume\Controller\AdminColorController'      => __DIR__ . '/src/Costume/Controller/AdminColorController.php',
   'Costume\Controller\AdminController'           => __DIR__ . '/src/Costume/Controller/AdminController.php',

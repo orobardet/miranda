@@ -242,7 +242,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		return array(
 			'invokables' => array(
 				'text2Html' => 'Application\View\Helper\Text2Html',
-				'translateReplace' => 'Application\View\Helper\TranslateReplace'
+				'translateReplace' => 'Application\View\Helper\TranslateReplace',
+				'formUxSpinner' => 'Application\Form\View\Helper\FormUxSpinner'
 			),
 			'factories' => array(
 				'resultStatus' => function (HelperPluginManager $pm)
@@ -257,7 +258,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		);
 	}
 
-	public function getConsoleBanner(ConsoleAdapterInterface $console)
+    public function getConsoleBanner(ConsoleAdapterInterface $console)
 	{
 		return 'Miranda';
 	}

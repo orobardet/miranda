@@ -5,6 +5,8 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\Paginator\Adapter\DbTableGateway;
 use Zend\Paginator\Paginator;
 use Application\Model\DataCache\AbstractDataCachePopulator;
+use Zend\Db\Sql\Expression;
+use ArrayObject;
 
 class CostumeTable extends AbstractDataCachePopulator
 {
@@ -178,7 +180,7 @@ class CostumeTable extends AbstractDataCachePopulator
 		if ($this->tagTable) {
 			$this->tagTable->saveCostumeTags($costume);
 		}
-
+		
 		// Sauvegarde des parts
 		if ($this->typeTable) {
 			$this->typeTable->saveCostumeParts($costume);
@@ -355,5 +357,97 @@ class CostumeTable extends AbstractDataCachePopulator
 	{
 		$this->typeTable = $typeTable;
 		$this->addCachedCollection($typeTable);
+	}
+	
+	/**
+	 * Retourne la liste des types, sous forme d'un tableau.
+	 * 
+	 * clé = ID type, valeur = nom type
+	 * 
+	 * @return array 
+	 */
+	public function getTypes()
+	{
+		$types = array();
+		
+		if ($this->typeTable) {
+			$allTypes = $this->typeTable->fetchAll();
+			if (count($allTypes)) {
+				foreach ($allTypes as $type){
+					$types[$type->getId()] = $type->getName();
+				}
+			}			
+		}
+		
+		return $types;
+	}
+	
+	/**
+	 * Retourne la liste des matières, sous forme d'un tableau.
+	 * 
+	 * clé = ID matière, valeur = nom matière
+	 * 
+	 * @return array 
+	 */
+	public function getMaterials()
+	{
+		$materials = array();
+		
+		if ($this->materialTable) {
+			$allMaterials = $this->materialTable->fetchAll();
+			if (count($allMaterials)) {
+				foreach ($allMaterials as $material){
+					$materials[$material->getId()] = $material->getName();
+				}
+			}			
+		}
+		
+		return $materials;
+	}
+	
+	/**
+	 * Retourne la liste des couleurs, sous forme d'un tableau.
+	 * 
+	 * clé = ID couleur, valeur = nom couleur
+	 * 
+	 * @return array 
+	 */
+	public function getColors()
+	{
+		$colors = array();
+		
+		if ($this->colorTable) {
+			$colors = $this->colorTable->fetchAll();
+		}
+		
+		return $colors;
+	}
+	
+	/**
+	 * Retourne la liste des etats déjà saisi dans la BDD
+	 * 
+	 * @return string[] 
+	 */
+	public function getStates()
+	{
+		/* @var $sqlSelect \Zend\Db\Sql\Select */
+		$sqlSelect = $this->tableGateway->getSql()->select();
+		$sqlSelect->columns(array(new Expression('DISTINCT(state) AS state')));
+		$sqlSelect->where(array(
+			'state IS NOT NULL',
+			'state != ?' => ''
+		));
+		$sqlSelect->order('state');
+		
+		/* @var $resultSet \Zend\Db\ResultSet\ResultSet */
+		$resultSet = $this->tableGateway->selectWith($sqlSelect);
+		$resultSet->setArrayObjectPrototype(new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS));
+		
+		$states = array();
+		foreach($resultSet as $state) {
+			$states[] = $state->state;
+		}
+		
+		return $states;
 	}
 }

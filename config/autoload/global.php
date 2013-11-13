@@ -19,6 +19,7 @@ $config = array(
 			'css' => array(
 				'css/jquery-ui-bootstrap/jquery-ui.css',
 				'css/bootstrap.css',
+				'css/fuelux.css',
 				'css/bootstrap-responsive.min.css',
 				'css/font-awesome.min.css',
 				'css/style.css'
@@ -29,6 +30,7 @@ $config = array(
 			'less' => array(
 				'css/jquery-ui-bootstrap/jquery-ui.css',
 				'css/bootstrap.less',
+				'css/fuelux.less',
 				'css/bootstrap-responsive.min.css',
 				'css/font-awesome.min.css',
 				'css/style.less'
@@ -39,6 +41,7 @@ $config = array(
 				'js/jquery-ui.min.js',
 				'js/jquery.loadmask.min.js',
 				'js/bootstrap.js',
+				'js/fuelux.js',
 				'lib/jquery.passstrength.js'
 			)
 		),

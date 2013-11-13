@@ -31,7 +31,7 @@ abstract class AbstractDataCachePopulator
 		}
 	}
 
-	protected function populateCaches()
+	public function populateCaches()
 	{
 		if (count($this->_cachedCollections)) {
 			foreach ($this->_cachedCollections as $name => $object) {

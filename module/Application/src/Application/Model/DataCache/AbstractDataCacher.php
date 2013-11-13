@@ -6,6 +6,22 @@ abstract class AbstractDataCacher
 
 	protected $_cacheData;
 
+	protected function dataCacheCount()
+	{
+		if (is_array($this->_cacheData)) {
+			return count($this->_cacheData);
+		}
+		return false;
+	}
+	
+	protected function dataCacheGetAll()
+	{
+		if (is_array($this->_cacheData)) {
+			return $this->_cacheData;
+		}
+		return array();
+	}
+	
 	protected function dataCacheAdd($key, $value)
 	{
 		if (!is_array($this->_cacheData)) {

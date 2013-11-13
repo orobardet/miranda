@@ -26,16 +26,20 @@ class TypeTable extends AbstractDataCacher implements DataCacheAwareInterface
 	/**
 	 * Retourne tous les types existant
 	 *
-	 * @return \Costume\Model\Type[] Liste des type (sous forme d'un iterable)
+	 * @return \Costume\Model\Type[] Liste des types (sous forme d'un iterable)
 	 */
 	public function fetchAll()
 	{
-		return $this->tableGateway->select(function ($select)
-		{
-			$select->order(array(
-				'name'
-			));
-		});
+		if ($this->dataCacheCount()) {
+			return $this->dataCacheGetAll();
+		} else {
+			return $this->tableGateway->select(function ($select)
+			{
+				$select->order(array(
+					'name'
+				));
+			});
+		}
 	}
 
 	public function getType($id, $exceptionIfNone = true)

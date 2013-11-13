@@ -1,0 +1,685 @@
+.fuelux {
+	@import "fuelux-variables.less";
+	@import "mixins.less";
+	
+	.form-inline {
+		.checkbox-custom {
+			padding-left: 20px;
+		}
+
+		.checkbox-custom .checkbox {
+			padding-left: 16px;
+		}
+	}
+
+	.checkbox-custom {
+		input[type=checkbox] {
+		/* IE cannot fire events if display none or visibility hidden */
+		position: relative;
+		top: -99999px;
+		}
+
+		i {
+			background-image: url(../img/form.png);
+			background-position: 0 1px;
+			background-repeat: no-repeat;
+			margin-left: -20px;
+			margin-right: 4px;
+			padding-left: 16px;
+			width: 16px;
+			height: 16px;
+
+			&.checked {
+				/* checked */
+				background-position: -48px 1px;
+			}
+
+			&.disabled {
+				/* disabled */
+				background-position: -64px 1px;
+
+				&.checked {
+					/* disabled and checked */
+					background-position: -80px 1px;
+				}
+			}
+		}
+	}
+
+	.checkbox-custom:hover {
+		i {
+			background-position: -16px 1px;
+
+			&.checked {
+				/* checked */
+				background-position: -32px 1px;
+			}
+
+			&.disabled {
+				/* disabled */
+				background-position: -64px 1px;
+
+				&.checked {
+					/* disabled and checked */
+					background-position: -80px 1px;
+				}
+			}
+		}
+	}
+	.combobox {
+		display: inline-block;
+
+		a {
+			font-size: @baseFontSize;
+		}
+
+		button.btn {
+			border-radius: 0 @inputBorderRadius @inputBorderRadius 0;
+		}
+	}@tableBackgroundAccentDark: darken(@tableBackgroundAccent, 8%);
+
+	.datagrid {
+
+		thead {
+
+			background-color: @tableBackgroundAccent;
+
+			.datagrid-header-title {
+				float: left;
+				line-height: 28px;
+				font-weight: normal;
+				font-size: 14px;
+				margin-right: 10px;
+			}
+
+			.datagrid-header-left {
+				float: left;
+			}
+
+			.datagrid-header-right {
+				float: right;
+			}
+
+			.datagrid-header-right, .datagrid-header-left {
+				.search, .filter {
+					margin-left: 8px;
+					margin-bottom: 0;
+
+					.dropdown-menu {
+						top: auto;
+						left: auto;
+					}
+				}
+			}
+
+			// When changing this section verify stretchHeight column sizes when sorting
+			// and update SORTED_HEADER_OFFSET in datagrid.js as needed
+			.sorted {
+				.gradientBar(@tableBackgroundAccent, @tableBackgroundAccentDark, @textColor, 'none');
+
+				padding-right: 30px;
+
+				i {
+					float: right;
+					margin-top: 2px;
+					margin-right: -22px;
+				}
+			}
+
+			.sortable {
+				cursor: pointer;
+				position: relative;
+
+				&:hover {
+					.gradientBar(@tableBackgroundAccent, @tableBackgroundAccentDark, @textColor, 'none');
+				}
+			}
+
+		}
+
+		tfoot {
+
+			background-color: @tableBackgroundAccent;
+
+			.datagrid-footer-left {
+
+				float: left;
+
+				.grid-controls {
+					margin-top: 7px;
+
+					select {
+						margin: 0 5px 1px;
+						width: 60px;
+					}
+
+					.grid-pagesize {
+						display: inline-block;
+						margin-bottom: 5px;
+						vertical-align: middle;
+
+						.dropdown-menu {
+							top: auto;
+							left: auto;
+						}
+					}
+
+					span {
+						font-weight: normal;
+					}
+				}
+
+			}
+
+			.datagrid-footer-right {
+
+				float: right;
+
+				.grid-pager {
+					> span {
+						font-weight: normal;
+						position: relative;
+						top: 8px;
+					}
+
+					.dropdown-menu {
+						min-width: 50px;
+					}
+
+					.combobox {
+						display: inline-block;
+						position: relative;
+						top: -2px;
+						vertical-align: baseline;
+						margin-bottom: 4px;
+					}
+
+					> button {
+						position: relative;
+						top: 7px;
+					}
+				}
+
+			}
+
+		}
+
+	}
+
+	.datagrid-stretch-header {
+		border-bottom: 0;
+		.border-bottom-radius(0);
+
+		margin-bottom: 0;
+
+		thead:last-child tr:last-child > th:first-child,
+		thead:last-child tr:last-child > th:last-child {
+			.border-bottom-radius(0);
+		}
+	}
+
+	.datagrid-stretch-wrapper {
+		border: 1px solid @tableBorder;
+		overflow: auto;
+
+		.datagrid {
+			border: none;
+			border-collapse: collapse;
+			.border-radius(0);
+
+			margin-bottom: 0;
+
+			td, th {
+				border-bottom: 1px solid @tableBorder;
+
+				&:first-child {
+					border-left: none;
+					.border-radius(0);
+				}
+			}
+		}
+	}
+
+	.datagrid-stretch-footer {
+		border-top: 0;
+		.border-top-radius(0);
+
+		th {
+			border-top: 0;
+		}
+	}
+
+	.dropUp {
+		-webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+		-moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	}.pillbox {
+
+		padding: 3px;
+
+		ul {
+			display: inline-block;
+			margin: 0;
+		}
+
+		li {
+
+			// Begin Bootstrap .label
+			font-size: @baseFontSize * .846;
+			font-weight: bold;
+			line-height: 21px; // modified
+			color: @white;
+			vertical-align: baseline;
+			//white-space: nowrap; //removed
+			text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+			background-color: @grayLight;
+			padding: 1px 4px 2px;
+			.border-radius(3px);
+			// End Bootstrap .label
+
+			display: inline-block;
+			margin: 2px;
+			cursor: pointer;
+			float:left;
+
+			&:after {
+
+				// Begin Bootstrap .close
+				float: right;
+				font-size: 20px;
+				font-weight: bold;
+				line-height: @baseLineHeight;
+				color: @black;
+				text-shadow: 0 1px 0 rgba(255,255,255,1);
+				.opacity(20);
+				// End Bootstrap .close
+
+				padding-left: 4px;
+				position: relative;
+				top: -2px;
+				content: " \00D7"
+			}
+
+			&:hover {
+				&:after {
+					.opacity(40);
+				}
+			}
+
+			&.status {
+				&-important {
+					background-color: @errorText;
+				}
+
+				&-warning {
+					background-color: @orange;
+				}
+
+				&-success {
+					background-color: @successText;
+				}
+
+				&-info {
+					background-color: @infoText;
+				}
+			}
+
+		}
+
+	}.radio-custom {
+		input[type=radio] {
+		/* IE cannot fire events if display none or visibility hidden */
+		position: relative;
+		top: -99999px;
+		}
+
+		i {
+			background-image: url(../img/form.png);
+			background-position: 0 -15px;
+			background-repeat: no-repeat;
+			margin-left: -20px;
+			margin-right: 4px;
+			padding-left: 16px;
+			width: 16px;
+			height: 16px;
+
+			&.checked {
+				/* checked */
+				background-position: -48px -15px;
+			}
+
+			&.disabled {
+				/* disabled */
+				background-position: -64px -15px;
+
+				&.checked {
+					/* disabled and checked */
+					background-position: -80px -15px;
+				}
+			}
+		}
+	}
+
+	.radio-custom:hover {
+		i {
+			background-position: -16px -15px;
+
+			&.checked {
+				/* checked */
+				background-position: -32px -15px;
+			}
+
+			&.disabled {
+				/* disabled */
+				background-position: -64px -15px;
+
+				&.checked {
+					/* disabled and checked */
+					background-position: -80px -15px;
+				}
+			}
+		}
+	}.spinner{
+
+		input {
+			width: 43px;
+			float: left;
+		}
+
+		.btn {
+			position: relative;
+			width: 20px;
+			height: 14px;
+			padding-top: 0;
+			padding-right: 9px;
+			padding-left: 9px;
+
+			&.disabled {
+				cursor: not-allowed;
+			}
+		}
+
+		.spinner-buttons {
+			position: relative;
+			float: left;
+			height: 28px;
+			width: 20px;
+			left: -22px;
+		}
+
+		.spinner-up {
+
+			padding: 0 0 4px 1px;
+			top: 2px;
+
+			i {
+				position:relative;
+				top: -4px;
+			}
+		}
+
+		.spinner-down {
+
+			padding: 0 0 4px 1px;
+			top: 2px;
+			height: 13px;
+
+			i {
+				position:relative;
+				top: -5px;
+			}
+		}
+	}.search {
+		display: inline-block;
+	}.select {
+		.dropdown-label {
+			padding: 0 10px 0 0;
+			margin: 0;
+			display: inline-block;
+			text-align: left;
+			font-weight: normal;
+			color: #333;
+		}
+
+		&-sizer {
+			display: inline-block;
+			position: absolute;
+			visibility: hidden;
+			top: 0;
+		}
+	}.tree {
+
+		border: 1px solid #BBBBBB;
+		border-radius: 4px 4px 4px 4px;
+		overflow-y: auto;
+		overflow-x: hidden;
+		padding: 10px 15px 0 15px;
+		position: relative;
+
+		.tree-folder {
+
+			width: 100%;
+			min-height: 20px;
+			cursor: pointer;
+			margin-top: 1px;
+
+			.tree-folder-header {
+
+				position: relative;
+				height: 20px;
+				-webkit-border-radius: 6px;
+				   -moz-border-radius: 6px;
+						border-radius: 6px;
+
+				&:hover {
+					background-color: @treeBackgroundHover;
+				}
+
+				i {
+					position: absolute;
+					float: left;
+					top: 1px;
+					left: 5px;
+				}
+
+				.tree-folder-name {
+					padding-left: 29px;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
+
+			}
+
+			.tree-folder-content {
+				margin-left: 23px;
+			}
+
+		}
+
+		.tree-item {
+
+			position: relative;
+			width: 100%;
+			height: 20px;
+			cursor: pointer;
+			margin-top: 1px;
+			-webkit-border-radius: 6px;
+			   -moz-border-radius: 6px;
+					border-radius: 6px;
+
+			&:hover {
+				background-color: @treeBackgroundHover;
+			}
+
+			.tree-item-name {
+				overflow: hidden;
+				padding-left: 29px;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			.tree-dot {
+				position: absolute;
+				top: 8px;
+				left: 10px;
+				display: block;
+				width: 4px;
+				height: 4px;
+				background-color: @grayDark;
+				-webkit-border-radius: 6px;
+				   -moz-border-radius: 6px;
+						border-radius: 6px;
+			}
+
+			.icon-ok {
+				position: absolute;
+				top: 1px;
+				left: 5px;
+			}
+
+		}
+
+		.tree-selected {
+			background-color: @treeBackgroundSelect;
+
+			&:hover {
+				background-color: @treeBackgroundSelect;
+			}
+		}
+	}
+	.wizard {
+
+		.clearfix;
+
+		border: 1px solid @navbarBorder;
+		.border-radius(@baseBorderRadius);
+		.box-shadow(0 1px 4px rgba(0,0,0,.065));
+		background-color: @tableBackgroundAccent;
+		position: relative;
+		overflow: hidden;
+
+		ul {
+			list-style: none outside none;
+			padding: 0;
+			margin: 0;
+			width: 4000px;
+			
+			li {
+				float: left;
+				margin: 0;
+				padding: 0 20px 0 30px;
+				height: 46px;
+				line-height: 46px;
+				position: relative;
+				background: #ededed;
+				color: @grayLight;
+				font-size: 16px;
+				cursor: default;
+
+				.chevron {
+					border: 24px solid transparent;
+					border-left: 14px solid @navbarBorder;
+					border-right: 0;
+					display: block;
+					position: absolute;
+					right: -14px;
+					top: 0;
+					z-index: 1;
+				}
+
+				.chevron:before {
+					border: 24px solid transparent;
+					border-left: 14px solid #ededed;
+					border-right: 0;
+					content: "";
+					display: block;
+					position: absolute;
+					right: 1px;
+					top: -24px;
+				}
+
+				&.complete {
+					background: #f3f4f5;
+					color: @successText;
+
+					&:hover {
+						background: #e7eff8;
+						cursor: pointer;
+
+						.chevron:before {
+							border-left: 14px solid #e7eff8;
+						}
+					}
+
+					.chevron:before {
+						border-left: 14px solid #f3f4f5;
+					}
+				}
+				&.active {
+					background: #f1f6fc;
+					color: @infoText;
+
+					.chevron:before {
+						border-left: 14px solid #f1f6fc;
+					}
+				}
+				.badge {
+					margin-right: 8px;
+				}
+			}
+
+			li:first-child {
+				border-radius: 4px 0 0 4px;
+				padding-left: 20px;
+			}
+		}
+
+		.actions {
+			z-index: 1000;
+			position: absolute;
+			right: 0;
+			line-height: 46px;
+			float: right;
+			padding-left: 15px;
+			padding-right: 15px;		
+			vertical-align: middle;
+			background-color: #e5e5e5;
+			border-left: 1px solid @navbarBorder;
+
+			a {
+				line-height: 45px;
+				font-size: 12px;
+				margin-right: 8px;
+			}
+
+			.btn-prev {
+				i {
+					margin-right: 5px;
+				}
+			}
+
+			.btn-next {
+				i {
+					margin-left: 5px;
+				}
+			}
+		}
+	}
+
+	.step-content {
+		.step-pane {
+			display: none;
+		}
+
+		.active {
+			display: block;
+			
+			.btn-group {
+				.active {
+					display: inline-block;
+				}
+			}
+		}
+	}	
+}

@@ -71,7 +71,8 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 					$picturePrototype->setUrlRoot($config->get('costume->pictures->url_path', ''));
 					$rootPath = $config->get('data_storage->root_path', '');
 					if (!empty($rootPath)) {
-						$storagePath = realpath(rtrim($rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $config->get('costume->pictures->store_path', ''));
+						$storagePath = realpath(
+								rtrim($rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $config->get('costume->pictures->store_path', ''));
 						$picturePrototype->setStorageRoot($storagePath);
 					} else {
 						$picturePrototype->setStorageRoot($config->get('costume->pictures->store_path', ''));
@@ -149,11 +150,27 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 								'costume_id',
 								'type_id'
 							)));
+				},
+				'Costume\Form\Costume' => function ($sm)
+				{
+					$form = new Form\Costume($sm->get('Costume\Model\CostumeTable'), null, $sm->get('translator'));
+					$form->setInputFilter(new Form\CostumeFilter($sm->get('costume_zend_db_adapter'), $sm->get('Miranda\Service\Config')));
+					return $form;
 				}
 			)
 		);
 	}
-
+	
+	public function getViewHelperConfig()
+	{
+		return array(
+			'invokables' => array(
+				'formColorSelect' => 'Costume\Form\View\Helper\FormColorSelect'
+			)
+		);
+	}
+	
+	
 	public function getConsoleUsage(ConsoleAdapterInterface $console)
 	{
 		return array(

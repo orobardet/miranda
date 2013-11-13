@@ -71,4 +71,11 @@ return array(
 	'purchase' => 'Achat',
 	'other' => 'Autre',
 	'History:' => 'Historique :',
+	'Origin details' => "Détail de l'origine",
+	'e.g.: AB.CD.1' => 'ex.: AB.CD.1',
+	'Short description of the costume' => 'Description courte du costume',
+	'Complete and detailed description of the costume.' => 'Description complète et détaillée du costume.',
+	'S, XL, or 38,42 or any text' => 'S, XL, ou 38,42 ou un texte',
+	'Existing or new' => 'Existant ou un nouveau',
+	"Existing or new, add it with '+'" => "Existant ou un nouveau, ajoutez-le avec '+'"
 );

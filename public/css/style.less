@@ -284,6 +284,10 @@ label.multicheckbox {
 .dropup-menu {
     bottom: 100%;
     top: auto !important;
+	&.typeahead {
+		margin-top: 0px;
+		margin-bottom: 2px;
+	}
 }
 
 /* position the arrow downwards, pointing to the menu */
@@ -408,5 +412,46 @@ label.multicheckbox {
 	max-width:500px;
 }
 
+label.radio.col2 {
+	display: inline-block;
+	width:40%;
+}
+
+/* Not visible outside of #parts-list*/
+.parts-list-item {
+	display: none;
+}
+#costume-form {
+	#parts-list {
+		min-height:10px;
+		max-height:120px;
+		overflow:auto;
+		
+		.border-radius(@inputBorderRadius);
+		padding: 4px 6px;
+		background-color: @inputBackground;
+		border: 1px solid @inputBorder;
+		.box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
+		.transition(~"border linear .2s, box-shadow linear .2s");
+	
+		.parts-list-item {
+			.clearfix();
+			display: block;
+			padding:2px;
+			
+			.part-label {
+				vertical-align:middle;
+			}
+			
+			&:hover {
+				background-color:@tableBackgroundHover;
+			}
+	
+			.btn-remove-part {
+				float:right;
+			}	
+		}
+	}
+}
 
 @import "icons-sprite.less";

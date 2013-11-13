@@ -25,6 +25,51 @@ class Costume extends ObjectModelBase
 	const ORIGIN_NONE = null;
 
 	/**
+	 * Retourne la liste des genres acceptés
+	 * 
+	 * @return string[] 
+	 */
+	public static function getGenders()
+	{
+		return array(
+			self::GENDER_MIXED,
+			self::GENDER_MAN,
+			self::GENDER_WOMAN
+		);
+	}
+
+	/**
+	 * Retourne la liste des origines acceptés
+	 * 
+	 * @return string[] 
+	 */
+	public static function getOrigins()
+	{
+		return array(
+			self::ORIGIN_CREATION,
+			self::ORIGIN_PURCHASE,
+			self::ORIGIN_OTHER
+		);
+	}
+
+	/**
+	 * Retourne la liste des tailles standard
+	 * 
+	 * @return string[] 
+	 */
+	public static function getDefaultSizes()
+	{
+		return array(
+			'U',
+			'S',
+			'M',
+			'L',
+			'XL',
+			'Enfant'
+		);
+	}
+
+	/**
 	 *
 	 * @var \Costume\Model\CostumeTable
 	 */
@@ -199,6 +244,8 @@ class Costume extends ObjectModelBase
 
 	/**
 	 * Origine du costume (creation, achat, .
+	 *
+	 *
 	 *
 	 *
 	 *

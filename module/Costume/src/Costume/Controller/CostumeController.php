@@ -8,7 +8,7 @@ use Application\Toolbox\String as StringTools;
 class CostumeController extends AbstractCostumeController implements AclControllerInterface
 {
 
-	public function aclIsAllowed($action, \Zend\Permissions\Acl\Acl $acl, $user)
+	public function aclIsAllowed($action,\Zend\Permissions\Acl\Acl $acl, $user)
 	{
 		switch ($action) {
 			case "index":
@@ -88,12 +88,36 @@ class CostumeController extends AbstractCostumeController implements AclControll
 
 	public function addAction()
 	{
+		$defaultData = array(
+			'gender' => 'None'
+		);
+		
+		$form = $this->getServiceLocator()->get('Costume\Form\Costume');
+		$form->prepare();
+		$form->setAttribute('action', $this->url()->fromRoute('costume', array(
+			'action' => 'add'
+		)));
+		$form->setAttribute('method', 'post');
+		$form->get('submit')->setValue($this->getServiceLocator()->get('translator')->translate('Add'));
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			$form->setData($request->getPost());
+			
+			if ($form->isValid()) {
+				
+				return $this->redirect()->toRoute('costume');
+			}
+		} else {
+			$form->setData($defaultData);
+		}
+		
 		return array(
-			'form' => null,
+			'form' => $form,
 			'cancel_url' => $this->refererUrl('costume-add')
 		);
 	}
-	
+
 	public function editAction()
 	{
 		return array(
@@ -101,7 +125,7 @@ class CostumeController extends AbstractCostumeController implements AclControll
 			'cancel_url' => $this->refererUrl('costume-edit')
 		);
 	}
-	
+
 	public function deleteAction()
 	{
 		return array(
