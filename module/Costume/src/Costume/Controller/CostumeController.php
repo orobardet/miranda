@@ -93,7 +93,6 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		);
 		
 		$form = $this->getServiceLocator()->get('Costume\Form\Costume');
-		$form->prepare();
 		$form->setAttribute('action', $this->url()->fromRoute('costume', array(
 			'action' => 'add'
 		)));

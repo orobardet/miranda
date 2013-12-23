@@ -256,11 +256,12 @@ class Costume extends Form
 					'required' => false,
 					'options' => array(
 						'label' => 'Origin:',
-						'value_options' => CostumeModel::getOrigins(),
+						'value_options' => array_merge(array('' => ''), array_combine(CostumeModel::getOrigins(), CostumeModel::getOrigins())),
 					),
 					'attributes' => array(
 						'id' => 'input-origin',
-						'title' => 'Origin'
+						'title' => 'Origin',
+						'placeholder' => 'No origin'
 					)
 				));
 		
@@ -276,6 +277,38 @@ class Costume extends Form
 						'maxlength' => 255,
 						'title' => 'Origin details',
 						'placeholder' => 'Origin details'
+					)
+				));
+		
+		$this->add(
+				array(
+					'name' => 'history',
+					'type' => 'Textarea',
+					'options' => array(
+						'label' => 'History:'
+					),
+					'attributes' => array(
+						'id' => 'input-history',
+						'maxlength' => 65535,
+						'title' => 'History',
+						'placeholder' => "Usage history of the costume. One per line, for example in form 'Show (character)."
+					)
+				));
+		
+		$this->add(
+				array(
+					'name' => 'tags_selector',
+					'type' => 'Select',
+					'required' => false,
+					'options' => array(
+						'label' => 'Tags:',
+						'value_options' => $costumeTable->getTypes(),
+						'disable_inarray_validator' => true
+					),
+					'attributes' => array(
+						'id' => 'input-tags-selector',
+						'title' => 'Tags',
+						'placeholder' => "Existing or new, add it with '+'"
 					)
 				));
 		

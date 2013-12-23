@@ -11,22 +11,48 @@ $this->headscript()->offsetSetFile(110, $this->basePath() . '/js/costume/form.js
 <?php
 $form = $this->form;
 $form->setAttribute('id', 'costume-form');
+$form->prepare();
 ?>
 <br/>
 <?php echo $this->form()->openTag($form); ?>
 
-	<div class="form-horizontal">
-		<?php $element = $form->get('code'); ?>
-		<div class="control-group required<?php if (count($element->getMessages())) echo " error"; ?>">
-			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
-			<div class="controls">
-				<?php echo $this->formElement($element->setAttributes(array('style' => 'width:100px;'))); ?>
-				<?php if (count($element->getMessages())):?>
-				<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
-				<?php endif; ?>
+	<div class="row-fluid">
+		<div class="span6">
+		
+			<div class="form-horizontal">
+				<?php $element = $form->get('code'); ?>
+				<div class="control-group required<?php if (count($element->getMessages())) echo " error"; ?>">
+					<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+					<div class="controls">
+						<?php echo $this->formElement($element->setAttributes(array('style' => 'width:100px;'))); ?>
+						<?php if (count($element->getMessages())):?>
+						<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
+						<?php endif; ?>
+					</div>
+				</div>
 			</div>
+				
 		</div>
-	
+		
+		<div class="span6">
+		
+			<div class="form-horizontal form-horizontal-packed">
+				<?php $element = $form->get('quantity'); ?>
+				<div class="control-group required<?php if (count($element->getMessages())) echo " error"; ?>">
+					<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+					<div class="controls fuelux">
+						<?php echo $this->formUxSpinner($element); ?>
+						<?php if (count($element->getMessages())):?>
+						<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
+						<?php endif; ?>
+					</div>
+				</div>
+			</div>
+				
+		</div>
+		</div>
+		
+	<div class="form-horizontal">
 		<?php $element = $form->get('label'); ?>
 		<div class="control-group required<?php if (count($element->getMessages())) echo " error"; ?>">
 			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
@@ -44,30 +70,44 @@ $form->setAttribute('id', 'costume-form');
 		<div class="span6">
 		
 			<div class="form-horizontal">
-				<?php $element = $form->get('quantity'); ?>
-				<div class="control-group required<?php if (count($element->getMessages())) echo " error"; ?>">
+				<?php $element = $form->get('type_id'); ?>
+				<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
 					<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
-					<div class="controls fuelux">
-						<?php echo $this->formUxSpinner($element); ?>
+					<div class="controls">
+						<?php echo $this->formElement($element->setAttributes(array('class' => 'combobox input-block-level', 'data-combo-class' => 'input-block-level', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
 						<?php if (count($element->getMessages())):?>
 						<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
 						<?php endif; ?>
 					</div>
 				</div>
-			</div>
-				
-			<?php $element = $form->get('descr'); ?>
-			<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
-				<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
-				<div class="controls">
-					<?php echo $this->formElement($element->setAttributes(array('class' => 'input-block-level', 'rows' => 4))); ?>
-					<?php if (count($element->getMessages())):?>
-					<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
-					<?php endif; ?>
+					  			
+				<?php $element = $form->get('parts_selector'); ?>
+				<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
+					<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+					<div class="controls">
+						<div style="position:relative;">
+							<div style="position:absolute;left:0;right:35px;">
+							<?php echo $this->formElement($element->setAttributes(array('class' => 'combobox input-block-level', 'data-combo-class' => 'input-block-level', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+							</div>
+							<button id="part-add" type="button" class="btn" style="position:absolute;right:0;width:30px;">+</button>
+						</div>
+						<?php if (count($element->getMessages())):?>
+						<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
+						<?php endif; ?>
+					</div>
 				</div>
-			</div>
-
-			<div class="form-horizontal">
+				<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
+					<div class="controls">
+						<div id="parts-list" style="display:none;">
+						</div>
+					</div>
+					<div class="parts-list-item" id="parts-list-item-template">
+						<span class="part-label"></span>
+						<input type="hidden" name="parts[]" value="" disabled="disabled"/>
+						<a href="#" class="btn-remove-part btn btn-mini"><i class="icon-remove"></i></a>
+					</div>
+				</div>
+				
 				<?php $element = $form->get('size'); ?>
 				<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
 					<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
@@ -91,44 +131,6 @@ $form->setAttribute('id', 'costume-form');
 					</div>
 				</div>
 					  			
-				<?php $element = $form->get('type_id'); ?>
-				<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
-					<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
-					<div class="controls">
-						<?php echo $this->formElement($element->setAttributes(array('class' => 'combobox input-block-level', 'data-combo-class' => 'input-block-level', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
-						<?php if (count($element->getMessages())):?>
-						<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
-						<?php endif; ?>
-					</div>
-				</div>
-					  			
-				<?php $element = $form->get('parts_selector'); ?>
-				<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
-					<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
-					<div class="controls">
-						<div style="position:relative;">
-							<div style="position:absolute;left:0;right:35px;">
-							<?php echo $this->formElement($element->setAttributes(array('class' => 'combobox input-block-level', 'data-combo-class' => 'input-block-level', 'data-dropmenu-class' => 'dropup-menu', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
-							</div>
-							<button id="part-add" type="button" class="btn" style="position:absolute;right:0;width:30px;">+</button>
-						</div>
-						<?php if (count($element->getMessages())):?>
-						<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
-						<?php endif; ?>
-					</div>
-				</div>
-				<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
-					<div class="controls">
-						<div id="parts-list" style="display:none;">
-						</div>
-					</div>
-					<div class="parts-list-item" id="parts-list-item-template">
-						<span class="part-label"></span>
-						<input type="hidden" name="parts[]" value="" disabled="disabled"/>
-						<a href="#" class="btn-remove-part btn btn-mini"><i class="icon-remove"></i></a>
-					</div>
-				</div>
-				
 				<?php $element = $form->get('primary_material_id'); ?>
 				<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
 					<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
@@ -183,12 +185,12 @@ $form->setAttribute('id', 'costume-form');
 						<?php endif; ?>
 					</div>
 				</div>
-					  			
+
 				<?php $element = $form->get('origin'); ?>
 				<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
 					<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
 					<div class="controls">
-						<?php echo $this->formColorSelect($element->setAttributes(array('class' => 'selectpicker input-block-level', 'data-width' => '100%', 'title' => ''))); ?>
+						<?php echo $this->formColorSelect($element->setAttributes(array('class' => 'selectpicker input-block-level', 'data-width' => '100%', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
 						<?php if (count($element->getMessages())):?>
 						<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
 						<?php endif; ?>
@@ -204,19 +206,73 @@ $form->setAttribute('id', 'costume-form');
 						<?php endif; ?>
 					</div>
 				</div>
-								  			
-  			</div>
+			
+			</div>
   		</div>
 		
 		
   		<div class="span6">
-	  		
-	  		Photo<br/>
-	  		
-	  		Tags<br/>
-	  		
-	  		Historique<br/>
-	  		
+			<?php $element = $form->get('descr'); ?>
+			<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
+				<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+				<div class="controls">
+					<?php echo $this->formElement($element->setAttributes(array('class' => 'input-block-level', 'rows' => 5))); ?>
+					<?php if (count($element->getMessages())):?>
+					<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
+					<?php endif; ?>
+				</div>
+			</div>
+
+  		
+			<div class="form-horizontal">
+  		  			
+				
+			</div>		  			
+  		
+			<?php $element = $form->get('history'); ?>
+			<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
+				<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+				<div class="controls">
+					<?php echo $this->formElement($element->setAttributes(array('class' => 'input-block-level', 'rows' => 5))); ?>
+					<?php if (count($element->getMessages())):?>
+					<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
+					<?php endif; ?>
+				</div>
+			</div>
+
+			<?php $element = $form->get('tags_selector'); ?>
+			<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
+				<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+				<div class="controls">
+					<div style="position:relative;height:26px;">
+						<div style="position:absolute;left:0;right:35px;">
+						<?php echo $this->formElement($element->setAttributes(array('class' => 'combobox input-block-level', 'data-combo-class' => 'input-block-level', 'data-dropmenu-class' => 'dropup-menu', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+						</div>
+						<button id="tag-add" type="button" class="btn" style="position:absolute;right:0;width:30px;">+</button>
+					</div>
+					<?php if (count($element->getMessages())):?>
+					<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
+					<?php endif; ?>
+				</div>
+			</div>
+			<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
+				<div class="controls fuelux">
+					<div id="tags-box" class="pillbox">
+						<ul>
+							<li>Item 1</li>
+							<li>Item 2</li>
+							<li>Item 3</li>
+							<li>Item 4</li>
+							<li>Item 5</li>
+							<li>Item 6</li>
+							<li>Item 7</li>
+						</ul>
+					</div>				
+				</div>
+			</div>
+			
+				  		
+			
   		</div>
 	
 	</div>

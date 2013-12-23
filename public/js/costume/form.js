@@ -42,4 +42,6 @@ $(function() {
 			$('#parts-list').hide();
 		}
 	});
+	
+	$('#tags-box').pillbox();
 });

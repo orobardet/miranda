@@ -50,6 +50,7 @@ return array(
 	'Delete a tag' => 'Supprimer une étiquette',
 	'Do you really want to delete this tag?' => 'Voulez-vous vraiment supprimer cette étiquette ?',
 	'The tag will be removed from all costumes using it.' => "L'étiquette sera retirée de tous les costumes qui l'utilisent.",
+	'Code: ' => 'Code : ',
 	'Type:' => 'Type :',
 	'Gender:' => 'Genre :',
 	'Size:' => 'Taille :',
@@ -60,6 +61,7 @@ return array(
 	'Primary material:' => 'Matière principale :',
 	'Secondary material:' => 'Matière secondaire :',
 	'Parts:' => 'Composition :',
+	'Tags:' => 'Etiquettes :',
 	'Parts & types' => 'Pièces & types',
 	"Costumes' parts & types" => 'Pièces & types des costumes',
 	'Delete a part' => 'Supprimer une pièce',
@@ -71,11 +73,14 @@ return array(
 	'purchase' => 'Achat',
 	'other' => 'Autre',
 	'History:' => 'Historique :',
+	'History' => 'Historique',
 	'Origin details' => "Détail de l'origine",
 	'e.g.: AB.CD.1' => 'ex.: AB.CD.1',
 	'Short description of the costume' => 'Description courte du costume',
 	'Complete and detailed description of the costume.' => 'Description complète et détaillée du costume.',
 	'S, XL, or 38,42 or any text' => 'S, XL, ou 38,42 ou un texte',
 	'Existing or new' => 'Existant ou un nouveau',
-	"Existing or new, add it with '+'" => "Existant ou un nouveau, ajoutez-le avec '+'"
+	"Existing or new, add it with '+'" => "Existant ou un nouveau, ajoutez-le avec '+'",
+	"Usage history of the costume. One per line, for example in form 'Show (character)." => "Historique d'utilisation du costume. Un par ligne, par exemple de la forme 'Spectacle (personnage).",
+	"No origin" => "Pas d'origine"
 );
