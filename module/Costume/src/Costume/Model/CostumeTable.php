@@ -366,7 +366,7 @@ class CostumeTable extends AbstractDataCachePopulator
 	 * 
 	 * @return array 
 	 */
-	public function getTypes()
+	public function getTypes($labelAsKey=false)
 	{
 		$types = array();
 		
@@ -374,7 +374,11 @@ class CostumeTable extends AbstractDataCachePopulator
 			$allTypes = $this->typeTable->fetchAll();
 			if (count($allTypes)) {
 				foreach ($allTypes as $type){
-					$types[$type->getId()] = $type->getName();
+					if ($labelAsKey) {
+						$types[$type->getName()] = $type->getName();
+					} else {
+						$types[$type->getId()] = $type->getName();
+					}
 				}
 			}			
 		}
@@ -389,7 +393,7 @@ class CostumeTable extends AbstractDataCachePopulator
 	 * 
 	 * @return array 
 	 */
-	public function getMaterials()
+	public function getMaterials($labelAsKey=false)
 	{
 		$materials = array();
 		
@@ -397,12 +401,43 @@ class CostumeTable extends AbstractDataCachePopulator
 			$allMaterials = $this->materialTable->fetchAll();
 			if (count($allMaterials)) {
 				foreach ($allMaterials as $material){
-					$materials[$material->getId()] = $material->getName();
+					if ($labelAsKey) {
+						$materials[$material->getName()] = $material->getName();
+					} else {
+						$materials[$material->getId()] = $material->getName();
+					}
 				}
 			}			
 		}
 		
 		return $materials;
+	}
+	
+	/**
+	 * Retourne la liste des tags, sous forme d'un tableau.
+	 * 
+	 * clé = ID type, valeur = nom type
+	 * 
+	 * @return array 
+	 */
+	public function getTags($labelAsKey=false)
+	{
+		$tags = array();
+		
+		if ($this->tagTable) {
+			$allTags = $this->tagTable->fetchAll();
+			if (count($allTags)) {
+				foreach ($allTags as $tag){
+					if ($labelAsKey) {
+						$tags[$tag->getName()] = $tag->getName();
+					} else {
+						$tags[$tag->getId()] = $tag->getName();
+					}
+				}
+			}			
+		}
+		
+		return $tags;
 	}
 	
 	/**

@@ -91,6 +91,306 @@ class CostumeFilter extends InputFilter
 						)
 					)
 				));
+		
+		$this->add(
+				array(
+					'name' => 'quantity',
+					'required' => true,
+					'validators' => array(
+						array(
+							'name' => 'Digits'
+						),
+						array(
+							'name' => 'GreaterThan',
+							'options' => array(
+								'min' => 0
+							)
+						),
+						array(
+							'name' => 'LessThan',
+							'options' => array(
+								'max' => 255,
+								'inclusive' => true
+							)
+						)
+					),
+					'filters' => array(
+						array(
+							'name' => 'Int'
+						)
+					)
+				));
+		
+		$this->add(
+				array(
+					'name' => 'size',
+					'required' => false,
+					'validators' => array(
+						array(
+							'name' => 'StringLength',
+							'options' => array(
+								'encoding' => 'UTF-8',
+								'max' => 20
+							)
+						)
+					),
+					'filters' => array(
+						array(
+							'name' => 'StripTags'
+						),
+						array(
+							'name' => 'StringTrim'
+						)
+					)
+				));
+		
+		$this->add(
+				array(
+					'name' => 'type',
+					'required' => false,
+					'validators' => array(
+						array(
+							'name' => 'StringLength',
+							'options' => array(
+								'encoding' => 'UTF-8',
+								'max' => 100
+							)
+						)
+					),
+					'filters' => array(
+						array(
+							'name' => 'StripTags'
+						),
+						array(
+							'name' => 'StringTrim'
+						)
+					)
+				));
+		
+		$this->add(
+				array(
+					'name' => 'parts_selector',
+					'required' => false,
+					'validators' => array(
+						array(
+							'name' => 'StringLength',
+							'options' => array(
+								'encoding' => 'UTF-8',
+								'max' => 100
+							)
+						)
+					),
+					'filters' => array(
+						array(
+							'name' => 'StripTags'
+						),
+						array(
+							'name' => 'StringTrim'
+						)
+					)
+				));
+		
+		$this->add(
+				array(
+					'name' => 'parts',
+					'required' => false,
+					'validators' => array(
+						array(
+							'name' => 'Callback',
+							'options' => array(
+								'callback' => function ($parts)
+								{
+									$strLenValidator = new \Zend\Validator\StringLength(
+											array(
+												'encoding' => 'UTF-8',
+												'min' => 1,
+												'max' => 100
+											));
+									foreach ($parts as $part) {
+										if (!$strLenValidator->isValid($part)) {
+											return false;
+										}
+									}
+									return true;
+								}
+							)
+						)
+					),
+					'filters' => array(
+						array(
+							'name' => 'Callback',
+							'options' => array(
+								'callback' => function ($parts)
+								{
+									$strip = new \Zend\Filter\StripTags();
+									$trim = new \Zend\Filter\StringTrim();
+									foreach ($parts as $key => $part) {
+										$part = $strip->filter($part);
+										$part = $trim->filter($part);
+										$parts[$key] = $part;
+									}
+									return $parts;
+								}
+							)
+						)
+					)
+				));
+		
+		$this->add(
+				array(
+					'name' => 'primary_material',
+					'required' => false,
+					'validators' => array(
+						array(
+							'name' => 'StringLength',
+							'options' => array(
+								'encoding' => 'UTF-8',
+								'max' => 100
+							)
+						)
+					),
+					'filters' => array(
+						array(
+							'name' => 'StripTags'
+						),
+						array(
+							'name' => 'StringTrim'
+						)
+					)
+				));
+		
+		$this->add(
+				array(
+					'name' => 'secondary_material',
+					'required' => false,
+					'validators' => array(
+						array(
+							'name' => 'StringLength',
+							'options' => array(
+								'encoding' => 'UTF-8',
+								'max' => 100
+							)
+						)
+					),
+					'filters' => array(
+						array(
+							'name' => 'StripTags'
+						),
+						array(
+							'name' => 'StringTrim'
+						)
+					)
+				));
+		
+		$this->add(
+				array(
+					'name' => 'primary_color_id',
+					'required' => false
+				));
+		
+		$this->add(
+				array(
+					'name' => 'secondary_color_id',
+					'required' => false
+				));
+		
+		$this->add(
+				array(
+					'name' => 'state',
+					'required' => false,
+					'validators' => array(
+						array(
+							'name' => 'StringLength',
+							'options' => array(
+								'encoding' => 'UTF-8',
+								'max' => 255
+							)
+						)
+					),
+					'filters' => array(
+						array(
+							'name' => 'StripTags'
+						),
+						array(
+							'name' => 'StringTrim'
+						)
+					)
+				));
+		
+		$this->add(
+				array(
+					'name' => 'origin',
+					'required' => false
+				));
+		
+		$this->add(
+				array(
+					'name' => 'tags_selector',
+					'required' => false,
+					'validators' => array(
+						array(
+							'name' => 'StringLength',
+							'options' => array(
+								'encoding' => 'UTF-8',
+								'max' => 100
+							)
+						)
+					),
+					'filters' => array(
+						array(
+							'name' => 'StripTags'
+						),
+						array(
+							'name' => 'StringTrim'
+						)
+					)
+				));
+		
+		$this->add(
+				array(
+					'name' => 'tags',
+					'required' => false,
+					'validators' => array(
+						array(
+							'name' => 'Callback',
+							'options' => array(
+								'callback' => function ($parts)
+								{
+									$strLenValidator = new \Zend\Validator\StringLength(
+											array(
+												'encoding' => 'UTF-8',
+												'min' => 1,
+												'max' => 255
+											));
+									foreach ($parts as $part) {
+										if (!$strLenValidator->isValid($part)) {
+											return false;
+										}
+									}
+									return true;
+								}
+							)
+						)
+					),
+					'filters' => array(
+						array(
+							'name' => 'Callback',
+							'options' => array(
+								'callback' => function ($parts)
+								{
+									$strip = new \Zend\Filter\StripTags();
+									$trim = new \Zend\Filter\StringTrim();
+									foreach ($parts as $key => $part) {
+										$part = $strip->filter($part);
+										$part = $trim->filter($part);
+										$parts[$key] = $part;
+									}
+									return $parts;
+								}
+							)
+						)
+					)
+				));
 	}
 
 	public function setCostumeId($id)

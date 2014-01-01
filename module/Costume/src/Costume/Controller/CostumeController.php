@@ -4,6 +4,7 @@ namespace Costume\Controller;
 use Acl\Controller\AclControllerInterface;
 use Zend\View\Model\ViewModel;
 use Application\Toolbox\String as StringTools;
+use Costume\Model\Costume;
 
 class CostumeController extends AbstractCostumeController implements AclControllerInterface
 {
@@ -102,10 +103,18 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		$request = $this->getRequest();
 		if ($request->isPost()) {
 			$form->setData($request->getPost());
-			
-			if ($form->isValid()) {
 				
-				return $this->redirect()->toRoute('costume');
+			if ($form->isValid()) {
+				$costume = new Costume();
+				
+				$costume->exchangeArray($form->getData());
+				// TODO: faire un Costume\Hydrator qui va peupler un objet costume passé en paramète avec le contenu d'un tableau en paramètre aussi.
+				// Fera les rapprochements dans la BDD avec les couleurs/matériaux/tag... et les ajoutant éventuellement (comme fait lors de l'import)
+ 				$data = $form->getData();
+// 				$this->getUserTable()->saveUser($user, true);
+				print_r($form->getData());
+				die;
+				//return $this->redirect()->toRoute('costume');
 			}
 		} else {
 			$form->setData($defaultData);

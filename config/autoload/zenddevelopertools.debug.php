@@ -83,7 +83,7 @@ return array(
              * Expects: bool
              * Default: false
              */
-            'enabled' => true,
+            'enabled' => false,
 
             /**
              * If enabled, every empty collector will be hidden.

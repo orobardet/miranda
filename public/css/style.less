@@ -431,11 +431,20 @@ label.radio.col2 {
 }
 
 /* Not visible outside of #parts-list*/
-.parts-list-item {
+.parts-list-item,.tags-list-item {
 	display: none;
 }
 #costume-form {
-	#parts-list {
+	margin-bottom:0px;
+	
+	#parts-list:empty:before {
+		content:"\f12e";
+	}
+	#tags-list:empty:before {
+		content:"\f02c";
+	}
+	#parts-list,#tags-list {
+		max-width:100%;
 		min-height:0px;
 		max-height:120px;
 		overflow:auto;
@@ -447,7 +456,22 @@ label.radio.col2 {
 		.box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
 		.transition(~"border linear .2s, box-shadow linear .2s");
 	
-		.parts-list-item {
+		&:empty {
+			border-style:dashed;
+	
+			&:before {
+				font-family:FontAwesome;
+				font-weight:normal;
+				font-style:normal;
+				font-size:20px;
+				text-decoration:inherit;
+				color:@inputBorder;
+				margin-left:5px;
+				line-height:25px;
+			}
+		}
+		
+		.parts-list-item,.tags-list-item {
 			.clearfix();
 			display: block;
 			padding:2px;
@@ -460,22 +484,29 @@ label.radio.col2 {
 				background-color:@tableBackgroundHover;
 			}
 	
-			.btn-remove-part {
+			.btn-remove-part,.btn-remove-tag {
 				float:right;
 			}	
 		}
 	}
+}
+
+.form-buttons-placeholder {
+	height:50px;
+}
+.form-buttons {
+	padding: 10px 0;
 	
-	#tags-box {
-		min-height:0px;
-		overflow:auto;
-		
-		.border-radius(@inputBorderRadius);
-		padding: 4px 6px;
-		background-color: @inputBackground;
-		border: 1px solid @inputBorder;
-		.box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
-		.transition(~"border linear .2s, box-shadow linear .2s");
+	&.affix {
+		bottom: 0;
+		left:0;
+		background-color: @bodyBackground;
+		width:100%;
+		box-shadow: 0px 0px 10px lighten(@navbarBackground, 65%);
+		z-index:1000;
+	}
+	&.affix-bottom {
+		//padding-top:0;
 	}
 }
 

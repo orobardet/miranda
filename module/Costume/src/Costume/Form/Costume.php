@@ -69,14 +69,14 @@ class Costume extends Form
 					)
 				));
 		
+		$defaultSizes = CostumeModel::getDefaultSizes();
 		$this->add(
 				array(
 					'name' => 'size',
 					'type' => 'Select',
-					'required' => false,
 					'options' => array(
 						'label' => 'Size:',
-						'value_options' => CostumeModel::getDefaultSizes(),
+						'value_options' => array_combine($defaultSizes, $defaultSizes),
 						'disable_inarray_validator' => true
 					),
 					'attributes' => array(
@@ -86,16 +86,16 @@ class Costume extends Form
 					)
 				));
 		
+		$genders = CostumeModel::getGenders();
 		$this->add(
 				array(
 					'name' => 'gender',
 					'type' => 'Radio',
-					'required' => true,
 					'options' => array(
 						'label' => 'Gender:',
 						'value_options' => array_merge(array(
-							'None'
-						), CostumeModel::getGenders())
+							'' => 'None',
+						), array_combine($genders, $genders))
 					),
 					'attributes' => array(
 						'id' => 'input-gender',
@@ -103,14 +103,14 @@ class Costume extends Form
 					)
 				));
 		
+		$types = $costumeTable->getTypes(true);
 		$this->add(
 				array(
-					'name' => 'type_id',
+					'name' => 'type',
 					'type' => 'Select',
-					'required' => false,
 					'options' => array(
 						'label' => 'Type:',
-						'value_options' => $costumeTable->getTypes(),
+						'value_options' => $types,
 						'disable_inarray_validator' => true
 					),
 					'attributes' => array(
@@ -124,10 +124,9 @@ class Costume extends Form
 				array(
 					'name' => 'parts_selector',
 					'type' => 'Select',
-					'required' => false,
 					'options' => array(
 						'label' => 'Parts:',
-						'value_options' => $costumeTable->getTypes(),
+						'value_options' => $types,
 						'disable_inarray_validator' => true
 					),
 					'attributes' => array(
@@ -139,12 +138,21 @@ class Costume extends Form
 		
 		$this->add(
 				array(
-					'name' => 'primary_material_id',
+					'name' => 'parts',
+					'type' => 'Text',
+					'options' => array(
+						'label' => ''
+					)
+				));
+		
+		$materials = $costumeTable->getMaterials(true);
+		$this->add(
+				array(
+					'name' => 'primary_material',
 					'type' => 'Select',
-					'required' => false,
 					'options' => array(
 						'label' => 'Primary material:',
-						'value_options' => $costumeTable->getMaterials(),
+						'value_options' => $materials,
 						'disable_inarray_validator' => true
 					),
 					'attributes' => array(
@@ -156,12 +164,11 @@ class Costume extends Form
 		
 		$this->add(
 				array(
-					'name' => 'secondary_material_id',
+					'name' => 'secondary_material',
 					'type' => 'Select',
-					'required' => false,
 					'options' => array(
 						'label' => 'Secondary material:',
-						'value_options' => $costumeTable->getMaterials(),
+						'value_options' => $materials,
 						'disable_inarray_validator' => true
 					),
 					'attributes' => array(
@@ -185,11 +192,9 @@ class Costume extends Form
 				array(
 					'name' => 'primary_color_id',
 					'type' => 'Select',
-					'required' => false,
 					'options' => array(
 						'label' => 'Primary color:',
-						'value_options' => $preparedColors,
-						'disable_inarray_validator' => true
+						'value_options' => $preparedColors
 					),
 					'attributes' => array(
 						'id' => 'input-primary-color-id',
@@ -202,11 +207,9 @@ class Costume extends Form
 				array(
 					'name' => 'secondary_color_id',
 					'type' => 'Select',
-					'required' => false,
 					'options' => array(
 						'label' => 'Secondary color:',
-						'value_options' => $preparedColors,
-						'disable_inarray_validator' => true
+						'value_options' => $preparedColors
 					),
 					'attributes' => array(
 						'id' => 'input-secondary-color-id',
@@ -219,7 +222,6 @@ class Costume extends Form
 				array(
 					'name' => 'quantity',
 					'type' => 'Number',
-					'required' => true,
 					'options' => array(
 						'label' => 'Quantity:'
 					),
@@ -236,7 +238,6 @@ class Costume extends Form
 				array(
 					'name' => 'state',
 					'type' => 'Select',
-					'required' => false,
 					'options' => array(
 						'label' => 'State:',
 						'value_options' => $costumeTable->getStates(),
@@ -253,7 +254,6 @@ class Costume extends Form
 				array(
 					'name' => 'origin',
 					'type' => 'Select',
-					'required' => false,
 					'options' => array(
 						'label' => 'Origin:',
 						'value_options' => array_merge(array('' => ''), array_combine(CostumeModel::getOrigins(), CostumeModel::getOrigins())),
@@ -299,16 +299,24 @@ class Costume extends Form
 				array(
 					'name' => 'tags_selector',
 					'type' => 'Select',
-					'required' => false,
 					'options' => array(
 						'label' => 'Tags:',
-						'value_options' => $costumeTable->getTypes(),
+						'value_options' => $costumeTable->getTags(),
 						'disable_inarray_validator' => true
 					),
 					'attributes' => array(
 						'id' => 'input-tags-selector',
 						'title' => 'Tags',
 						'placeholder' => "Existing or new, add it with '+'"
+					)
+				));
+		
+		$this->add(
+				array(
+					'name' => 'tags',
+					'type' => 'Text',
+					'options' => array(
+						'label' => ''
 					)
 				));
 		

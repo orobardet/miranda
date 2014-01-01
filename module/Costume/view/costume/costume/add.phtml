@@ -70,11 +70,11 @@ $form->prepare();
 		<div class="span6">
 		
 			<div class="form-horizontal">
-				<?php $element = $form->get('type_id'); ?>
+				<?php $element = $form->get('type'); ?>
 				<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
 					<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
 					<div class="controls">
-						<?php echo $this->formElement($element->setAttributes(array('class' => 'combobox input-block-level', 'data-combo-class' => 'input-block-level', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+						<?php echo $this->formElement($element->setAttributes(array('class' => 'combobox input-block-level', 'data-value' => $element->getValue(), 'data-combo-class' => 'input-block-level', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
 						<?php if (count($element->getMessages())):?>
 						<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
 						<?php endif; ?>
@@ -87,7 +87,7 @@ $form->prepare();
 					<div class="controls">
 						<div style="position:relative;">
 							<div style="position:absolute;left:0;right:35px;">
-							<?php echo $this->formElement($element->setAttributes(array('class' => 'combobox input-block-level', 'data-combo-class' => 'input-block-level', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+							<?php echo $this->formElement($element->setAttributes(array('class' => 'input-block-level', 'data-combo-class' => 'input-block-level', 'data-dropmenu-class' => 'dropup-menu', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
 							</div>
 							<button id="part-add" type="button" class="btn" style="position:absolute;right:0;width:30px;">+</button>
 						</div>
@@ -96,23 +96,27 @@ $form->prepare();
 						<?php endif; ?>
 					</div>
 				</div>
+				
+				<?php $element = $form->get('parts'); ?>
 				<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
 					<div class="controls">
-						<div id="parts-list" style="display:none;">
-						</div>
+						<div id="parts-list" data-values="<?php echo $this->escapehtmlattr(json_encode($element->getValue())); ?>"></div>
 					</div>
 					<div class="parts-list-item" id="parts-list-item-template">
 						<span class="part-label"></span>
 						<input type="hidden" name="parts[]" value="" disabled="disabled"/>
 						<a href="#" class="btn-remove-part btn btn-mini"><i class="icon-remove"></i></a>
 					</div>
+					<?php if (count($element->getMessages())):?>
+					<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
+					<?php endif; ?>
 				</div>
 				
 				<?php $element = $form->get('size'); ?>
 				<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
 					<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
 					<div class="controls">
-						<?php echo $this->formElement($element->setAttributes(array('class' => 'combobox input-block-level', 'data-combo-class' => 'input-block-level', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+						<?php echo $this->formElement($element->setAttributes(array('class' => 'combobox input-block-level', 'data-value' => $element->getValue(), 'data-combo-class' => 'input-block-level', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
 						<?php if (count($element->getMessages())):?>
 						<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
 						<?php endif; ?>
@@ -131,22 +135,22 @@ $form->prepare();
 					</div>
 				</div>
 					  			
-				<?php $element = $form->get('primary_material_id'); ?>
+				<?php $element = $form->get('primary_material'); ?>
 				<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
 					<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
 					<div class="controls">
-						<?php echo $this->formElement($element->setAttributes(array('class' => 'combobox input-block-level', 'data-combo-class' => 'input-block-level', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+						<?php echo $this->formElement($element->setAttributes(array('class' => 'combobox input-block-level', 'data-value' => $element->getValue(), 'data-combo-class' => 'input-block-level', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
 						<?php if (count($element->getMessages())):?>
 						<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
 						<?php endif; ?>
 					</div>
 				</div>
 					  			
-				<?php $element = $form->get('secondary_material_id'); ?>
+				<?php $element = $form->get('secondary_material'); ?>
 				<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
 					<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
 					<div class="controls">
-						<?php echo $this->formElement($element->setAttributes(array('class' => 'combobox input-block-level', 'data-combo-class' => 'input-block-level', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+						<?php echo $this->formElement($element->setAttributes(array('class' => 'combobox input-block-level', 'data-value' => $element->getValue(), 'data-combo-class' => 'input-block-level', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
 						<?php if (count($element->getMessages())):?>
 						<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
 						<?php endif; ?>
@@ -179,7 +183,7 @@ $form->prepare();
 				<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
 					<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
 					<div class="controls">
-						<?php echo $this->formElement($element->setAttributes(array('class' => 'combobox input-block-level', 'data-combo-class' => 'input-block-level', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+						<?php echo $this->formElement($element->setAttributes(array('class' => 'combobox input-block-level', 'data-value' => $element->getValue(), 'data-combo-class' => 'input-block-level', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
 						<?php if (count($element->getMessages())):?>
 						<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
 						<?php endif; ?>
@@ -190,7 +194,7 @@ $form->prepare();
 				<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
 					<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
 					<div class="controls">
-						<?php echo $this->formColorSelect($element->setAttributes(array('class' => 'selectpicker input-block-level', 'data-width' => '100%', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+						<?php echo $this->formColorSelect($element->setAttributes(array('class' => 'selectpicker input-block-level', 'data-value' => $element->getValue(), 'data-width' => '100%', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
 						<?php if (count($element->getMessages())):?>
 						<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
 						<?php endif; ?>
@@ -246,7 +250,7 @@ $form->prepare();
 				<div class="controls">
 					<div style="position:relative;height:26px;">
 						<div style="position:absolute;left:0;right:35px;">
-						<?php echo $this->formElement($element->setAttributes(array('class' => 'combobox input-block-level', 'data-combo-class' => 'input-block-level', 'data-dropmenu-class' => 'dropup-menu', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+						<?php echo $this->formElement($element->setAttributes(array('class' => 'input-block-level', 'data-combo-class' => 'input-block-level', 'data-dropmenu-class' => 'dropup-menu', 'data-placeholder' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
 						</div>
 						<button id="tag-add" type="button" class="btn" style="position:absolute;right:0;width:30px;">+</button>
 					</div>
@@ -255,34 +259,32 @@ $form->prepare();
 					<?php endif; ?>
 				</div>
 			</div>
+			<?php $element = $form->get('tags'); ?>
 			<div class="control-group <?php if (count($element->getMessages())) echo " error"; ?>">
-				<div class="controls fuelux">
-					<div id="tags-box" class="pillbox">
-						<ul>
-							<li>Item 1</li>
-							<li>Item 2</li>
-							<li>Item 3</li>
-							<li>Item 4</li>
-							<li>Item 5</li>
-							<li>Item 6</li>
-							<li>Item 7</li>
-						</ul>
-					</div>				
+				<div class="controls">
+					<div id="tags-list" data-values="<?php echo $this->escapehtmlattr(json_encode($element->getValue())); ?>"></div>
 				</div>
+				<div class="tags-list-item" id="tags-list-item-template">
+					<span class="tag-label"></span>
+					<input type="hidden" name="tags[]" value="" disabled="disabled"/>
+					<a href="#" class="btn-remove-tag btn btn-mini"><i class="icon-remove"></i></a>
+				</div>
+				<?php if (count($element->getMessages())):?>
+				<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
+				<?php endif; ?>
 			</div>
-			
-				  		
-			
   		</div>
 	
 	</div>
 
-	<div class="control-group">
-	    <div class="controls">
-			<?php if ($this->cancel_url): ?>
-				<a href="<?php echo $this->cancel_url; ?>" class="btn"><?php echo $this->translate('Cancel'); ?></a>
-			<?php endif; ?>
-			<?php echo $this->formElement($form->get('submit')->setAttributes(array('class' => 'btn btn-primary'))); ?>
+	<div class="form-buttons-placeholder">
+		<div class="form-buttons affix" data-spy="affix" data-offset-bottom="60">
+		    <div class="controls container">
+				<?php if ($this->cancel_url): ?>
+					<a href="<?php echo $this->cancel_url; ?>" class="btn"><?php echo $this->translate('Cancel'); ?></a>
+				<?php endif; ?>
+				<?php echo $this->formElement($form->get('submit')->setAttributes(array('class' => 'btn btn-primary'))); ?>
+			</div>
 		</div>
 	</div>
 

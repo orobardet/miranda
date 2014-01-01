@@ -32,6 +32,7 @@
     this.$menu = $(this.options.menu).appendTo('body')
     this.placeholder = this.options.placeholder || this.$target.attr('data-placeholder')
     this.$element.attr('placeholder', this.placeholder)
+    this.$element.val(this.$target.attr('data-value'))
     this.$menu.addClass($(element).data('dropmenu-class'));
     this.shown = false
     this.selected = false
@@ -151,6 +152,24 @@
       this.$button
         .on('click', $.proxy(this.toggle, this))
     }
+  
+  , keydown: function (e) {
+      this.suppressKeyPressRepeat = ~$.inArray(e.keyCode, [40,38,9,13,27])
+      this.move(e)
+      
+      if ((e.keyCode == 13) && !this.shown && $.isFunction(this.options.onFieldEnterKey)) {
+    	  return this.options.onFieldEnterKey(e);
+      }
+    }
+
+  , keypress: function (e) {
+      if (this.suppressKeyPressRepeat) return
+      this.move(e)
+      
+      if ((e.keyCode == 13) && !this.shown && $.isFunction(this.options.onFieldEnterKey)) {
+    	  return this.options.onFieldEnterKey(e);
+      }
+    }
 
   // modified typeahead function to clear on type and prevent on moving around
   , keyup: function (e) {
@@ -166,8 +185,14 @@
 
         case 9: // tab
         case 13: // enter
-          if (!this.shown) return
-          this.select()
+          if (!this.shown) {
+        	  if ($.isFunction(this.options.onFieldEnterKey)) {
+        		  return this.options.onFieldEnterKey(e);
+        	  } else {
+        		  return;
+        	  }
+          }
+    	  this.select()
           break
 
         case 27: // escape
@@ -214,6 +239,7 @@
   , menu: '<ul class="typeahead typeahead-long dropdown-menu"></ul>'
   , item: '<li><a href="#"></a></li>'
   , placeholder: null
+  , onFieldEnterKey: null
   }
 
   $.fn.combobox.Constructor = Combobox
