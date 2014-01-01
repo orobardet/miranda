@@ -119,10 +119,7 @@ class CostumeController extends AbstractCostumeController implements AclControll
 									'label' => $costume->getLabel()
 								)), "success");
 				
-				return $this->redirect()->toRoute('costume', array(
-					'action' => 'show',
-					'id' => $costume->getId()
-				));
+				return $this->redirect()->toUrl($this->refererUrl('costume-add'));
 			}
 		} else {
 			$form->setData($defaultData);
@@ -136,8 +133,67 @@ class CostumeController extends AbstractCostumeController implements AclControll
 
 	public function editAction()
 	{
+		$costumeId = (int)$this->params()->fromRoute('id', 0);
+		if (!$costumeId) {
+			$this->resultStatus()->addResultStatus(
+					StringTools::varprintf($this->getServiceLocator()->get('translator')->translate("Costume ID %id% does not exists."), 
+							array(
+								'id' => $costumeId
+							)), 'error');
+			return $this->redirect()->toRoute('costume');
+		}
+		
+		$costume = $this->getCostumeTable()->getCostume($costumeId, false);
+		if (!$costume) {
+			$this->resultStatus()->addResultStatus(
+					StringTools::varprintf($this->getServiceLocator()->get('translator')->translate("Costume ID %id% does not exists."), 
+							array(
+								'id' => $costumeId
+							)), 'error');
+			return $this->redirect()->toRoute('costume');
+		}
+		
+		$defaultData = array(
+			'gender' => ''
+		);
+		
+		$form = $this->getServiceLocator()->get('Costume\Form\Costume');
+		$form->getInputFilter()->setCostumeId($costumeId);
+		$form->setAttribute('action', $this->url()->fromRoute('costume', array(
+			'action' => 'edit',
+			'id' => $costumeId
+		)));
+		$form->setAttribute('method', 'post');
+		$form->get('submit')->setValue($this->getServiceLocator()->get('translator')->translate('Edit'));
+		
+		$costumeHydrator = $this->getServiceLocator()->get('Costume\Hydrator\CostumeForm');
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			$form->setData($request->getPost());
+			
+			if ($form->isValid()) {
+				$costume = $costumeHydrator->hydrate($form->getData(), $costume);
+				$costume->setId($costumeId);
+				
+				$this->dbTransaction()->begin();
+				$this->getCostumeTable()->saveCostume($costume);
+				$this->dbTransaction()->commit();
+				
+				$this->resultStatus()->addResultStatus(
+						StringTools::varprintf($this->getServiceLocator()->get('translator')->translate("Costume '%label%' edited."), 
+								array(
+									'label' => $costume->getLabel()
+								)), "success");
+				
+				return $this->redirect()->toUrl($this->refererUrl('costume-edit'));
+			}
+		} else {
+			$form->setData(array_merge($defaultData, $costumeHydrator->extract($costume)));
+		}
+		
 		return array(
-			'form' => null,
+			'form' => $form,
 			'cancel_url' => $this->refererUrl('costume-edit')
 		);
 	}
@@ -157,7 +213,7 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		if ($request->isPost()) {
 			$del = $request->getPost('del', 'no');
 			$return_url = $this->refererUrl('costume-delete');
-				
+			
 			if ($del == 'yes') {
 				$id = (int)$request->getPost('id');
 				$this->getCostumeTable()->deleteCostume($id);

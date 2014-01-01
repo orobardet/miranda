@@ -83,7 +83,9 @@ return array(
 	"Existing or new, add it with '+'" => "Existant ou un nouveau, ajoutez-le avec '+'",
 	"Usage history of the costume. One per line, for example in form 'Show (character)." => "Historique d'utilisation du costume. Un par ligne, par exemple de la forme 'Spectacle (personnage).",
 	"No origin" => "Pas d'origine",
+	'Code already used' => 'Code déjà utilisé',
 	"Costume '%label%' added." => "Le costume '%label%' a été ajouté.",
+	"Costume '%label%' edited." => "Le costume '%label%' a été modifié.",
 	"Costume '%label%' deleted." => "Le costume '%label%' a été supprimé.",
 	"Delete costume '%label%'" => "Supprimer le costume '%label%'",
 	"Are you sure that you want to delete costume <b>%label%</b> (%code%)?" => "Voulez-vous vraiment supprimer le costume <b>%label%</b> (%code%) ?"

@@ -4,10 +4,4 @@ $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($this->translate($title)); ?></h1>
 
-<big class="text-warning text-lg" style="font-style:italic;"><i class="icon-warning-sign"></i> Fonctionnalité en cours de développement. <i class="icon-warning-sign"></i></big>
-
-<?php if ($this->cancel_url): ?>
-<p style="margin-top:20px;">
-<a href="<?php echo $this->cancel_url; ?>" class="btn btn-primary"><?php echo $this->translate('Back'); ?></a>
-</p>
-<?php endif; ?>
+<?php require "include/form.phtml"; ?>
