@@ -25,7 +25,11 @@ $this->headTitle($title);
     	<a href="<?php echo $this->url('costume',
             array('action'=>'edit', 'id' => $costume->getId()));?>"><i class="icon-edit icon-linkcolor"></i> <?php echo $this->translate('edit'); ?></a>
         </div> 
-		<?php endif;?>
+		<div class="action-bar-item">
+        <a href="<?php echo $this->url('costume',
+            array('action'=>'picture', 'id' => $costume->getId()));?>"><i class="icon-picture icon-linkcolor"></i> <?php echo $this->translate('change picture'); ?></a>
+        </div> 
+        <?php endif;?>
     	<?php if ($this->acl()->isAllowed("delete_costume")): ?>
 		<div class="action-bar-item">
     	<a href="<?php echo $this->url('costume',

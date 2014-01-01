@@ -22,6 +22,7 @@ class CostumeController extends AbstractCostumeController implements AclControll
 				return "add_costume";
 				break;
 			case "edit":
+			case "picture":
 				return "edit_costume";
 				break;
 			case "delete":
@@ -79,6 +80,7 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		}
 		
 		$this->refererUrl()->setReferer('costume-edit');
+		$this->refererUrl()->setReferer('costume-picture');
 		$this->refererUrl()->setReferer('costume-delete', null, true);
 		
 		return new ViewModel(array(
@@ -119,7 +121,15 @@ class CostumeController extends AbstractCostumeController implements AclControll
 									'label' => $costume->getLabel()
 								)), "success");
 				
-				return $this->redirect()->toUrl($this->refererUrl('costume-add'));
+				$referer = $this->refererUrl('costume-add');
+				if ($referer) {
+					return $this->redirect()->toUrl($referer);
+				} else {
+					return $this->redirect()->toRoute('costume', array(
+						'action' => 'show',
+						'id' => $costume->getId()
+					));
+				}
 			}
 		} else {
 			$form->setData($defaultData);
@@ -186,7 +196,15 @@ class CostumeController extends AbstractCostumeController implements AclControll
 									'label' => $costume->getLabel()
 								)), "success");
 				
-				return $this->redirect()->toUrl($this->refererUrl('costume-edit'));
+				$referer = $this->refererUrl('costume-edit');
+				if ($referer) {
+					return $this->redirect()->toUrl($referer);
+				} else {
+					return $this->redirect()->toRoute('costume', array(
+						'action' => 'show',
+						'id' => $costumeId
+					));
+				}
 			}
 		} else {
 			$form->setData(array_merge($defaultData, $costumeHydrator->extract($costume)));
@@ -195,6 +213,67 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		return array(
 			'form' => $form,
 			'cancel_url' => $this->refererUrl('costume-edit')
+		);
+	}
+
+	public function pictureAction()
+	{
+		$costumeId = (int)$this->params()->fromRoute('id', 0);
+		if (!$costumeId) {
+			$this->resultStatus()->addResultStatus(
+					StringTools::varprintf($this->getServiceLocator()->get('translator')->translate("Costume ID %id% does not exists."), 
+							array(
+								'id' => $costumeId
+							)), 'error');
+			return $this->redirect()->toRoute('costume');
+		}
+		
+		$costume = $this->getCostumeTable()->getCostume($costumeId, false);
+		if (!$costume) {
+			$this->resultStatus()->addResultStatus(
+					StringTools::varprintf($this->getServiceLocator()->get('translator')->translate("Costume ID %id% does not exists."), 
+							array(
+								'id' => $costumeId
+							)), 'error');
+			return $this->redirect()->toRoute('costume');
+		}
+		
+		$form = $this->getServiceLocator()->get('Costume\Form\Picture');
+		$form->setAttribute('action', $this->url()->fromRoute('costume', array(
+			'action' => 'picture',
+			'id' => $costumeId
+		)));
+		$form->setAttribute('method', 'post');
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			$form->setData(array_merge_recursive($request->getPost()->toArray(), $request->getFiles()->toArray()));
+			if ($form->isValid()) {
+				$data = $form->getData();
+				
+				// TODO: sauvegarder l'image
+				
+				$this->resultStatus()->addResultStatus(
+						StringTools::varprintf($this->getServiceLocator()->get('translator')->translate("Picture changed for costume '%label%'."), 
+								array(
+									'label' => $costume->getLabel()
+								)), "success");
+				
+				$referer = $this->refererUrl('costume-edit');
+				if ($referer) {
+					return $this->redirect()->toUrl($referer);
+				} else {
+					return $this->redirect()->toRoute('costume', array(
+						'action' => 'show',
+						'id' => $costumeId
+					));
+				}
+			}
+		}
+		
+		return array(
+			'form' => $form,
+			'cancel_url' => $this->refererUrl('costume-picture')
 		);
 	}
 

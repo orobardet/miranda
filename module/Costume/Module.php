@@ -157,6 +157,11 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 					$form->setInputFilter(new Form\CostumeFilter($sm->get('costume_zend_db_adapter'), $sm->get('Miranda\Service\Config')));
 					return $form;
 				},
+				'Costume\Form\Picture' => function ($sm)
+				{
+					$form = new Form\Picture(); 
+					return $form;
+				},
 				'Costume\Hydrator\CostumeForm' => function ($sm)
 				{
 					$hydrator = new Model\Costume\FormHydrator($sm->get('Costume\Model\CostumeTable'), $sm->get('Costume\Model\TypeTable'), $sm->get('Costume\Model\MaterialTable'));

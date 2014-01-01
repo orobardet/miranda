@@ -3,6 +3,7 @@ return array(
 	'Costumes' => 'Costumes',
 	'Catalog' => 'Catalogue',
 	'No costumes.' => 'Aucun costume.',
+	'Change costume picture' => "Changer l'image d'un costume",
 	'Code' => 'Code',
 	'Label' => 'Libellé',
 	'Gender' => 'Genre',
@@ -26,6 +27,7 @@ return array(
 	'Invalid values' => 'Valeurs invalides',
 	'color' => 'Couleur',
 	'name' => 'Nom',
+	'change picture' => "changer l'image",
 	'Add a color' => 'Ajouter une couleur',
 	'Edit color' => 'Modifier la couleur',
 	'Delete a color' => 'Supprimer une couleur',
@@ -86,6 +88,7 @@ return array(
 	'Code already used' => 'Code déjà utilisé',
 	"Costume '%label%' added." => "Le costume '%label%' a été ajouté.",
 	"Costume '%label%' edited." => "Le costume '%label%' a été modifié.",
+	"Picture changed for costume '%label%'." => "L'image du costume '%label%' a été modifiée.",
 	"Costume '%label%' deleted." => "Le costume '%label%' a été supprimé.",
 	"Delete costume '%label%'" => "Supprimer le costume '%label%'",
 	"Are you sure that you want to delete costume <b>%label%</b> (%code%)?" => "Voulez-vous vraiment supprimer le costume <b>%label%</b> (%code%) ?"

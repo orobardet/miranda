@@ -1,0 +1,52 @@
+<?php
+$title = $this->translate('Change costume picture');
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($this->translate($title)); ?></h1>
+
+<?php 
+if ($this->form) {
+
+$form = $this->form;
+$form->setAttribute('id', 'costume-picture-form');
+$form->prepare(); ?>
+<br/>
+<?php echo $this->form()->openTag($form); ?>
+
+<div class="row-fluid">
+	<div class="span6">
+	
+		<div class="form-horizontal">
+			<?php $element = $form->get('picture'); ?>
+			<div class="control-group required<?php if (count($element->getMessages())) echo " error"; ?>">
+				<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+				<div class="controls">
+					<?php echo $this->formElement($element->setAttributes(array('style' => 'width:100px;'))); ?>
+					<?php if (count($element->getMessages())):?>
+					<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+			
+		<div class="form-buttons">
+		    <div class="controls">
+				<?php if ($this->cancel_url): ?>
+					<a href="<?php echo $this->cancel_url; ?>" class="btn"><?php echo $this->translate('Cancel'); ?></a>
+				<?php endif; ?>
+				<?php echo $this->formElement($form->get('submit')->setAttributes(array('class' => 'btn btn-primary'))); ?>
+			</div>
+		</div>
+	
+	</div>
+	
+	<div class="span6">
+	Current picture:
+	</div>
+</div>
+
+
+<?php 
+echo $this->form()->closeTag(); 
+} // $this->form 
+?>
