@@ -20,6 +20,13 @@ class Material extends ObjectModelBase
 	 */
 	protected $name;
 
+	public function __construct($name = null)
+	{
+		if ($name) {
+			$this->setName($name);
+		}
+	}
+
 	/**
 	 *
 	 * @return $id

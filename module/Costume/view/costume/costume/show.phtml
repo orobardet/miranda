@@ -49,7 +49,7 @@ $this->headTitle($title);
 	<?php endif; ?>
 	
 	<div class="span<?php echo $landscapePicture?4:5; ?>">
-		<?php echo $costume->getDescr(); ?>
+		<?php echo $this->text2html($costume->getDescr()); ?>
 		<?php $tags = $costume->getTags(); ?>
 		<?php if (count($tags)): ?>
 		<ul class="unstyled" style="margin-top:10px;">

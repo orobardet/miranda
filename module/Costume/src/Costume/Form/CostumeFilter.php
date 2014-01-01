@@ -144,6 +144,11 @@ class CostumeFilter extends InputFilter
 					)
 				));
 		
+		$this->add(array(
+			'name' => 'gender',
+			'required' => false
+		));
+		
 		$this->add(
 				array(
 					'name' => 'type',
@@ -206,9 +211,11 @@ class CostumeFilter extends InputFilter
 												'min' => 1,
 												'max' => 100
 											));
-									foreach ($parts as $part) {
-										if (!$strLenValidator->isValid($part)) {
-											return false;
+									if (count($parts)) {
+										foreach ($parts as $part) {
+											if (!$strLenValidator->isValid($part)) {
+												return false;
+											}
 										}
 									}
 									return true;
@@ -222,12 +229,14 @@ class CostumeFilter extends InputFilter
 							'options' => array(
 								'callback' => function ($parts)
 								{
-									$strip = new \Zend\Filter\StripTags();
-									$trim = new \Zend\Filter\StringTrim();
-									foreach ($parts as $key => $part) {
-										$part = $strip->filter($part);
-										$part = $trim->filter($part);
-										$parts[$key] = $part;
+									if (count($parts)) {
+										$strip = new \Zend\Filter\StripTags();
+										$trim = new \Zend\Filter\StringTrim();
+										foreach ($parts as $key => $part) {
+											$part = $strip->filter($part);
+											$part = $trim->filter($part);
+											$parts[$key] = $part;
+										}
 									}
 									return $parts;
 								}
@@ -285,13 +294,51 @@ class CostumeFilter extends InputFilter
 		$this->add(
 				array(
 					'name' => 'primary_color_id',
-					'required' => false
+					'required' => false,
+					'validators' => array(
+						array(
+							'name' => 'Digits'
+						),
+						array(
+							'name' => 'GreaterThan',
+							'options' => array(
+								'min' => 0
+							)
+						)
+					),
+					'filters' => array(
+						array(
+							'name' => 'Int'
+						),
+						array(
+							'name' => 'Null'
+						)
+					)
 				));
 		
 		$this->add(
 				array(
 					'name' => 'secondary_color_id',
-					'required' => false
+					'required' => false,
+					'validators' => array(
+						array(
+							'name' => 'Digits'
+						),
+						array(
+							'name' => 'GreaterThan',
+							'options' => array(
+								'min' => 0
+							)
+						)
+					),
+					'filters' => array(
+						array(
+							'name' => 'Int'
+						),
+						array(
+							'name' => 'Null'
+						)
+					)
 				));
 		
 		$this->add(
@@ -317,11 +364,10 @@ class CostumeFilter extends InputFilter
 					)
 				));
 		
-		$this->add(
-				array(
-					'name' => 'origin',
-					'required' => false
-				));
+		$this->add(array(
+			'name' => 'origin',
+			'required' => false
+		));
 		
 		$this->add(
 				array(
@@ -354,7 +400,7 @@ class CostumeFilter extends InputFilter
 						array(
 							'name' => 'Callback',
 							'options' => array(
-								'callback' => function ($parts)
+								'callback' => function ($tags)
 								{
 									$strLenValidator = new \Zend\Validator\StringLength(
 											array(
@@ -362,9 +408,11 @@ class CostumeFilter extends InputFilter
 												'min' => 1,
 												'max' => 255
 											));
-									foreach ($parts as $part) {
-										if (!$strLenValidator->isValid($part)) {
-											return false;
+									if (count($tags)) {
+										foreach ($tags as $tag) {
+											if (!$strLenValidator->isValid($tag)) {
+												return false;
+											}
 										}
 									}
 									return true;
@@ -376,16 +424,18 @@ class CostumeFilter extends InputFilter
 						array(
 							'name' => 'Callback',
 							'options' => array(
-								'callback' => function ($parts)
+								'callback' => function ($tags)
 								{
-									$strip = new \Zend\Filter\StripTags();
-									$trim = new \Zend\Filter\StringTrim();
-									foreach ($parts as $key => $part) {
-										$part = $strip->filter($part);
-										$part = $trim->filter($part);
-										$parts[$key] = $part;
+									if (count($tags)) {
+										$strip = new \Zend\Filter\StripTags();
+										$trim = new \Zend\Filter\StringTrim();
+										foreach ($tags as $key => $tag) {
+											$tag = $strip->filter($tag);
+											$tag = $trim->filter($tag);
+											$tags[$key] = $tag;
+										}
 									}
-									return $parts;
+									return $tags;
 								}
 							)
 						)

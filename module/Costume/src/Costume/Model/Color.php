@@ -5,30 +5,37 @@ use Application\Model\ObjectModelBase;
 
 class Color extends ObjectModelBase
 {
-	
+
 	/**
 	 * ID en BDD de la couleur
+	 * 
 	 * @var integer
 	 */
 	protected $id;
+
 	/**
 	 * Nom de la couleur
+	 * 
 	 * @var string
 	 */
 	protected $name;
+
 	/**
 	 * Code couleur
+	 * 
 	 * @var string
 	 */
 	protected $color;
+
 	/**
 	 * Ordre d'affichage de la couleur
+	 * 
 	 * @var integer
 	 */
 	protected $ord;
-	
-	
+
 	/**
+	 *
 	 * @return $id
 	 */
 	public function getId()
@@ -37,6 +44,7 @@ class Color extends ObjectModelBase
 	}
 
 	/**
+	 *
 	 * @return $name
 	 */
 	public function getName()
@@ -45,6 +53,7 @@ class Color extends ObjectModelBase
 	}
 
 	/**
+	 *
 	 * @return $color
 	 */
 	public function getColorCode()
@@ -53,6 +62,7 @@ class Color extends ObjectModelBase
 	}
 
 	/**
+	 *
 	 * @return $ord
 	 */
 	public function getOrd()
@@ -61,6 +71,7 @@ class Color extends ObjectModelBase
 	}
 
 	/**
+	 *
 	 * @param number $id
 	 */
 	public function setId($id)
@@ -69,6 +80,7 @@ class Color extends ObjectModelBase
 	}
 
 	/**
+	 *
 	 * @param string $name
 	 */
 	public function setName($name)
@@ -77,6 +89,7 @@ class Color extends ObjectModelBase
 	}
 
 	/**
+	 *
 	 * @param string $color
 	 */
 	public function setColorCode($color)
@@ -88,6 +101,7 @@ class Color extends ObjectModelBase
 	}
 
 	/**
+	 *
 	 * @param number $ord
 	 */
 	public function setOrd($ord)
@@ -102,7 +116,7 @@ class Color extends ObjectModelBase
 		$this->color = (array_key_exists('color', $data)) ? $data['color'] : null;
 		$this->ord = (array_key_exists('ord', $data)) ? $data['ord'] : null;
 	}
-	
+
 	public function getArrayCopy()
 	{
 		return array(

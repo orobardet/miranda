@@ -6,26 +6,26 @@ use Application\Model\ObjectModelBase;
 class Type extends ObjectModelBase
 {
 
-	public function __construct($name=null)
-	{
-		if ($name) {
-			$this->setName($name);
-		}
-	}
-	
 	/**
 	 * ID en BDD du type
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $id;
 
 	/**
 	 * Nom du type
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $name;
+
+	public function __construct($name = null)
+	{
+		if ($name) {
+			$this->setName($name);
+		}
+	}
 
 	/**
 	 *
@@ -76,7 +76,7 @@ class Type extends ObjectModelBase
 			'name' => $this->name
 		);
 	}
-	
+
 	public function __toString()
 	{
 		return $this->name;

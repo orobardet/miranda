@@ -6,26 +6,26 @@ use Application\Model\ObjectModelBase;
 class Tag extends ObjectModelBase
 {
 
-	public function __construct($name=null)
-	{
-		if ($name) {
-			$this->setName($name);
-		}
-	}
-	
 	/**
 	 * ID en BDD du tag
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $id;
 
 	/**
 	 * Nom du tag
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $name;
+
+	public function __construct($name = null)
+	{
+		if ($name) {
+			$this->setName($name);
+		}
+	}
 
 	/**
 	 *
@@ -76,7 +76,7 @@ class Tag extends ObjectModelBase
 			'name' => $this->name
 		);
 	}
-	
+
 	public function __toString()
 	{
 		return $this->name;

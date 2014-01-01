@@ -82,5 +82,6 @@ return array(
 	'Existing or new' => 'Existant ou un nouveau',
 	"Existing or new, add it with '+'" => "Existant ou un nouveau, ajoutez-le avec '+'",
 	"Usage history of the costume. One per line, for example in form 'Show (character)." => "Historique d'utilisation du costume. Un par ligne, par exemple de la forme 'Spectacle (personnage).",
-	"No origin" => "Pas d'origine"
+	"No origin" => "Pas d'origine",
+	"Costume '%label%' added." => "Le costume '%label%' a été ajouté."
 );

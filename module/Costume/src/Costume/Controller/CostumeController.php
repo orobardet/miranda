@@ -9,7 +9,7 @@ use Costume\Model\Costume;
 class CostumeController extends AbstractCostumeController implements AclControllerInterface
 {
 
-	public function aclIsAllowed($action,\Zend\Permissions\Acl\Acl $acl, $user)
+	public function aclIsAllowed($action, \Zend\Permissions\Acl\Acl $acl, $user)
 	{
 		switch ($action) {
 			case "index":
@@ -90,7 +90,7 @@ class CostumeController extends AbstractCostumeController implements AclControll
 	public function addAction()
 	{
 		$defaultData = array(
-			'gender' => 'None'
+			'gender' => ''
 		);
 		
 		$form = $this->getServiceLocator()->get('Costume\Form\Costume');
@@ -103,18 +103,26 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		$request = $this->getRequest();
 		if ($request->isPost()) {
 			$form->setData($request->getPost());
-				
+			
 			if ($form->isValid()) {
-				$costume = new Costume();
+				$costumeHydrator = $this->getServiceLocator()->get('Costume\Hydrator\CostumeForm');
 				
-				$costume->exchangeArray($form->getData());
-				// TODO: faire un Costume\Hydrator qui va peupler un objet costume passé en paramète avec le contenu d'un tableau en paramètre aussi.
-				// Fera les rapprochements dans la BDD avec les couleurs/matériaux/tag... et les ajoutant éventuellement (comme fait lors de l'import)
- 				$data = $form->getData();
-// 				$this->getUserTable()->saveUser($user, true);
-				print_r($form->getData());
-				die;
-				//return $this->redirect()->toRoute('costume');
+				$costume = $costumeHydrator->hydrate($form->getData(), new Costume());
+				
+				$this->dbTransaction()->begin();
+				$this->getCostumeTable()->saveCostume($costume);
+				$this->dbTransaction()->commit();
+				
+				$this->resultStatus()->addResultStatus(
+						StringTools::varprintf($this->getServiceLocator()->get('translator')->translate("Costume '%label%' added."), 
+								array(
+									'label' => $costume->getLabel()
+								)), "success");
+				
+				return $this->redirect()->toRoute('costume', array(
+					'action' => 'show',
+					'id' => $costume->getId()
+				));
 			}
 		} else {
 			$form->setData($defaultData);

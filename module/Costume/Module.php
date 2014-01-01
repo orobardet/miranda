@@ -156,11 +156,16 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 					$form = new Form\Costume($sm->get('Costume\Model\CostumeTable'), null, $sm->get('translator'));
 					$form->setInputFilter(new Form\CostumeFilter($sm->get('costume_zend_db_adapter'), $sm->get('Miranda\Service\Config')));
 					return $form;
+				},
+				'Costume\Hydrator\CostumeForm' => function ($sm)
+				{
+					$hydrator = new Model\Costume\FormHydrator($sm->get('Costume\Model\CostumeTable'), $sm->get('Costume\Model\TypeTable'), $sm->get('Costume\Model\MaterialTable'));
+					return $hydrator;
 				}
 			)
 		);
 	}
-	
+
 	public function getViewHelperConfig()
 	{
 		return array(
@@ -169,8 +174,7 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 			)
 		);
 	}
-	
-	
+
 	public function getConsoleUsage(ConsoleAdapterInterface $console)
 	{
 		return array(

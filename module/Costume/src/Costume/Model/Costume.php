@@ -26,8 +26,8 @@ class Costume extends ObjectModelBase
 
 	/**
 	 * Retourne la liste des genres acceptés
-	 * 
-	 * @return string[] 
+	 *
+	 * @return string[]
 	 */
 	public static function getGenders()
 	{
@@ -40,8 +40,8 @@ class Costume extends ObjectModelBase
 
 	/**
 	 * Retourne la liste des origines acceptés
-	 * 
-	 * @return string[] 
+	 *
+	 * @return string[]
 	 */
 	public static function getOrigins()
 	{
@@ -54,8 +54,8 @@ class Costume extends ObjectModelBase
 
 	/**
 	 * Retourne la liste des tailles standard
-	 * 
-	 * @return string[] 
+	 *
+	 * @return string[]
 	 */
 	public static function getDefaultSizes()
 	{
@@ -244,6 +244,7 @@ class Costume extends ObjectModelBase
 
 	/**
 	 * Origine du costume (creation, achat, .
+	 *
 	 *
 	 *
 	 *
@@ -918,7 +919,7 @@ class Costume extends ObjectModelBase
 
 	public function exchangeArray($data)
 	{
-		$this->id = (array_key_exists('id', $data)) ? $data['id'] : null;
+		$this->id = (array_key_exists('id', $data)) ? $this->filterDbId($data['id']) : null;
 		$this->code = (array_key_exists('code', $data)) ? $data['code'] : null;
 		$this->label = (array_key_exists('label', $data)) ? $data['label'] : null;
 		$this->creation_ts = (array_key_exists('creation_ts', $data)) ? $data['creation_ts'] : $this->creation_ts;
@@ -928,11 +929,11 @@ class Costume extends ObjectModelBase
 		$this->size = (array_key_exists('size', $data)) ? $data['size'] : null;
 		$this->state = (array_key_exists('state', $data)) ? $data['state'] : $this->state;
 		$this->quantity = (array_key_exists('quantity', $data)) ? $data['quantity'] : $this->quantity;
-		$this->primary_color_id = (array_key_exists('primary_color_id', $data)) ? $data['primary_color_id'] : $this->primary_color_id;
-		$this->secondary_color_id = (array_key_exists('secondary_color_id', $data)) ? $data['secondary_color_id'] : $this->secondary_color_id;
-		$this->primary_material_id = (array_key_exists('primary_material_id', $data)) ? $data['primary_material_id'] : $this->primary_material_id;
-		$this->secondary_material_id = (array_key_exists('secondary_material_id', $data)) ? $data['secondary_material_id'] : $this->secondary_material_id;
-		$this->type_id = (array_key_exists('type_id', $data)) ? $data['type_id'] : $this->type_id;
+		$this->primary_color_id = (array_key_exists('primary_color_id', $data)) ? $this->filterDbId($data['primary_color_id']) : $this->primary_color_id;
+		$this->secondary_color_id = (array_key_exists('secondary_color_id', $data)) ? $this->filterDbId($data['secondary_color_id']) : $this->secondary_color_id;
+		$this->primary_material_id = (array_key_exists('primary_material_id', $data)) ? $this->filterDbId($data['primary_material_id']) : $this->primary_material_id;
+		$this->secondary_material_id = (array_key_exists('secondary_material_id', $data)) ? $this->filterDbId($data['secondary_material_id']) : $this->secondary_material_id;
+		$this->type_id = (array_key_exists('type_id', $data)) ? $this->filterDbId($data['type_id']) : $this->type_id;
 		$this->origin = (array_key_exists('origin', $data)) ? $data['origin'] : $this->origin;
 		$this->origin_details = (array_key_exists('origin_details', $data)) ? $data['origin_details'] : $this->origin_details;
 		$this->history = (array_key_exists('history', $data)) ? $data['history'] : $this->history;
@@ -962,5 +963,20 @@ class Costume extends ObjectModelBase
 			'origin_details' => $this->origin_details,
 			'history' => $this->history
 		);
+	}
+
+	public function __toString()
+	{
+		$data = $this->getArrayCopy();
+		
+		$data['primary_color'] = $this->primary_color;
+		$data['secondary_color'] = $this->secondary_color;
+		$data['primary_material'] = $this->primary_material;
+		$data['secondary_material'] = $this->secondary_material;
+		$data['type'] = $this->type;
+		$data['parts'] = $this->parts;
+		$data['tags'] = $this->tags;
+		
+		return print_r($data, true);
 	}
 }
