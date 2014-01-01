@@ -184,6 +184,14 @@ class TagTable extends AbstractDataCacher implements DataCacheAwareInterface
 		));
 	}
 	
+	public function removeCostumeTags($costume_id)
+	{
+		// On supprime tous les tags du costumes
+		$this->costumeTagGateway->delete(array(
+			'costume_id' => $costume_id
+		));
+	}
+	
 	public function deleteTag($id)
 	{
 		// On ne supprime que si le tag n'est plus utilisé

@@ -38,7 +38,7 @@ class RefererUrl extends AbstractPlugin
 	 * @param string $message
 	 * @param string $type "success" ou "error" ou "warning"
 	 */
-	public function setReferer($name, $url = null)
+	public function setReferer($name, $url = null, $skipable = false)
 	{
 		if ($url === null) {
 			$request = $this->getController()->getRequest();
@@ -57,13 +57,19 @@ class RefererUrl extends AbstractPlugin
 				$url .= '#' . $uriFragment;
 			}
 		}
-		$this->session->refererUrls[$name] = $url;
+		$this->session->refererUrls[$name] = array('url' => $url, 'skipable' => $skipable);
 	}
 
-	public function getReferer($name)
+	public function getReferer($name, $skip = false)
 	{
 		if (array_key_exists($name, $this->session->refererUrls)) {
-			return $this->session->refererUrls[$name];
+			if ($skip) {
+				if (!$this->session->refererUrls[$name]['skipable']) {
+					return $this->session->refererUrls[$name]['url'];
+				}
+			} else {
+				return $this->session->refererUrls[$name]['url'];
+			}
 		}
 		return false;
 	}

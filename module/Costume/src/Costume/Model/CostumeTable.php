@@ -71,6 +71,15 @@ class CostumeTable extends AbstractDataCachePopulator
 		return $rowset;
 	}
 
+	/**
+	 * Charge un costume depuis la BDD, par ID
+	 * 
+	 * @param integer $id
+	 * @param boolean $exceptionIfNone
+	 * 
+	 * @throws \Exception
+	 * @return Costume
+	 */
 	public function getCostume($id, $exceptionIfNone = true)
 	{
 		$id = (int)$id;
@@ -90,6 +99,15 @@ class CostumeTable extends AbstractDataCachePopulator
 		return $costume;
 	}
 
+	/**
+	 * Charge un costume depuis la BDD, par code de costume
+	 * 
+	 * @param string $code
+	 * @param boolean $exceptionIfNone
+	 * 
+	 * @throws \Exception
+	 * @return Costume
+	 */
 	public function getCostumeByCode($code, $exceptionIfNone = true)
 	{
 		$rowset = $this->tableGateway->select(array(
@@ -238,9 +256,29 @@ class CostumeTable extends AbstractDataCachePopulator
 
 	public function deleteCostume($id)
 	{
-		$this->tableGateway->delete(array(
-			'id' => $id
-		));
+		$costume = $this->getCostume($id, false);
+		
+		if ($costume) {
+			// On supprime les images du costume
+			if ($this->costumePictureTable) {
+				$this->costumePictureTable->deleteCostumePictures($costume);
+			}
+		
+			// On supprime l'associatin des tags à un costume (mais pas les tags eux-même)
+			if ($this->tagTable) {
+				$this->tagTable->removeCostumeTags($costume->getId());
+			}
+			
+			// On supprime l'associatin des types compsant un costume (mais pas les pièces eux-même)
+			if ($this->typeTable) {
+				$this->typeTable->removeCostumeTypes($costume->getId());
+			}
+			
+		
+			$this->tableGateway->delete(array(
+				'id' => $id
+			));
+		}		
 	}
 
 	public function populateCostumeData(Costume $costume)

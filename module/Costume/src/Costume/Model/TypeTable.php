@@ -188,6 +188,14 @@ class TypeTable extends AbstractDataCacher implements DataCacheAwareInterface
 		));
 	}
 
+	public function removeCostumeTypes($costume_id)
+	{
+		// On supprime tous les type du costume
+		$this->costumeTypeGateway->delete(array(
+			'costume_id' => $costume_id
+		));
+	}
+
 	public function deleteType($id)
 	{
 		// On ne supprime que si le type n'est plus utilisé

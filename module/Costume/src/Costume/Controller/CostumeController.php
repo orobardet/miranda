@@ -79,7 +79,7 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		}
 		
 		$this->refererUrl()->setReferer('costume-edit');
-		$this->refererUrl()->setReferer('costume-delete');
+		$this->refererUrl()->setReferer('costume-delete', null, true);
 		
 		return new ViewModel(array(
 			'costume' => $costume,
@@ -144,8 +144,42 @@ class CostumeController extends AbstractCostumeController implements AclControll
 
 	public function deleteAction()
 	{
+		$id = (int)$this->params()->fromRoute('id', 0);
+		if (!$id) {
+			return $this->redirect()->toRoute('costume');
+		}
+		$costume = $this->getCostumeTable()->getCostume($id, false);
+		if (!$costume) {
+			return $this->redirect()->toRoute('costume');
+		}
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			$del = $request->getPost('del', 'no');
+			$return_url = $this->refererUrl('costume-delete');
+				
+			if ($del == 'yes') {
+				$id = (int)$request->getPost('id');
+				$this->getCostumeTable()->deleteCostume($id);
+				$this->resultStatus()->addResultStatus(
+						StringTools::varprintf($this->getServiceLocator()->get('translator')->translate("Costume '%label%' deleted."), 
+								array(
+									'label' => $costume->getLabel()
+								)), "success");
+				
+				$return_url = $this->refererUrl()->getReferer('costume-delete', true);
+			}
+			
+			if ($return_url) {
+				return $this->redirect()->toUrl($return_url);
+			} else {
+				return $this->redirect()->toRoute('costume');
+			}
+		}
+		
 		return array(
 			'form' => null,
+			'costume' => $costume,
 			'cancel_url' => $this->refererUrl('costume-delete')
 		);
 	}

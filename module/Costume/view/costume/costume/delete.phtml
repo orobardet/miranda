@@ -1,13 +1,24 @@
 <?php
 $title = $this->translate('Delete costume');
 $this->headTitle($title);
+$costume = $this->costume;
 ?>
-<h1><?php echo $this->escapeHtml($this->translate($title)); ?></h1>
+<h1><?php echo $this->translateReplace("Delete costume '%label%'", array('label' => $this->escapeHtml($costume->getLabel()))); ?></h1>
 
-<big class="text-warning text-lg" style="font-style:italic;"><i class="icon-warning-sign"></i> Fonctionnalité en cours de développement. <i class="icon-warning-sign"></i></big>
-
-<?php if ($this->cancel_url): ?>
-<p style="margin-top:20px;">
-<a href="<?php echo $this->cancel_url; ?>" class="btn btn-primary"><?php echo $this->translate('Back'); ?></a>
+<p>
+<?php echo $this->translateReplace("Are you sure that you want to delete costume <b>%label%</b> (%code%)?", array('label' => $this->escapeHtml($costume->getLabel()), 'code' => $this->escapeHtml($costume->getCode()))); ?>
 </p>
-<?php endif; ?>
+
+<?php
+$url = $this->url('costume', array(
+    'action' => 'delete',
+    'id'     => (int) $costume->getId(),
+));
+?>
+<form action="<?php echo $url; ?>" method="post">
+<div>
+    <input type="hidden" name="id" value="<?php echo (int) $costume->getId(); ?>" />
+    <button type="submit" class="btn" name="del" value="no"><?php echo $this->translate('No'); ?></button>
+    <button type="submit" class="btn btn-primary" name="del" value="yes"><?php echo $this->translate('Yes'); ?></button>
+</div>
+</form>

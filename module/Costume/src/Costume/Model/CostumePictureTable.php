@@ -80,4 +80,18 @@ class CostumePictureTable extends PictureTable
 			}
 		}
 	}
+	
+	public function deleteCostumePictures(Costume $costume)
+	{
+		$costumeId = $costume->getId();
+		$pictures = $this->getCostumePictures($costumeId);
+		
+		if (count($pictures)) {
+			foreach ($pictures as $picture) {
+				$pictureId = $picture->getId();
+				$this->costumePictureGateway->delete(array('picture_id' => $pictureId));
+				$this->deletePicture($pictureId);
+			}
+		}
+	}
 }
