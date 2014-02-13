@@ -18,5 +18,21 @@ class String
 	{
 		return str_pad($input, strlen($input) - mb_strlen($input, $encoding) + $pad_length, $pad_string, $pad_style);
 	}
+
+	public static function return_bytes($val)
+	{
+		$val = trim($val);
+		$last = strtolower($val[strlen($val) - 1]);
+		switch ($last) {
+			case 'g':
+				$val *= 1024;
+			case 'm':
+				$val *= 1024;
+			case 'k':
+				$val *= 1024;
+		}
+		
+		return $val;
+	}
 }
 ?>

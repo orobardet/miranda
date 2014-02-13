@@ -3,6 +3,7 @@ namespace Costume\Form;
 
 use Zend\InputFilter\InputFilter;
 use Application\TraversableConfig;
+use Application\Toolbox\String as StringTools;
 
 class PictureFilter extends InputFilter
 {
@@ -13,6 +14,18 @@ class PictureFilter extends InputFilter
 				array(
 					'name' => 'picture_file',
 					'required' => true,
+					'validators' => array(
+						array(
+							'name' => 'File\Size',
+							'max' => min(StringTools::return_bytes(ini_get('post_max_size')), 
+									StringTools::return_bytes(ini_get('upload_max_filesize')))
+						),
+/*						array(
+							'name' => 'File\MimeType',
+							'mimeType' => 'image/jpeg,image/jpg',
+							'enableHeaderCheck' => true
+						)*/
+					),
 					'filters' => array(
 						array(
 							'name' => 'File\RenameUpload',

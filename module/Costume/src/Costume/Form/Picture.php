@@ -20,7 +20,8 @@ class Picture extends Form
 						'label' => 'Picture: '
 					),
 					'attributes' => array(
-						'id' => 'input-picture'
+						'id' => 'input-picture',
+						'accept' => 'image/jpeg'
 					)
 				));
 		

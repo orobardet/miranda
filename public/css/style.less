@@ -333,6 +333,27 @@ label.multicheckbox {
 	}
 }
 
+.progress {
+	position:relative;
+		
+	.progress-message {
+	    color: #333333;
+	    font-weight: bold;
+	    position: absolute;
+	    text-align: center;
+	    text-shadow: 1px 1px #FFFFFF;
+	    width: 100%;
+	}
+}
+
+.progress-miranda .bar, .progress .bar-miranda {
+  #gradient > .vertical(lighten(@navbarBackgroundHighlight, 15%), @mirandaBase);
+}
+.progress-miranda.progress-striped .bar, .progress-striped .bar-miranda {
+  #gradient > .striped(@mirandaBase);
+}
+
+
 .page-qrcode-container {
 	position: relative;
 }

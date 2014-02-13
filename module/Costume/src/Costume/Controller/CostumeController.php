@@ -5,11 +5,12 @@ use Acl\Controller\AclControllerInterface;
 use Zend\View\Model\ViewModel;
 use Application\Toolbox\String as StringTools;
 use Costume\Model\Costume;
+use Zend\View\Model\JsonModel;
 
 class CostumeController extends AbstractCostumeController implements AclControllerInterface
 {
 
-	public function aclIsAllowed($action, \Zend\Permissions\Acl\Acl $acl, $user)
+	public function aclIsAllowed($action,\Zend\Permissions\Acl\Acl $acl, $user)
 	{
 		switch ($action) {
 			case "index":
@@ -238,6 +239,8 @@ class CostumeController extends AbstractCostumeController implements AclControll
 			return $this->redirect()->toRoute('costume');
 		}
 		
+		$max_upload_size = min(StringTools::return_bytes(ini_get('post_max_size')), StringTools::return_bytes(ini_get('upload_max_filesize')));
+		
 		$form = $this->getServiceLocator()->get('Costume\Form\Picture');
 		$form->setAttribute('action', $this->url()->fromRoute('costume', array(
 			'action' => 'picture',
@@ -246,12 +249,12 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		$form->setAttribute('method', 'post');
 		
 		$request = $this->getRequest();
+		$postData = array_merge_recursive($request->getPost()->toArray(), $request->getFiles()->toArray());
 		if ($request->isPost()) {
-			$form->setData(array_merge_recursive($request->getPost()->toArray(), $request->getFiles()->toArray()));
+			$form->setData($postData);
 			if ($form->isValid()) {
 				$data = $form->getData();
 				
-				print_r($data);
 				$this->dbTransaction()->begin();
 				if (array_key_exists('picture_file', $data) && is_array($data['picture_file']) && array_key_exists('tmp_name', $data['picture_file']) &&
 						 ($data['picture_file']['tmp_name'] != '')) {
@@ -286,22 +289,50 @@ class CostumeController extends AbstractCostumeController implements AclControll
 								)), "success");
 				
 				$referer = $this->refererUrl('costume-edit');
-				if ($referer) {
-					return $this->redirect()->toUrl($referer);
+				
+				if (array_key_exists('isAjax', $postData) && !empty($postData['isAjax'])) {
+					if ($referer) {
+						return new JsonModel(array(
+							'status' => true,
+							'redirect' => $referer
+						));
+					} else {
+						return new JsonModel(
+								array(
+									'status' => true,
+									'redirect' => $this->url()->fromRoute('costume', 
+											array(
+												'action' => 'show',
+												'id' => $costumeId
+											))
+								));
+					}
 				} else {
-					return $this->redirect()->toRoute('costume', array(
-						'action' => 'show',
-						'id' => $costumeId
-					));
+					if ($referer) {
+						return $this->redirect()->toUrl($referer);
+					} else {
+						return $this->redirect()->toRoute('costume', array(
+							'action' => 'show',
+							'id' => $costumeId
+						));
+					}
 				}
 			}
 		}
 		
-		return array(
-			'costume' => $costume,
-			'form' => $form,
-			'cancel_url' => $this->refererUrl('costume-picture')
-		);
+		if (array_key_exists('isAjax', $postData) && !empty($postData['isAjax'])) {
+			return new JsonModel(array(
+				'status' => false,
+				'formErrors' => $form->getMessages()
+			));
+		} else {
+			return array(
+				'costume' => $costume,
+				'form' => $form,
+				'cancel_url' => $this->refererUrl('costume-picture'),
+				'max_upload_size' => $max_upload_size
+			);
+		}
 	}
 
 	public function deleteAction()

@@ -99,5 +99,9 @@ return array(
 	'Select another picture' => 'Choisir une autre image',
 	"Delete the costume's picture?" => "Supprimer l'image du costume ?",
 	"You have not selected image. This will permanently delete the image already attached to the costume." => "Vous n'avez pas selectionné d'image. Ceci va définitivement supprimer l'image déjà associée au costume.",
-	"Do you really want to delete this picture?" => "Voulez-vous vraiment supprimer cette image ?"
+	"Do you really want to delete this picture?" => "Voulez-vous vraiment supprimer cette image ?",
+	'Maximum file size: %size% Mb' => 'Taille maximale du fichier : %size% Mo',
+	'File too big' => 'Fichier trop gros',
+	'Processing picture...' => "Traitement de l'image...",
+	'Picture upload completed!' => "Envoi de l'image terminé !"
 );
