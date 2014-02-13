@@ -4,14 +4,14 @@ namespace Costume\Form;
 use Zend\InputFilter\InputFilter;
 use Zend\Db\Adapter\Adapter as DbAdapter;
 use Zend\Validator\Db\NoRecordExists as DbNoRecordExists;
-use Zend\Config\Config as ZendConfig;
+use Application\TraversableConfig;
 
 class CostumeFilter extends InputFilter
 {
 
 	private $codeNotExistsValidator;
 
-	public function __construct(DbAdapter $dbAdapter, ZendConfig $config)
+	public function __construct(DbAdapter $dbAdapter, TraversableConfig $config)
 	{
 		$this->codeNotExistsValidator = new DbNoRecordExists(
 				array(

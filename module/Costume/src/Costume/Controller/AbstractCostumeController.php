@@ -11,6 +11,8 @@ abstract class AbstractCostumeController extends AbstractActionController implem
 
 	protected $costumeTable;
 	
+	protected $costumePictureTable;
+	
 	public function setConfig(ZendConfig $config)
 	{
 		$this->config = $config;
@@ -22,5 +24,13 @@ abstract class AbstractCostumeController extends AbstractActionController implem
 			$this->costumeTable = $this->getServiceLocator()->get('Costume\Model\CostumeTable');
 		}
 		return $this->costumeTable;
+	}
+	
+	public function getCostumePictureTable()
+	{
+		if (!$this->costumePictureTable) {
+			$this->costumePictureTable = $this->getServiceLocator()->get('Costume\Model\CostumePictureTable');
+		}
+		return $this->costumePictureTable;
 	}
 }

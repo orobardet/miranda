@@ -14,7 +14,7 @@ class Picture extends Form
 		
 		$this->add(
 				array(
-					'name' => 'picture',
+					'name' => 'picture_file',
 					'type' => 'File',
 					'options' => array(
 						'label' => 'Picture: '

@@ -52,6 +52,8 @@ return array(
 	'Delete a tag' => 'Supprimer une étiquette',
 	'Do you really want to delete this tag?' => 'Voulez-vous vraiment supprimer cette étiquette ?',
 	'The tag will be removed from all costumes using it.' => "L'étiquette sera retirée de tous les costumes qui l'utilisent.",
+	'Costume: ' => 'Costume : ',
+	'Current picture: ' => 'Image actuelle : ',
 	'Code: ' => 'Code : ',
 	'Type:' => 'Type :',
 	'Gender:' => 'Genre :',
@@ -91,5 +93,7 @@ return array(
 	"Picture changed for costume '%label%'." => "L'image du costume '%label%' a été modifiée.",
 	"Costume '%label%' deleted." => "Le costume '%label%' a été supprimé.",
 	"Delete costume '%label%'" => "Supprimer le costume '%label%'",
-	"Are you sure that you want to delete costume <b>%label%</b> (%code%)?" => "Voulez-vous vraiment supprimer le costume <b>%label%</b> (%code%) ?"
+	"Are you sure that you want to delete costume <b>%label%</b> (%code%)?" => "Voulez-vous vraiment supprimer le costume <b>%label%</b> (%code%) ?",
+	'Select picture' => 'Choisir une image',
+	'Select another picture' => 'Choisir une autre image'
 );

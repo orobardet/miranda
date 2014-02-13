@@ -1,52 +1,112 @@
 <?php
 $title = $this->translate('Change costume picture');
 $this->headTitle($title);
+$this->headscript()->offsetSetFile(100, $this->basePath() . '/js/bootstrap-fileupload.js');
 ?>
 <h1><?php echo $this->escapeHtml($this->translate($title)); ?></h1>
 
 <?php 
-if ($this->form) {
+if ($this->form && $this->costume) {
 
+$costume = $this->costume;
 $form = $this->form;
 $form->setAttribute('id', 'costume-picture-form');
 $form->prepare(); ?>
-<br/>
+<br />
 <?php echo $this->form()->openTag($form); ?>
 
 <div class="row-fluid">
-	<div class="span6">
+
+	<div class="span4 well">
+		<h4 style="margin-top: 0;"><?php echo $this->escapehtml($costume->getLabel()); ?> <em>(<?php echo $this->escapehtml($costume->getCode()); ?>)</em>
+		</h4>
+		<b><?php echo $this->translate('Current picture: ');?></b><br />
 	
-		<div class="form-horizontal">
-			<?php $element = $form->get('picture'); ?>
-			<div class="control-group required<?php if (count($element->getMessages())) echo " error"; ?>">
-				<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
-				<div class="controls">
-					<?php echo $this->formElement($element->setAttributes(array('style' => 'width:100px;'))); ?>
-					<?php if (count($element->getMessages())):?>
-					<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
-					<?php endif; ?>
-				</div>
+		<?php if (count($costume->getPictures())): ?>
+		<?php $mainPicture = $costume->getPictures()->current(); ?>
+		<?php $landscapePicture = ($mainPicture->getOrientation() == Application\Model\Picture::ORIENTATION_LANDSCAPE); ?>
+		<a class="thumbnail pull-left zoom-in-cursor span12"
+			href="<?php echo $mainPicture->getUrlPath(); ?>" target="_blank"
+			style="margin: 0;"> <img class="media-object"
+			src="<?php echo $mainPicture->getUrlPath(); ?>">
+		</a>
+		<?php else: ?>
+		<?php $landscapePicture = true; ?>
+		<div class="thumbnail pull-left no-picture text-center span12" style="margin: 0; background-color:white;">
+			<img class="media-object" src="/img/costume/no-costume.png"> <small><?php echo $this->translate('No picture'); ?></small>
+		</div>
+		<?php endif; ?>
+		
+	</div>
+
+	<div class="span8">
+			<?php $element = $form->get('picture_file'); ?>
+			<div class="fileupload fileupload-new control-group <?php if (count($element->getMessages())) echo " error"; ?>" data-provides="fileupload">
+			<div class="fileupload-new thumbnail drop-zone" id="picture-drop-zone" style="max-width: 300px; vertical-align:middle;">
+				<img class="media-object" src="/img/costume/no-costume.png"> <small><?php echo $this->translate('No picture'); ?></small>
+			</div>
+			<div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 300px; max-height: 300px; line-height: 20px;"></div>
+			<?php if (count($element->getMessages())):?>
+			<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
+			<?php endif; ?>
+			<div>
+				<span class="btn btn-file">
+					<span class="fileupload-new"><?php echo $this->translate('Select picture'); ?></span>
+					<span class="fileupload-exists"><?php echo $this->translate('Select another picture'); ?></span>
+					<?php echo $this->formElement($element); ?>
+				</span>
+				<a href="#" class="btn fileupload-exists" data-dismiss="fileupload"><?php echo $this->translate('No picture'); ?></a>
 			</div>
 		</div>
-			
+		
 		<div class="form-buttons">
-		    <div class="controls">
+			<div class="controls">
 				<?php if ($this->cancel_url): ?>
 					<a href="<?php echo $this->cancel_url; ?>" class="btn"><?php echo $this->translate('Cancel'); ?></a>
 				<?php endif; ?>
 				<?php echo $this->formElement($form->get('submit')->setAttributes(array('class' => 'btn btn-primary'))); ?>
 			</div>
 		</div>
-	
+
 	</div>
-	
-	<div class="span6">
-	Current picture:
-	</div>
+
 </div>
-
-
 <?php 
 echo $this->form()->closeTag(); 
 } // $this->form 
+?>
+<?php
+/*
+<script type="text/javascript">
+$(function() {
+	$('.drop-zone').bind('dragover', function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+	}).bind('dragenter', function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		$(this).addClass('drop-zone-active');
+	}).bind('dragleave', function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		$(this).removeClass('drop-zone-active');
+	});
+
+	$('#picture-drop-zone').bind('drop', function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		$(this).removeClass('drop-zone-active');
+
+		var files = e.originalEvent.dataTransfer.files;
+
+		if (files.length) {
+			if (files.length > 1) {
+				alert('Seulement un fichier');
+			} else {
+				
+			}
+		}
+	});
+});
+</script>*/
 ?>

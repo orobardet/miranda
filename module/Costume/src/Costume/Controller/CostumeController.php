@@ -251,7 +251,33 @@ class CostumeController extends AbstractCostumeController implements AclControll
 			if ($form->isValid()) {
 				$data = $form->getData();
 				
-				// TODO: sauvegarder l'image
+				print_r($data);
+				$this->dbTransaction()->begin();
+				if (array_key_exists('picture_file', $data) && is_array($data['picture_file']) && array_key_exists('tmp_name', $data['picture_file']) &&
+						 ($data['picture_file']['tmp_name'] != '')) {
+					$pictureSource = $data['picture_file']['tmp_name'];
+					
+					$pictureFilter = new \Costume\Filter\File\CostumePicture(array(
+						'max_width' => 1000,
+						'max_height' => 1000
+					));
+					$pictureSource = $pictureFilter->filter($pictureSource);
+					
+					$picture = $this->getCostumePictureTable()->pictureFactory();
+					$picture->setPath(basename($pictureSource));
+					if ($picture->copyFromFile($pictureSource)) {
+						$costume->setPictures(array(
+							$picture
+						));
+					}
+					
+					unlink($pictureSource);
+				} else {
+					$costume->setPictures(array());
+				}
+				
+				$this->getCostumeTable()->saveCostume($costume);
+				$this->dbTransaction()->commit();
 				
 				$this->resultStatus()->addResultStatus(
 						StringTools::varprintf($this->getServiceLocator()->get('translator')->translate("Picture changed for costume '%label%'."), 
@@ -272,6 +298,7 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		}
 		
 		return array(
+			'costume' => $costume,
 			'form' => $form,
 			'cancel_url' => $this->refererUrl('costume-picture')
 		);

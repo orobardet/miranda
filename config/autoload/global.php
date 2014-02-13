@@ -60,7 +60,8 @@ $config = array(
 			'table_prefix' => ''
 		),
 		'data_storage' => array(
-			'root_path' => '../../data/miranda'
+			'root_path' => '../../data/miranda',
+			'temp_path' => '../../data/miranda/tmp'
 		),
 		'costume' => array(
 			'pictures' => array(

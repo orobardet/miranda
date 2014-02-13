@@ -160,6 +160,7 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 				'Costume\Form\Picture' => function ($sm)
 				{
 					$form = new Form\Picture(); 
+					$form->setInputFilter(new Form\PictureFilter($sm->get('Miranda\Service\Config')));
 					return $form;
 				},
 				'Costume\Hydrator\CostumeForm' => function ($sm)
