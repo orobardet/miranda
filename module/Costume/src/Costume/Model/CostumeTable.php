@@ -264,17 +264,16 @@ class CostumeTable extends AbstractDataCachePopulator
 				$this->costumePictureTable->deleteCostumePictures($costume);
 			}
 		
-			// On supprime l'associatin des tags à un costume (mais pas les tags eux-même)
+			// On supprime l'association des tags à un costume (mais pas les tags eux-même)
 			if ($this->tagTable) {
 				$this->tagTable->removeCostumeTags($costume->getId());
 			}
 			
-			// On supprime l'associatin des types compsant un costume (mais pas les pièces eux-même)
+			// On supprime l'association des types compsant un costume (mais pas les pièces eux-même)
 			if ($this->typeTable) {
 				$this->typeTable->removeCostumeTypes($costume->getId());
 			}
 			
-		
 			$this->tableGateway->delete(array(
 				'id' => $id
 			));

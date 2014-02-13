@@ -29,8 +29,8 @@ class Picture extends Form
 					'name' => 'submit',
 					'type' => 'Submit',
 					'attributes' => array(
-						'value' => 'Edit',
-						'id' => 'submitbutton'
+						'value' => 'Save picture',
+						'id' => 'picture-save-button'
 					)
 				));
 	}

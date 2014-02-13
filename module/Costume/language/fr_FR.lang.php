@@ -28,6 +28,7 @@ return array(
 	'color' => 'Couleur',
 	'name' => 'Nom',
 	'change picture' => "changer l'image",
+	'Save picture' => "Enregistrer l'image",
 	'Add a color' => 'Ajouter une couleur',
 	'Edit color' => 'Modifier la couleur',
 	'Delete a color' => 'Supprimer une couleur',
@@ -95,5 +96,8 @@ return array(
 	"Delete costume '%label%'" => "Supprimer le costume '%label%'",
 	"Are you sure that you want to delete costume <b>%label%</b> (%code%)?" => "Voulez-vous vraiment supprimer le costume <b>%label%</b> (%code%) ?",
 	'Select picture' => 'Choisir une image',
-	'Select another picture' => 'Choisir une autre image'
+	'Select another picture' => 'Choisir une autre image',
+	"Delete the costume's picture?" => "Supprimer l'image du costume ?",
+	"You have not selected image. This will permanently delete the image already attached to the costume." => "Vous n'avez pas selectionné d'image. Ceci va définitivement supprimer l'image déjà associée au costume.",
+	"Do you really want to delete this picture?" => "Voulez-vous vraiment supprimer cette image ?"
 );

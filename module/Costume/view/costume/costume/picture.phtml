@@ -75,38 +75,41 @@ $form->prepare(); ?>
 echo $this->form()->closeTag(); 
 } // $this->form 
 ?>
-<?php
-/*
+
+<?php if (count($costume->getPictures())): ?>
+<div id="delete-picture-confirm" class="modal hide fade" tabindex="-1">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3 id="myModalLabel"><?php echo $this->translate("Delete the costume's picture?"); ?></h3>
+  </div>
+  <div class="modal-body">
+  <h1 class="icon-warning-sign text-error pull-left"></h1>
+    <p><?php echo $this->translate("You have not selected image. This will permanently delete the image already attached to the costume."); ?></p>
+    <p><?php echo $this->translate("Do you really want to delete this picture?"); ?></p>
+    </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal"><?php echo $this->translate('No'); ?></button>
+    <button class="btn btn-primary" id="delete-picture-confirm-yes"><?php echo $this->translate('Yes'); ?></button>
+  </div>
+</div>
+
 <script type="text/javascript">
 $(function() {
-	$('.drop-zone').bind('dragover', function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-	}).bind('dragenter', function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-		$(this).addClass('drop-zone-active');
-	}).bind('dragleave', function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-		$(this).removeClass('drop-zone-active');
-	});
-
-	$('#picture-drop-zone').bind('drop', function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-		$(this).removeClass('drop-zone-active');
-
-		var files = e.originalEvent.dataTransfer.files;
-
-		if (files.length) {
-			if (files.length > 1) {
-				alert('Seulement un fichier');
+	$('#costume-picture-form').submit(function(e) {
+		if (!$('#input-picture').val().length) {
+			if ($(this).data('delete_confirmed')) {
 			} else {
-				
+				$('#delete-picture-confirm').modal('show');
+				return false;
 			}
 		}
 	});
+
+	$('#delete-picture-confirm-yes').click(function (e) {
+		$('#delete-picture-confirm').modal('hide');
+		$('#costume-picture-form').data('delete_confirmed', true);
+		$('#picture-save-button').trigger('click');
 });
-</script>*/
-?>
+});
+</script>
+<?php endif; ?>
