@@ -323,7 +323,7 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		if (array_key_exists('isAjax', $postData) && !empty($postData['isAjax'])) {
 			return new JsonModel(array(
 				'status' => false,
-				'formErrors' => $form->getMessages()
+				'errors' => $form->getMessages()
 			));
 		} else {
 			return array(

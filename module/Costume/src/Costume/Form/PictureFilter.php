@@ -20,11 +20,13 @@ class PictureFilter extends InputFilter
 							'max' => min(StringTools::return_bytes(ini_get('post_max_size')), 
 									StringTools::return_bytes(ini_get('upload_max_filesize')))
 						),
-/*						array(
+						array(
 							'name' => 'File\MimeType',
-							'mimeType' => 'image/jpeg,image/jpg',
-							'enableHeaderCheck' => true
-						)*/
+							'options' => array(
+								'mimeType' => 'image/jpeg,image/jpg',
+								'enableHeaderCheck' => true
+							)
+						)
 					),
 					'filters' => array(
 						array(

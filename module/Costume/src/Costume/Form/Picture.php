@@ -21,7 +21,7 @@ class Picture extends Form
 					),
 					'attributes' => array(
 						'id' => 'input-picture',
-						'accept' => 'image/jpeg'
+						'accept' => 'image/jpeg,image/jpg'
 					)
 				));
 		

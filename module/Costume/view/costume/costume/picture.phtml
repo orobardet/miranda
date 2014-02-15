@@ -203,12 +203,29 @@ $(function() {
 	                } else {
 	    				$('#picture-fileupload').fileupload('clear');
 		                $('.fileupload .btn, .form-buttons .btn').removeAttr('disabled').removeClass('disabled');
-	    				
-	                    // TODO: Afficher les erreurs
+
+		                if (response.errors) {
+			                var errMsg = '';
+			                for (field in response.errors) {
+			                    if (response.errors.hasOwnProperty(field)) {
+				                    errMsg += field+':\n';
+				                    var errList = response.errors[field];
+					                for (type in errList) {
+					                    if (errList.hasOwnProperty(type)) {
+						                    errMsg += ' - '+errList[type]+'\n';
+										}
+					                }
+				                    errMsg += '\n';
+								}
+			                }
+			                alert('Une erreur miranda est survenue :\n'+errMsg);
+						} else {
+			                alert('Une erreur miranda inconnue est survenue.');
+						}
 	                }
 	            },
-	            error: function(a, b, c) {
-	                console.log(a, b, c);
+	            error: function(jqXHR, textStatus, errorThrown) {
+	                alert('Une erreur AJAX est survenue : \n'+textStatus+'\n'+errorThrown);
 	            }
 	        });
 	        startProgress();
