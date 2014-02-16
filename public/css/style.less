@@ -286,6 +286,7 @@ label.multicheckbox {
 
 .pagination-placeholder {
 	height:55px;
+	
 }
 
 .pagination-container {
@@ -573,3 +574,15 @@ label.radio.col2 {
 }
 
 @import "icons-sprite.less";
+
+@media print {
+	a[href]:after {
+		content: '';
+	}
+	
+	.pagination-placeholder, .pagination-container, 
+	.action-bar, .action-bar-container,
+	.breadcrumb {
+		display: none;
+	}
+}
