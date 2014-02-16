@@ -284,6 +284,30 @@ label.multicheckbox {
 	}
 }
 
+.pagination-placeholder {
+	height:55px;
+}
+
+.pagination-container {
+	padding:10px 0;
+	
+	.pagination {
+		margin:0px;
+	}
+	
+	&.affix {
+		bottom: 0;
+		left:0;
+		background-color: @bodyBackground;
+		width:100%;
+		box-shadow: 0px 0px 10px lighten(@navbarBackground, 65%);
+		z-index:1000;
+	}
+	&.affix-bottom {
+		//padding-top:0;
+	}
+}
+
 .pagination-info {
 	padding:5px 0;
 }

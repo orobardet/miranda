@@ -1,4 +1,9 @@
 <?php if ($this->pageCount): ?>
+<?php if ($this->affix): ?>
+<div class="pagination-container affix" data-offset-bottom="60" data-spy="affix"><div class="container">
+<?php else: ?>
+<div class="pagination-container">
+<?php endif; ?>
 	<?php
 	$route_parameters = array();
 	if (isset($this->route_parameters)) { 
@@ -35,7 +40,6 @@
 		<?php echo $this->translateReplace('%first% - %last% out of %total%', array('first' => $this->firstItemNumber, 'last' => $this->lastItemNumber, 'total' => $this->totalItemCount)); ?>
 	</div>
 	<div class="pagination pagination-right">
-	<!-- class="pull-left" style="line-height:20px; padding:5px 0;" -->
 		<ul>
             <li <?php echo!isset($this->previous) ? 'class="disabled"' : ''; ?>>
                 <a href="<?php echo $this->url($this->route, $route_parameters, array('query' => array_merge($get_parameters, array('page' => $this->first)))); ?>">&laquo;</a></li>
@@ -64,4 +68,9 @@
                 <a href="<?php echo $this->url($this->route, $route_parameters, array('query' => array_merge($get_parameters, array('page' => $this->last)))); ?>">&raquo;</a></li>
         </ul>
     </div>
+<?php if ($this->affix): ?>
+</div></div>
+<?php else: ?>
+</div>
+<?php endif; ?>
 <?php endif; ?>

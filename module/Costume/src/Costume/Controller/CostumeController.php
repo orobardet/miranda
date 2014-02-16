@@ -49,9 +49,9 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		$costumes = $this->getCostumeTable()
 			->fetchAll(true)
 			->setItemCountPerPage($this->itemsPerPage()
-			->getItemsPerPage('costume-list', 10))
+			->getItemsPerPage('costume-list', 25))  // Nombre d'item par page
 			->setCurrentPageNumber($page)
-			->setPageRange(10);
+			->setPageRange(10); // Nombre max de lien dans le pager
 		
 		return new ViewModel(
 				array(

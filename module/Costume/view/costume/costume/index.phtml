@@ -105,8 +105,10 @@ $this->headTitle($title);
 </tbody>
 </table>
 <?php if ($this->costumes instanceof Zend\Paginator\Paginator): ?>
+<div class="pagination-placeholder">
 <?php echo $this->paginationControl($this->costumes, 'Sliding', 'paginator/sliding', 
-		array('route' => 'costume', 'route_parameters' => array(), 'get_parameters' => $this->get_parameters, 'context' => 'costume-list')); ?>
+		array('route' => 'costume', 'route_parameters' => array(), 'get_parameters' => $this->get_parameters, 'context' => 'costume-list', 'affix' => true)); ?>
+</div>
 <?php endif; ?>
 <?php else: ?>
 <div class="well">
