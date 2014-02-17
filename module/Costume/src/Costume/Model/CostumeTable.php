@@ -2,7 +2,7 @@
 namespace Costume\Model;
 
 use Zend\Db\TableGateway\TableGateway;
-use Zend\Paginator\Adapter\DbTableGateway;
+use Zend\Paginator\Adapter\DbSelect;
 use Zend\Paginator\Paginator;
 use Application\Model\DataCache\AbstractDataCachePopulator;
 use Zend\Db\Sql\Expression;
@@ -57,15 +57,22 @@ class CostumeTable extends AbstractDataCachePopulator
 	 *
 	 * @return Costume[] Liste des costumes (sous forme d'un iterable)
 	 */
-	public function fetchAll($usePaginator = false)
+	public function fetchAll($usePaginator = false, $order = null)
 	{
 		$this->populateCaches();
+
+		$select = $this->tableGateway->getSql()->select();
+		if (!empty($order)) {
+			$select->order($order);
+		}
+		
+//   		echo $select->getSqlString($this->tableGateway->adapter->platform); die;
 		
 		if ($usePaginator) {
-			$dbTableGatewayAdapter = new DbTableGateway($this->tableGateway);
+			$dbTableGatewayAdapter = new DbSelect($select, $this->tableGateway->adapter, $this->tableGateway->getResultSetPrototype());
 			$rowset = new Paginator($dbTableGatewayAdapter);
 		} else {
-			$rowset = $this->tableGateway->select();
+			$rowset = $this->tableGateway->select($select);
 		}
 		
 		return $rowset;

@@ -50,6 +50,8 @@ CREATE TABLE IF NOT EXISTS `costumes` (
   KEY `type` (`type_id`)
   KEY `origin` (`origin`),
   KEY `origin_details` (`origin_details`)
+  KEY `label` (`label`)
+  KEY `quantity` (`quantity`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------

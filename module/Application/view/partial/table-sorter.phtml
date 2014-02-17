@@ -1,0 +1,30 @@
+<?php
+$route_parameters = array();
+if (isset($this->route_parameters)) { 
+	$route_parameters = $this->route_parameters;
+}
+$get_parameters = array();
+if (isset($this->get_parameters)) { 
+	$get_parameters = $this->get_parameters;
+}
+if (array_key_exists('page', $get_parameters)) {
+	unset($get_parameters['page']);
+}
+$context = null;
+if (isset($this->context)) { 
+	$context = $this->context;
+}
+$direction = 'up';
+$class_direction = 'none';
+$icon_class = 'icon-sort';
+if ($this->field == $this->sort) {
+	$class_direction = 'down';
+	$icon_class = 'icon-sort-down';
+	if ($this->direction == 'up') {
+		$icon_class = 'icon-sort-up';
+		$direction = 'down';
+		$class_direction = 'up';
+	}
+}
+?>
+<a href="<?php echo $this->url($this->route, $route_parameters, array('query' => array_merge($get_parameters, array('sort' => $this->field, 'direction' => $direction)))); ?>" class="tablesorter-icon tablesorter-direction-<?php echo $this->escapehtmlattr($class_direction); ?>"><i class="<?php echo $this->escapehtmlattr($icon_class);?>"></i></a>  

@@ -14,14 +14,23 @@ $this->headTitle($title);
 <table class="table table-hover">
 <thead>
 <tr>
-    <th><?php echo $this->translate('Code'); ?></th>
-    <th><?php echo $this->translate('Name'); ?></th>
+    <th>
+    	<?php echo $this->partial("table-sorter", array('field' => 'code', 'sort' => $this->sort, 'direction' => $this->direction, 'route_parameters' => array(), 'get_parameters' => $this->get_parameters)); ?>
+    	<?php echo $this->translate('Code'); ?>
+    </th>
+    <th>
+    	<?php echo $this->partial("table-sorter", array('field' => 'label', 'sort' => $this->sort, 'direction' => $this->direction, 'route_parameters' => array(), 'get_parameters' => $this->get_parameters)); ?>
+    	<?php echo $this->translate('Name'); ?>
+    </th>
     <th class="text-center"><?php echo $this->translate('Type'); ?></th>
     <th class="text-center"><?php echo $this->translate('Gender'); ?></th>
     <th class="text-center"><?php echo $this->translate('Size'); ?></th>
     <th class="text-center"><?php echo $this->translate('Colors'); ?></th>
     <th class="text-center"><?php echo $this->translate('Materials'); ?></th>
-    <th class="text-center"><?php echo $this->translate('Quantity'); ?></th>
+    <th class="text-center">
+    	<?php echo $this->partial("table-sorter", array('field' => 'quantity', 'sort' => $this->sort, 'direction' => $this->direction, 'route_parameters' => array(), 'get_parameters' => $this->get_parameters)); ?>
+    	<?php echo $this->translate('Quantity'); ?>
+    </th>
     <th>&nbsp;</th>
 </tr>
 </thead>

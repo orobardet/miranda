@@ -111,6 +111,7 @@ return array(
 					'error/index' => __DIR__ . '/../view/error/index.phtml',
 					'breadcrumb' => __DIR__ . '/../view/partial/breadcrumb.phtml',
 					'paginator/sliding' => __DIR__ . '/../view/partial/paginator-sliding.phtml',
+					'table-sorter' => __DIR__ . '/../view/partial/table-sorter.phtml',
 					'results-status' => __DIR__ . '/../view/partial/results-status.phtml',
 					'result-status' => __DIR__ . '/../view/partial/result-status.phtml'
 				)),

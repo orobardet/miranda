@@ -6,6 +6,8 @@ use Zend\View\Model\ViewModel;
 use Application\Toolbox\String as StringTools;
 use Costume\Model\Costume;
 use Zend\View\Model\JsonModel;
+use Zend\Stdlib\Parameters;
+use Costume\Controller\InputFilter\IndexFilter;
 
 class CostumeController extends AbstractCostumeController implements AclControllerInterface
 {
@@ -44,12 +46,26 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		$this->refererUrl()->setReferer('costume-edit');
 		$this->refererUrl()->setReferer('costume-delete');
 		
-		$page = (int)$this->getRequest()->getQuery('page', 1);
+		$defaults = array(
+			'page' => 1,
+			'sort' => 'code',
+			'direction' => 'up'
+		);
+		
+		$inputFilter = $this->getIndexInputFilter($defaults);
+		$inputFilter->setData((array)$this->getRequest()->getQuery())->validate();
+		
+		$filteredInput = $inputFilter->getValues();
+		$indexParams = new Parameters(array_merge($defaults, $filteredInput));
+		$linkParams = new Parameters(array_merge((array)$this->getRequest()->getQuery(), $filteredInput));
+		
+		$page = (int)$indexParams->get('page', 1);
+		$sortStatement = $indexParams->get('sort').($indexParams->get('direction')=='down'?' DESC':' ASC');
 		
 		$costumes = $this->getCostumeTable()
-			->fetchAll(true)
+			->fetchAll(true, $sortStatement)
 			->setItemCountPerPage($this->itemsPerPage()
-			->getItemsPerPage('costume-list', 25))  // Nombre d'item par page
+			->getItemsPerPage('costume-list', 25))
 			->setCurrentPageNumber($page)
 			->setPageRange(10); // Nombre max de lien dans le pager
 		
@@ -57,7 +73,10 @@ class CostumeController extends AbstractCostumeController implements AclControll
 				array(
 					'page' => $page,
 					'costumes' => $costumes,
-					'get_parameters' => $this->getRequest()->getQuery()->toArray()
+					'get_parameters' => $this->getRequest()->getQuery()->toArray(),
+					'link_params' => $linkParams,
+					'sort' => $indexParams->get('sort'),
+					'direction' => $indexParams->get('direction')
 				));
 	}
 
@@ -375,5 +394,14 @@ class CostumeController extends AbstractCostumeController implements AclControll
 			'costume' => $costume,
 			'cancel_url' => $this->refererUrl('costume-delete')
 		);
+	}
+
+	/**
+	 *
+	 * @return \Zend\InputFilter\InputFilter
+	 */
+	protected function getIndexInputFilter($defaults = array())
+	{
+		return new IndexFilter($defaults);
 	}
 }
