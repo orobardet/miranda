@@ -2,13 +2,28 @@
 $title = $this->translate('Costumes');
 $this->headTitle($title);
 ?>
-<div class="p action-bar action-bar-container">
-	<?php if ($this->acl()->isAllowed("add_costume")): ?>
-	<div class="action-bar-item">
-	<a href="<?php echo $this->url('costume', array('action'=>'add'));?>"><i class="icon-plus-sign icon-linkcolor"></i> <?php echo $this->translate('Add costume'); ?></a>
+<form id="costume-search-form" class="form-search">
+	<div id="small-search-form" class="pull-right input-append">
+		<input type="text" class="input-medium search-query" name="q" placeholder="<?php echo $this->translate('Search'); ?>">
+		<button type="submit" id="small-submit-button" class="btn" title="<?php echo $this->translate('Search'); ?>"><i class="icon-search"></i></button>
+		<button type="button" id="more-search-form" class="btn" title="<?php echo $this->translate('Show more search options...'); ?>"><i class="caret"></i></button>
 	</div>
-	<?php endif; ?>
-</div>
+	
+	<div class="p action-bar action-bar-container">
+		<?php if ($this->acl()->isAllowed("add_costume")): ?>
+		<div class="action-bar-item">
+		<a href="<?php echo $this->url('costume', array('action'=>'add'));?>"><i class="icon-plus-sign icon-linkcolor"></i> <?php echo $this->translate('Add costume'); ?></a>
+		</div>
+		<?php endif; ?>
+	</div>
+	
+	<div id="full-search-form" style="display:none;">
+	    <label class="control-label" for="inputEmail">Email</label>
+	    <div class="controls">
+	      <input type="text" id="inputEmail" placeholder="Email">
+	    </div>
+	</div>
+</form>
 
 <?php if (count($this->costumes)): ?>
 <table class="table table-hover">
@@ -133,3 +148,26 @@ $this->headTitle($title);
 <?php echo $this->translate('No costumes.'); ?>
 </div>
 <?php endif; ?>
+
+<script type="text/javascript">
+$(function() {
+	$('#more-search-form').click(function(e) {
+		e.preventDefault();
+
+		var $fullForm = $('#full-search-form');
+		var $moreSearchButton = $('#more-search-form');
+		var $moreSearchButtonIcon = $('#more-search-form > i');
+		
+		if ($fullForm.is(':visible')) {
+			$fullForm.hide();
+			$moreSearchButton.removeClass('btn-danger');
+			$moreSearchButtonIcon.removeClass('icon-remove').addClass('caret');
+		} else {
+			$fullForm.show();
+			$moreSearchButton.addClass('btn-danger');
+			$moreSearchButtonIcon.removeClass('caret').addClass('icon-remove');
+		}
+		$moreSearchButton.blur();
+	});
+});
+</script>

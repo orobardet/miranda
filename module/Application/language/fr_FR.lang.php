@@ -38,5 +38,6 @@ return array(
 	'%count% items displayed' => '%count% éléments affichés',
 	'No picture' => "Pas d'image",
 	
-	'Saving...' => 'Enregistrement...'
+	'Saving...' => 'Enregistrement...',
+	'Search' => 'Rechercher' 
 );

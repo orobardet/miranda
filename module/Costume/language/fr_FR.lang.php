@@ -103,5 +103,6 @@ return array(
 	'Maximum file size: %size% Mb' => 'Taille maximale du fichier : %size% Mo',
 	'File too big' => 'Fichier trop gros',
 	'Processing picture...' => "Traitement de l'image...",
-	'Picture upload completed!' => "Envoi de l'image terminé !"
+	'Picture upload completed!' => "Envoi de l'image terminé !",
+	'Show more search options...' => "Afficher plus d'options de recherche..."
 );
