@@ -57,6 +57,26 @@ class IndexFilter extends InputFilter
 							)
 						),
 						array(
+							'name' => 'Callback',
+							'options' => array(
+								'callback' => function ($value)
+								{
+									if (!in_array($value, array(
+										'code',
+										'label',
+										'type',
+										'gender',
+										'size',
+										'quantity'
+									))) {
+										return null;
+									}
+									
+									return $value;
+								}
+							)
+						),
+						array(
 							'name' => 'Null'
 						)
 					)

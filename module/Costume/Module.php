@@ -47,7 +47,7 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 			'factories' => array(
 				'Costume\Model\CostumeTable' => function ($sm)
 				{
-					$costumeTable = new CostumeTable($sm->get('Costume\TableGateway\Costumes'));
+					$costumeTable = new CostumeTable($sm->get('Costume\TableGateway\Costumes'), $sm->get('Costume\TableGateway\Types'));
 					$costumeTable->setCostumePictureTable($sm->get('Costume\Model\CostumePictureTable'));
 					$costumeTable->setColorTable($sm->get('Costume\Model\ColorTable'));
 					$costumeTable->setMaterialTable($sm->get('Costume\Model\MaterialTable'));
@@ -132,9 +132,9 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 				},
 				'Costume\Model\TypeTable' => function ($sm)
 				{
-					return new TypeTable($sm->get('Costume\TableGateway\Type'), $sm->get('Costume\TableGateway\CostumeType'));
+					return new TypeTable($sm->get('Costume\TableGateway\Types'), $sm->get('Costume\TableGateway\CostumeType'));
 				},
-				'Costume\TableGateway\Type' => function ($sm)
+				'Costume\TableGateway\Types' => function ($sm)
 				{
 					$dbAdapter = $sm->get('costume_zend_db_adapter');
 					$resultSetPrototype = new ResultSet();

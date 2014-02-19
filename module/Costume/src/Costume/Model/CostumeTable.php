@@ -16,6 +16,11 @@ class CostumeTable extends AbstractDataCachePopulator
 	 */
 	protected $tableGateway;
 
+	/*
+	 * @var TableGateway
+	 */
+	protected $typeTableGateway;
+
 	/**
 	 *
 	 * @var \Costume\Model\CostumePictureTable
@@ -46,10 +51,11 @@ class CostumeTable extends AbstractDataCachePopulator
 	 */
 	protected $typeTable;
 
-	public function __construct(TableGateway $tableGateway)
+	public function __construct(TableGateway $tableGateway, TableGateway $typeTableGateway)
 	{
 		$this->tableGateway = $tableGateway;
-		$this->tableGateway->getResultSetPrototype()->getArrayObjectPrototype()->setCostumeTable($this);
+		$this->typeTableGateway = $typeTableGateway;
+		$this->tableGateway->getResultSetPrototype()->getArrayObjectPrototype()->setCostumeTable($this);		
 	}
 
 	/**
@@ -60,13 +66,30 @@ class CostumeTable extends AbstractDataCachePopulator
 	public function fetchAll($usePaginator = false, $order = null)
 	{
 		$this->populateCaches();
-
+		
 		$select = $this->tableGateway->getSql()->select();
 		if (!empty($order)) {
-			$select->order($order);
+			if ($order) {
+				preg_match('/^\s*([^\s]+).*?(asc|desc)?\s*$/iu', $order, $matches);
+				if (count($matches) > 1) {
+					$field = $matches[1];
+					$direction = 'ASC';
+						
+					if ($field == 'type') {
+						$typeTableName = $this->typeTableGateway->getTable();
+						$select->join($typeTableName, $typeTableName . '.id = ' . $this->tableGateway->getTable() . '.type_id', array(), 'left');
+						$field = $typeTableName.'.name';
+					}
+					
+					if (count($matches) > 2) {
+						$direction = $matches[2];
+					}
+					$select->order("$field $direction");
+				}
+			}
 		}
 		
-//   		echo $select->getSqlString($this->tableGateway->adapter->platform); die;
+//		echo $select->getSqlString($this->tableGateway->adapter->platform); die;
 		
 		if ($usePaginator) {
 			$dbTableGatewayAdapter = new DbSelect($select, $this->tableGateway->adapter, $this->tableGateway->getResultSetPrototype());
@@ -80,10 +103,10 @@ class CostumeTable extends AbstractDataCachePopulator
 
 	/**
 	 * Charge un costume depuis la BDD, par ID
-	 * 
+	 *
 	 * @param integer $id
 	 * @param boolean $exceptionIfNone
-	 * 
+	 *
 	 * @throws \Exception
 	 * @return Costume
 	 */
@@ -108,10 +131,10 @@ class CostumeTable extends AbstractDataCachePopulator
 
 	/**
 	 * Charge un costume depuis la BDD, par code de costume
-	 * 
+	 *
 	 * @param string $code
 	 * @param boolean $exceptionIfNone
-	 * 
+	 *
 	 * @throws \Exception
 	 * @return Costume
 	 */
@@ -270,7 +293,7 @@ class CostumeTable extends AbstractDataCachePopulator
 			if ($this->costumePictureTable) {
 				$this->costumePictureTable->deleteCostumePictures($costume);
 			}
-		
+			
 			// On supprime l'association des tags à un costume (mais pas les tags eux-même)
 			if ($this->tagTable) {
 				$this->tagTable->removeCostumeTags($costume->getId());
@@ -284,7 +307,7 @@ class CostumeTable extends AbstractDataCachePopulator
 			$this->tableGateway->delete(array(
 				'id' => $id
 			));
-		}		
+		}
 	}
 
 	public function populateCostumeData(Costume $costume)
@@ -402,94 +425,94 @@ class CostumeTable extends AbstractDataCachePopulator
 		$this->typeTable = $typeTable;
 		$this->addCachedCollection($typeTable);
 	}
-	
+
 	/**
 	 * Retourne la liste des types, sous forme d'un tableau.
-	 * 
+	 *
 	 * clé = ID type, valeur = nom type
-	 * 
-	 * @return array 
+	 *
+	 * @return array
 	 */
-	public function getTypes($labelAsKey=false)
+	public function getTypes($labelAsKey = false)
 	{
 		$types = array();
 		
 		if ($this->typeTable) {
 			$allTypes = $this->typeTable->fetchAll();
 			if (count($allTypes)) {
-				foreach ($allTypes as $type){
+				foreach ($allTypes as $type) {
 					if ($labelAsKey) {
 						$types[$type->getName()] = $type->getName();
 					} else {
 						$types[$type->getId()] = $type->getName();
 					}
 				}
-			}			
+			}
 		}
 		
 		return $types;
 	}
-	
+
 	/**
 	 * Retourne la liste des matières, sous forme d'un tableau.
-	 * 
+	 *
 	 * clé = ID matière, valeur = nom matière
-	 * 
-	 * @return array 
+	 *
+	 * @return array
 	 */
-	public function getMaterials($labelAsKey=false)
+	public function getMaterials($labelAsKey = false)
 	{
 		$materials = array();
 		
 		if ($this->materialTable) {
 			$allMaterials = $this->materialTable->fetchAll();
 			if (count($allMaterials)) {
-				foreach ($allMaterials as $material){
+				foreach ($allMaterials as $material) {
 					if ($labelAsKey) {
 						$materials[$material->getName()] = $material->getName();
 					} else {
 						$materials[$material->getId()] = $material->getName();
 					}
 				}
-			}			
+			}
 		}
 		
 		return $materials;
 	}
-	
+
 	/**
 	 * Retourne la liste des tags, sous forme d'un tableau.
-	 * 
+	 *
 	 * clé = ID type, valeur = nom type
-	 * 
-	 * @return array 
+	 *
+	 * @return array
 	 */
-	public function getTags($labelAsKey=false)
+	public function getTags($labelAsKey = false)
 	{
 		$tags = array();
 		
 		if ($this->tagTable) {
 			$allTags = $this->tagTable->fetchAll();
 			if (count($allTags)) {
-				foreach ($allTags as $tag){
+				foreach ($allTags as $tag) {
 					if ($labelAsKey) {
 						$tags[$tag->getName()] = $tag->getName();
 					} else {
 						$tags[$tag->getId()] = $tag->getName();
 					}
 				}
-			}			
+			}
 		}
 		
 		return $tags;
 	}
-	
+
 	/**
 	 * Retourne la liste des couleurs, sous forme d'un tableau.
-	 * 
+	 *
 	 * clé = ID couleur, valeur = nom couleur
-	 * 
-	 * @return array 
+	 *
+	 * @return array
 	 */
 	public function getColors()
 	{
@@ -501,17 +524,19 @@ class CostumeTable extends AbstractDataCachePopulator
 		
 		return $colors;
 	}
-	
+
 	/**
 	 * Retourne la liste des etats déjà saisi dans la BDD
-	 * 
-	 * @return string[] 
+	 *
+	 * @return string[]
 	 */
 	public function getStates()
 	{
 		/* @var $sqlSelect \Zend\Db\Sql\Select */
 		$sqlSelect = $this->tableGateway->getSql()->select();
-		$sqlSelect->columns(array(new Expression('DISTINCT(state) AS state')));
+		$sqlSelect->columns(array(
+			new Expression('DISTINCT(state) AS state')
+		));
 		$sqlSelect->where(array(
 			'state IS NOT NULL',
 			'state != ?' => ''
@@ -523,7 +548,7 @@ class CostumeTable extends AbstractDataCachePopulator
 		$resultSet->setArrayObjectPrototype(new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS));
 		
 		$states = array();
-		foreach($resultSet as $state) {
+		foreach ($resultSet as $state) {
 			$states[] = $state->state;
 		}
 		

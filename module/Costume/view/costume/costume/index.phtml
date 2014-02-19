@@ -22,9 +22,18 @@ $this->headTitle($title);
     	<?php echo $this->partial("table-sorter", array('field' => 'label', 'sort' => $this->sort, 'direction' => $this->direction, 'route_parameters' => array(), 'get_parameters' => $this->get_parameters)); ?>
     	<?php echo $this->translate('Name'); ?>
     </th>
-    <th class="text-center"><?php echo $this->translate('Type'); ?></th>
-    <th class="text-center"><?php echo $this->translate('Gender'); ?></th>
-    <th class="text-center"><?php echo $this->translate('Size'); ?></th>
+    <th class="text-center">
+    	<?php echo $this->partial("table-sorter", array('field' => 'type', 'sort' => $this->sort, 'direction' => $this->direction, 'route_parameters' => array(), 'get_parameters' => $this->get_parameters)); ?>
+    	<?php echo $this->translate('Type'); ?>
+    </th>
+    <th class="text-center">
+    	<?php echo $this->partial("table-sorter", array('field' => 'gender', 'sort' => $this->sort, 'direction' => $this->direction, 'route_parameters' => array(), 'get_parameters' => $this->get_parameters)); ?>
+    	<?php echo $this->translate('Gender'); ?>
+    </th>
+    <th class="text-center">
+    	<?php echo $this->partial("table-sorter", array('field' => 'size', 'sort' => $this->sort, 'direction' => $this->direction, 'route_parameters' => array(), 'get_parameters' => $this->get_parameters)); ?>
+    	<?php echo $this->translate('Size'); ?>
+    </th>
     <th class="text-center"><?php echo $this->translate('Colors'); ?></th>
     <th class="text-center"><?php echo $this->translate('Materials'); ?></th>
     <th class="text-center">
