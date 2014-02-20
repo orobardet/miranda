@@ -1,11 +1,19 @@
 <?php
 $title = $this->translate('Costumes');
 $this->headTitle($title);
+
+$form = $this->form;
+$form->prepare();
 ?>
 <form id="costume-search-form" class="form-search">
+
+	<?php $element = $form->get('q'); ?>
 	<div id="small-search-form" class="pull-right input-append">
-		<input type="text" class="input-medium search-query" name="q" placeholder="<?php echo $this->translate('Search'); ?>">
-		<button type="submit" id="small-submit-button" class="btn" title="<?php echo $this->translate('Search'); ?>"><i class="icon-search"></i></button>
+		<?php echo $this->formElement($element->setAttributes(array('class' => 'input-medium search-query'))); ?>
+		<button type="submit" id="small-search-button" class="btn" title="<?php echo $this->translate('Search'); ?>"><i class="icon-search"></i></button>
+		<?php if ($this->has_search): ?>
+		<a id="small-cancel-search-button" href="<?php echo $this->url(); ?>" class="btn btn-danger" title="<?php echo $this->translate('Cancel search'); ?>"><i class="icon-remove"></i></a>
+		<?php endif; ?>
 		<button type="button" id="more-search-form" class="btn" title="<?php echo $this->translate('Show more search options...'); ?>"><i class="caret"></i></button>
 	</div>
 	
@@ -156,17 +164,14 @@ $(function() {
 
 		var $fullForm = $('#full-search-form');
 		var $moreSearchButton = $('#more-search-form');
-		var $moreSearchButtonIcon = $('#more-search-form > i');
 		
 		if ($fullForm.is(':visible')) {
 			$fullForm.hide();
-			$moreSearchButton.removeClass('btn-danger');
-			$moreSearchButtonIcon.removeClass('icon-remove').addClass('caret');
+			$moreSearchButton.removeClass('active');
 		} else {
 			$fullForm.show();
-			$moreSearchButton.addClass('btn-danger');
-			$moreSearchButtonIcon.removeClass('caret').addClass('icon-remove');
-		}
+			$moreSearchButton.addClass('active');
+	}
 		$moreSearchButton.blur();
 	});
 });

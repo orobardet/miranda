@@ -104,5 +104,6 @@ return array(
 	'File too big' => 'Fichier trop gros',
 	'Processing picture...' => "Traitement de l'image...",
 	'Picture upload completed!' => "Envoi de l'image terminé !",
-	'Show more search options...' => "Afficher plus d'options de recherche..."
+	'Show more search options...' => "Afficher plus d'options de recherche...",
+	'Cancel search' => 'Annuler la recherche'
 );

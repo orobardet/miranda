@@ -151,6 +151,12 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 								'type_id'
 							)));
 				},
+				'Costume\Form\Search' => function ($sm)
+				{
+					$form = new Form\Search($sm->get('Costume\Model\CostumeTable'), null, $sm->get('translator'));
+					//$form->setInputFilter(new Form\CostumeFilter($sm->get('costume_zend_db_adapter'), $sm->get('Miranda\Service\Config')));
+					return $form;
+				},
 				'Costume\Form\Costume' => function ($sm)
 				{
 					$form = new Form\Costume($sm->get('Costume\Model\CostumeTable'), null, $sm->get('translator'));

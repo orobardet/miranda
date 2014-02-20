@@ -7,6 +7,7 @@ use Zend\Paginator\Paginator;
 use Application\Model\DataCache\AbstractDataCachePopulator;
 use Zend\Db\Sql\Expression;
 use ArrayObject;
+use Zend\Stdlib\Parameters;
 
 class CostumeTable extends AbstractDataCachePopulator
 {
@@ -15,7 +16,7 @@ class CostumeTable extends AbstractDataCachePopulator
 	 * @var TableGateway
 	 */
 	protected $tableGateway;
-
+	
 	/*
 	 * @var TableGateway
 	 */
@@ -55,11 +56,11 @@ class CostumeTable extends AbstractDataCachePopulator
 	{
 		$this->tableGateway = $tableGateway;
 		$this->typeTableGateway = $typeTableGateway;
-		$this->tableGateway->getResultSetPrototype()->getArrayObjectPrototype()->setCostumeTable($this);		
+		$this->tableGateway->getResultSetPrototype()->getArrayObjectPrototype()->setCostumeTable($this);
 	}
 
 	/**
-	 * Retoune tous les costumes existants
+	 * Retourne tous les costumes existants
 	 *
 	 * @return Costume[] Liste des costumes (sous forme d'un iterable)
 	 */
@@ -74,11 +75,11 @@ class CostumeTable extends AbstractDataCachePopulator
 				if (count($matches) > 1) {
 					$field = $matches[1];
 					$direction = 'ASC';
-						
+					
 					if ($field == 'type') {
 						$typeTableName = $this->typeTableGateway->getTable();
 						$select->join($typeTableName, $typeTableName . '.id = ' . $this->tableGateway->getTable() . '.type_id', array(), 'left');
-						$field = $typeTableName.'.name';
+						$field = $typeTableName . '.name';
 					}
 					
 					if (count($matches) > 2) {
@@ -89,7 +90,58 @@ class CostumeTable extends AbstractDataCachePopulator
 			}
 		}
 		
-//		echo $select->getSqlString($this->tableGateway->adapter->platform); die;
+		if ($usePaginator) {
+			$dbTableGatewayAdapter = new DbSelect($select, $this->tableGateway->adapter, $this->tableGateway->getResultSetPrototype());
+			$rowset = new Paginator($dbTableGatewayAdapter);
+		} else {
+			$rowset = $this->tableGateway->select($select);
+		}
+		
+		return $rowset;
+	}
+
+	/**
+	 * Cherche dans les costumes existants
+	 *
+	 * @return Costume[] Liste des costumes (sous forme d'un iterable)
+	 */
+	public function search($searchCriterions, $usePaginator = false, $order = null)
+	{
+		$this->populateCaches();
+		
+		$select = $this->tableGateway->getSql()->select();
+		
+		$searchParams = new Parameters($searchCriterions);
+		$q = $searchParams->get('q', null);
+		if ($q !== null) {
+			$matchValue = $this->matchSearchValue($q);
+			$fuzzyMatchValue = $this->fuzzyMatchSearchValue($q);
+			$select->where->nest->like('code', $fuzzyMatchValue)->or->like('label', $matchValue)->or->like('descr', $matchValue)->or->like('history', 
+					$matchValue);
+		}
+		
+		if (!empty($order)) {
+			if ($order) {
+				preg_match('/^\s*([^\s]+).*?(asc|desc)?\s*$/iu', $order, $matches);
+				if (count($matches) > 1) {
+					$field = $matches[1];
+					$direction = 'ASC';
+					
+					if ($field == 'type') {
+						$typeTableName = $this->typeTableGateway->getTable();
+						$select->join($typeTableName, $typeTableName . '.id = ' . $this->tableGateway->getTable() . '.type_id', array(), 'left');
+						$field = $typeTableName . '.name';
+					}
+					
+					if (count($matches) > 2) {
+						$direction = $matches[2];
+					}
+					$select->order("$field $direction");
+				}
+			}
+		}
+		
+		//echo $select->getSqlString($this->tableGateway->adapter->platform); die();
 		
 		if ($usePaginator) {
 			$dbTableGatewayAdapter = new DbSelect($select, $this->tableGateway->adapter, $this->tableGateway->getResultSetPrototype());
@@ -99,6 +151,16 @@ class CostumeTable extends AbstractDataCachePopulator
 		}
 		
 		return $rowset;
+	}
+
+	protected function matchSearchValue($value)
+	{
+		return '%' . trim($value) . '%';
+	}
+
+	protected function fuzzyMatchSearchValue($value)
+	{
+		return '%' . preg_replace('/[ \.-]/', '_', trim($value) . '%');
 	}
 
 	/**

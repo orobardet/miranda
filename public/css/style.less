@@ -565,8 +565,19 @@ label.radio.col2 {
 		padding-right:5px;
 		padding-left:5px;
 		width: 25px;
+		
+		&.active {
+			border-color:@btnBorder;
+			border-bottom-color: darken(@btnBorder, 10%);
+
+			.caret {
+				border-top: 0;
+				border-bottom: 4px solid @black;
+				content: "";
+			}		
+		}
 	}
-	button#small-submit-button {
+	button#small-search-button, button#small-cancel-search-button, a#small-cancel-search-button {
 		border-radius:0;
 	}
 	

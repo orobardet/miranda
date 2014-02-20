@@ -61,10 +61,24 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		
 		$page = (int)$indexParams->get('page', 1);
 		$sortStatement = $indexParams->get('sort').($indexParams->get('direction')=='down'?' DESC':' ASC');
+
+		$doSearch = false;
+		$form = $this->getServiceLocator()->get('Costume\Form\Search');
+		$form->setData($linkParams);
+		if ($form->isValid()) {
+			$searchData = $form->getSearchData();
+			if (count($searchData)) {
+				$doSearch = true;
+			}
+		}		
 		
-		$costumes = $this->getCostumeTable()
-			->fetchAll(true, $sortStatement)
-			->setItemCountPerPage($this->itemsPerPage()
+		if ($doSearch) {
+			$costumes = $this->getCostumeTable()->search($searchData, true, $sortStatement);
+		} else {
+			$costumes = $this->getCostumeTable()->fetchAll(true, $sortStatement);
+		}
+		
+		$costumes->setItemCountPerPage($this->itemsPerPage()
 			->getItemsPerPage('costume-list', 25))
 			->setCurrentPageNumber($page)
 			->setPageRange(10); // Nombre max de lien dans le pager
@@ -76,7 +90,9 @@ class CostumeController extends AbstractCostumeController implements AclControll
 					'get_parameters' => $this->getRequest()->getQuery()->toArray(),
 					'link_params' => $linkParams,
 					'sort' => $indexParams->get('sort'),
-					'direction' => $indexParams->get('direction')
+					'direction' => $indexParams->get('direction'),
+					'form' => $form,
+					'has_search' => $doSearch
 				));
 	}
 
