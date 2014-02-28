@@ -5,6 +5,7 @@ return array(
     'partial/paginator-sliding' => __DIR__ . '/view/partial/paginator-sliding.phtml',
     'partial/results-status'    => __DIR__ . '/view/partial/results-status.phtml',
     'partial/breadcrumb'        => __DIR__ . '/view/partial/breadcrumb.phtml',
+    'partial/table-sorter'      => __DIR__ . '/view/partial/table-sorter.phtml',
     'partial/result-status'     => __DIR__ . '/view/partial/result-status.phtml',
     'error/index'               => __DIR__ . '/view/error/index.phtml',
     'error/404'                 => __DIR__ . '/view/error/404.phtml',

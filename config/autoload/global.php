@@ -42,7 +42,7 @@ $config = array(
 				'js/jquery.loadmask.min.js',
 				'js/bootstrap.js',
 				'js/fuelux.js',
-				'lib/jquery.passstrength.js'
+				'lib/jquery.passstrength.js',
 			)
 		),
 		'authentification' => array(

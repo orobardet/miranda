@@ -18,6 +18,9 @@ class CostumeController extends AbstractCostumeController implements AclControll
 			case "index":
 				return "list_costumes";
 				break;
+			case "searchcmpl":
+				return "list_costumes";
+				break;
 			case "show":
 				return "show_costume";
 				break;
@@ -94,6 +97,26 @@ class CostumeController extends AbstractCostumeController implements AclControll
 					'form' => $form,
 					'has_search' => $doSearch
 				));
+	}
+	
+	public function searchcmplAction()
+	{
+		$results = [];
+		
+		$q = $this->getRequest()->getQuery('q', false);
+		if ($q) {
+			$costumes = $this->getLightCostumeTable()->search(array('q' => $q), false, null, $this->getRequest()->getQuery('max', 10));
+			if (count($costumes)) {
+				/* @var $costume \Costume\Model\Costume  */
+				foreach ($costumes as $costume) {
+					$results[] = $costume->getArrayCopy();
+				}
+			}
+		}
+		
+		return new JsonModel(array(
+			'results' => $results
+		));
 	}
 
 	public function showAction()

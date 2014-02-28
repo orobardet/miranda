@@ -1,4 +1,7 @@
 <?php
+$this->headscript()->offsetSetFile(100, $this->basePath() . '/js/typeahead.bundle.min.js');
+$this->headscript()->offsetSetFile(101, $this->basePath() . '/js/handlebars-v1.3.0.js');
+
 $title = $this->translate('Costumes');
 $this->headTitle($title);
 
@@ -10,6 +13,7 @@ $form->prepare();
 	<?php $element = $form->get('q'); ?>
 	<div id="small-search-form" class="pull-right input-append">
 		<?php echo $this->formElement($element->setAttributes(array('class' => 'input-medium search-query'))); ?>
+		<span id="small-search-form-completion-loader"></span>
 		<button type="submit" id="small-search-button" class="btn" title="<?php echo $this->translate('Search'); ?>"><i class="icon-search"></i></button>
 		<?php if ($this->has_search): ?>
 		<a id="small-cancel-search-button" href="<?php echo $this->url(); ?>" class="btn btn-danger" title="<?php echo $this->translate('Cancel search'); ?>"><i class="icon-remove"></i></a>
@@ -152,7 +156,7 @@ $form->prepare();
 </div>
 <?php endif; ?>
 <?php else: ?>
-<div class="well">
+<div class="well" style="margin-top:20px;">
 <?php echo $this->translate('No costumes.'); ?>
 </div>
 <?php endif; ?>
@@ -171,8 +175,51 @@ $(function() {
 		} else {
 			$fullForm.show();
 			$moreSearchButton.addClass('active');
-	}
+		}
 		$moreSearchButton.blur();
 	});
+
+	var costumeCompletion = new Bloodhound({
+		remote: {
+			url: '<?php echo $this->url('costume', array('action'=>'searchcmpl')); ?>?q=%QUERY&max=8',
+			filter: function(parsedResponse) {
+				return parsedResponse.results;
+			},
+			ajax: {
+				beforeSend: function() {
+					$('#small-search-form-completion-loader').show();
+				},
+				complete: function() {
+					$('#small-search-form-completion-loader').hide();
+				}
+			}
+		},
+		limit: 8,
+		datumTokenizer: function(d) { 
+		    return Bloodhound.tokenizers.whitespace(d.val); 
+		},
+		queryTokenizer: Bloodhound.tokenizers.whitespace
+	});
+
+	costumeCompletion.initialize();
+
+	$('#input-q').typeahead({
+			minLength: 2
+		}, {
+			name: 'costume-completion',
+			source: costumeCompletion.ttAdapter(),
+		 	displayKey: 'label',
+			templates: {
+				suggestion: Handlebars.compile([
+				    '<div class="costume-suggestion">',
+					'<div class="costume-code">{{code}}</div>',
+					'<div class="costume-label">{{label}}</div>',
+					'</div>'
+					].join(''))
+		}
+	}).on('typeahead:selected', function(typeahead, costume, name) {
+		window.location.href = '<?php echo $this->url('costume', array('action'=>'show'));?>/'+costume.id;
+	});
+	$('#small-search-form-completion-loader').appendTo($('#small-search-form > .twitter-typeahead'));
 });
 </script>

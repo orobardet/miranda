@@ -55,6 +55,11 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 					$costumeTable->setTypeTable($sm->get('Costume\Model\TypeTable'));
 					return $costumeTable;
 				},
+				'Costume\Model\LightCostumeTable' => function ($sm)
+				{
+					$costumeTable = new CostumeTable($sm->get('Costume\TableGateway\Costumes'), $sm->get('Costume\TableGateway\Types'));
+					return $costumeTable;
+				},
 				'Costume\TableGateway\Costumes' => function ($sm)
 				{
 					$dbAdapter = $sm->get('costume_zend_db_adapter');

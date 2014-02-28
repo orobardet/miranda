@@ -35,7 +35,8 @@ class Search extends Form
 					'attributes' => array(
 						'id' => 'input-q',
 						'title' => 'Search',
-						'placeholder' => 'Search'
+						'placeholder' => 'Search',
+						'autocomplete' => 'off'
 					)
 				));
 		

@@ -116,6 +116,43 @@ html,body {
     padding: 0 15px;
 }
 
+.tt-dropdown-menu {
+	font-size: @baseFontSize;
+	
+	padding: 5px 0;
+	margin: 2px 0 0; // override default ul
+	list-style: none;
+	background-color: @dropdownBackground;
+	border: 1px solid #ccc; // Fallback for IE7-8
+	border: 1px solid @dropdownBorder;
+	*border-right-width: 2px;
+	*border-bottom-width: 2px;
+	.border-radius(6px);
+	.box-shadow(0 5px 10px rgba(0,0,0,.2));
+	-webkit-background-clip: padding-box;
+	   -moz-background-clip: padding;
+	        background-clip: padding-box;
+
+	.tt-suggestion {
+		padding:5px;
+		border-top: 1px solid @grayLighter;
+		&:first-child {
+			border-top:0;
+		}
+	
+		&.tt-cursor {
+			cursor: pointer;
+			text-decoration: none;
+			color: @dropdownLinkColorHover;
+			#gradient > .vertical(@dropdownLinkBackgroundActive, darken(@dropdownLinkBackgroundActive, 5%));
+		}
+	
+		p {
+			margin:0px;
+		}
+	}
+}
+
 #wrap {
 	min-height: 100%;
 	height: auto !important;
@@ -559,6 +596,10 @@ label.radio.col2 {
 	margin-bottom:0;
 	
 	#small-search-form {
+		.dropdown-menu > li > a {
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
 	}
 	
 	button#more-search-form {
@@ -593,6 +634,43 @@ label.radio.col2 {
 		margin-right:19px;
 		z-index:-1;
 	    box-shadow: inset 1px 1px 1px rgba(0,0,0,.075);
+	}
+	
+	#small-search-form-completion-loader {
+		width:16px;
+		height:16px;
+		background: url('../img/loading.gif') no-repeat 0px 0px;
+		display:block;
+		position:absolute;
+		top:7px;
+		right:7px;
+		display:none;
+	}
+	
+	.tt-dropdown-menu {
+		left:auto !important;
+		right:0 !important;
+		width:350px;
+	}
+	
+	.tt-dataset-costume-completion {
+		.tt-suggestion {
+			.costume-suggestion {
+				.clearfix;
+				vertical-align:middle;
+			}
+		
+			.costume-code {
+				display:block;
+				float:left;
+				vertical-align:middle;
+			}
+			.costume-label {
+				font-size:smaller;
+				display:block;
+				margin-left:100px;
+			}
+		}
 	}
 }
 

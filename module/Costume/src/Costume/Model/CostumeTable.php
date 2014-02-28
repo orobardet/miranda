@@ -105,7 +105,7 @@ class CostumeTable extends AbstractDataCachePopulator
 	 *
 	 * @return Costume[] Liste des costumes (sous forme d'un iterable)
 	 */
-	public function search($searchCriterions, $usePaginator = false, $order = null)
+	public function search($searchCriterions, $usePaginator = false, $order = null, $limit = null)
 	{
 		$this->populateCaches();
 		
@@ -118,6 +118,10 @@ class CostumeTable extends AbstractDataCachePopulator
 			$fuzzyMatchValue = $this->fuzzyMatchSearchValue($q);
 			$select->where->nest->like('code', $fuzzyMatchValue)->or->like('label', $matchValue)->or->like('descr', $matchValue)->or->like('history', 
 					$matchValue);
+		}
+		
+		if ($limit) {
+			$select->limit((int)$limit);
 		}
 		
 		if (!empty($order)) {
@@ -141,13 +145,13 @@ class CostumeTable extends AbstractDataCachePopulator
 			}
 		}
 		
-		//echo $select->getSqlString($this->tableGateway->adapter->platform); die();
+		//var_dump($this->tableGateway->getSql()->getSqlStringForSqlObject($select)); die();
 		
 		if ($usePaginator) {
 			$dbTableGatewayAdapter = new DbSelect($select, $this->tableGateway->adapter, $this->tableGateway->getResultSetPrototype());
 			$rowset = new Paginator($dbTableGatewayAdapter);
 		} else {
-			$rowset = $this->tableGateway->select($select);
+			$rowset = $this->tableGateway->selectWith($select);
 		}
 		
 		return $rowset;
