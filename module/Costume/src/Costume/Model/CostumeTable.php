@@ -592,7 +592,40 @@ class CostumeTable extends AbstractDataCachePopulator
 	}
 
 	/**
-	 * Retourne la liste des etats déjà saisi dans la BDD
+	 * Retourne la liste des tailles déjà saisies dans la BDD
+	 *
+	 * @return string[]
+	 */
+	public function getSizes()
+	{
+		/* @var $sqlSelect \Zend\Db\Sql\Select */
+		$sqlSelect = $this->tableGateway->getSql()->select();
+		$sqlSelect->columns(array(
+			new Expression('DISTINCT(size) AS size')
+		));
+		$sqlSelect->where(array(
+			'state IS NOT NULL',
+			'state != ?' => ''
+		));
+		$sqlSelect->order('size');
+		
+		/* @var $resultSet \Zend\Db\ResultSet\ResultSet */
+		$resultSet = $this->tableGateway->selectWith($sqlSelect);
+		$resultSet->setArrayObjectPrototype(new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS));
+		
+		$sizes = array();
+		foreach ($resultSet as $row) {
+			$size = trim($row->size);
+			if ($size != '') {
+				$sizes[$row->size] = $row->size;
+			}
+		}
+
+		return $sizes;
+	}
+
+	/**
+	 * Retourne la liste des etats déjà saisis dans la BDD
 	 *
 	 * @return string[]
 	 */
@@ -615,7 +648,7 @@ class CostumeTable extends AbstractDataCachePopulator
 		
 		$states = array();
 		foreach ($resultSet as $state) {
-			$states[] = $state->state;
+			$states[$state->state] = $state->state;
 		}
 		
 		return $states;

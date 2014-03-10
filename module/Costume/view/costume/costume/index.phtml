@@ -1,6 +1,11 @@
 <?php
+$this->headLink()->offsetSetStylesheet(100, $this->basePath() . '/css/bootstrap-select.min.css');
+
 $this->headscript()->offsetSetFile(100, $this->basePath() . '/js/typeahead.bundle.min.js');
 $this->headscript()->offsetSetFile(101, $this->basePath() . '/js/handlebars-v1.3.0.js');
+$this->headscript()->offsetSetFile(102, $this->basePath() . '/js/bootstrap-select.js');
+$this->headscript()->offsetSetFile(103, $this->basePath() . '/js/bootstrap-multiple-tag-selector.js');
+$this->headscript()->offsetSetFile(110, $this->basePath() . '/js/costume/search.js');
 
 $title = $this->translate('Costumes');
 $this->headTitle($title);
@@ -29,12 +34,88 @@ $form->prepare();
 		<?php endif; ?>
 	</div>
 	
-	<div id="full-search-form" style="display:none;">
-	    <label class="control-label" for="inputEmail">Email</label>
-	    <div class="controls">
-	      <input type="text" id="inputEmail" placeholder="Email">
+	<div id="full-search-form" style="">
+		<?php $element = $form->get('code'); ?>
+		<div class="control-group">
+			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+			<?php echo $this->formElement($element->setAttributes(array('class' => 'input-mini'))); ?>
 	    </div>
-	</div>
+		<?php $element = $form->get('label'); ?>
+		<div class="control-group">
+			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+			<?php echo $this->formElement($element->setAttributes(array('class' => 'input-medium'))); ?>
+	    </div>
+		<?php $element = $form->get('type'); ?>
+		<div class="control-group">
+			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+			<?php echo $this->formElement($element->setAttributes(array('class' => 'selectpicker', 'data-value' => $element->getValue(), 'data-live-search'=> 'true', 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'200px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+	    </div>
+		<?php $element = $form->get('gender'); ?>
+		<div class="control-group">
+			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+			<?php echo $this->formElement($element->setAttributes(array('class' => 'selectpicker', 'data-value' => $element->getValue(), 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'120px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+	    </div>
+		<?php $element = $form->get('size'); ?>
+		<div class="control-group">
+			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+			<?php echo $this->formElement($element->setAttributes(array('class' => 'selectpicker', 'data-value' => $element->getValue(), 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'120px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+	    </div>
+		<?php $element = $form->get('primary_color'); ?>
+		<div class="control-group">
+			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+			<?php echo $this->formColorSelect($element->setAttributes(array('class' => 'selectpicker', 'data-value' => $element->getValue(), 'data-live-search'=> 'true', 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'160px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+	    </div>
+		<?php $element = $form->get('secondary_color'); ?>
+		<div class="control-group">
+			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+			<?php echo $this->formColorSelect($element->setAttributes(array('class' => 'selectpicker', 'data-value' => $element->getValue(), 'data-live-search'=> 'true', 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'160px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+	    </div>
+		<?php $element = $form->get('primary_material'); ?>
+		<div class="control-group">
+			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+			<?php echo $this->formElement($element->setAttributes(array('class' => 'selectpicker', 'data-value' => $element->getValue(), 'data-live-search'=> 'true', 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'160px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+	    </div>
+		<?php $element = $form->get('secondary_material'); ?>
+		<div class="control-group">
+			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+			<?php echo $this->formElement($element->setAttributes(array('class' => 'selectpicker', 'data-value' => $element->getValue(), 'data-live-search'=> 'true', 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'160px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+	    </div>
+		<?php $element = $form->get('state'); ?>
+		<div class="control-group">
+			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+			<?php echo $this->formElement($element->setAttributes(array('class' => 'selectpicker', 'data-value' => $element->getValue(), 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'120px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+	    </div>
+		<?php $element = $form->get('origin'); ?>
+		<div class="control-group">
+			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+			<?php echo $this->formElement($element->setAttributes(array('class' => 'selectpicker', 'data-value' => $element->getValue(), 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'120px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+	    </div>
+	    <?php $element = $form->get('origin_details'); ?>
+		<div class="control-group">
+			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+			<?php echo $this->formElement($element->setAttributes(array('class' => 'input-medium'))); ?>
+	    </div>
+	    <?php $element = $form->get('descr'); ?>
+		<div class="control-group">
+			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+			<?php echo $this->formElement($element->setAttributes(array('class' => 'input-medium'))); ?>
+	    </div>
+		<?php $element = $form->get('history'); ?>
+		<div class="control-group">
+			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+			<?php echo $this->formElement($element->setAttributes(array('class' => 'input-medium'))); ?>
+	    </div>
+		<?php $element = $form->get('parts_selector'); ?>
+		<div class="control-group">
+			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+			<?php echo $this->formElement($element->setAttributes(array('class' => 'selectpicker', 'data-values' => json_encode($form->get('parts')->getValue()), 'data-live-search'=> 'true', 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'160px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+	    </div>
+		<?php $element = $form->get('tags_selector'); ?>
+		<div class="control-group">
+			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
+			<?php echo $this->formElement($element->setAttributes(array('class' => 'selectpicker', 'data-values' => json_encode($form->get('tags')->getValue()), 'data-live-search'=> 'true', 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'160px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
+	    </div>
+    </div>
 </form>
 
 <?php if (count($this->costumes)): ?>
@@ -162,64 +243,6 @@ $form->prepare();
 <?php endif; ?>
 
 <script type="text/javascript">
-$(function() {
-	$('#more-search-form').click(function(e) {
-		e.preventDefault();
-
-		var $fullForm = $('#full-search-form');
-		var $moreSearchButton = $('#more-search-form');
-		
-		if ($fullForm.is(':visible')) {
-			$fullForm.hide();
-			$moreSearchButton.removeClass('active');
-		} else {
-			$fullForm.show();
-			$moreSearchButton.addClass('active');
-		}
-		$moreSearchButton.blur();
-	});
-
-	var costumeCompletion = new Bloodhound({
-		remote: {
-			url: '<?php echo $this->url('costume', array('action'=>'searchcmpl')); ?>?q=%QUERY&max=8',
-			filter: function(parsedResponse) {
-				return parsedResponse.results;
-			},
-			ajax: {
-				beforeSend: function() {
-					$('#small-search-form-completion-loader').show();
-				},
-				complete: function() {
-					$('#small-search-form-completion-loader').hide();
-				}
-			}
-		},
-		limit: 8,
-		datumTokenizer: function(d) { 
-		    return Bloodhound.tokenizers.whitespace(d.val); 
-		},
-		queryTokenizer: Bloodhound.tokenizers.whitespace
-	});
-
-	costumeCompletion.initialize();
-
-	$('#input-q').typeahead({
-			minLength: 2
-		}, {
-			name: 'costume-completion',
-			source: costumeCompletion.ttAdapter(),
-		 	displayKey: 'label',
-			templates: {
-				suggestion: Handlebars.compile([
-				    '<div class="costume-suggestion">',
-					'<div class="costume-code">{{code}}</div>',
-					'<div class="costume-label">{{label}}</div>',
-					'</div>'
-					].join(''))
-		}
-	}).on('typeahead:selected', function(typeahead, costume, name) {
-		window.location.href = '<?php echo $this->url('costume', array('action'=>'show'));?>/'+costume.id;
-	});
-	$('#small-search-form-completion-loader').appendTo($('#small-search-form > .twitter-typeahead'));
-});
+var costumeSearchCmplUrl = '<?php echo $this->url('costume', array('action'=>'searchcmpl')); ?>';
+var costumeShowUrl = '<?php echo $this->url('costume', array('action'=>'show'));?>';
 </script>

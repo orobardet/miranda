@@ -2,6 +2,7 @@
 @import "mixins.less";
 
 @import "bootstrap-fileupload.less";
+@import "bootstrap-multiple-tag-selector.less";
 
 html,body {
 	/* html et body doivent rester comme ça et sans padding ni margin, pour gérer le footer en bas de page */
@@ -632,8 +633,30 @@ label.radio.col2 {
 		position: relative;
 		top: -1px;
 		margin-right:19px;
-		z-index:-1;
 	    box-shadow: inset 1px 1px 1px rgba(0,0,0,.075);
+		
+		.control-group {
+			margin: 0 10px 0 0;
+			display:inline-block;
+		
+			label {
+				font-size: 10px;
+			}
+			
+			input {
+				height: 10px;
+				font-size: 10px;
+			}
+			
+			.btn-group.bootstrap-select {
+				height: 18px;
+				font-size: 10px;
+			}
+		}
+		
+		#search-parts-list, #search-tags-list {
+			font-size:10px;
+		}
 	}
 	
 	#small-search-form-completion-loader {

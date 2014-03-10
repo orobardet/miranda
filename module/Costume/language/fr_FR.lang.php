@@ -20,6 +20,8 @@ return array(
 	'Costumes administration' => 'Administration des costumes',
 	'Colors' => 'Couleurs',
 	'Materials' => 'Matières',
+	'Color' => 'Couleur',
+	'Material' => 'Matière',
 	"Costumes' colors" => 'Couleurs des costumes',
 	'No colors.' => 'Aucune couleur.',
 	'No color' => 'Pas de couleur',
@@ -66,6 +68,7 @@ return array(
 	'Primary material:' => 'Matière principale :',
 	'Secondary material:' => 'Matière secondaire :',
 	'Parts:' => 'Composition :',
+	'Parts' => 'Composition',
 	'Tags:' => 'Etiquettes :',
 	'Parts & types' => 'Pièces & types',
 	"Costumes' parts & types" => 'Pièces & types des costumes',
@@ -74,6 +77,7 @@ return array(
 	'The part will be removed from all costumes using it, as type or part.' => "La pièce sera retirée de tous les costumes qui l'utilisent, comme type ou composition.",
 	'Origin' => 'Origine',
 	'Origin:' => 'Origine :',
+	'Origin details:' => "Détail de l'origine :",
 	'creation' => 'Création',
 	'purchase' => 'Achat',
 	'other' => 'Autre',
@@ -105,5 +109,6 @@ return array(
 	'Processing picture...' => "Traitement de l'image...",
 	'Picture upload completed!' => "Envoi de l'image terminé !",
 	'Show more search options...' => "Afficher plus d'options de recherche...",
-	'Cancel search' => 'Annuler la recherche'
+	'Cancel search' => 'Annuler la recherche',
+	'<none>' => '<aucun>'
 );
