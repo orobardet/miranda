@@ -33,7 +33,7 @@ return array(
 	'Back' => 'Retour',
 	'None' => 'Aucun',
 	
-	'%first% - %last% out of %total%' => '%first% à %last% sur %total%',
+	'%first% - %last% out of <b>%total%</b>' => '%first% à %last% sur <b>%total%</b>',
 	'Display:' => 'Afficher :',
 	'%count% items displayed' => '%count% éléments affichés',
 	'No picture' => "Pas d'image",

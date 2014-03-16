@@ -597,6 +597,8 @@ label.radio.col2 {
 	margin-bottom:0;
 	
 	#small-search-form {
+		position:relative;
+		z-index:2;
 		.dropdown-menu > li > a {
 			overflow: hidden;
 			text-overflow: ellipsis;
@@ -631,9 +633,13 @@ label.radio.col2 {
 		padding:5px;
 		margin-top:5px;
 		position: relative;
+		z-index:1;
 		top: -1px;
 		margin-right:19px;
 	    box-shadow: inset 1px 1px 1px rgba(0,0,0,.075);
+		text-align: justify;
+    	-ms-text-justify: distribute-all-lines;
+    	text-justify: distribute-all-lines;
 		
 		.control-group {
 			margin: 0 10px 0 0;

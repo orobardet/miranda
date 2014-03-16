@@ -70,4 +70,13 @@ $(function() {
 		name: 'tags[]',
 		containerId: 'search-tags-list'
 	});
+	
+	$('#costume-search-form').submit(function(e) {
+		console.log('Desactivation des input vides');
+		$(this).find(":input").attr('readonly', 'readonly');
+		$(this).find("button[type=submit]").attr('disabled', 'disabled').children('i').removeClass().addClass('icon-refresh icon-spin');
+		$(this).find(":input").filter(function(){ return !this.value; }).attr('disabled', 'disabled');
+		
+		return true;
+	});
 });

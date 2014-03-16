@@ -21,6 +21,16 @@ class CostumeTable extends AbstractDataCachePopulator
 	 * @var TableGateway
 	 */
 	protected $typeTableGateway;
+	
+	/*
+	 * @var TableGateway
+	 */
+	protected $costumeTagTableGateway;
+	
+	/*
+	 * @var TableGateway
+	 */
+	protected $costumeTypeTableGateway;
 
 	/**
 	 *
@@ -52,10 +62,13 @@ class CostumeTable extends AbstractDataCachePopulator
 	 */
 	protected $typeTable;
 
-	public function __construct(TableGateway $tableGateway, TableGateway $typeTableGateway)
+	public function __construct(TableGateway $tableGateway, TableGateway $typeTableGateway, TableGateway $costumeTypeTableGateway, 
+			TableGateway $costumeTagTableGateway)
 	{
 		$this->tableGateway = $tableGateway;
 		$this->typeTableGateway = $typeTableGateway;
+		$this->costumeTypeTableGateway = $costumeTypeTableGateway;
+		$this->costumeTagTableGateway = $costumeTagTableGateway;
 		$this->tableGateway->getResultSetPrototype()->getArrayObjectPrototype()->setCostumeTable($this);
 	}
 
@@ -112,12 +125,47 @@ class CostumeTable extends AbstractDataCachePopulator
 		$select = $this->tableGateway->getSql()->select();
 		
 		$searchParams = new Parameters($searchCriterions);
-		$q = $searchParams->get('q', null);
-		if ($q !== null) {
-			$matchValue = $this->matchSearchValue($q);
-			$fuzzyMatchValue = $this->fuzzyMatchSearchValue($q);
-			$select->where->nest->like('code', $fuzzyMatchValue)->or->like('label', $matchValue)->or->like('descr', $matchValue)->or->like('history', 
-					$matchValue);
+		if (count($searchParams)) {
+			foreach ($searchParams as $param => $value) {
+				switch ($param) {
+					case "q":
+						$matchValue = $this->matchSearchValue($value);
+						$fuzzyMatchValue = $this->fuzzyMatchSearchValue($value);
+						$select->where->nest->like('code', $fuzzyMatchValue)->or->like('label', $matchValue)->or->like('descr', $matchValue)->or->like(
+								'history', $matchValue);
+						break;
+					case "code":
+						$select->where->and->like($param, $this->fuzzyMatchSearchValue($value));
+						break;
+					case "label":
+					case "descr":
+					case "history":
+					case "origin_details":
+						$select->where->and->like($param, $this->matchSearchValue($value));
+						break;
+					case "tags":
+						$costumeTagTableName = $this->costumeTagTableGateway->getTable();
+						$select->join($costumeTagTableName, $costumeTagTableName.'.costume_id = '.$this->tableGateway->getTable().'.id', array(), 'left');
+						$select->where->and->in($costumeTagTableName.'.tag_id', $value);
+						$select->group($this->tableGateway->getTable().'.id');
+						$select->having->addPredicate(new \Zend\Db\Sql\Predicate\Expression('COUNT(DISTINCT '.$costumeTagTableName.'.tag_id) = ?', count($value)));
+						break;
+					case "parts":
+						$costumeTypeTableName = $this->costumeTypeTableGateway->getTable();
+						$select->join($costumeTypeTableName, $costumeTypeTableName.'.costume_id = '.$this->tableGateway->getTable().'.id', array(), 'left');
+						$select->where->and->in($costumeTypeTableName.'.type_id', $value);
+						$select->group($this->tableGateway->getTable().'.id');
+						$select->having->addPredicate(new \Zend\Db\Sql\Predicate\Expression('COUNT(DISTINCT '.$costumeTypeTableName.'.type_id) = ?', count($value)));
+						break;
+					default:
+						if ($value === null) {
+							$select->where->and->nest->isNull($param, $value)->or->equalTo($param, '')->unnest;
+						} else {
+							$select->where->and->equalTo($param, $value);
+						}
+						break;
+				}
+			}
 		}
 		
 		if ($limit) {
@@ -144,8 +192,7 @@ class CostumeTable extends AbstractDataCachePopulator
 				}
 			}
 		}
-		
-		//var_dump($this->tableGateway->getSql()->getSqlStringForSqlObject($select)); die();
+		//var_dump($this->tableGateway->getSql()->getSqlStringForSqlObject($select));die();
 		
 		if ($usePaginator) {
 			$dbTableGatewayAdapter = new DbSelect($select, $this->tableGateway->adapter, $this->tableGateway->getResultSetPrototype());
@@ -620,7 +667,7 @@ class CostumeTable extends AbstractDataCachePopulator
 				$sizes[$row->size] = $row->size;
 			}
 		}
-
+		
 		return $sizes;
 	}
 

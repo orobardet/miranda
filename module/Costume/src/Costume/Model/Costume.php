@@ -919,7 +919,7 @@ class Costume extends ObjectModelBase
 
 	public function exchangeArray($data)
 	{
-		$this->id = (array_key_exists('id', $data)) ? $this->filterDbId($data['id']) : null;
+		$this->id = (array_key_exists('id', $data)) ? $this->filterDbId($data['id']) : $this->id;
 		$this->code = (array_key_exists('code', $data)) ? $data['code'] : null;
 		$this->label = (array_key_exists('label', $data)) ? $data['label'] : null;
 		$this->creation_ts = (array_key_exists('creation_ts', $data)) ? $data['creation_ts'] : $this->creation_ts;

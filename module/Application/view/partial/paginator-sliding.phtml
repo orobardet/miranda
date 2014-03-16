@@ -37,7 +37,7 @@
 			</ul>
 		</div>
 		<?php endif; ?>
-		<?php echo $this->translateReplace('%first% - %last% out of %total%', array('first' => $this->firstItemNumber, 'last' => $this->lastItemNumber, 'total' => $this->totalItemCount)); ?>
+		<?php echo $this->translateReplace('%first% - %last% out of <b>%total%</b>', array('first' => $this->firstItemNumber, 'last' => $this->lastItemNumber, 'total' => $this->totalItemCount)); ?>
 	</div>
 	<div class="pagination pagination-right">
 		<ul>

@@ -76,8 +76,7 @@ class Costume extends Form
 					'type' => 'Select',
 					'options' => array(
 						'label' => 'Size:',
-						'value_options' => array_combine($defaultSizes, $defaultSizes),
-						'disable_inarray_validator' => true
+						'value_options' => array_combine($defaultSizes, $defaultSizes)
 					),
 					'attributes' => array(
 						'id' => 'input-size',

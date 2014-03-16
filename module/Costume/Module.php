@@ -47,7 +47,8 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 			'factories' => array(
 				'Costume\Model\CostumeTable' => function ($sm)
 				{
-					$costumeTable = new CostumeTable($sm->get('Costume\TableGateway\Costumes'), $sm->get('Costume\TableGateway\Types'));
+					$costumeTable = new CostumeTable($sm->get('Costume\TableGateway\Costumes'), $sm->get('Costume\TableGateway\Types'), 
+							$sm->get('Costume\TableGateway\CostumeType'), $sm->get('Costume\TableGateway\CostumeTag'));
 					$costumeTable->setCostumePictureTable($sm->get('Costume\Model\CostumePictureTable'));
 					$costumeTable->setColorTable($sm->get('Costume\Model\ColorTable'));
 					$costumeTable->setMaterialTable($sm->get('Costume\Model\MaterialTable'));
@@ -159,7 +160,7 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 				'Costume\Form\Search' => function ($sm)
 				{
 					$form = new Form\Search($sm->get('Costume\Model\CostumeTable'), null, $sm->get('translator'));
-					//$form->setInputFilter(new Form\CostumeFilter($sm->get('costume_zend_db_adapter'), $sm->get('Miranda\Service\Config')));
+					// $form->setInputFilter(new Form\CostumeFilter($sm->get('costume_zend_db_adapter'), $sm->get('Miranda\Service\Config')));
 					return $form;
 				},
 				'Costume\Form\Costume' => function ($sm)
@@ -170,13 +171,14 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 				},
 				'Costume\Form\Picture' => function ($sm)
 				{
-					$form = new Form\Picture(); 
+					$form = new Form\Picture();
 					$form->setInputFilter(new Form\PictureFilter($sm->get('Miranda\Service\Config')));
 					return $form;
 				},
 				'Costume\Hydrator\CostumeForm' => function ($sm)
 				{
-					$hydrator = new Model\Costume\FormHydrator($sm->get('Costume\Model\CostumeTable'), $sm->get('Costume\Model\TypeTable'), $sm->get('Costume\Model\MaterialTable'));
+					$hydrator = new Model\Costume\FormHydrator($sm->get('Costume\Model\CostumeTable'), $sm->get('Costume\Model\TypeTable'), 
+							$sm->get('Costume\Model\MaterialTable'));
 					return $hydrator;
 				}
 			)

@@ -4,9 +4,33 @@ namespace Costume\Form;
 use Zend\Form\Form;
 use Costume\Model\CostumeTable;
 use Costume\Model\Costume as CostumeModel;
+use Zend\InputFilter\InputFilterProviderInterface;
 
-class Search extends Form
+class Search extends Form implements InputFilterProviderInterface
 {
+
+	/**
+	 *
+	 * @var array
+	 */
+	protected $inputFilterSpecification = null;
+
+	public function getInputFilterSpecification()
+	{
+		if (!$this->inputFilterSpecification) {
+			$this->inputFilterSpecification = array();
+			$elements = $this->getElements();
+			if (count($elements)) {
+				foreach ($elements as $name => $input) {
+					$this->inputFilterSpecification[$name] = array(
+						'required' => false
+					);
+				}
+			}
+		}
+		
+		return $this->inputFilterSpecification;
+	}
 
 	public function __construct(CostumeTable $costumeTable, $name = null, $translator = null)
 	{
@@ -15,6 +39,7 @@ class Search extends Form
 		$costumeTable->populateCaches();
 		
 		$this->setAttribute('method', 'get');
+		$this->setPreferFormInputFilter(true);
 		
 		$this->add(array(
 			'name' => 'sort',
@@ -87,8 +112,14 @@ class Search extends Form
 				));
 		
 		$sizes = $costumeTable->getSizes();
-		array_unshift($sizes, array('label' => '<none>', 'value' => '##none##'));
-		array_unshift($sizes, array('label' => '', 'value' => null));
+		array_unshift($sizes, array(
+			'label' => '<none>',
+			'value' => '##none##'
+		));
+		array_unshift($sizes, array(
+			'label' => '',
+			'value' => null
+		));
 		$this->add(
 				array(
 					'name' => 'size',
@@ -96,20 +127,30 @@ class Search extends Form
 					'options' => array(
 						'label' => 'Size:',
 						'value_options' => $sizes,
+						'disable_inarray_validator' => true
 					),
 					'attributes' => array(
 						'id' => 'input-size',
-						'title' => 'Size',
+						'title' => 'Size'
 					)
 				));
 		
 		$genders = CostumeModel::getGenders();
-		foreach ($genders as $key=>&$value) {
+		foreach ($genders as $key => &$value) {
 			$val = $value;
-			$value = array('label' => $val, 'value' => $val);
+			$value = array(
+				'label' => $val,
+				'value' => $val
+			);
 		}
-		array_unshift($genders, array('label' => '<none>', 'value' => '##none##'));
-		array_unshift($genders, array('label' => '', 'value' => null));
+		array_unshift($genders, array(
+			'label' => '<none>',
+			'value' => '##none##'
+		));
+		array_unshift($genders, array(
+			'label' => '',
+			'value' => null
+		));
 		$this->add(
 				array(
 					'name' => 'gender',
@@ -120,89 +161,109 @@ class Search extends Form
 					),
 					'attributes' => array(
 						'id' => 'input-gender',
-						'title' => 'Gender',
+						'title' => 'Gender'
 					)
 				));
 		
 		$types = $costumeTable->getTypes();
-		foreach ($types as $key=>&$value) {
+		foreach ($types as $key => &$value) {
 			$val = $value;
-			$value = array('label' => $val, 'value' => $key);
+			$value = array(
+				'label' => $val,
+				'value' => $key
+			);
 		}
 		$parts = $types;
-		array_unshift($types, array('label' => '<none>', 'value' => '##none##'));
-		array_unshift($types, array('label' => '', 'value' => null));
+		array_unshift($types, array(
+			'label' => '<none>',
+			'value' => '##none##'
+		));
+		array_unshift($types, array(
+			'label' => '',
+			'value' => null
+		));
 		$this->add(
 				array(
-					'name' => 'type',
+					'name' => 'type_id',
 					'type' => 'Select',
 					'options' => array(
 						'label' => 'Type:',
-						'value_options' => $types,
+						'value_options' => $types
 					),
 					'attributes' => array(
 						'id' => 'input-type',
-						'title' => 'Type',
+						'title' => 'Type'
 					)
 				));
 		
-		array_unshift($parts, array('label' => '', 'value' => null));
+		array_unshift($parts, array(
+			'label' => '',
+			'value' => null
+		));
 		$this->add(
 				array(
 					'name' => 'parts_selector',
 					'type' => 'Select',
 					'options' => array(
 						'label' => 'Parts:',
-						'value_options' => $parts,
+						'value_options' => $parts
 					),
 					'attributes' => array(
 						'id' => 'input-parts-selector',
 						'title' => 'Parts',
-						'placeholder' => 'Parts'					
+						'placeholder' => 'Parts'
 					)
 				));
 		
-		$this->add(
-				array(
-					'name' => 'parts',
-					'type' => 'Text',
-					'options' => array(
-						'label' => ''
-					)
-				));
+		$this->add(array(
+			'name' => 'parts',
+			'type' => 'Text',
+			'options' => array(
+				'label' => ''
+			)
+		));
 		
 		$materials = $costumeTable->getMaterials();
-		foreach ($materials as $key=>&$value) {
+		foreach ($materials as $key => &$value) {
 			$val = $value;
-			$value = array('label' => $val, 'value' => $key);
+			$value = array(
+				'label' => $val,
+				'value' => $key
+			);
 		}
-		array_unshift($materials, array('label' => '<none>', 'value' => '##none##'));
-		array_unshift($materials, array('label' => '', 'value' => null));
+		array_unshift($materials, array(
+			'label' => '<none>',
+			'value' => '##none##'
+		));
+		array_unshift($materials, array(
+			'label' => '',
+			'value' => null
+		));
 		$this->add(
 				array(
-					'name' => 'primary_material',
+					'name' => 'primary_material_id',
 					'type' => 'Select',
 					'options' => array(
 						'label' => 'Primary material:',
-						'value_options' => $materials,
+						'value_options' => $materials
 					),
 					'attributes' => array(
 						'id' => 'input-primary-material-id',
-						'title' => 'Primary material',
+						'title' => 'Primary material'
 					)
 				));
 		
 		$this->add(
 				array(
-					'name' => 'secondary_material',
+					'name' => 'secondary_material_id',
 					'type' => 'Select',
 					'options' => array(
 						'label' => 'Secondary material:',
-						'value_options' => $materials,
+						'value_options' => $materials
 					),
 					'attributes' => array(
 						'id' => 'input-secondary-material-id',
-						'title' => 'Secondary material',
+						'title' => 'Secondary material'
 					)
 				));
 		
@@ -211,14 +272,24 @@ class Search extends Form
 		if (count($colors)) {
 			/* @var $color \Costume\Model\Color */
 			foreach ($colors as $color) {
-				$preparedColors[$color->getId()] = array('label' => $color->getName(), 'value' => $color->getId(), 'color' => $color->getColorCode());
+				$preparedColors[$color->getId()] = array(
+					'label' => $color->getName(),
+					'value' => $color->getId(),
+					'color' => $color->getColorCode()
+				);
 			}
 		}
-		array_unshift($preparedColors, array('label' => '<none>', 'value' => '##none##'));
-		array_unshift($preparedColors, array('label' => '', 'value' => null));
+		array_unshift($preparedColors, array(
+			'label' => '<none>',
+			'value' => '##none##'
+		));
+		array_unshift($preparedColors, array(
+			'label' => '',
+			'value' => null
+		));
 		$this->add(
 				array(
-					'name' => 'primary_color',
+					'name' => 'primary_color_id',
 					'type' => 'Select',
 					'options' => array(
 						'label' => 'Primary color:',
@@ -226,13 +297,13 @@ class Search extends Form
 					),
 					'attributes' => array(
 						'id' => 'input-primary-color-id',
-						'title' => 'Primary color',
+						'title' => 'Primary color'
 					)
 				));
 		
 		$this->add(
 				array(
-					'name' => 'secondary_color',
+					'name' => 'secondary_color_id',
 					'type' => 'Select',
 					'options' => array(
 						'label' => 'Secondary color:',
@@ -240,13 +311,19 @@ class Search extends Form
 					),
 					'attributes' => array(
 						'id' => 'input-secondary-color-id',
-						'title' => 'Secondary color',
+						'title' => 'Secondary color'
 					)
 				));
 		
 		$states = $costumeTable->getStates();
-		array_unshift($states, array('label' => '<none>', 'value' => '##none##'));
-		array_unshift($states, array('label' => '', 'value' => null));
+		array_unshift($states, array(
+			'label' => '<none>',
+			'value' => '##none##'
+		));
+		array_unshift($states, array(
+			'label' => '',
+			'value' => null
+		));
 		$this->add(
 				array(
 					'name' => 'state',
@@ -258,24 +335,30 @@ class Search extends Form
 					),
 					'attributes' => array(
 						'id' => 'input-state',
-						'title' => 'State',
+						'title' => 'State'
 					)
 				));
 		
 		$origins = array_combine(CostumeModel::getOrigins(), CostumeModel::getOrigins());
-		array_unshift($origins, array('label' => '<none>', 'value' => '##none##'));
-		array_unshift($origins, array('label' => '', 'value' => null));
+		array_unshift($origins, array(
+			'label' => '<none>',
+			'value' => '##none##'
+		));
+		array_unshift($origins, array(
+			'label' => '',
+			'value' => null
+		));
 		$this->add(
 				array(
 					'name' => 'origin',
 					'type' => 'Select',
 					'options' => array(
 						'label' => 'Origin:',
-						'value_options' => $origins,
+						'value_options' => $origins
 					),
 					'attributes' => array(
 						'id' => 'input-origin',
-						'title' => 'Origin',
+						'title' => 'Origin'
 					)
 				));
 		
@@ -310,11 +393,17 @@ class Search extends Form
 				));
 		
 		$tags = $costumeTable->getTags();
-		foreach ($tags as $key=>&$value) {
+		foreach ($tags as $key => &$value) {
 			$val = $value;
-			$value = array('label' => $val, 'value' => $key);
+			$value = array(
+				'label' => $val,
+				'value' => $key
+			);
 		}
-		array_unshift($tags, array('label' => '', 'value' => null));
+		array_unshift($tags, array(
+			'label' => '',
+			'value' => null
+		));
 		$this->add(
 				array(
 					'name' => 'tags_selector',
@@ -331,22 +420,24 @@ class Search extends Form
 					)
 				));
 		
-		$this->add(
-				array(
-					'name' => 'tags',
-					'type' => 'Text',
-					'options' => array(
-						'label' => ''
-					)
-				));
+		$this->add(array(
+			'name' => 'tags',
+			'type' => 'Text',
+			'options' => array(
+				'label' => ''
+			)
+		));
 	}
-	
+
 	public function getSearchData()
 	{
 		$data = $this->getData();
 		
 		// On retire les champs "hors recherche"
-		$ignoredFields = array('sort', 'direction');
+		$ignoredFields = array(
+			'sort',
+			'direction'
+		);
 		
 		$searchData = array();
 		foreach ($data as $key => $val) {
@@ -356,7 +447,7 @@ class Search extends Form
 				}
 			}
 		}
-	
+		
 		return $searchData;
-	}	
+	}
 }

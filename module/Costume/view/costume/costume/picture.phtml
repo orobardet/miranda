@@ -24,8 +24,9 @@ $form->prepare(); ?>
 		</h4>
 		<b><?php echo $this->translate('Current picture: ');?></b><br />
 	
-		<?php if (count($costume->getPictures())): ?>
-		<?php $mainPicture = $costume->getPictures()->current(); ?>
+		<?php $costumePictures = $costume->getPictures();
+		if (count($costumePictures)): ?>
+		<?php $mainPicture = reset($costumePictures); ?>
 		<?php $landscapePicture = ($mainPicture->getOrientation() == Application\Model\Picture::ORIENTATION_LANDSCAPE); ?>
 		<a class="thumbnail pull-left zoom-in-cursor span12"
 			href="<?php echo $mainPicture->getUrlPath(); ?>" target="_blank"

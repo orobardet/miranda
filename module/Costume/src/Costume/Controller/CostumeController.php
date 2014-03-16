@@ -66,12 +66,24 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		$sortStatement = $indexParams->get('sort').($indexParams->get('direction')=='down'?' DESC':' ASC');
 
 		$doSearch = false;
+		$extendedSearch = false;
 		$form = $this->getServiceLocator()->get('Costume\Form\Search');
 		$form->setData($linkParams);
 		if ($form->isValid()) {
 			$searchData = $form->getSearchData();
 			if (count($searchData)) {
 				$doSearch = true;
+				$extendedSearchData = $searchData;
+				unset($extendedSearchData['q']);
+				if (count($extendedSearchData)) {
+					$extendedSearch = true;
+				}
+				
+				array_walk($searchData, function(&$value) {
+					if ($value == '##none##') {
+						$value = null;
+					}
+				});
 			}
 		}		
 		
@@ -95,7 +107,8 @@ class CostumeController extends AbstractCostumeController implements AclControll
 					'sort' => $indexParams->get('sort'),
 					'direction' => $indexParams->get('direction'),
 					'form' => $form,
-					'has_search' => $doSearch
+					'has_search' => $doSearch,
+					'has_extended_search' => $extendedSearch
 				));
 	}
 	
@@ -242,7 +255,11 @@ class CostumeController extends AbstractCostumeController implements AclControll
 			$form->setData($request->getPost());
 			
 			if ($form->isValid()) {
-				$costume = $costumeHydrator->hydrate($form->getData(), $costume);
+				$formData = $form->getData();
+				if (array_key_exists('id', $formData)) {
+					unset($formData['id']);
+				}
+				$costume = $costumeHydrator->hydrate($formData, $costume);
 				$costume->setId($costumeId);
 				
 				$this->dbTransaction()->begin();

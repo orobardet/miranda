@@ -34,7 +34,9 @@ $form->prepare();
 		<?php endif; ?>
 	</div>
 	
-	<div id="full-search-form" style="">
+	<div id="full-search-form" style="display:none;">
+		<?php echo $this->formElement($form->get('sort')); ?>
+		<?php echo $this->formElement($form->get('direction')); ?>
 		<?php $element = $form->get('code'); ?>
 		<div class="control-group">
 			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
@@ -45,7 +47,7 @@ $form->prepare();
 			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
 			<?php echo $this->formElement($element->setAttributes(array('class' => 'input-medium'))); ?>
 	    </div>
-		<?php $element = $form->get('type'); ?>
+		<?php $element = $form->get('type_id'); ?>
 		<div class="control-group">
 			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
 			<?php echo $this->formElement($element->setAttributes(array('class' => 'selectpicker', 'data-value' => $element->getValue(), 'data-live-search'=> 'true', 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'200px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
@@ -60,22 +62,22 @@ $form->prepare();
 			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
 			<?php echo $this->formElement($element->setAttributes(array('class' => 'selectpicker', 'data-value' => $element->getValue(), 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'120px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
 	    </div>
-		<?php $element = $form->get('primary_color'); ?>
+		<?php $element = $form->get('primary_color_id'); ?>
 		<div class="control-group">
 			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
 			<?php echo $this->formColorSelect($element->setAttributes(array('class' => 'selectpicker', 'data-value' => $element->getValue(), 'data-live-search'=> 'true', 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'160px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
 	    </div>
-		<?php $element = $form->get('secondary_color'); ?>
+		<?php $element = $form->get('secondary_color_id'); ?>
 		<div class="control-group">
 			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
 			<?php echo $this->formColorSelect($element->setAttributes(array('class' => 'selectpicker', 'data-value' => $element->getValue(), 'data-live-search'=> 'true', 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'160px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
 	    </div>
-		<?php $element = $form->get('primary_material'); ?>
+		<?php $element = $form->get('primary_material_id'); ?>
 		<div class="control-group">
 			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
 			<?php echo $this->formElement($element->setAttributes(array('class' => 'selectpicker', 'data-value' => $element->getValue(), 'data-live-search'=> 'true', 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'160px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
 	    </div>
-		<?php $element = $form->get('secondary_material'); ?>
+		<?php $element = $form->get('secondary_material_id'); ?>
 		<div class="control-group">
 			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
 			<?php echo $this->formElement($element->setAttributes(array('class' => 'selectpicker', 'data-value' => $element->getValue(), 'data-live-search'=> 'true', 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'160px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
@@ -115,6 +117,7 @@ $form->prepare();
 			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
 			<?php echo $this->formElement($element->setAttributes(array('class' => 'selectpicker', 'data-values' => json_encode($form->get('tags')->getValue()), 'data-live-search'=> 'true', 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'160px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
 	    </div>
+		<button type="submit" id="small-search-button" class="btn pull-right" title="<?php echo $this->translate('Search'); ?>"><i class="icon-search"></i> <?php echo $this->translate('Search'); ?></button>
     </div>
 </form>
 
@@ -245,4 +248,9 @@ $form->prepare();
 <script type="text/javascript">
 var costumeSearchCmplUrl = '<?php echo $this->url('costume', array('action'=>'searchcmpl')); ?>';
 var costumeShowUrl = '<?php echo $this->url('costume', array('action'=>'show'));?>';
+<?php if ($this->has_extended_search): ?>
+$(function(){
+	$('#more-search-form').trigger('click');
+});
+<?php endif;?>
 </script>

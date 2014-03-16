@@ -38,8 +38,9 @@ $this->headTitle($title);
     	<?php endif;?>
 </div>
 <div class="row-fluid">
-	<?php if (count($costume->getPictures())): ?>
-	<?php $mainPicture = $costume->getPictures()->current(); ?>
+	<?php $costumePictures = $costume->getPictures();
+	if (count($costumePictures)): ?>
+	<?php $mainPicture = reset($costumePictures); ?>
 	<?php $landscapePicture = ($mainPicture->getOrientation() == Application\Model\Picture::ORIENTATION_LANDSCAPE); ?>
 	<a class="thumbnail pull-left zoom-in-cursor span<?php echo $landscapePicture?4:3; ?>" href="<?php echo $mainPicture->getUrlPath(); ?>" target="_blank">
 		<img class="media-object" src="<?php echo $mainPicture->getUrlPath(); ?>">

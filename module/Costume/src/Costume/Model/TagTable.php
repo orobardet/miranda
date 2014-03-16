@@ -97,7 +97,14 @@ class TagTable extends AbstractDataCacher implements DataCacheAwareInterface
 		));
 		$resultSet = $this->tableGateway->selectWith($sqlSelect);
 		
-		return $resultSet;
+		$tags = array();
+		if (count($resultSet)) {
+			foreach ($resultSet as $tag) {
+				$tags[] = $tag;
+			}
+		}
+		
+		return $tags;
 	}
 
 	public function saveCostumeTags($costume)
@@ -105,7 +112,7 @@ class TagTable extends AbstractDataCacher implements DataCacheAwareInterface
 		$costumeId = $costume->getId();
 		$currentTags = $this->getCostumeTags($costumeId);
 		$tags = $costume->getTags();
-		
+
 		$currentTagIds = array();
 		$tagIds = array();
 		
@@ -118,7 +125,7 @@ class TagTable extends AbstractDataCacher implements DataCacheAwareInterface
 			foreach ($tags as $tag) {
 				if ($tag->getName()) {
 					$tagId = $tag->getId();
-					// Si l'image n'a pas d'ID et qu'il n'y a pas déjà ce tag, on l'enregistre d'abord
+					// Si le tag n'a pas d'ID et qu'il n'y a pas déjà ce tag, on l'enregistre d'abord
 					if (!$tagId) {
 						$existingTag = $this->getTagByName($tag->getName(), false);
 						if ($existingTag) {
@@ -138,6 +145,7 @@ class TagTable extends AbstractDataCacher implements DataCacheAwareInterface
 		if (count($removedTags)) {
 			foreach ($removedTags as $id) {
 				$this->costumeTagGateway->delete(array(
+					'costume_id' => $costumeId,
 					'tag_id' => $id
 				));
 				$this->deleteTag($id);

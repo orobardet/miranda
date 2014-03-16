@@ -34,7 +34,14 @@ class CostumePictureTable extends PictureTable
 		
 		$resultSet = $this->tableGateway->selectWith($sqlSelect);
 		
-		return $resultSet;
+		$pictures = array();
+		if (count($resultSet)) {
+			foreach ($resultSet as $picture) {
+				$pictures[] = $picture;
+			}
+		}
+		
+		return $pictures;
 	}
 
 	public function saveCostumePictures(Costume $costume)
@@ -67,7 +74,10 @@ class CostumePictureTable extends PictureTable
 		$removedPictures = array_diff($currentPicturesIds, $picturesIds);
 		if (count($removedPictures)) {
 			foreach ($removedPictures as $id) {
-				$this->costumePictureGateway->delete(array('picture_id' => $id));
+				$this->costumePictureGateway->delete(array(
+					'costume_id' => $costumeId,
+					'picture_id' => $id
+				));
 				$this->deletePicture($id);
 			}
 		}
@@ -76,11 +86,14 @@ class CostumePictureTable extends PictureTable
 		$newPictures = array_diff($picturesIds, $currentPicturesIds);
 		if (count($newPictures)) {
 			foreach ($newPictures as $id) {
-				$this->costumePictureGateway->insert(array('costume_id' => $costumeId, 'picture_id' => $id));
+				$this->costumePictureGateway->insert(array(
+					'costume_id' => $costumeId,
+					'picture_id' => $id
+				));
 			}
 		}
 	}
-	
+
 	public function deleteCostumePictures(Costume $costume)
 	{
 		$costumeId = $costume->getId();
@@ -89,7 +102,9 @@ class CostumePictureTable extends PictureTable
 		if (count($pictures)) {
 			foreach ($pictures as $picture) {
 				$pictureId = $picture->getId();
-				$this->costumePictureGateway->delete(array('picture_id' => $pictureId));
+				$this->costumePictureGateway->delete(array(
+					'picture_id' => $pictureId
+				));
 				$this->deletePicture($pictureId);
 			}
 		}

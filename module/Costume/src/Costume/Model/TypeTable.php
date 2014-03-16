@@ -101,7 +101,14 @@ class TypeTable extends AbstractDataCacher implements DataCacheAwareInterface
 		));
 		$resultSet = $this->tableGateway->selectWith($sqlSelect);
 		
-		return $resultSet;
+		$parts = array();
+		if (count($resultSet)) {
+			foreach ($resultSet as $part) {
+				$parts[] = $part;
+			}
+		}
+				
+		return $parts;
 	}
 
 	public function saveCostumeParts($costume)
@@ -142,6 +149,7 @@ class TypeTable extends AbstractDataCacher implements DataCacheAwareInterface
 		if (count($removedTypes)) {
 			foreach ($removedTypes as $id) {
 				$this->costumeTypeGateway->delete(array(
+					'costume_id' => $costumeId,
 					'type_id' => $id
 				));
 				$this->deleteType($id);
