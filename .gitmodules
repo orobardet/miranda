@@ -1,3 +1,6 @@
 [submodule "vendor/ZFTool"]
 	path = vendor/ZFTool
 	url = https://github.com/zendframework/ZFTool.git
+[submodule "vendor/BjyProfiler"]
+	path = vendor/BjyProfiler
+	url = https://github.com/bjyoungblood/BjyProfiler.git

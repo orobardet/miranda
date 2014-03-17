@@ -121,6 +121,25 @@
 .control-group.success .fileupload .thumbnail {
   border-color: #468847;
 }
+.multiple-tag-selector-list-container {
+  display: inline-block;
+}
+.multiple-tag-selector-list-item {
+  display: inline-block;
+  padding: 0 4px;
+  margin: 0 4px 4px 0;
+  background-color: #f5f5f5;
+  border: 1px solid #bbb;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+.multiple-tag-selector-list-item .multiple-tag-selector-list-remove {
+  margin-left: 4px;
+}
 html,
 body {
   /* html et body doivent rester comme �a et sans padding ni margin, pour g�rer le footer en bas de page */
@@ -733,6 +752,10 @@ label.radio.col2 {
   position: relative;
   margin-bottom: 0;
 }
+#costume-search-form #small-search-form {
+  position: relative;
+  z-index: 2;
+}
 #costume-search-form #small-search-form .dropdown-menu > li > a {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -764,10 +787,32 @@ label.radio.col2 {
   padding: 5px;
   margin-top: 5px;
   position: relative;
+  z-index: 1;
   top: -1px;
   margin-right: 19px;
-  z-index: -1;
   box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.075);
+  text-align: justify;
+  -ms-text-justify: distribute-all-lines;
+  text-justify: distribute-all-lines;
+}
+#costume-search-form #full-search-form .control-group {
+  margin: 0 10px 0 0;
+  display: inline-block;
+}
+#costume-search-form #full-search-form .control-group label {
+  font-size: 10px;
+}
+#costume-search-form #full-search-form .control-group input {
+  height: 10px;
+  font-size: 10px;
+}
+#costume-search-form #full-search-form .control-group .btn-group.bootstrap-select {
+  height: 18px;
+  font-size: 10px;
+}
+#costume-search-form #full-search-form #search-parts-list,
+#costume-search-form #full-search-form #search-tags-list {
+  font-size: 10px;
 }
 #costume-search-form #small-search-form-completion-loader {
   width: 16px;
