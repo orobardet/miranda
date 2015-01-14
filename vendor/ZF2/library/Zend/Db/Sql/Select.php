@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -207,9 +207,9 @@ class Select extends AbstractSql implements SqlInterface, PreparableSqlInterface
      */
     public function quantifier($quantifier)
     {
-        if (!is_string($quantifier) && !$quantifier instanceof Expression) {
+        if (!is_string($quantifier) && !$quantifier instanceof ExpressionInterface) {
             throw new Exception\InvalidArgumentException(
-                'Quantifier must be one of DISTINCT, ALL, or some platform specific Expression object'
+                'Quantifier must be one of DISTINCT, ALL, or some platform specific object implementing ExpressionInterface'
             );
         }
         $this->quantifier = $quantifier;
@@ -630,7 +630,6 @@ class Select extends AbstractSql implements SqlInterface, PreparableSqlInterface
         // process table columns
         $columns = array();
         foreach ($this->columns as $columnIndexOrAs => $column) {
-
             $columnName = '';
             if ($column === self::SQL_STAR) {
                 $columns[] = array($fromTable . self::SQL_STAR);
@@ -740,12 +739,14 @@ class Select extends AbstractSql implements SqlInterface, PreparableSqlInterface
             } else {
                 $joinName = $join['name'];
             }
-            if ($joinName instanceof TableIdentifier) {
+            if ($joinName instanceof ExpressionInterface) {
+                $joinName = $joinName->getExpression();
+            } elseif ($joinName instanceof TableIdentifier) {
                 $joinName = $joinName->getTableAndSchema();
                 $joinName = ($joinName[1] ? $platform->quoteIdentifier($joinName[1]) . $platform->getIdentifierSeparator() : '') . $platform->quoteIdentifier($joinName[0]);
             } else {
                 if ($joinName instanceof Select) {
-                    $joinName = '(' . $joinName->processSubSelect($joinName, $platform, $driver, $parameterContainer) . ')';
+                    $joinName = '(' . $this->processSubSelect($joinName, $platform, $driver, $parameterContainer) . ')';
                 } else {
                     $joinName = $platform->quoteIdentifier($joinName);
                 }
@@ -822,7 +823,7 @@ class Select extends AbstractSql implements SqlInterface, PreparableSqlInterface
         }
         $orders = array();
         foreach ($this->order as $k => $v) {
-            if ($v instanceof Expression) {
+            if ($v instanceof ExpressionInterface) {
                 /** @var $orderParts \Zend\Db\Adapter\StatementContainer */
                 $orderParts = $this->processExpression($v, $platform, $driver);
                 if ($parameterContainer) {

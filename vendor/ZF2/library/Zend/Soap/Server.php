@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -557,13 +557,10 @@ class Server implements ZendServerServer
                     throw new Exception\InvalidArgumentException('One or more invalid functions specified in array');
                 }
             }
-
         } elseif (is_string($function) && function_exists($function)) {
             $this->functions[] = $function;
-
         } elseif ($function == SOAP_FUNCTIONS_ALL) {
             $this->functions = SOAP_FUNCTIONS_ALL;
-
         } else {
             throw new Exception\InvalidArgumentException('Invalid function specified');
         }
@@ -720,7 +717,7 @@ class Server implements ZendServerServer
      * - stdClass; if so, calls __toString() and verifies XML
      * - string; if so, verifies XML
      *
-     * @param  DOMDocument|DOMNode|SimpleXMLElement|stdClass|string $request
+     * @param  DOMDocument|DOMNode|SimpleXMLElement|\stdClass|string $request
      * @return self
      * @throws Exception\InvalidArgumentException
      */
@@ -730,13 +727,10 @@ class Server implements ZendServerServer
 
         if ($request instanceof DOMDocument) {
             $xml = $request->saveXML();
-
         } elseif ($request instanceof DOMNode) {
             $xml = $request->ownerDocument->saveXML();
-
         } elseif ($request instanceof SimpleXMLElement) {
             $xml = $request->asXML();
-
         } elseif (is_object($request) || is_string($request)) {
             if (is_object($request)) {
                 $xml = $request->__toString();
@@ -745,10 +739,12 @@ class Server implements ZendServerServer
             }
             $xml = trim($xml);
 
-            libxml_disable_entity_loader(true);
+            $loadEntities = libxml_disable_entity_loader(true);
 
             $dom = new DOMDocument();
             $loadStatus = $dom->loadXML($xml);
+
+            libxml_disable_entity_loader($loadEntities);
 
             // @todo check libxml errors ? validate document ?
             if (strlen($xml) == 0 || !$loadStatus) {
@@ -760,7 +756,6 @@ class Server implements ZendServerServer
                     throw new Exception\InvalidArgumentException('Invalid XML: Detected use of illegal DOCTYPE');
                 }
             }
-            libxml_disable_entity_loader(false);
         }
 
         $this->request = $xml;
@@ -880,7 +875,7 @@ class Server implements ZendServerServer
      * If no request is passed, pulls request using php:://input (for
      * cross-platform compatibility purposes).
      *
-     * @param  DOMDocument|DOMNode|SimpleXMLElement|stdClass|string $request Optional request
+     * @param  DOMDocument|DOMNode|SimpleXMLElement|\stdClass|string $request Optional request
      * @return void|string
      */
     public function handle($request = null)
@@ -981,7 +976,6 @@ class Server implements ZendServerServer
             foreach ($class as $row) {
                 $this->registerFaultException($row);
             }
-
         } elseif (is_string($class) && class_exists($class) && (is_subclass_of($class, 'Exception') || 'Exception' === $class)) {
             $ref = new ReflectionClass($class);
 
@@ -999,7 +993,7 @@ class Server implements ZendServerServer
     /**
      * Checks if provided fault name is registered as valid in this server.
      *
-     * @param $fault Name of a fault class
+     * @param string $fault Name of a fault class
      * @return bool
      */
     public function isRegisteredAsFaultException($fault)

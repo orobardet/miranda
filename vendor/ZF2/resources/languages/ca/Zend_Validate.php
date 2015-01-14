@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -50,8 +50,8 @@ return array(
     "Invalid type given. String expected" => "Tipus no vàlid donat. S'espera una cadena de text",
 
     // Zend\Validator\Between
-    "The input is not between '%min%' and '%max%', inclusively" => "L'entrada no és entre '% min%' i '% max%', inclusivament",
-    "The input is not strictly between '%min%' and '%max%'" => "L'entrada no és estrictament entre '% min%' i '%% max'",
+    "The input is not between '%min%' and '%max%', inclusively" => "L'entrada no és entre '%min%' i '%max%', inclusivament",
+    "The input is not strictly between '%min%' and '%max%'" => "L'entrada no és estrictament entre '%min%' i '%max%'",
 
     // Zend\Validator\Callback
     "The input is not valid" => "L'entrada no és vàlida",

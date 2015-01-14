@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -45,7 +45,7 @@ return array(
 
     // Zend\Validator\Between
     "The input is not between '%min%' and '%max%', inclusively" => "Isian tidak berada di antara '%min%' and '%max%', inklusif",
-    "The input is not strictly between '%min%' and '%max%'" => "Isian tidak ketat berada di antara '% min%' dan '% max%'",
+    "The input is not strictly between '%min%' and '%max%'" => "Isian tidak ketat berada di antara '%min%' dan '%max%'",
 
     // Zend\Validator\Callback
     "The input is not valid" => "Isian tidak valid",

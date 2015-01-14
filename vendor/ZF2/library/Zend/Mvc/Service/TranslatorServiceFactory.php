@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -34,11 +34,6 @@ class TranslatorServiceFactory implements FactoryInterface
             return new MvcTranslator($serviceLocator->get('Zend\I18n\Translator\TranslatorInterface'));
         }
 
-        // If ext/intl is not loaded, return a dummy translator
-        if (!extension_loaded('intl')) {
-            return new MvcTranslator(new DummyTranslator());
-        }
-
         // Load a translator from configuration, if possible
         if ($serviceLocator->has('Config')) {
             $config = $serviceLocator->get('Config');
@@ -57,6 +52,11 @@ class TranslatorServiceFactory implements FactoryInterface
                 $serviceLocator->setService('Zend\I18n\Translator\TranslatorInterface', $i18nTranslator);
                 return new MvcTranslator($i18nTranslator);
             }
+        }
+
+        // If ext/intl is not loaded, return a dummy translator
+        if (!extension_loaded('intl')) {
+            return new MvcTranslator(new DummyTranslator());
         }
 
         // For BC purposes (pre-2.3.0), use the I18n Translator

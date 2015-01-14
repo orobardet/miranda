@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @link      http://github.com/zendframework/zf2 for the canonical source repository
- * @copyright Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
@@ -12,7 +12,6 @@ namespace Zend\View\Helper\Navigation;
 use RecursiveIteratorIterator;
 use Zend\Navigation\AbstractContainer;
 use Zend\Navigation\Page\AbstractPage;
-use Zend\View;
 use Zend\View\Exception;
 
 /**
@@ -152,7 +151,9 @@ class Menu extends AbstractHelper
             $active['page'] = $active['page']->getParent();
         }
 
-        $ulClass = $ulClass ? ' class="' . $ulClass . '"' : '';
+        /* @var $escaper \Zend\View\Helper\EscapeHtmlAttr */
+        $escaper = $this->view->plugin('escapeHtmlAttr');
+        $ulClass = $ulClass ? ' class="' . $escaper($ulClass) . '"' : '';
         $html = $indent . '<ul' . $ulClass . '>' . PHP_EOL;
 
         foreach ($active['page'] as $subPage) {
@@ -170,7 +171,7 @@ class Menu extends AbstractHelper
             if ($addClassToListItem && $subPage->getClass()) {
                 $liClasses[] = $subPage->getClass();
             }
-            $liClass = empty($liClasses) ? '' : ' class="' . implode(' ', $liClasses) . '"';
+            $liClass = empty($liClasses) ? '' : ' class="' . $escaper(implode(' ', $liClasses)) . '"';
 
             $html .= $indent . '    <li' . $liClass . '>' . PHP_EOL;
             $html .= $indent . '        ' . $this->htmlify($subPage, $escapeLabels, $addClassToListItem) . PHP_EOL;
@@ -208,7 +209,8 @@ class Menu extends AbstractHelper
         $options = $this->normalizeOptions($options);
 
         if ($options['onlyActiveBranch'] && !$options['renderParents']) {
-            $html = $this->renderDeepestMenu($container,
+            $html = $this->renderDeepestMenu(
+                $container,
                 $options['ulClass'],
                 $options['indent'],
                 $options['minDepth'],
@@ -218,7 +220,8 @@ class Menu extends AbstractHelper
                 $options['liActiveClass']
             );
         } else {
-            $html = $this->renderNormalMenu($container,
+            $html = $this->renderNormalMenu(
+                $container,
                 $options['ulClass'],
                 $options['indent'],
                 $options['minDepth'],
@@ -262,6 +265,9 @@ class Menu extends AbstractHelper
 
         // find deepest active
         $found = $this->findActive($container, $minDepth, $maxDepth);
+        /* @var $escaper \Zend\View\Helper\EscapeHtmlAttr */
+        $escaper = $this->view->plugin('escapeHtmlAttr');
+
         if ($found) {
             $foundPage  = $found['page'];
             $foundDepth = $found['depth'];
@@ -270,8 +276,10 @@ class Menu extends AbstractHelper
         }
 
         // create iterator
-        $iterator = new RecursiveIteratorIterator($container,
-            RecursiveIteratorIterator::SELF_FIRST);
+        $iterator = new RecursiveIteratorIterator(
+            $container,
+            RecursiveIteratorIterator::SELF_FIRST
+        );
         if (is_int($maxDepth)) {
             $iterator->setMaxDepth($maxDepth);
         }
@@ -314,7 +322,7 @@ class Menu extends AbstractHelper
             if ($depth > $prevDepth) {
                 // start new ul tag
                 if ($ulClass && $depth ==  0) {
-                    $ulClass = ' class="' . $ulClass . '"';
+                    $ulClass = ' class="' . $escaper($ulClass) . '"';
                 } else {
                     $ulClass = '';
                 }
@@ -343,7 +351,7 @@ class Menu extends AbstractHelper
             if ($addClassToListItem && $page->getClass()) {
                 $liClasses[] = $page->getClass();
             }
-            $liClass = empty($liClasses) ? '' : ' class="' . implode(' ', $liClasses) . '"';
+            $liClass = empty($liClasses) ? '' : ' class="' . $escaper(implode(' ', $liClasses)) . '"';
 
             $html .= $myIndent . '    <li' . $liClass . '>' . PHP_EOL
                 . $myIndent . '        ' . $this->htmlify($page, $escapeLabels, $addClassToListItem) . PHP_EOL;
@@ -414,8 +422,8 @@ class Menu extends AbstractHelper
             if (count($partial) != 2) {
                 throw new Exception\InvalidArgumentException(
                     'Unable to render menu: A view partial supplied as '
-                        .  'an array must contain two values: partial view '
-                        .  'script and module where script can be found'
+                    .  'an array must contain two values: partial view '
+                    .  'script and module where script can be found'
                 );
             }
 
