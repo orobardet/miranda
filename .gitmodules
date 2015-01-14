@@ -4,3 +4,6 @@
 [submodule "vendor/BjyProfiler"]
 	path = vendor/BjyProfiler
 	url = https://github.com/bjyoungblood/BjyProfiler.git
+[submodule "vendor/ZendDeveloperTools"]
+	path = vendor/ZendDeveloperTools
+	url = https://github.com/zendframework/ZendDeveloperTools.git
