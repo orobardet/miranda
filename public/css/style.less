@@ -4,6 +4,8 @@
 @import "bootstrap-fileupload.less";
 @import "bootstrap-multiple-tag-selector.less";
 
+@footerBackground: lighten(@navbarBackground, 65%);
+
 html,body {
 	/* html et body doivent rester comme ça et sans padding ni margin, pour gérer le footer en bas de page */
 	height: 100%;
@@ -170,7 +172,7 @@ html,body {
 }
 
 #footer {
-	background-color: lighten(@navbarBackground, 65%);
+	background-color: @footerBackground;
 	color: purple;
 	.container p {
 		color: purple;
@@ -316,12 +318,12 @@ label.multicheckbox {
 }
 
 .pagination-placeholder {
-	height:55px;
+	height:45px;
 	
 }
 
 .pagination-container {
-	padding:10px 0;
+	padding:5px 0;
 	
 	.pagination {
 		margin:0px;
@@ -330,13 +332,12 @@ label.multicheckbox {
 	&.affix {
 		bottom: 0;
 		left:0;
-		background-color: @bodyBackground;
+		background-color: @footerBackground;
 		width:100%;
 		box-shadow: 0px 0px 10px lighten(@navbarBackground, 65%);
 		z-index:1000;
 	}
 	&.affix-bottom {
-		//padding-top:0;
 	}
 }
 
