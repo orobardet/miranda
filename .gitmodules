@@ -1,9 +1,0 @@
-[submodule "vendor/ZFTool"]
-	path = vendor/ZFTool
-	url = https://github.com/zendframework/ZFTool.git
-[submodule "vendor/BjyProfiler"]
-	path = vendor/BjyProfiler
-	url = https://github.com/bjyoungblood/BjyProfiler.git
-[submodule "vendor/ZendDeveloperTools"]
-	path = vendor/ZendDeveloperTools
-	url = https://github.com/zendframework/ZendDeveloperTools.git
