@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
-define('CLASSMAP_GENERATOR', 'vendor/ZF2/bin/classmap_generator.php');
-define('TEMPLATEMAP_GENERATOR', 'vendor/ZF2/bin/templatemap_generator.php');
+define('CLASSMAP_GENERATOR', 'vendor/bin/classmap_generator.php');
+define('TEMPLATEMAP_GENERATOR', 'vendor/bin/templatemap_generator.php');
 
 chdir(__DIR__);
 
@@ -25,8 +25,5 @@ foreach ($modules as $module) {
 		system(TEMPLATEMAP_GENERATOR." -w -l module/$module -v module/$module/view");
 	}	
 }
-
-echo "Generating classmap for ZF2...\n";
-system(CLASSMAP_GENERATOR." -w -l vendor/ZF2/library -o vendor/zf2_autoload_classmap.php");
 
 echo "All maps generated.\n";

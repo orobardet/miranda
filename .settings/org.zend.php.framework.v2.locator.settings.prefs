@@ -1,2 +1,3 @@
 Costume\\Hydrator\\CostumeForm=Costume\\Model\\Costume\\FormHydrator
+Miranda\\Debug\\Logger=\\Zend\\Log\\Logger
 eclipse.preferences.version=1

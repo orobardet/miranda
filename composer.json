@@ -1,0 +1,17 @@
+{
+    "name": "orobardet/miranda",
+    "description": "Gestionnaire de la compagnie Miranda",
+    "require": {
+        "firephp/firephp-core": "dev-master",
+        "bjyoungblood/bjy-profiler": "dev-master",
+        "zendframework/zftool": "dev-master",
+        "zendframework/zend-developer-tools": "dev-master",
+        "zendframework/zendframework": "~2"
+    },
+    "authors": [
+        {
+            "name": "Olivier Robardet",
+            "email": "olivier.robardet@gmail.com"
+        }
+    ]
+}
