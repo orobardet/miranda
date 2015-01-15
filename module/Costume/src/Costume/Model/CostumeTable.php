@@ -62,8 +62,8 @@ class CostumeTable extends AbstractDataCachePopulator
 	 */
 	protected $typeTable;
 
-	public function __construct(TableGateway $tableGateway, TableGateway $typeTableGateway, TableGateway $costumeTypeTableGateway, 
-			TableGateway $costumeTagTableGateway)
+	public function __construct(TableGateway $tableGateway, TableGateway $typeTableGateway = null, TableGateway $costumeTypeTableGateway = null, 
+			TableGateway $costumeTagTableGateway = null)
 	{
 		$this->tableGateway = $tableGateway;
 		$this->typeTableGateway = $typeTableGateway;

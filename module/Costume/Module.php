@@ -58,7 +58,7 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 				},
 				'Costume\Model\LightCostumeTable' => function ($sm)
 				{
-					$costumeTable = new CostumeTable($sm->get('Costume\TableGateway\Costumes'), $sm->get('Costume\TableGateway\Types'));
+					$costumeTable = new CostumeTable($sm->get('Costume\TableGateway\Costumes'));
 					return $costumeTable;
 				},
 				'Costume\TableGateway\Costumes' => function ($sm)

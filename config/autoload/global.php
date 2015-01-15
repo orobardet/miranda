@@ -15,6 +15,7 @@ $app_key = 'application';
 
 $config = array(
 	$app_key => array(
+		'env' => $env,
 		'layout' => array(
 			'css' => array(
 				'css/jquery-ui-bootstrap/jquery-ui.css',

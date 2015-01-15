@@ -17,6 +17,7 @@ use Application\Model\PictureTable;
 use Application\Model\Picture;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
+use Zend\Log\Writer\FirePhp\FirePhpBridge;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ConsoleBannerProviderInterface
 {
@@ -258,7 +259,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		);
 	}
 
-    public function getConsoleBanner(ConsoleAdapterInterface $console)
+	public function getConsoleBanner(ConsoleAdapterInterface $console)
 	{
 		return 'Miranda';
 	}
