@@ -149,10 +149,8 @@ class UserTable extends User
 			$data['last_login_ts'] = time();
 		}
 		
-		if ($this->getUser($id)) {
-			$this->tableGateway->update($data, array('id' => $id));
-		} else {
-			throw new \Exception("User id $id does not exist");
+		if (!$this->tableGateway->update($data, array('id' => $id))) {
+ 			throw new \Exception("User id $id does not exist");
 		}
 	}
 	
