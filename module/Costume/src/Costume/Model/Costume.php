@@ -7,7 +7,8 @@ use Application\Model\Picture;
 
 class Costume extends ObjectModelBase
 {
-
+	use \Application\Model\FeaturesTrait;
+	
 	const GENDER_MIXED = 'Mixte';
 
 	const GENDER_MAN = 'Homme';
@@ -24,6 +25,10 @@ class Costume extends ObjectModelBase
 
 	const ORIGIN_NONE = null;
 
+	public function __construct() {
+		$this->setFeatures(['populatePictures', 'populateParts', 'populateTags']);
+	}
+	
 	/**
 	 * Retourne la liste des genres acceptés
 	 *

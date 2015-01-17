@@ -88,9 +88,9 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		}		
 		
 		if ($doSearch) {
-			$costumes = $this->getCostumeTable()->search($searchData, true, $sortStatement);
+			$costumes = $this->getSearchCostumeTable()->search($searchData, true, $sortStatement);
 		} else {
-			$costumes = $this->getCostumeTable()->fetchAll(true, $sortStatement);
+			$costumes = $this->getSearchCostumeTable()->fetchAll(true, $sortStatement);
 		}
 		
 		$costumes->setItemCountPerPage($this->itemsPerPage()

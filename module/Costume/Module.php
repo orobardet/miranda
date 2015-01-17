@@ -56,6 +56,20 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 					$costumeTable->setTypeTable($sm->get('Costume\Model\TypeTable'));
 					return $costumeTable;
 				},
+				'Costume\Model\SearchCostumeTable' => function ($sm)
+				{
+					$costumeTableGateway = $sm->get('Costume\TableGateway\Costumes');
+					$costumeTable = new CostumeTable($costumeTableGateway, $sm->get('Costume\TableGateway\Types'), 
+							$sm->get('Costume\TableGateway\CostumeType'), $sm->get('Costume\TableGateway\CostumeTag'));
+					$costumePrototype = $costumeTableGateway->getResultSetPrototype()->getArrayObjectPrototype();
+					$costumePrototype->disableFeatures(['populatePictures', 'populateParts', 'populateTags']);
+					$costumeTable->setCostumePictureTable($sm->get('Costume\Model\CostumePictureTable'));
+					$costumeTable->setColorTable($sm->get('Costume\Model\ColorTable'));
+					$costumeTable->setMaterialTable($sm->get('Costume\Model\MaterialTable'));
+					$costumeTable->setTagTable($sm->get('Costume\Model\TagTable'));
+					$costumeTable->setTypeTable($sm->get('Costume\Model\TypeTable'));
+					return $costumeTable;
+				},
 				'Costume\Model\LightCostumeTable' => function ($sm)
 				{
 					$costumeTable = new CostumeTable($sm->get('Costume\TableGateway\Costumes'));

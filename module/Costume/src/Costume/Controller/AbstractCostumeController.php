@@ -11,6 +11,8 @@ abstract class AbstractCostumeController extends AbstractActionController implem
 
 	protected $costumeTable;
 	
+	protected $searchCostumeTable;
+	
 	protected $lightCostumeTable;
 	
 	protected $costumePictureTable;
@@ -26,6 +28,14 @@ abstract class AbstractCostumeController extends AbstractActionController implem
 			$this->costumeTable = $this->getServiceLocator()->get('Costume\Model\CostumeTable');
 		}
 		return $this->costumeTable;
+	}
+	
+	public function getSearchCostumeTable()
+	{
+		if (!$this->searchCostumeTable) {
+			$this->searchCostumeTable = $this->getServiceLocator()->get('Costume\Model\SearchCostumeTable');
+		}
+		return $this->searchCostumeTable;
 	}
 	
 	public function getLightCostumeTable()

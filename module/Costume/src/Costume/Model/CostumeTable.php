@@ -192,7 +192,6 @@ class CostumeTable extends AbstractDataCachePopulator
 				}
 			}
 		}
-		//var_dump($this->tableGateway->getSql()->getSqlStringForSqlObject($select));die();
 		
 		if ($usePaginator) {
 			$dbTableGatewayAdapter = new DbSelect($select, $this->tableGateway->adapter, $this->tableGateway->getResultSetPrototype());
@@ -425,7 +424,7 @@ class CostumeTable extends AbstractDataCachePopulator
 
 	public function populateCostumeData(Costume $costume)
 	{
-		if ($this->costumePictureTable) {
+		if ($this->costumePictureTable && $costume->hasFeature('populatePictures')) {
 			$costume->setPictures($this->costumePictureTable->getCostumePictures($costume->getId()));
 		}
 		
@@ -471,7 +470,7 @@ class CostumeTable extends AbstractDataCachePopulator
 			}
 		}
 		
-		if ($this->tagTable) {
+		if ($this->tagTable && $costume->hasFeature('populateTags')) {
 			$costume->setTags($this->tagTable->getCostumeTags($costume->getId()));
 		}
 		
@@ -486,7 +485,9 @@ class CostumeTable extends AbstractDataCachePopulator
 				}
 			}
 			
-			$costume->setParts($this->typeTable->getCostumeParts($costume->getId()));
+			if ($costume->hasFeature('populateParts')) {
+				$costume->setParts($this->typeTable->getCostumeParts($costume->getId()));
+			}
 		}
 	}
 
