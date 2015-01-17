@@ -12,13 +12,16 @@ use Costume\Controller\InputFilter\IndexFilter;
 class CostumeController extends AbstractCostumeController implements AclControllerInterface
 {
 
-	public function aclIsAllowed($action,\Zend\Permissions\Acl\Acl $acl, $user)
+	public function aclIsAllowed($action, \Zend\Permissions\Acl\Acl $acl, $user)
 	{
 		switch ($action) {
 			case "index":
 				return "list_costumes";
 				break;
 			case "searchcmpl":
+				return "list_costumes";
+				break;
+			case "picturepreview":
 				return "list_costumes";
 				break;
 			case "show":
@@ -63,8 +66,8 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		$linkParams = new Parameters(array_merge((array)$this->getRequest()->getQuery(), $filteredInput));
 		
 		$page = (int)$indexParams->get('page', 1);
-		$sortStatement = $indexParams->get('sort').($indexParams->get('direction')=='down'?' DESC':' ASC');
-
+		$sortStatement = $indexParams->get('sort') . ($indexParams->get('direction') == 'down' ? ' DESC' : ' ASC');
+		
 		$doSearch = false;
 		$extendedSearch = false;
 		$form = $this->getServiceLocator()->get('Costume\Form\Search');
@@ -79,13 +82,14 @@ class CostumeController extends AbstractCostumeController implements AclControll
 					$extendedSearch = true;
 				}
 				
-				array_walk($searchData, function(&$value) {
+				array_walk($searchData, function (&$value)
+				{
 					if ($value == '##none##') {
 						$value = null;
 					}
 				});
 			}
-		}		
+		}
 		
 		if ($doSearch) {
 			$costumes = $this->getSearchCostumeTable()->search($searchData, true, $sortStatement);
@@ -111,14 +115,16 @@ class CostumeController extends AbstractCostumeController implements AclControll
 					'has_extended_search' => $extendedSearch
 				));
 	}
-	
+
 	public function searchcmplAction()
 	{
 		$results = [];
 		
 		$q = $this->getRequest()->getQuery('q', false);
 		if ($q) {
-			$costumes = $this->getLightCostumeTable()->search(array('q' => $q), false, null, $this->getRequest()->getQuery('max', 10));
+			$costumes = $this->getLightCostumeTable()->search(array(
+				'q' => $q
+			), false, null, $this->getRequest()->getQuery('max', 10));
 			if (count($costumes)) {
 				/* @var $costume \Costume\Model\Costume  */
 				foreach ($costumes as $costume) {
@@ -130,6 +136,32 @@ class CostumeController extends AbstractCostumeController implements AclControll
 		return new JsonModel(array(
 			'results' => $results
 		));
+	}
+
+	public function picturepreviewAction()
+	{
+		$results = [];
+		$picture = null;
+		
+		$id = $this->getRequest()->getQuery('id', false);
+		if ($id) {
+			$picture = $this->getServiceLocator()->get('Costume\Model\CostumePictureTable')->getFirstCostumePicture($id);
+		}
+		
+		if ($picture) {
+			return new JsonModel(
+					[
+						'width' => $picture->getWidth(),
+						'height' => $picture->getHeight(),
+						'url' => $picture->getUrlPath()
+					]);
+		} else {
+			return new JsonModel([
+				'width' => null,
+				'height' => null,
+				'url' => "/img/costume/no-costume.png"
+			]);
+		}
 	}
 
 	public function showAction()

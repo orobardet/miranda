@@ -856,6 +856,23 @@ label.radio.col2 {
   display: block;
   margin-left: 100px;
 }
+#costume-preview-container {
+  position: absolute;
+  background: #ffffff;
+  transition: none;
+  z-index: 2000;
+}
+#costume-preview-container img {
+  max-height: 300px;
+}
+#costume-preview-container.loading {
+  background: url('../img/loading.gif') no-repeat center center #ffffff;
+  height: 20px;
+  width: 20px;
+}
+#costume-preview-container.loading img {
+  display: none;
+}
 .form-buttons-placeholder {
   height: 50px;
 }

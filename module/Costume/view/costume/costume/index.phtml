@@ -122,7 +122,7 @@ $form->prepare();
 </form>
 
 <?php if (count($this->costumes)): ?>
-<table class="table table-hover">
+<table id="costumes-table-list" class="table table-hover">
 <thead>
 <tr>
     <th>
@@ -156,17 +156,17 @@ $form->prepare();
 </thead>
 <tbody>
 <?php foreach ($this->costumes as $costume) : ?>
-<tr>
+<tr class="costume-preview-data-container" data-costume-id="<?php echo $this->escapehtmlattr($costume->getId()); ?>">
 	<td>
 		<?php if ($this->acl()->isAllowed("show_costume")): ?>
-		<a href="<?php echo $this->url('costume', array('action'=>'show', 'id' => $costume->getId()));?>"><?php echo $this->escapeHtml($costume->getCode());?></a>
+		<a href="<?php echo $this->url('costume', array('action'=>'show', 'id' => $costume->getId()));?>" class="costume-preview-trigger"><?php echo $this->escapeHtml($costume->getCode());?></a>
 		<?php else: ?>
 		<?php echo $this->escapeHtml($costume->getCode());?>
 		<?php endif;?>
 		</td>
     <td>
 		<?php if ($this->acl()->isAllowed("show_costume")): ?>
-		<a href="<?php echo $this->url('costume', array('action'=>'show', 'id' => $costume->getId()));?>"><?php echo $this->escapeHtml($costume->getLabel());?></a>
+		<a href="<?php echo $this->url('costume', array('action'=>'show', 'id' => $costume->getId()));?>" class="costume-preview-trigger"><?php echo $this->escapeHtml($costume->getLabel());?></a>
 		<?php else: ?>
     	<?php echo $this->escapeHtml($costume->getLabel());?>
 		<?php endif;?>
@@ -248,6 +248,67 @@ $form->prepare();
 <script type="text/javascript">
 var costumeSearchCmplUrl = '<?php echo $this->url('costume', array('action'=>'searchcmpl')); ?>';
 var costumeShowUrl = '<?php echo $this->url('costume', array('action'=>'show'));?>';
+$(function() {
+	function costumePreviewPopulate(item, preview, pictureData) {
+		preview.hide();
+		$('>img', preview).attr('src', pictureData.url);
+		preview.removeClass('loading').show().position({
+ 	 	 	my : "left top",
+ 	 	 	at : "left bottom+5",
+ 	 	 	of : item,
+ 	 	 	collision : 'flip',
+ 	 	});
+	}
+	
+	costumePreviewXHR = null;
+	costumePreviewTimeout = null;
+ 	$('.costume-preview-trigger').hover(function() {
+ 	 	var $this = $(this);
+ 		costumePreviewTimeout = setTimeout(function() {
+	 	 	var dataHolder = $this.parents('.costume-preview-data-container').first();
+	 	 	if (!dataHolder.length) {
+	 	 	 	dataHolder = $this;
+	 	 	}
+	 	 	var costumeId = dataHolder.data('costumeId');
+	 	 	if (!costumeId) {
+		 	 	return;
+	 	 	}
+	
+	 	 	var preview = $('#costume-preview-container');
+	 	 	if (!preview.length) {
+	 	 		preview = $('<div class="thumbnail" id="costume-preview-container"><img src=""></div>');
+	 	 		$('body').append(preview);
+	 	 	}
+
+			var pictureData = dataHolder.data('picture-data');
+			if (!pictureData) {
+		 	 	preview.addClass('loading');
+		 	 	preview.show().position({
+		 	 	 	my : "left top",
+		 	 	 	at : "left bottom+5",
+		 	 	 	of : $this
+		 	 	});
+		 	 	costumePreviewXHR = $.ajax({
+			 	 	  url: '<?php echo $this->url('costume', array('action'=>'picturepreview')); ?>',
+			 	 	  data: {id: costumeId},
+			 	 	  success: function(data, textStatus, jqXHR) {
+				 	 		dataHolder.data('picture-data', data);
+			 	 			costumePreviewPopulate($this, preview, data);
+			 	 	  }
+			 	 	});
+			} else {
+				costumePreviewPopulate($this, preview, pictureData);
+			}
+ 		}, 250);
+ 	}, function() {
+ 		if (costumePreviewXHR && costumePreviewXHR.readyState != 4){
+ 			costumePreviewXHR.abort();
+        }
+ 	 	clearTimeout(costumePreviewTimeout);
+ 	 	$('#costume-preview-container').hide().removeClass('loading');
+ 	});
+});
+
 <?php if ($this->has_extended_search): ?>
 $(function(){
 	$('#more-search-form').trigger('click');

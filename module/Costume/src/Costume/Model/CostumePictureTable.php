@@ -18,21 +18,31 @@ class CostumePictureTable extends PictureTable
 
 	/**
 	 *
-	 * @param integer $id ID du costume dont on veut les images
-	 * @throws \Exception
-	 * @return boolean Picture[]
+	 * @param int $id
+	 * @return \Zend\Db\Sql\Select, \Zend\Db\Sql\Select
 	 */
-	public function getCostumePictures($id)
+	protected function _getCostumePicturesSelect($id)
 	{
 		$assocTable = $this->costumePictureGateway->getTable();
 		/* @var $sqlSelect Select */
-		$sqlSelect = $this->tableGateway->getSql()->select();
-		$sqlSelect->join($assocTable, $assocTable . '.picture_id = ' . $this->tableGateway->getTable() . '.id', array(), 'left');
-		$sqlSelect->where(array(
-			'costume_id = ?' => $id
-		));
-		
-		$resultSet = $this->tableGateway->selectWith($sqlSelect);
+		return $this->tableGateway->getSql()
+			->select()
+			->join($assocTable, $assocTable . '.picture_id = ' . $this->tableGateway->getTable() . '.id', array(), 'left')
+			->where(array(
+			'costume_id = ?' => (int)$id
+		))
+			->order('picture_id');
+	}
+
+	/**
+	 *
+	 * @param integer $id ID du costume dont on veut les images
+	 * @throws \Exception
+	 * @return \Application\Model\Picture[]
+	 */
+	public function getCostumePictures($id)
+	{
+		$resultSet = $this->tableGateway->selectWith($this->_getCostumePicturesSelect($id));
 		
 		$pictures = array();
 		if (count($resultSet)) {
@@ -42,6 +52,20 @@ class CostumePictureTable extends PictureTable
 		}
 		
 		return $pictures;
+	}
+
+	/**
+	 * @param integer $id
+	 * @return \Application\Model\Picture
+	 */
+	public function getFirstCostumePicture($id)
+	{
+		$select = $this->_getCostumePicturesSelect($id);
+		$select->limit(1);
+		
+		$resultSet = $this->tableGateway->selectWith($select);
+		
+		return $resultSet->current();
 	}
 
 	public function saveCostumePictures(Costume $costume)

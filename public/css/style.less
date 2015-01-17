@@ -709,6 +709,27 @@ label.radio.col2 {
 	}
 }
 
+#costume-preview-container {
+	position: absolute;
+ 	background: @bodyBackground;
+	transition: none;
+	z-index: 2000;
+	
+	img {
+		max-height: 300px;
+	}
+	
+	&.loading {
+		background: url('../img/loading.gif') no-repeat center center @bodyBackground;
+		height:20px;
+		width:20px;
+
+		img {
+			display: none;
+		}
+	}
+}
+
 .form-buttons-placeholder {
 	height:50px;
 }

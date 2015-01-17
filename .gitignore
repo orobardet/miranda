@@ -5,6 +5,8 @@ nbproject
 .DS_Store
 .idea
 .project
+.externalToolBuilders
+.settings
 composer.lock
 composer.phar
 config/autoload/local.php
