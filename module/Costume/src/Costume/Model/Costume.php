@@ -32,6 +32,9 @@ class Costume extends ObjectModelBase
 	{
 		$this->setFeatures([
 			'populatePictures',
+			'populateMaterials',
+			'populateColors',
+			'populateType',
 			'populateParts',
 			'populateTags'
 		]);
