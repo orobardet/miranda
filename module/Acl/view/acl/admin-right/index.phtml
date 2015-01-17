@@ -5,3 +5,7 @@ $this->headTitle($title);
 <h1><?php echo $this->escapeHtml($title); ?></h1>
 
 <?php echo $this->partial('partial/rights-list.phtml', array('rights' => $this->rights)); ?>
+
+<?php if ($this->acl()->isAllowed("admin_update_acl")): ?>
+	<?php echo $this->translate('Rights changed: '); ?><a href="<?php echo $this->url('admin/right', array('action' => 'update'));?>" class="btn"><?php echo $this->translate('Update ACL'); ?></a>
+<?php endif; ?>

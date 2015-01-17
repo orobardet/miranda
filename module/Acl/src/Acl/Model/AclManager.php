@@ -2,9 +2,14 @@
 namespace Acl\Model;
 
 use Zend\Db\Adapter\Adapter as DbAdapter;
+use Zend\Permissions\Acl\Acl;
+use Zend\Permissions\Acl\Resource\GenericResource as Resource;
+use Zend\Permissions\Acl\Role\GenericRole as ZendRole;
 
 class AclManager
 {
+
+	const ACL_CACHE_NAME = 'acl';
 
 	const TABLE_ROLES = 'roles';
 
@@ -16,7 +21,12 @@ class AclManager
 
 	protected $tableNames;
 
-	public function __construct(DbAdapter $dbAdapter, $tableNames)
+	/**
+	 * @var \Zend\Cache\Storage\Adapter\AbstractAdapter
+	 */
+	protected $cache;
+
+	public function __construct(DbAdapter $dbAdapter, $tableNames, $cache = null)
 	{
 		$this->dbAdapter = $dbAdapter;
 		$this->tableNames = array_merge(
@@ -25,6 +35,52 @@ class AclManager
 					self::TABLE_RIGHTS => self::TABLE_RIGHTS,
 					self::TABLE_ROLES_RIGHTS => self::TABLE_ROLES_RIGHTS
 				), $tableNames);
+		$this->cache = $cache;
+	}
+
+	public function aclNeedsUpdate()
+	{
+		if ($this->cache && $this->cache->hasItem(self::ACL_CACHE_NAME)) {
+			$this->cache->removeItem(self::ACL_CACHE_NAME);
+		}
+	}
+	
+	public function getAcl()
+	{
+		$acl = null;
+		
+		if ($this->cache && $this->cache->hasItem(self::ACL_CACHE_NAME)) {
+			$acl = unserialize($this->cache->getItem(self::ACL_CACHE_NAME));
+		}
+		
+		if (!$acl || !$acl instanceof Acl) {
+			// Récupération de tous les noms des rôles et les noms des droits qu'ils autorisent
+			$roles = $this->getRolesAndRights();
+			
+			$acl = new Acl();
+			// Construction des ACL de l'application
+			foreach ($roles as $role => $resources) {
+				// On ajoute d'abord les rôles
+				$acl->addRole(new ZendRole($role));
+				
+				// On ajoute une ressource, si elle n'est pas déjà déclarée
+				foreach ($resources as $resource) {
+					if (!$acl->hasResource($resource))
+						$acl->addResource(new Resource($resource));
+				}
+				
+				// On autorise le rôle sur la ressource
+				foreach ($resources as $resource) {
+					$acl->allow($role, $resource);
+				}
+			}
+			
+			if ($this->cache) {
+				$this->cache->setItem(self::ACL_CACHE_NAME, serialize($acl));
+			}
+		}
+		
+		return $acl;
 	}
 
 	public function getRolesAndRights()

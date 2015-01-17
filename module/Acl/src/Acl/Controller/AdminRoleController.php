@@ -110,6 +110,7 @@ class AdminRoleController extends AbstractActionController implements ConfigAwar
 				$data = $form->getData();
 				$role->exchangeArray($form->getData());
 				$this->getRoleTable()->saverole($role, true);
+				$this->getServiceLocator()->get('Acl\Model\AclManager')->aclNeedsUpdate();
 				
 				return $this->redirect()->toRoute('admin/role');
 			}
@@ -161,6 +162,7 @@ class AdminRoleController extends AbstractActionController implements ConfigAwar
 			
 			if ($form->isValid()) {
 				$this->getRoleTable()->saveRole($role);
+				$this->getServiceLocator()->get('Acl\Model\AclManager')->aclNeedsUpdate();
 				
 				return $this->redirect()->toRoute('admin/role');
 			}
@@ -192,6 +194,7 @@ class AdminRoleController extends AbstractActionController implements ConfigAwar
 			if ($del == 'yes') {
 				$id = (int)$request->getPost('id');
 				$this->getRoleTable()->deleteRole($id);
+				$this->getServiceLocator()->get('Acl\Model\AclManager')->aclNeedsUpdate();
 			}
 			
 			$return_url = $this->refererUrl('admin-role-delete');

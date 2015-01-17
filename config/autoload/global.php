@@ -60,6 +60,9 @@ $config = array(
 		'db' => array(
 			'table_prefix' => ''
 		),
+		'cache' => array(
+			'namespace' => 'miranda'
+		),
 		'data_storage' => array(
 			'root_path' => '../../data/miranda',
 			'temp_path' => '../../data/miranda/tmp'

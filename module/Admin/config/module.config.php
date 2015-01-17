@@ -36,9 +36,9 @@ return array(
  			    		    				),
  			    		    		),
          			    		    'right' => array(
-         			    		    		'type' => 'Literal',
+         			    		    		'type' => 'Segment',
          			    		    		'options' => array(
-         			    		    				'route' => '/right',
+         			    		    				'route' => '/right[/][:action]',
                 									'defaults' => array(
      			    									'__NAMESPACE__' => 'Acl\Controller',
                 										'controller' => 'Acl\Controller\AdminRight',

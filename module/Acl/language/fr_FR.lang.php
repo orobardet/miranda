@@ -1,5 +1,5 @@
 <?php 
-return array(
+return [
 	'Common rights' => 'Droits généraux',
 	'Admin access' => "Accès à l'administration",
 	
@@ -19,6 +19,7 @@ return array(
 	'Add role' => 'Ajouter un rôle',
 	'Edit role' => 'Modifier un rôle',
 	'Delete role' => 'Supprimer un rôle',
+	'Update ACL' => 'Mettre à jour les ACL',
 
 	'No roles.' => 'Aucun rôles.',
 	
@@ -43,5 +44,6 @@ return array(
 	"Are you sure that you want to delete role '%name%'?" => "Est-vous sûr de vouloir supprimer le rôle '%name%' ?",
 	"Users having this role:" => 'Utilisateurs possédants ce rôle :',
 	'Warning, this role is assigned to some users.<br/>Deleting this role will remove it and all associated access right from these users.' => "Attention, ce rôle est possédé par certains utilisateurs.<br/>Supprimer ce rôle le retirera de ces utilisateurs, ainsi que tous les droits d'accès correspondants.",
-		
-);
+	'Rights changed: ' => 'Droits modifiés : ',
+	'ACL updated' => 'ACL mises à jour'		
+];

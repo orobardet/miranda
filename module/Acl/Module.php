@@ -14,7 +14,6 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Permissions\Acl\Acl;
-use Zend\Permissions\Acl\Resource\GenericResource as Resource;
 use Zend\Permissions\Acl\Role\GenericRole as Role;
 use Acl\Controller\AclControllerInterface;
 use Zend\View\Model\ViewModel;
@@ -41,12 +40,14 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		if ($e->getRequest() instanceof ConsoleRequest) {
 			$controller = $e->getTarget();
 			if (!$controller instanceof AclConsoleControllerInterface) {
-				/*// Le controlleur n'implémente pas l'interface qui est obligatoire pour déclarer des actions console
-				// Erreur et on arrête là
-				$console = $e->getApplication()->getServiceManager()->get('console');
-				$console->writeLine('No console access allowed for this controller!');
-				// On arrête la propagation de l'évenement, pour empecher que l'action initialement demandée soient exécutée 
-				$e->stopPropagation();*/
+				/*
+				 * // Le controlleur n'implémente pas l'interface qui est obligatoire pour déclarer des actions console
+				 * // Erreur et on arrête là
+				 * $console = $e->getApplication()->getServiceManager()->get('console');
+				 * $console->writeLine('No console access allowed for this controller!');
+				 * // On arrête la propagation de l'évenement, pour empecher que l'action initialement demandée soient exécutée
+				 * $e->stopPropagation();
+				 */
 				return;
 			}
 			$route = $e->getRouteMatch();
@@ -73,14 +74,14 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 			$neededRights = $controller->aclIsAllowed($route->getParam('action'), $acl, 'Miranda\CurrentUser');
 			if ($neededRights === true) {
 				$accessAllowed = true;
-			} else if (empty($neededRights)) {
-				$accessAllowed = false;
-			} else {
-				$accessAllowed = AclHelper::isAllowed($acl, 'Miranda\CurrentUser', $neededRights);
-			}
-			
+			} else 
+				if (empty($neededRights)) {
+					$accessAllowed = false;
+				} else {
+					$accessAllowed = AclHelper::isAllowed($acl, 'Miranda\CurrentUser', $neededRights);
+				}
 		}
-
+		
 		if (!$accessAllowed) {
 			// Construction de la vue 403
 			$userIdentity = $e->getApplication()->getServiceManager()->get('Miranda\Service\AuthService')->getIdentity();
@@ -88,7 +89,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'controller' => $route->getParam('controller'),
 				'action' => $route->getParam('action'),
 				'message' => "You've tried to access to an unauthorized resource.",
-				'user' => $userIdentity->getIdentity(),
+				'user' => $userIdentity->getIdentity()
 			);
 			$viewModel = new ViewModel($viewParams);
 			$viewModel->setTemplate('error/403');
@@ -99,7 +100,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 			$response->setStatusCode(403);
 			$e->setResponse($response);
 			
-			// On arrête la propagation de l'évenement, pour empecher que l'action initialement demandée soient exécutée 
+			// On arrête la propagation de l'évenement, pour empecher que l'action initialement demandée soient exécutée
 			$e->stopPropagation();
 		}
 	}
@@ -129,26 +130,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 			'factories' => array(
 				'Miranda\Service\Acl' => function ($sm)
 				{
-					// Récupération de tous les noms des rôles et les noms des droits qu'ils autorisent
-					$roles = $sm->get('Acl\Model\AclManager')->getRolesAndRights();
-					
-					$acl = new Acl();
-					// Construction des ACL de l'application
-					foreach ($roles as $role => $resources) {
-						// On ajoute d'abord les rôles
-						$acl->addRole(new Role($role));
-						
-						// On ajoute une ressource, si elle n'est pas déjà déclarée
-						foreach ($resources as $resource) {
-							if (!$acl->hasResource($resource))
-								$acl->addResource(new Resource($resource));
-						}
-						
-						// On autorise le rôle sur la ressource
-						foreach ($resources as $resource) {
-							$acl->allow($role, $resource);
-						}
-					}
+					$acl = $sm->get('Acl\Model\AclManager')->getAcl();
 					
 					// Récupération de l'utilisateur connecté et de ses rôles
 					$authService = $sm->get('Miranda\Service\AuthService');
@@ -156,7 +138,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 						$user = $authService->getIdentity();
 						$acl->addRole(new Role($user->getIdentity()), $sm->get('Acl\Model\RolesManager')->getRoleNames($user->getRoles()));
 						
-						// Le rôle 'Miranda\CurrentUser' est ajouté comme un alias pour accéder au l'utilisateur courant 
+						// Le rôle 'Miranda\CurrentUser' est ajouté comme un alias pour accéder au l'utilisateur courant
 						// dans les isAllowed
 						$acl->addRole(new Role('Miranda\CurrentUser'), $user->getIdentity());
 					} else {
@@ -179,11 +161,11 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				{
 					$tablePrefix = $sm->get('Miranda\Service\Config')->get('db->table_prefix', '');
 					return new AclManager($sm->get('app_zend_db_adapter'), 
-							array(
+							[
 								AclManager::TABLE_ROLES => $tablePrefix . 'roles',
 								AclManager::TABLE_RIGHTS => $tablePrefix . 'rights',
 								AclManager::TABLE_ROLES_RIGHTS => $tablePrefix . 'roles_rights'
-							));
+							], $sm->get('Miranda\Service\Cache'));
 				},
 				'Acl\TableGateway\Rights' => function ($sm)
 				{
@@ -213,7 +195,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				},
 				'Acl\Model\RoleTable' => function ($sm)
 				{
-					return new RoleTable($sm->get('Acl\TableGateway\Roles'), $sm->get('Acl\TableGateway\RolesRights'), $sm->get('User\TableGateway\UsersRoles'));
+					return new RoleTable($sm->get('Acl\TableGateway\Roles'), $sm->get('Acl\TableGateway\RolesRights'), 
+							$sm->get('User\TableGateway\UsersRoles'));
 				},
 				'Acl\Form\Role' => function ($sm)
 				{
@@ -259,6 +242,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				{
 					return new \Acl\View\Helper\Acl($pm->getServiceLocator()->get('Miranda\Service\Acl'));
 				},
+				
 				// Surcharge la factory native du Navigation View Helper, pour obtenir une version préconfigurée
 				// avec les ACL de l'application
 				'navigation' => function (HelperPluginManager $pm)

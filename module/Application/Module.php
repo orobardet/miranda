@@ -17,7 +17,7 @@ use Application\Model\PictureTable;
 use Application\Model\Picture;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
-use Zend\Log\Writer\FirePhp\FirePhpBridge;
+use Zend\Cache\StorageFactory;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ConsoleBannerProviderInterface
 {
@@ -128,6 +128,19 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				{
 					$config = new TraversableConfig($sm->get('config'));
 					return $config->application;
+				},
+				'Miranda\Service\Cache' => function ($sm)
+				{
+					$config = $sm->get('Miranda\Service\Config');
+					return StorageFactory::factory(
+							[
+								'adapter' => [
+									'name' => 'xcache',
+									'options' => [
+										'namespace' => $config->get('cache->namespace', 'miranda')
+									]
+								]
+							]);
 				},
 				'Zend\Session\SessionManager' => function ($sm)
 				{
