@@ -11,11 +11,12 @@ Installation
 VHost Apache :
 ```apache
 <VirtualHost *:80>
-    ServerName manager.compagniemiranda.com
+    ServerName HOST
     ServerAdmin webmaster@localhost
 
     DocumentRoot /home/miranda/www/public
-    SetEnv APPLICATION_ENV "dev"
+    # Uncomment if running in development environment (application will provide debugging features)
+    # SetEnv APPLICATION_ENV "dev"
 
     AddDefaultCharset UTF-8
 
