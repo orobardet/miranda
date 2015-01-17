@@ -424,10 +424,12 @@ class CostumeTable extends AbstractDataCachePopulator
 
 	public function populateCostumeData(Costume $costume)
 	{
+		// Images du costume
 		if ($this->costumePictureTable && $costume->hasFeature('populatePictures')) {
 			$costume->setPictures($this->costumePictureTable->getCostumePictures($costume->getId()));
 		}
 		
+		// Données des couleurs, on a déjà leur ID
 		if ($this->colorTable) {
 			$primaryColorId = $costume->getPrimaryColorId();
 			if ($primaryColorId) {
@@ -449,6 +451,7 @@ class CostumeTable extends AbstractDataCachePopulator
 			}
 		}
 		
+		// Données des matières, on a déjà leur ID
 		if ($this->materialTable) {
 			$primaryMaterialId = $costume->getPrimaryMaterialId();
 			if ($primaryMaterialId) {
@@ -470,10 +473,12 @@ class CostumeTable extends AbstractDataCachePopulator
 			}
 		}
 		
+		// Tags du costume
 		if ($this->tagTable && $costume->hasFeature('populateTags')) {
 			$costume->setTags($this->tagTable->getCostumeTags($costume->getId()));
 		}
 		
+		// Données du type du costume, on a déjà l'ID
 		if ($this->typeTable) {
 			$typeId = $costume->getTypeId();
 			if ($typeId) {
@@ -485,6 +490,7 @@ class CostumeTable extends AbstractDataCachePopulator
 				}
 			}
 			
+			// Elements composant le costume
 			if ($costume->hasFeature('populateParts')) {
 				$costume->setParts($this->typeTable->getCostumeParts($costume->getId()));
 			}

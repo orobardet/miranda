@@ -4,11 +4,14 @@ namespace Costume\Model;
 use Application\Model\ObjectModelBase;
 use Costume\Model\Color;
 use Application\Model\Picture;
+use Application\Model\FormatDataTrait;
+use Application\Model\FeaturesTrait;
 
 class Costume extends ObjectModelBase
 {
-	use \Application\Model\FeaturesTrait;
-	
+	use FormatDataTrait;
+	use FeaturesTrait;
+
 	const GENDER_MIXED = 'Mixte';
 
 	const GENDER_MAN = 'Homme';
@@ -25,10 +28,15 @@ class Costume extends ObjectModelBase
 
 	const ORIGIN_NONE = null;
 
-	public function __construct() {
-		$this->setFeatures(['populatePictures', 'populateParts', 'populateTags']);
+	public function __construct()
+	{
+		$this->setFeatures([
+			'populatePictures',
+			'populateParts',
+			'populateTags'
+		]);
 	}
-	
+
 	/**
 	 * Retourne la liste des genres acceptés
 	 *
@@ -249,6 +257,9 @@ class Costume extends ObjectModelBase
 
 	/**
 	 * Origine du costume (creation, achat, .
+	 *
+	 *
+	 *
 	 *
 	 *
 	 *

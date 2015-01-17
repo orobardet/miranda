@@ -2,9 +2,12 @@
 namespace Acl\Model;
 
 use Application\Model\ObjectModelBase;
+use Application\Model\BaseAttributesTrait;
 
 class Role extends ObjectModelBase
 {
+	use BaseAttributesTrait;
+	
 	/**
 	 * ID en BDD du rôle
 	 * @var integer

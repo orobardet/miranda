@@ -5,19 +5,6 @@ trait BaseAttributesTrait
 {
 	protected $baseAttributes = array();
 	
-	public function filterDbId($value)
-	{
-		$filtered = filter_var($value, FILTER_VALIDATE_INT, array(
-			'min_range' => 1,
-			'default' => null
-		));
-		if ($filtered === false) {
-			return null;
-		}
-		
-		return $filtered;
-	}
-
 	public function setBaseAttribute($name, $value)
 	{
 		$this->baseAttributes[$name] = $value;
