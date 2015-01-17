@@ -149,9 +149,7 @@ class UserTable extends User
 			$data['last_login_ts'] = time();
 		}
 		
-		if (!$this->tableGateway->update($data, array('id' => $id))) {
- 			throw new \Exception("User id $id does not exist");
-		}
+		$this->tableGateway->update($data, array('id' => $id));
 	}
 	
 	public function deleteUser($id)

@@ -49,11 +49,12 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 			'authenticate',
 			'logout'
 		));
-		if (!is_array($allowedPages))
+		if (!is_array($allowedPages)) {
 			$allowedPages = $allowedPages->toArray();
-			
-			// Si on est sur une page non accessible si pas connecté, et qu'il n'y a
-			// pas d'utilisateur connecté
+		}
+		
+		// Si on est sur une page non accessible si pas connecté, et qu'il n'y a
+		// pas d'utilisateur connecté
 		if (!in_array($e->getRouteMatch()->getMatchedRouteName(), $allowedPages) && !$authService->hasIdentity()) {
 			// Calcul de l'URL demandée, pour redirection après connexion
 			$requestUri = $e->getRequest()->getUri();
@@ -171,8 +172,10 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'Miranda\Service\AuthDb' => function ($sm)
 				{
 					$authAdapter = new AuthDbTable($sm->get('Miranda\Service\DbAdapter'));
-					$authAdapter->setTableName($sm->get('Miranda\Service\Config')->get('db->table_prefix', '') . 'users')->setIdentityColumn('email')->setCredentialColumn(
-							'password');
+					$authAdapter->setTableName($sm->get('Miranda\Service\Config')
+						->get('db->table_prefix', '') . 'users')
+						->setIdentityColumn('email')
+						->setCredentialColumn('password');
 					return $authAdapter;
 				},
 				'Miranda\Service\AuthBCrypt' => function ($sm)
