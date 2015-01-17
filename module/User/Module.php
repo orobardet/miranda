@@ -75,7 +75,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				return $e->getTarget()->plugin('redirect')->toRoute('login', array(), 
 						array(
 							'query' => array(
-								'redirect' => urlencode($redirect)
+								'redirect' => $redirect
 							)
 						));
 			} else {
