@@ -2,11 +2,12 @@
 namespace Costume\Model;
 
 use Zend\Db\TableGateway\TableGateway;
-use Application\Model\DataCache\AbstractDataCacher;
+use Application\Model\DataCache\DataCacherTrait;
 use Application\Model\DataCache\DataCacheAwareInterface;
 
-class TagTable extends AbstractDataCacher implements DataCacheAwareInterface
+class TagTable implements DataCacheAwareInterface
 {
+	use DataCacherTrait;
 	
 	/*
 	 * @var TableGateway
@@ -30,12 +31,24 @@ class TagTable extends AbstractDataCacher implements DataCacheAwareInterface
 	 */
 	public function fetchAll()
 	{
-		return $this->tableGateway->select(function ($select)
+		if ($this->dataCacheIsComplete()) {
+			return $this->dataCacheGetAll();
+		}
+		
+		$data = $this->tableGateway->select(function ($select)
 		{
 			$select->order(array(
 				'name'
 			));
 		});
+		
+		if (count($data)) {
+			foreach ($data as $item) {
+				$this->dataCacheAdd($item->getId(), $item);
+			}
+			$this->dataCacheComplete();
+		}
+		return $data;
 	}
 
 	public function getTag($id, $exceptionIfNone = true)
@@ -216,10 +229,5 @@ class TagTable extends AbstractDataCacher implements DataCacheAwareInterface
 	public function populateCache()
 	{
 		$tags = $this->fetchAll();
-		if (count($tags)) {
-			foreach ($tags as $tag) {
-				$this->dataCacheAdd($tag->getId(), $tag);
-			}
-		}
 	}
 }

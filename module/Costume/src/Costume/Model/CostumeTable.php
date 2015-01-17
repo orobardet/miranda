@@ -4,13 +4,14 @@ namespace Costume\Model;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Paginator\Adapter\DbSelect;
 use Zend\Paginator\Paginator;
-use Application\Model\DataCache\AbstractDataCachePopulator;
+use Application\Model\DataCache\DataCachePopulatorTrait;
 use Zend\Db\Sql\Expression;
 use ArrayObject;
 use Zend\Stdlib\Parameters;
 
-class CostumeTable extends AbstractDataCachePopulator
+class CostumeTable
 {
+	use DataCachePopulatorTrait; 
 	
 	/*
 	 * @var TableGateway
@@ -145,17 +146,21 @@ class CostumeTable extends AbstractDataCachePopulator
 						break;
 					case "tags":
 						$costumeTagTableName = $this->costumeTagTableGateway->getTable();
-						$select->join($costumeTagTableName, $costumeTagTableName.'.costume_id = '.$this->tableGateway->getTable().'.id', array(), 'left');
-						$select->where->and->in($costumeTagTableName.'.tag_id', $value);
-						$select->group($this->tableGateway->getTable().'.id');
-						$select->having->addPredicate(new \Zend\Db\Sql\Predicate\Expression('COUNT(DISTINCT '.$costumeTagTableName.'.tag_id) = ?', count($value)));
+						$select->join($costumeTagTableName, $costumeTagTableName . '.costume_id = ' . $this->tableGateway->getTable() . '.id', 
+								array(), 'left');
+						$select->where->and->in($costumeTagTableName . '.tag_id', $value);
+						$select->group($this->tableGateway->getTable() . '.id');
+						$select->having->addPredicate(
+								new \Zend\Db\Sql\Predicate\Expression('COUNT(DISTINCT ' . $costumeTagTableName . '.tag_id) = ?', count($value)));
 						break;
 					case "parts":
 						$costumeTypeTableName = $this->costumeTypeTableGateway->getTable();
-						$select->join($costumeTypeTableName, $costumeTypeTableName.'.costume_id = '.$this->tableGateway->getTable().'.id', array(), 'left');
-						$select->where->and->in($costumeTypeTableName.'.type_id', $value);
-						$select->group($this->tableGateway->getTable().'.id');
-						$select->having->addPredicate(new \Zend\Db\Sql\Predicate\Expression('COUNT(DISTINCT '.$costumeTypeTableName.'.type_id) = ?', count($value)));
+						$select->join($costumeTypeTableName, $costumeTypeTableName . '.costume_id = ' . $this->tableGateway->getTable() . '.id', 
+								array(), 'left');
+						$select->where->and->in($costumeTypeTableName . '.type_id', $value);
+						$select->group($this->tableGateway->getTable() . '.id');
+						$select->having->addPredicate(
+								new \Zend\Db\Sql\Predicate\Expression('COUNT(DISTINCT ' . $costumeTypeTableName . '.type_id) = ?', count($value)));
 						break;
 					default:
 						if ($value === null) {
@@ -424,60 +429,108 @@ class CostumeTable extends AbstractDataCachePopulator
 
 	public function populateCostumeData(Costume $costume)
 	{
+		$this->populateCostumePictures($costume);
+		$this->populateCostumeColors($costume);
+		$this->populateCostumeMaterials($costume);
+		$this->populateCostumeTags($costume);
+		$this->populateCostumeType($costume);
+		$this->populateCostumeParts($costume);
+	}
+
+	public function populateCostumePictures(Costume $costume)
+	{
 		// Images du costume
 		if ($this->costumePictureTable && $costume->hasFeature('populatePictures')) {
 			$costume->setPictures($this->costumePictureTable->getCostumePictures($costume->getId()));
 		}
-		
+	}
+
+	public function populateCostumeColors(Costume $costume)
+	{
 		// Données des couleurs, on a déjà leur ID
 		if ($this->colorTable && $costume->hasFeature('populateColors')) {
 			$primaryColorId = $costume->getPrimaryColorId();
-			if ($primaryColorId) {
-				$primaryColor = $this->colorTable->getColor($primaryColorId, false);
-				if ($primaryColor) {
-					$costume->setPrimaryColor($primaryColor);
-				} else {
-					$costume->setPrimaryColorId(null);
-				}
-			}
 			$secondaryColorId = $costume->getSecondaryColorId();
-			if ($secondaryColorId) {
-				$secondaryColor = $this->colorTable->getColor($secondaryColorId);
-				if ($secondaryColor) {
-					$costume->setSecondaryColor($secondaryColor);
-				} else {
-					$costume->setSecondaryColorId(null);
+			$primaryColor = $secondaryColor = null;
+			
+			if ($primaryColorId && $secondaryColorId) {
+				$colors = $this->colorTable->getColors([
+					$primaryColorId,
+					$secondaryColorId
+				], false);
+				if (array_key_exists($primaryColorId, $colors)) {
+					$primaryColor = $colors[$primaryColorId];
 				}
+				if (array_key_exists($secondaryColorId, $colors)) {
+					$secondaryColor = $colors[$secondaryColorId];
+				}
+			} elseif ($primaryColorId) {
+				$primaryColor = $this->colorTable->getColor($primaryColorId, false);
+			} elseif ($secondaryColorId) {
+				$secondaryColor = $this->colorTable->getColor($secondaryColorId);
+			}
+			
+			if ($primaryColor) {
+				$costume->setPrimaryColor($primaryColor);
+			} else {
+				$costume->setPrimaryColorId(null);
+			}
+			if ($secondaryColor) {
+				$costume->setSecondaryColor($secondaryColor);
+			} else {
+				$costume->setSecondaryColorId(null);
 			}
 		}
-		
+	}
+
+	public function populateCostumeMaterials(Costume $costume)
+	{
 		// Données des matières, on a déjà leur ID
 		if ($this->materialTable && $costume->hasFeature('populateMaterials')) {
 			$primaryMaterialId = $costume->getPrimaryMaterialId();
-			if ($primaryMaterialId) {
-				$primaryMaterial = $this->materialTable->getMaterial($primaryMaterialId, false);
-				if ($primaryMaterial) {
-					$costume->setPrimaryMaterial($primaryMaterial);
-				} else {
-					$costume->setPrimaryMaterialId(null);
-				}
-			}
 			$secondaryMaterialId = $costume->getSecondaryMaterialId();
-			if ($secondaryMaterialId) {
-				$secondaryMaterial = $this->materialTable->getMaterial($secondaryMaterialId);
-				if ($secondaryMaterial) {
-					$costume->setSecondaryMaterial($secondaryMaterial);
-				} else {
-					$costume->setSecondaryMaterialId(null);
+			$primaryMaterial = $secondaryMaterial = null;
+			
+			if ($primaryMaterialId && $secondaryMaterialId) {
+				$materials = $this->materialTable->getMaterials([
+					$primaryMaterialId,
+					$secondaryMaterialId
+				], false);
+				if (array_key_exists($primaryMaterialId, $materials)) {
+					$primaryMaterial = $materials[$primaryMaterialId];
 				}
+				if (array_key_exists($secondaryMaterialId, $materials)) {
+					$secondaryMaterial = $materials[$secondaryMaterialId];
+				}
+			} elseif ($primaryMaterialId) {
+				$primaryMaterial = $this->materialTable->getMaterial($primaryMaterialId, false);
+			} elseif ($secondaryMaterialId) {
+				$secondaryMaterial = $this->materialTable->getMaterial($secondaryMaterialId);
+			}
+			
+			if ($primaryMaterial) {
+				$costume->setPrimaryMaterial($primaryMaterial);
+			} else {
+				$costume->setPrimaryMaterialId(null);
+			}
+			if ($secondaryMaterial) {
+				$costume->setSecondaryMaterial($secondaryMaterial);
+			} else {
+				$costume->setSecondaryMaterialId(null);
 			}
 		}
-		
+	}
+
+	public function populateCostumeTags(Costume $costume)
+	{
 		// Tags du costume
 		if ($this->tagTable && $costume->hasFeature('populateTags')) {
 			$costume->setTags($this->tagTable->getCostumeTags($costume->getId()));
 		}
-		
+	}
+
+	public function populateCostumeType(Costume $costume)
+	{
 		// Données du type du costume, on a déjà l'ID
 		if ($this->typeTable && $costume->hasFeature('populateType')) {
 			$typeId = $costume->getTypeId();
@@ -489,9 +542,11 @@ class CostumeTable extends AbstractDataCachePopulator
 					$costume->setTypeId(null);
 				}
 			}
-			
 		}
-		
+	}
+
+	public function populateCostumeParts(Costume $costume)
+	{
 		// Elements composant le costume
 		if ($this->typeTable && $costume->hasFeature('populateParts')) {
 			$costume->setParts($this->typeTable->getCostumeParts($costume->getId()));

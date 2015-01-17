@@ -4,10 +4,11 @@ namespace Costume\Model;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Expression;
 use Application\Model\DataCache\DataCacheAwareInterface;
-use Application\Model\DataCache\AbstractDataCacher;
+use Application\Model\DataCache\DataCacherTrait;
 
-class ColorTable extends AbstractDataCacher implements DataCacheAwareInterface
+class ColorTable implements DataCacheAwareInterface
 {
+	use DataCacherTrait;
 	
 	/*
 	 * @var TableGateway
@@ -64,13 +65,25 @@ class ColorTable extends AbstractDataCacher implements DataCacheAwareInterface
 	 */
 	public function fetchAll()
 	{
-		return $this->tableGateway->select(function ($select)
+		if ($this->dataCacheIsComplete()) {
+			return $this->dataCacheGetAll();
+		}
+		
+		$data = $this->tableGateway->select(function ($select)
 		{
 			$select->order(array(
 				'ord',
 				'name'
 			));
 		});
+		
+		if (count($data)) {
+			foreach ($data as $item) {
+				$this->dataCacheAdd($item->getId(), $item);
+			}
+			$this->dataCacheComplete();
+		}
+		return $data;
 	}
 
 	public function getColor($id, $exceptionIfNone = true)
@@ -95,14 +108,44 @@ class ColorTable extends AbstractDataCacher implements DataCacheAwareInterface
 		return $color;
 	}
 
+	public function getColors(array $ids, $exceptionIfNone = true)
+	{
+		$colors = [];
+		
+		if (!count($ids)) {
+			return false;
+		}
+		
+		$getIds = array();
+		foreach ($ids as $id) {
+			$id = (int)$id;
+			if ($this->dataCacheIs($id)) {
+				$colors[$id] = $this->dataCacheGet($id);
+				continue;
+			} else {
+				$getIds[] = $id;
+			}
+		}
+		
+		if (count($getIds)) {
+			$rowset = $this->tableGateway->select(array(
+				'id' => $getIds
+			));
+			foreach ($rowset as $color) {
+				$colors[$color->getId()] = $color;
+			}
+		}
+		
+		return $colors;
+	}
+
 	public function getColorByName($name, $caseInsensitive = false, $exceptionIfNone = true)
 	{
 		if ($caseInsensitive) {
-			$rowset = $this->tableGateway->select(
-					function ($select) use($name)
-					{
-						$select->where->like('name', $name);
-					});
+			$rowset = $this->tableGateway->select(function ($select) use($name)
+			{
+				$select->where->like('name', $name);
+			});
 		} else {
 			$rowset = $this->tableGateway->select(array(
 				'name' => $name
@@ -166,10 +209,5 @@ class ColorTable extends AbstractDataCacher implements DataCacheAwareInterface
 	public function populateCache()
 	{
 		$colors = $this->fetchAll();
-		if (count($colors)) {
-			foreach ($colors as $color) {
-				$this->dataCacheAdd($color->getId(), $color);
-			}
-		}
 	}
 }

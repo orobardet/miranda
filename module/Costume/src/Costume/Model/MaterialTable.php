@@ -3,10 +3,11 @@ namespace Costume\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 use Application\Model\DataCache\DataCacheAwareInterface;
-use Application\Model\DataCache\AbstractDataCacher;
+use Application\Model\DataCache\DataCacherTrait;
 
-class MaterialTable extends AbstractDataCacher implements DataCacheAwareInterface
+class MaterialTable implements DataCacheAwareInterface
 {
+	use DataCacherTrait;
 	
 	/*
 	 * @var TableGateway
@@ -25,12 +26,24 @@ class MaterialTable extends AbstractDataCacher implements DataCacheAwareInterfac
 	 */
 	public function fetchAll()
 	{
-		return $this->tableGateway->select(function ($select)
+		if ($this->dataCacheIsComplete()) {
+			return $this->dataCacheGetAll();
+		}
+		
+		$data = $this->tableGateway->select(function ($select)
 		{
 			$select->order(array(
 				'name'
 			));
 		});
+		
+		if (count($data)) {
+			foreach ($data as $item) {
+				$this->dataCacheAdd($item->getId(), $item);
+			}
+			$this->dataCacheComplete();
+		}
+		return $data;
 	}
 
 	public function getMaterial($id, $exceptionIfNone = true)
@@ -55,6 +68,37 @@ class MaterialTable extends AbstractDataCacher implements DataCacheAwareInterfac
 		return $material;
 	}
 
+	public function getMaterials(array $ids, $exceptionIfNone = true)
+	{
+		$materials = [];
+		
+		if (!count($ids)) {
+			return false;
+		}
+		
+		$getIds = array();
+		foreach ($ids as $id) {
+			$id = (int)$id;
+			if ($this->dataCacheIs($id)) {
+				$materials[$id] = $this->dataCacheGet($id);
+				continue;
+			} else {
+				$getIds[] = $id;
+			}
+		}
+		
+		if (count($getIds)) {
+			$rowset = $this->tableGateway->select(array(
+				'id' => $getIds
+			));
+			foreach ($rowset as $material) {
+				$materials[$material->getId()] = $material;
+			}
+		}
+		
+		return $materials;
+	}
+	
 	public function getMaterialByName($name, $caseInsensitive = false, $exceptionIfNone = true)
 	{
 		if ($caseInsensitive) {
@@ -110,10 +154,5 @@ class MaterialTable extends AbstractDataCacher implements DataCacheAwareInterfac
 	public function populateCache()
 	{
 		$materials = $this->fetchAll();
-		if (count($materials)) {
-			foreach ($materials as $material) {
-				$this->dataCacheAdd($material->getId(), $material);
-			}
-		}
 	}
 }

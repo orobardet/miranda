@@ -449,10 +449,10 @@ label.multicheckbox input[type=checkbox] {
   content: '';
 }
 .pagination-placeholder {
-  height: 55px;
+  height: 45px;
 }
 .pagination-container {
-  padding: 10px 0;
+  padding: 5px 0;
 }
 .pagination-container .pagination {
   margin: 0px;
@@ -460,7 +460,7 @@ label.multicheckbox input[type=checkbox] {
 .pagination-container.affix {
   bottom: 0;
   left: 0;
-  background-color: #ffffff;
+  background-color: #f3dffa;
   width: 100%;
   box-shadow: 0px 0px 10px #f3dffa;
   z-index: 1000;
@@ -751,6 +751,10 @@ label.radio.col2 {
 #costume-search-form {
   position: relative;
   margin-bottom: 0;
+}
+#costume-search-form .tt-hint {
+  color: #CCC;
+  font-style: italic;
 }
 #costume-search-form #small-search-form {
   position: relative;

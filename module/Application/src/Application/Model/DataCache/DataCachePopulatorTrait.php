@@ -1,7 +1,7 @@
 <?php
 namespace Application\Model\DataCache;
 
-abstract class AbstractDataCachePopulator
+trait DataCachePopulatorTrait
 {
 
 	protected $_cachedCollections;

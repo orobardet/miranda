@@ -2,11 +2,12 @@
 namespace Costume\Model;
 
 use Zend\Db\TableGateway\TableGateway;
-use Application\Model\DataCache\AbstractDataCacher;
+use Application\Model\DataCache\DataCacherTrait;
 use Application\Model\DataCache\DataCacheAwareInterface;
 
-class TypeTable extends AbstractDataCacher implements DataCacheAwareInterface
+class TypeTable implements DataCacheAwareInterface
 {
+	use DataCacherTrait;
 	
 	/*
 	 * @var TableGateway
@@ -30,16 +31,24 @@ class TypeTable extends AbstractDataCacher implements DataCacheAwareInterface
 	 */
 	public function fetchAll()
 	{
-		if ($this->dataCacheCount()) {
+		if ($this->dataCacheIsComplete()) {
 			return $this->dataCacheGetAll();
-		} else {
-			return $this->tableGateway->select(function ($select)
-			{
-				$select->order(array(
-					'name'
-				));
-			});
 		}
+		
+		$data = $this->tableGateway->select(function ($select)
+		{
+			$select->order(array(
+				'name'
+			));
+		});
+		
+		if (count($data)) {
+			foreach ($data as $item) {
+				$this->dataCacheAdd($item->getId(), $item);
+			}
+			$this->dataCacheComplete();
+		}
+		return $data;
 	}
 
 	public function getType($id, $exceptionIfNone = true)
@@ -220,10 +229,5 @@ class TypeTable extends AbstractDataCacher implements DataCacheAwareInterface
 	public function populateCache()
 	{
 		$types = $this->fetchAll();
-		if (count($types)) {
-			foreach ($types as $type) {
-				$this->dataCacheAdd($type->getId(), $type);
-			}
-		}
 	}
 }
