@@ -250,14 +250,16 @@ var costumeSearchCmplUrl = '<?php echo $this->url('costume', array('action'=>'se
 var costumeShowUrl = '<?php echo $this->url('costume', array('action'=>'show'));?>';
 $(function() {
 	function costumePreviewPopulate(item, preview, pictureData) {
-		preview.hide();
-		$('>img', preview).attr('src', pictureData.url);
-		preview.removeClass('loading').show().position({
- 	 	 	my : "left top",
- 	 	 	at : "left bottom+5",
- 	 	 	of : item,
- 	 	 	collision : 'flip',
- 	 	});
+		preview.hide().removeClass('loading');
+		if (pictureData.url) {
+			$('>img', preview).attr('src', pictureData.url);
+			preview.show().position({
+	 	 	 	my : "left top",
+	 	 	 	at : "left bottom+5",
+	 	 	 	of : item,
+	 	 	 	collision : 'flip',
+	 	 	});
+		}
 	}
 	
 	costumePreviewXHR = null;
@@ -291,9 +293,12 @@ $(function() {
 		 	 	costumePreviewXHR = $.ajax({
 			 	 	  url: '<?php echo $this->url('costume', array('action'=>'picturepreview')); ?>',
 			 	 	  data: {id: costumeId},
-			 	 	  success: function(data, textStatus, jqXHR) {
+			 	 	  success: function(data) {
 				 	 		dataHolder.data('picture-data', data);
 			 	 			costumePreviewPopulate($this, preview, data);
+			 	 	  }, 
+			 	 	  error: function() {
+				 	 	  preview.hide().removeClass('loading');
 			 	 	  }
 			 	 	});
 			} else {
