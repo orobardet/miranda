@@ -50,7 +50,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 			$viewModel->setVariable('action', $route->getParam('action'));
 		}
 		
-		$viewModel->setVariable('module', strtolower(__NAMESPACE__));
+		$controllerClass = get_class($e->getTarget());
+		$viewModel->setVariable('module', substr($controllerClass, 0, strpos($controllerClass, '\\')));
 	}
 
 	public function onBootstrap(MvcEvent $e)
@@ -87,6 +88,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 			$viewModel->setVariable('css', $config->get('layout->css', array())->toArray());
 		}
 		$viewModel->setVariable('js', $config->get('layout->js', array())->toArray());
+		
+		$viewModel->setVariable('config', $config);
 	}
 
 	public function bootstrapSession($e)

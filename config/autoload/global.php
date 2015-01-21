@@ -13,258 +13,263 @@
 $env = getenv('APPLICATION_ENV') ?  : 'prod';
 $app_key = 'application';
 
-$config = array(
-	$app_key => array(
+$config = [
+	$app_key => [
 		'env' => $env,
-		'layout' => array(
-			'css' => array(
+		'version' => '0.1',
+		'layout' => [
+			'footer' => [
+				'url_label' => 'Compagnie Miranda',
+				'url_link' => 'http://www.compagniemiranda.com/'
+			],
+			'css' => [
 				'css/jquery-ui-bootstrap/jquery-ui.css',
 				'css/bootstrap.css',
 				'css/fuelux.css',
 				'css/bootstrap-responsive.min.css',
 				'css/font-awesome.min.css',
 				'css/style.css'
-			),
+			],
 			'compile_less' => false,
 			'less_wrapper' => 'less.php',
 			'less_compiler' => 'lessphp',
-			'less' => array(
+			'less' => [
 				'css/jquery-ui-bootstrap/jquery-ui.css',
 				'css/bootstrap.less',
 				'css/fuelux.less',
 				'css/bootstrap-responsive.min.css',
 				'css/font-awesome.min.css',
 				'css/style.less'
-			),
-			'js' => array(
+			],
+			'js' => [
 				'js/jquery.min.js',
 				'js/json2.js',
 				'js/jquery-ui.min.js',
 				'js/jquery.loadmask.min.js',
 				'js/bootstrap.js',
 				'js/fuelux.js',
-				'lib/jquery.passstrength.js',
-			)
-		),
-		'authentification' => array(
-			'not_login_page' => array(
+				'lib/jquery.passstrength.js'
+			]
+		],
+		'authentification' => [
+			'not_login_page' => [
 				'login',
 				'logout',
 				'authenticate',
 				'unauthorized'
-			),
-			'bcrypt' => array(
+			],
+			'bcrypt' => [
 				'cost' => 10
-			)
-		),
-		'db' => array(
+			]
+		],
+		'db' => [
 			'table_prefix' => ''
-		),
-		'cache' => array(
+		],
+		'cache' => [
 			'namespace' => 'miranda'
-		),
-		'data_storage' => array(
+		],
+		'data_storage' => [
 			'root_path' => '../../data/miranda',
 			'temp_path' => '../../data/miranda/tmp'
-		),
-		'costume' => array(
-			'pictures' => array(
+		],
+		'costume' => [
+			'pictures' => [
 				'max_width' => 1000,
 				'max_height' => 1000,
 				'store_path' => 'pictures/costumes',
 				'url_path' => '/pictures/costumes'
-			)
-		)
-	),
+			]
+		]
+	],
 	
-	'db' => array(
+	'db' => [
 		'driver' => 'Mysqli',
 		'hostname' => 'localhost',
 		'database' => 'miranda',
 		'charset' => 'UTF8',
-		'options' => array(
+		'options' => [
 			'buffer_results' => true
-		)
-	),
-	'navigation' => array(
-		'default' => array(
-			array(
+		]
+	],
+	'navigation' => [
+		'default' => [
+			[
 				'label' => 'Home',
 				'route' => 'home'
-			),
-			array(
+			],
+			[
 				'label' => 'Costumes',
 				'route' => 'costume',
 				'resource' => 'list_costumes',
-				'pages' => array(
-					array(
+				'pages' => [
+					[
 						'label' => 'Catalog',
 						'route' => 'costume',
 						'action' => 'index',
 						'resource' => 'list_costumes',
-						'pages' => array(
-							array(
+						'pages' => [
+							[
 								'label' => 'Show',
 								'route' => 'costume',
 								'action' => 'show',
 								'resource' => 'show_costume',
 								'visible' => false
-							),
-							array(
+							],
+							[
 								'label' => 'Add',
 								'route' => 'costume',
 								'action' => 'add',
 								'resource' => 'add_costume',
 								'visible' => false
-							),
-							array(
+							],
+							[
 								'label' => 'Edit',
 								'route' => 'costume',
 								'action' => 'edit',
 								'resource' => 'edit_costume',
 								'visible' => false
-							),
-							array(
+							],
+							[
 								'label' => 'Delete',
 								'route' => 'costume',
 								'action' => 'delete',
 								'resource' => 'delete_costume',
 								'visible' => false
-							)
-						)
-					),
-					array(
+							]
+						]
+					],
+					[
 						'label' => 'Management',
 						'route' => 'costume-admin',
 						'action' => 'index',
 						'resource' => 'admin_costumes',
-						'pages' => array(
-							array(
+						'pages' => [
+							[
 								'label' => 'Colors',
 								'route' => 'costume-admin/color',
 								'action' => 'index',
 								'resource' => 'admin_costumes_colors'
-							),
-							array(
+							],
+							[
 								'label' => 'Materials',
 								'route' => 'costume-admin/material',
 								'action' => 'index',
 								'resource' => 'admin_costumes_materials'
-							),
-							array(
+							],
+							[
 								'label' => 'Tags',
 								'route' => 'costume-admin/tag',
 								'action' => 'index',
 								'resource' => 'admin_costumes_tags'
-							),
-							array(
+							],
+							[
 								'label' => 'Parts & types',
 								'route' => 'costume-admin/part',
 								'action' => 'index',
 								'resource' => 'admin_costumes_parts'
-							)
-						)
-					)
-				)
-			),
-			array(
+							]
+						]
+					]
+				]
+			],
+			[
 				'label' => 'Admin',
 				'route' => 'admin',
 				'resource' => 'admin_access',
-				'pages' => array(
-					array(
+				'pages' => [
+					[
 						'label' => 'Users',
 						'route' => 'admin/user',
 						'resource' => 'admin_list_users',
-						'pages' => array(
-							array(
+						'pages' => [
+							[
 								'label' => 'Show',
 								'route' => 'admin/user',
 								'action' => 'show',
 								'resource' => 'admin_show_user'
-							),
-							array(
+							],
+							[
 								'label' => 'Add',
 								'route' => 'admin/user',
 								'action' => 'add',
 								'resource' => 'admin_add_user'
-							),
-							array(
+							],
+							[
 								'label' => 'Edit',
 								'route' => 'admin/user',
 								'action' => 'edit',
 								'resource' => 'admin_edit_user'
-							),
-							array(
+							],
+							[
 								'label' => 'Delete',
 								'route' => 'admin/user',
 								'action' => 'delete',
 								'resource' => 'admin_delete_user'
-							)
-						)
-					),
-					array(
+							]
+						]
+					],
+					[
 						'label' => 'Roles',
 						'route' => 'admin/role',
 						'resource' => 'admin_list_roles',
-						'pages' => array(
-							array(
+						'pages' => [
+							[
 								'label' => 'Show',
 								'route' => 'admin/role',
 								'action' => 'show',
 								'resource' => 'admin_show_role'
-							),
-							array(
+							],
+							[
 								'label' => 'Add',
 								'route' => 'admin/role',
 								'action' => 'add',
 								'resource' => 'admin_add_role'
-							),
-							array(
+							],
+							[
 								'label' => 'Edit',
 								'route' => 'admin/role',
 								'action' => 'edit',
 								'resource' => 'admin_edit_role'
-							),
-							array(
+							],
+							[
 								'label' => 'Delete',
 								'route' => 'admin/role',
 								'action' => 'delete',
 								'resource' => 'admin_delete_role'
-							)
-						)
-					),
-					array(
+							]
+						]
+					],
+					[
 						'label' => 'Rights',
 						'route' => 'admin/right',
 						'resource' => 'admin_list_rights'
-					)
-				)
-			)
-		)
-	),
-	'session' => array(
-		'config' => array(
+					]
+				]
+			]
+		]
+	],
+	'session' => [
+		'config' => [
 			'class' => 'Zend\Session\Config\SessionConfig',
-			'options' => array(
+			'options' => [
 				'name' => 'miranda'
-			)
-		),
+			]
+		],
 		'storage' => 'Zend\Session\Storage\SessionArrayStorage',
-		'validators' => array(
+		'validators' => [
 			'Zend\Session\Validator\RemoteAddr',
 			'Zend\Session\Validator\HttpUserAgent'
-		)
-	)
-);
+		]
+	]
+];
 
 if ($env == 'prod') {
-	$config[$app_key]['layout']['css'] = array(
+	$config[$app_key]['layout']['css'] = [
 		'css/miranda-full-min.css'
-	);
-	$config[$app_key]['layout']['js'] = array(
+	];
+	$config[$app_key]['layout']['js'] = [
 		'js/miranda-full-min.js'
-	);
+	];
 }
 
 return $config;
