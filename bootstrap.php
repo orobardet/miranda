@@ -7,7 +7,7 @@
 date_default_timezone_set('Europe/Paris');
 
 // Si on est en environnement de dev, affichage d'un maximum d'info en cas d'erreur
-if (getenv('APPLICATION_ENV') == 'dev') {
+if ((getenv('APPLICATION_ENV') == 'dev') || (PHP_SAPI == 'cli')) {
 	error_reporting(E_ALL | E_STRICT | E_NOTICE | E_DEPRECATED);
 	ini_set("display_errors", 1);
 	ini_set("display_startup_errors", 1);
