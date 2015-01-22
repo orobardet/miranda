@@ -15,11 +15,9 @@ class ConsoleController extends AbstractUserController implements ConfigAwareInt
 		return true;
 	}
 
-	public function listAction()
+	protected function _userList($users)
 	{
 		$translator = $this->getServiceLocator()->get('translator');
-		
-		$users = $this->getUserTable()->fetchAll();
 		
 		if (count($users)) {
 			$userTable = array();
@@ -32,7 +30,7 @@ class ConsoleController extends AbstractUserController implements ConfigAwareInt
 					$user->isActive() ? $translator->translate('Yes') : $translator->translate('No')
 				);
 			}
-			$this->console()->writeTable($userTable, 
+			$this->console()->writeTable($userTable,
 					array(
 						$translator->translate('ID'),
 						$translator->translate('Lastname'),
@@ -44,7 +42,21 @@ class ConsoleController extends AbstractUserController implements ConfigAwareInt
 			$this->console()->writeLine($translator->translate('No users.'));
 		}
 	}
+	
+	public function listAction()
+	{
+		$type = $this->getRequest()->getParam('type', 'all');
+		
+		$this->_userList($this->getUserTable()->fetchAll($type));
+	}
 
+	public function searchAction()
+	{
+		$q = $this->getRequest()->getParam('search', 0);
+		
+		$this->_userList($this->getUserTable()->searchUsers($q));
+	}
+	
 	public function showAction()
 	{
 		$translator = $this->getServiceLocator()->get('translator');
@@ -93,6 +105,54 @@ class ConsoleController extends AbstractUserController implements ConfigAwareInt
 			} else {
 				$this->console()->writeLine($translator->translate('None'));
 			}
+		} else {
+			$this->console()->writeLine($translator->translate('User not found.'));
+		}
+	}
+	
+	public function enableAction()
+	{
+		$translator = $this->getServiceLocator()->get('translator');
+		
+		$id = $this->getRequest()->getParam('id', 0);
+		
+		$user = null;
+		try {
+			if (filter_var($id, FILTER_VALIDATE_INT)) {
+				$user = $this->getUserTable()->getUser($id);
+			} else {
+				$user = $this->getUserTable()->getUserByEmail($id);
+			}
+		} catch (\Exception $e) {
+		}
+		
+		if ($user) {
+			// TODO: implémenter l'activation de l'utilisateur
+			$this->console()->writeLine($translator->translate('User XX enabled'));
+		} else {
+			$this->console()->writeLine($translator->translate('User not found.'));
+		}
+	}
+	
+	public function disableAction()
+	{
+		$translator = $this->getServiceLocator()->get('translator');
+		
+		$id = $this->getRequest()->getParam('id', 0);
+		
+		$user = null;
+		try {
+			if (filter_var($id, FILTER_VALIDATE_INT)) {
+				$user = $this->getUserTable()->getUser($id);
+			} else {
+				$user = $this->getUserTable()->getUserByEmail($id);
+			}
+		} catch (\Exception $e) {
+		}
+		
+		if ($user) {
+			// TODO: implémenter la desactivation de l'utilisateur
+			$this->console()->writeLine($translator->translate('User XX disabled'));
 		} else {
 			$this->console()->writeLine($translator->translate('User not found.'));
 		}

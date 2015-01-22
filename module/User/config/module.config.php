@@ -64,21 +64,30 @@ return array(
 	'console' => array(
 		'router' => array(
 			'routes' => array(
-				'user-all-list' => array(
+				'user-list' => array(
 					'options' => array(
-						'route' => 'show [all] users',
+						'route' => '(show|list) [all|enabled|disabled]:type users',
 						'defaults' => array(
 							'controller' => 'User\Controller\Console',
 							'action' => 'list'
 						)
 					)
 				),
-				'user-list' => array(
+				'user-simple-list' => array(
 					'options' => array(
-						'route' => 'show users',
+						'route' => '(show|list) users',
 						'defaults' => array(
 							'controller' => 'User\Controller\Console',
 							'action' => 'list'
+						)
+					)
+				),
+				'user-search' => array(
+					'options' => array(
+						'route' => 'search user <search>',
+						'defaults' => array(
+							'controller' => 'User\Controller\Console',
+							'action' => 'search'
 						)
 					)
 				),
@@ -88,6 +97,24 @@ return array(
 						'defaults' => array(
 							'controller' => 'User\Controller\Console',
 							'action' => 'show'
+						)
+					)
+				),
+				'user-disable' => array(
+					'options' => array(
+						'route' => 'disable user <id>',
+						'defaults' => array(
+							'controller' => 'User\Controller\Console',
+							'action' => 'disable'
+						)
+					)
+				),
+				'user-enable' => array(
+					'options' => array(
+						'route' => 'enable user <id>',
+						'defaults' => array(
+							'controller' => 'User\Controller\Console',
+							'action' => 'enable'
 						)
 					)
 				)

@@ -243,8 +243,10 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 	{
 		return array(
 			'List and display users',
-			'show [all] users' => 'List all users',
+			'show [all|enabled|disabled] users' => 'List all users',
 			'show user <id>|<email>' => 'Show a user by ID or email',
+			'search user "<search terms>"' => 'Search for users',
+			'enable|disable user <id>|<email>"' => 'Enable or disable a user account',
 			array(
 				'<id>',
 				'user ID',
@@ -254,6 +256,11 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'<email>',
 				'user email',
 				'Full email address of the user'
+			),
+			array(
+				'<search terms>',
+				'search terms',
+				'List of terms that can match users'
 			)
 		);
 	}
