@@ -242,11 +242,27 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 	public function getConsoleUsage(ConsoleAdapterInterface $console)
 	{
 		return array(
-			'List and display users',
+			'List, search and display users',
 			'show [all|enabled|disabled] users' => 'List all users',
 			'show user <id>|<email>' => 'Show a user by ID or email',
+			array(
+				'<id>',
+				'user ID',
+				'ID of the user'
+			),
+			array(
+				'<email>',
+				'user email',
+				'Full email address of the user'
+			),
 			'search user "<search terms>"' => 'Search for users',
-			'enable|disable user <id>|<email>"' => 'Enable or disable a user account',
+			array(
+				'<search terms>',
+				'search terms',
+				'List of terms that can match users'
+			),
+			'Users manipulation',
+			'enable|disable user <id>|<email> [-y|--yes]"' => 'Enable or disable a user account',
 			array(
 				'<id>',
 				'user ID',
@@ -258,10 +274,10 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'Full email address of the user'
 			),
 			array(
-				'<search terms>',
-				'search terms',
-				'List of terms that can match users'
-			)
+				'-y|--yes',
+				'no confirmation',
+				"You won't be asked for confirmation"
+			),
 		);
 	}
 }

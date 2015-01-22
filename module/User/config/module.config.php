@@ -102,7 +102,7 @@ return array(
 				),
 				'user-disable' => array(
 					'options' => array(
-						'route' => 'disable user <id>',
+						'route' => 'disable user <id>  [-y|--yes]:yes',
 						'defaults' => array(
 							'controller' => 'User\Controller\Console',
 							'action' => 'disable'
@@ -111,7 +111,7 @@ return array(
 				),
 				'user-enable' => array(
 					'options' => array(
-						'route' => 'enable user <id>',
+						'route' => 'enable user <id> [-y|--yes]:yes',
 						'defaults' => array(
 							'controller' => 'User\Controller\Console',
 							'action' => 'enable'

@@ -6,6 +6,7 @@ use User\Model\User;
 use Acl\Controller\AclConsoleControllerInterface;
 use Application\Toolbox\String as StringTools;
 use Zend\Console\ColorInterface;
+use Zend\Console\Prompt\Confirm;
 
 class ConsoleController extends AbstractUserController implements ConfigAwareInterface, AclConsoleControllerInterface
 {
@@ -30,7 +31,7 @@ class ConsoleController extends AbstractUserController implements ConfigAwareInt
 					$user->isActive() ? $translator->translate('Yes') : $translator->translate('No')
 				);
 			}
-			$this->console()->writeTable($userTable,
+			$this->console()->writeTable($userTable, 
 					array(
 						$translator->translate('ID'),
 						$translator->translate('Lastname'),
@@ -42,7 +43,7 @@ class ConsoleController extends AbstractUserController implements ConfigAwareInt
 			$this->console()->writeLine($translator->translate('No users.'));
 		}
 	}
-	
+
 	public function listAction()
 	{
 		$type = $this->getRequest()->getParam('type', 'all');
@@ -56,7 +57,7 @@ class ConsoleController extends AbstractUserController implements ConfigAwareInt
 		
 		$this->_userList($this->getUserTable()->searchUsers($q));
 	}
-	
+
 	public function showAction()
 	{
 		$translator = $this->getServiceLocator()->get('translator');
@@ -109,12 +110,13 @@ class ConsoleController extends AbstractUserController implements ConfigAwareInt
 			$this->console()->writeLine($translator->translate('User not found.'));
 		}
 	}
-	
+
 	public function enableAction()
 	{
 		$translator = $this->getServiceLocator()->get('translator');
 		
 		$id = $this->getRequest()->getParam('id', 0);
+		$forceYes = $this->getRequest()->getParam('yes', false);
 		
 		$user = null;
 		try {
@@ -127,18 +129,44 @@ class ConsoleController extends AbstractUserController implements ConfigAwareInt
 		}
 		
 		if ($user) {
-			// TODO: implémenter l'activation de l'utilisateur
-			$this->console()->writeLine($translator->translate('User XX enabled'));
+			if ($user->isActive()) {
+				$this->console()->writeLine($translator->translate('User is already enabled!'));
+				return;
+			}
+			
+			$confirmed = false;
+			
+			if ($forceYes) {
+				$confirmed = true;
+			} else {
+				$this->console()->writeLine($user->getDisplayName());
+				$this->console()->writeLine($user->getEmail());
+				
+				if (Confirm::prompt($translator->translate('Do you want to enable this user? [y/n] '), $translator->translate('y'), 
+						$translator->translate('n'))) {
+					$confirmed = true;
+				}
+			}
+			
+			if ($confirmed) {
+				if ($this->getUserTable()->enableUser($user)) {
+					$this->console()->writeLine($translator->translate('User enabled.'));
+					return;
+				} else {
+					$this->console()->writeLine($translator->translate('Operation failed.'), ColorInterface::RED);
+				}
+			}
 		} else {
 			$this->console()->writeLine($translator->translate('User not found.'));
 		}
 	}
-	
+
 	public function disableAction()
 	{
 		$translator = $this->getServiceLocator()->get('translator');
 		
 		$id = $this->getRequest()->getParam('id', 0);
+		$forceYes = $this->getRequest()->getParam('yes', false);
 		
 		$user = null;
 		try {
@@ -151,8 +179,33 @@ class ConsoleController extends AbstractUserController implements ConfigAwareInt
 		}
 		
 		if ($user) {
-			// TODO: implémenter la desactivation de l'utilisateur
-			$this->console()->writeLine($translator->translate('User XX disabled'));
+			if (!$user->isActive()) {
+				$this->console()->writeLine($translator->translate('User is already disabled!'));
+				return;
+			}
+			
+			$confirmed = false;
+			
+			if ($forceYes) {
+				$confirmed = true;
+			} else {
+				$this->console()->writeLine($user->getDisplayName());
+				$this->console()->writeLine($user->getEmail());
+				
+				if (Confirm::prompt($translator->translate('Do you want to disable this user? [y/n] '), $translator->translate('y'), 
+						$translator->translate('n'))) {
+					$confirmed = true;
+				}
+			}
+			
+			if ($confirmed) {
+				if ($this->getUserTable()->disableUser($user)) {
+					$this->console()->writeLine($translator->translate('User disabled.'));
+					return;
+				} else {
+					$this->console()->writeLine($translator->translate('Operation failed.'), ColorInterface::RED);
+				}
+			}
 		} else {
 			$this->console()->writeLine($translator->translate('User not found.'));
 		}

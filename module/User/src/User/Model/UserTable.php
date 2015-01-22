@@ -2,7 +2,6 @@
 namespace User\Model;
 
 use Zend\Db\TableGateway\TableGateway;
-use Zend\Db\Sql\Predicate\Expression;
 
 class UserTable extends User
 {
@@ -43,10 +42,11 @@ class UserTable extends User
 	}
 
 	/**
-	 * Retourn tous les utilisateurs appartenant possedant un ID role donné
+	 * Retourne tous les utilisateurs appartenant possedant un ID role donné
 	 *
 	 * @param integer $roleId ID du rôle
-	 * @return User[] Liste des utilisateurs (sous forme d'un iterable)
+	 *       
+	 * @return \User\Model\User[] Liste des utilisateurs (sous forme d'un iterable)
 	 */
 	public function fetchByRole($roleId)
 	{
@@ -60,6 +60,20 @@ class UserTable extends User
 		return $users;
 	}
 
+	/**
+	 * Cherche parmi les utilisateurs
+	 *
+	 * Retourne tous les utilisateurs dont $q est trouvé au moins un des éléments suivants :
+	 * - email
+	 * - nom
+	 * - prenom
+	 * - prenom nom
+	 * - nom prenom
+	 *
+	 * @param string $q
+	 *
+	 * @return \User\Model\User[] Liste des utilisateurs (sous forme d'un iterable)
+	 */
 	public function searchUsers($q)
 	{
 		$q = '%' . preg_replace('/[\s]+/', ' ', $q) . '%';
@@ -71,7 +85,15 @@ class UserTable extends User
 				});
 	}
 
-	public function getUser($id)
+	/**
+	 *
+	 * @param integer $id
+	 *
+	 * @throws \Exception
+	 *
+	 * @return \User\Model\User
+	 */
+	public function getUser($id, $exceptionIfNotFound = true)
 	{
 		$id = (int)$id;
 		$rowset = $this->tableGateway->select(array(
@@ -79,7 +101,11 @@ class UserTable extends User
 		));
 		$row = $rowset->current();
 		if (!$row) {
-			throw new \Exception("Could not find user $id");
+			if ($exceptionIfNotFound) {
+				throw new \Exception("Could not find user $id");
+			} else {
+				return false;
+			}
 		}
 		
 		$roles = array();
@@ -96,14 +122,26 @@ class UserTable extends User
 		return $row;
 	}
 
-	public function getUserByEmail($email)
+	/**
+	 *
+	 * @param string $email
+	 *
+	 * @throws \Exception
+	 *
+	 * @return \User\Model\User
+	 */
+	public function getUserByEmail($email, $exceptionIfNotFound = true)
 	{
 		$rowset = $this->tableGateway->select(array(
 			'email' => $email
 		));
 		$row = $rowset->current();
 		if (!$row) {
-			throw new \Exception("Could not find user with email '$email'");
+			if ($exceptionIfNotFound) {
+				throw new \Exception("Could not find user with email '$email'");
+			} else {
+				return false;
+			}
 		}
 		
 		$roles = array();
@@ -120,6 +158,40 @@ class UserTable extends User
 		return $row;
 	}
 
+	/**
+	 *
+	 * @param \User\Model\User|integer $user
+	 */
+	public function enableUser($user)
+	{
+		if ($user instanceof User) {
+			$user = (int) $user->getId();
+		}
+
+		if (!is_integer($user) || ((int)$user <= 0)) {
+			throw new \Exception("Invalid user id");
+		}
+		
+		return (boolean) $this->tableGateway->update(['active' => 1], ['id' => $user]);
+	}
+
+	/**
+	 *
+	 * @param \User\Model\User|integer $user
+	 */
+	public function disableUser($user)
+	{
+		if ($user instanceof User) {
+			$user = (int) $user->getId();
+		}
+
+		if (!is_integer($user) || ((int)$user <= 0)) {
+			throw new \Exception("Invalid user id");
+		}
+		
+		return (boolean) $this->tableGateway->update(['active' => 0], ['id' => $user]);
+	}
+	
 	public function saveUser(User $user, $savePassword = false)
 	{
 		$data = array(

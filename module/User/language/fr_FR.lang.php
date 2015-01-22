@@ -64,6 +64,12 @@ return array(
 	"User '%name%' edited." => "Utilisateur '%name%' modifié.",
 	
 	'Users list:' => 'Liste des utilisateurs :',
+	'User is already enabled!' => "L'utilisateur est déjà activé !",
+	'User is already disabled!' => "L'utilisateur est déjà désactivé !",
+	'Do you want to enable this user? [y/n] ' => "Voulez-vous activer cet utilisateur ? [o/n] ",
+	'Do you want to disable this user? [y/n] ' => "Voulez-vous désactiver cet utilisateur ? [o/n] ",
+	'User enabled.' => 'Utilisateur activé.',
+	'User disabled.' => 'Utilisateur désactivé.',
 	
 	'Profile edited.' => 'Profil modifié.',
 	'New password defined.' => 'Nouveau mot de passe défini.',

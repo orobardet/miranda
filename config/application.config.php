@@ -82,7 +82,7 @@ $config = array(
 if ($env == 'dev') {
 	$config['modules'][] = 'ZendDeveloperTools';
 	$config['modules'][] = 'BjyProfiler';
-	$config['modules'][] = 'ZFTool';
+//	$config['modules'][] = 'ZFTool';
 	$config['module_listener_options']['config_glob_paths'][] = 'config/autoload/{,*.}debug.php';
 	unset($config['service_manager']['factories']['Zend\Db\Adapter\Adapter']);
 	
