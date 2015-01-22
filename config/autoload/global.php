@@ -76,7 +76,7 @@ $config = [
 			'pictures' => [
 				'max_width' => 1000,
 				'max_height' => 1000,
-				'store_path' => 'pictures/costumes',
+				'store_path' => 'pictures/costumes', // relative to data_storage->root_path
 				'url_path' => '/pictures/costumes'
 			]
 		]
@@ -88,9 +88,10 @@ $config = [
 		'database' => 'miranda',
 		'charset' => 'UTF8',
 		'options' => [
-			'buffer_results' => true
+			'buffer_results' => true // need for executing query while using results of an other query (else there'll be "commands out of sync" Mysql error
 		]
 	],
+	
 	'navigation' => [
 		'default' => [
 			[
