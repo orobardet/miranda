@@ -70,6 +70,10 @@ return array(
 	'Do you want to disable this user? [y/n] ' => "Voulez-vous désactiver cet utilisateur ? [o/n] ",
 	'User enabled.' => 'Utilisateur activé.',
 	'User disabled.' => 'Utilisateur désactivé.',
+	'Input new password (or empty to abort): ' => "Saisissez le nouveau mot de passe (ou rien pour annuler) : ",
+	'Confirm new password:' => "Confirmez le nouveau mot de passe : ",
+	'Passwords does not match.' => "Les mots de passe ne correspondent pas.",
+	'Password changed.' => "Mot de passe modifié",
 	
 	'Profile edited.' => 'Profil modifié.',
 	'New password defined.' => 'Nouveau mot de passe défini.',

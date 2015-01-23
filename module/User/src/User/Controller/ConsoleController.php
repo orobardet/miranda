@@ -7,6 +7,7 @@ use Acl\Controller\AclConsoleControllerInterface;
 use Application\Toolbox\String as StringTools;
 use Zend\Console\ColorInterface;
 use Zend\Console\Prompt\Confirm;
+use Application\Console\Prompt\Password as PromptPassword;
 
 class ConsoleController extends AbstractUserController implements ConfigAwareInterface, AclConsoleControllerInterface
 {
@@ -210,4 +211,44 @@ class ConsoleController extends AbstractUserController implements ConfigAwareInt
 			$this->console()->writeLine($translator->translate('User not found.'));
 		}
 	}
-}
+	
+	public function changepasswordAction()
+	{
+		$translator = $this->getServiceLocator()->get('translator');
+		
+		$id = $this->getRequest()->getParam('id', 0);
+		$forceYes = $this->getRequest()->getParam('yes', false);
+		
+		$user = null;
+		try {
+			if (filter_var($id, FILTER_VALIDATE_INT)) {
+				$user = $this->getUserTable()->getUser($id);
+			} else {
+				$user = $this->getUserTable()->getUserByEmail($id);
+			}
+		} catch (\Exception $e) {
+		}
+		
+		if ($user) {
+			$this->console()->writeLine($user->getDisplayName());
+			$this->console()->writeLine($user->getEmail());
+			
+			$password = PromptPassword::prompt($translator->translate('Input new password (or empty to abort): '), true);
+			if (trim($password) == '') {
+				return;
+			}
+			$passwordConfirm = PromptPassword::prompt($translator->translate('Confirm new password: '), true);
+			
+			if ($password != $passwordConfirm) {
+				$this->console()->writeLine($translator->translate('Passwords does not match.'));
+				return;
+			}
+			
+			$user->setPassword($password, $this->getServiceLocator()->get('Miranda\Service\AuthBCrypt'));
+			$this->getUserTable()->saveUser($user, true);
+			
+			$this->console()->writeLine($translator->translate('Password changed.'));			
+		} else {
+			$this->console()->writeLine($translator->translate('User not found.'));
+		}
+	}}

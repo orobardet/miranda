@@ -278,6 +278,17 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'no confirmation',
 				"You won't be asked for confirmation"
 			),
+			'user password <id>|<email>"' => 'Change the password of a given user',
+			array(
+				'<id>',
+				'user ID',
+				'ID of the user'
+			),
+			array(
+				'<email>',
+				'user email',
+				'Full email address of the user'
+			)
 		);
 	}
 }

@@ -117,6 +117,24 @@ return array(
 							'action' => 'enable'
 						)
 					)
+				),
+				'user-change-password' => array(
+					'options' => array(
+						'route' => '[change] user password <id>',
+						'defaults' => array(
+							'controller' => 'User\Controller\Console',
+							'action' => 'changepassword'
+						)
+					)
+				),
+				'user-password' => array(
+					'options' => array(
+						'route' => 'user password <id>',
+						'defaults' => array(
+							'controller' => 'User\Controller\Console',
+							'action' => 'changepassword'
+						)
+					)
 				)
 			)
 		)
