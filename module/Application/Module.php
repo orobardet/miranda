@@ -18,18 +18,20 @@ use Application\Model\Picture;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Cache\StorageFactory;
+use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 
-class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ConsoleBannerProviderInterface
+class Module implements AutoloaderProviderInterface, ConfigProviderInterface, ServiceProviderInterface, ConsoleBannerProviderInterface, 
+		ConsoleUsageProviderInterface
 {
 
 	public function init(\Zend\ModuleManager\ModuleManager $mm)
 	{
 		$sem = $mm->getEventManager()->getSharedManager();
 		
-		$sem->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', array(
+		$sem->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', [
 			$this,
 			'addLayoutViewVariables'
-		), 200);
+		], 200);
 	}
 
 	/**
@@ -75,19 +77,19 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		
 		$viewModel = $e->getViewModel();
 		if ($config->get('layout->compile_less', false)) {
-			$css = array();
-			$less = $config->get('layout->less', array());
+			$css = [];
+			$less = $config->get('layout->less', []);
 			if (count($less)) {
-				$css = array(
+				$css = [
 					$config->get('layout->less_wrapper', 'less_wrapper.php') . '?f=' . join(',', $less->toArray()) . '&c=' .
 							 $config->get('layout->less_compiler', 'lessphp')
-				);
+				];
 			}
 			$viewModel->setVariable('css', $css);
 		} else {
-			$viewModel->setVariable('css', $config->get('layout->css', array())->toArray());
+			$viewModel->setVariable('css', $config->get('layout->css', [])->toArray());
 		}
-		$viewModel->setVariable('js', $config->get('layout->js', array())->toArray());
+		$viewModel->setVariable('js', $config->get('layout->js', [])->toArray());
 		
 		$viewModel->setVariable('config', $config);
 	}
@@ -111,22 +113,22 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 
 	public function getAutoloaderConfig()
 	{
-		return array(
-			'Zend\Loader\ClassMapAutoloader' => array(
+		return [
+			'Zend\Loader\ClassMapAutoloader' => [
 				__DIR__ . '/autoload_classmap.php'
-			),
-			'Zend\Loader\StandardAutoloader' => array(
-				'namespaces' => array(
+			],
+			'Zend\Loader\StandardAutoloader' => [
+				'namespaces' => [
 					__NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__
-				)
-			)
-		);
+				]
+			]
+		];
 	}
 
 	public function getServiceConfig()
 	{
-		return array(
-			'factories' => array(
+		return [
+			'factories' => [
 				'Miranda\Service\Config' => function ($sm)
 				{
 					$config = new TraversableConfig($sm->get('config'));
@@ -145,6 +147,11 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 								]
 							]);
 				},
+				'Miranda\Service\Mailer' => function ($sm)
+				{
+					return new Mail\Mailer(new \Zend\Mail\Transport\Sendmail(), $sm->get('Miranda\Service\Config'), 
+							$sm->get('Zend\View\Renderer\RendererInterface'));
+				},
 				'Zend\Session\SessionManager' => function ($sm)
 				{
 					$config = $sm->get('config');
@@ -154,7 +161,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 						$sessionConfig = null;
 						if (isset($session['config'])) {
 							$class = isset($session['config']['class']) ? $session['config']['class'] : 'Zend\Session\Config\SessionConfig';
-							$options = isset($session['config']['options']) ? $session['config']['options'] : array();
+							$options = isset($session['config']['options']) ? $session['config']['options'] : [];
 							$sessionConfig = new $class();
 							$sessionConfig->setOptions($options);
 						}
@@ -176,10 +183,10 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 							$chain = $sessionManager->getValidatorChain();
 							foreach ($session['validators'] as $validator) {
 								$validator = new $validator();
-								$chain->attach('session.validate', array(
+								$chain->attach('session.validate', [
 									$validator,
 									'isValid'
-								));
+								]);
 							}
 						}
 					} else {
@@ -204,31 +211,34 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 					return new TableGateway($sm->get('Miranda\Service\Config')->get('db->table_prefix', '') . 'pictures', $dbAdapter, null, 
 							$resultSetPrototype);
 				}
-			)
-		);
+			],
+			'shared' => [
+				'Miranda\Service\Mailer' => false
+			]
+		];
 	}
 
 	public function getControllerConfig()
 	{
-		return array(
-			'initializers' => array(
+		return [
+			'initializers' => [
 				function ($instance, $cm)
 				{
 					if ($instance instanceof ConfigAwareInterface) {
 						$instance->setConfig($cm->getServiceLocator()->get('Miranda\Service\Config'));
 					}
 				}
-			)
-		);
+			]
+		];
 	}
 
 	public function getControllerPluginConfig()
 	{
-		return array(
-			'invokables' => array(
+		return [
+			'invokables' => [
 				'requestAcceptJson' => 'Application\Controller\Plugin\RequestAcceptJson'
-			),
-			'factories' => array(
+			],
+			'factories' => [
 				'resultStatus' => function ($sm)
 				{
 					return new \Application\Controller\Plugin\ResultStatus($sm->getServiceLocator()->get('Zend\Session\SessionManager')->getStorage());
@@ -250,19 +260,19 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				{
 					return new \Application\Controller\Plugin\DbTransaction($sm->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
 				}
-			)
-		);
+			]
+		];
 	}
 
 	public function getViewHelperConfig()
 	{
-		return array(
-			'invokables' => array(
+		return [
+			'invokables' => [
 				'text2Html' => 'Application\View\Helper\Text2Html',
 				'translateReplace' => 'Application\View\Helper\TranslateReplace',
 				'formUxSpinner' => 'Application\Form\View\Helper\FormUxSpinner'
-			),
-			'factories' => array(
+			],
+			'factories' => [
 				'resultStatus' => function (HelperPluginManager $pm)
 				{
 					return new \Application\View\Helper\ResultStatus($pm->getServiceLocator()->get('Zend\Session\SessionManager')->getStorage());
@@ -271,12 +281,24 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				{
 					return new \Application\View\Helper\ItemsPerPage($pm->getServiceLocator()->get('Miranda\Service\Paginator\ItemsPerPageManager'));
 				}
-			)
-		);
+			]
+		];
 	}
 
 	public function getConsoleBanner(ConsoleAdapterInterface $console)
 	{
 		return 'Miranda';
+	}
+
+	public function getConsoleUsage(ConsoleAdapterInterface $console)
+	{
+		return [
+			'Tests',
+			'[send] test email [to] <email>' => 'Send a test email',
+			[
+				'<email>',
+				'Valid email address'
+			]
+		];
 	}
 }

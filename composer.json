@@ -6,7 +6,8 @@
         "bjyoungblood/bjy-profiler": "dev-master",
         "zendframework/zftool": "dev-master",
         "zendframework/zend-developer-tools": "dev-master",
-        "zendframework/zendframework": "~2"
+        "zendframework/zendframework": "~2",
+        "tijsverkoyen/css-to-inline-styles": "~1.5"
     },
     "authors": [
         {

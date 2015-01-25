@@ -1,0 +1,18 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+</head>
+<body>
+<table style="width:100%;">
+    <tr><td id="header">
+    	<img src="cid:header.png@miranda" />
+    </td></tr>
+    <tr><td id="content">
+    	<?= $this->content; ?>
+    </td></tr>
+    <tr><td id="footer">
+    	<p>v<?php echo $this->escapehtml($this->config->get('app->version', 'Dev')); ?> - &copy; 2013 - <?php echo date('Y') ?> <a href="<?php echo $this->escapehtml($this->config->get('layout->footer->url_link', '#')); ?>" target="_blank"><?php echo $this->translate($this->config->get('layout->footer->url_label', 'blu')); ?></a>. <?php echo $this->translate('All rights reserved.') ?></p>
+    </td></tr>
+</table>
+</body>
+</html>

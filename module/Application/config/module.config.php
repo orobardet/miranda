@@ -1,109 +1,131 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
+ * Zend Framework (http://framework.zend.com/]
  *
  * @link http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c] 2005-2013 Zend Technologies USA Inc. (http://www.zend.com]
  * @license http://framework.zend.com/license/new-bsd New BSD License
  */
-return array(
-	'router' => array(
-		'routes' => array(
-			'home' => array(
+return [
+	'router' => [
+		'routes' => [
+			'home' => [
 				'type' => 'Zend\Mvc\Router\Http\Literal',
-				'options' => array(
+				'options' => [
 					'route' => '/',
-					'defaults' => array(
+					'defaults' => [
 						'controller' => 'Application\Controller\Index',
 						'action' => 'index'
-					)
-				)
-			),
-			'application' => array(
+					]
+				]
+			],
+			'application' => [
 				'type' => 'Literal',
-				'options' => array(
+				'options' => [
 					'route' => '/application',
-					'defaults' => array(
+					'defaults' => [
 						'__NAMESPACE__' => 'Application\Controller',
 						'controller' => 'Index',
 						'action' => 'index'
-					)
-				),
+					]
+				],
 				'may_terminate' => true,
-				'child_routes' => array(
-					'set-items-per-page' => array(
+				'child_routes' => [
+					'set-items-per-page' => [
 						'type' => 'segment',
-						'options' => array(
+						'options' => [
 							'route' => '/setitemsperpage/:context/:items/:redirect',
-							'constraints' => array(
+							'constraints' => [
 								'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
 								'id' => '[0-9]+'
-							),
-							'defaults' => array(
+							],
+							'defaults' => [
 								'__NAMESPACE__' => 'Application\Controller',
 								'controller' => 'Application',
 								'action' => 'setitemsperpage'
-							)
-						)
-					),
-					'default' => array(
+							]
+						]
+					],
+					'default' => [
 						'type' => 'Segment',
-						'options' => array(
+						'options' => [
 							'route' => '/[:controller[/:action]]',
-							'constraints' => array(
+							'constraints' => [
 								'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
 								'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
-							),
-							'defaults' => array()
-						)
-					)
-				)
-			)
-		)
-	),
-	'service_manager' => array(
-		'abstract_factories' => array(
+							],
+							'defaults' => []
+						]
+					]
+				]
+			]
+		]
+	],
+	
+	'console' => [
+		'router' => [
+			'routes' => [
+				'send-test-email' => [
+					'options' => [
+						'route' => 'send test email to <email>',
+						'defaults' => [
+							'controller' => 'Application\Controller\Console',
+							'action' => 'testemail',
+							'to' => 'a',
+						]
+					]
+				]
+			]
+		]
+	],
+	
+	'service_manager' => [
+		'abstract_factories' => [
 			'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
 			'Zend\Log\LoggerAbstractServiceFactory'
-		),
-		'aliases' => array(
+		],
+		'aliases' => [
 			'app_zend_db_adapter' => 'Zend\Db\Adapter\Adapter'
-		)
-	),
-	'translator' => array(
+		]
+	],
+	
+	'translator' => [
 		'locale' => 'fr_FR',
-		'translation_file_patterns' => array(
-			array(
+		'translation_file_patterns' => [
+			[
 				'type' => 'phparray',
 				'base_dir' => __DIR__ . '/../../../language',
 				'pattern' => '%s/Zend_Validate.php'
-			),
-			array(
+			],
+			[
 				'type' => 'phparray',
 				'base_dir' => __DIR__ . '/../../../language',
 				'pattern' => '%s/Zend_Captcha.php'
-			),
-			array(
+			],
+			[
 				'type' => 'phparray',
 				'base_dir' => __DIR__ . '/../language',
 				'pattern' => '%s.lang.php'
-			)
-		)
-	),
-	'controllers' => array(
-		'invokables' => array(
+			]
+		]
+	],
+	
+	'controllers' => [
+		'invokables' => [
 			'Application\Controller\Index' => 'Application\Controller\IndexController',
-			'Application\Controller\Application' => 'Application\Controller\ApplicationController'
-		)
-	),
-	'view_manager' => array(
+			'Application\Controller\Application' => 'Application\Controller\ApplicationController',
+			'Application\Controller\Console' => 'Application\Controller\ConsoleController'
+		]
+	],
+	
+	'view_manager' => [
 		'display_not_found_reason' => true,
 		'display_exceptions' => true,
 		'doctype' => 'HTML5',
 		'not_found_template' => 'error/404',
 		'exception_template' => 'error/index',
 		'template_map' => array_merge(include __DIR__ . '/../template_map.php', 
-				array(
+				[
 					'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
 					'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
 					'error/404' => __DIR__ . '/../view/error/404.phtml',
@@ -113,19 +135,14 @@ return array(
 					'paginator/sliding' => __DIR__ . '/../view/partial/paginator-sliding.phtml',
 					'table-sorter' => __DIR__ . '/../view/partial/table-sorter.phtml',
 					'results-status' => __DIR__ . '/../view/partial/results-status.phtml',
-					'result-status' => __DIR__ . '/../view/partial/result-status.phtml'
-				)),
-		'template_path_stack' => array(
+					'result-status' => __DIR__ . '/../view/partial/result-status.phtml',
+					'email/layout' => __DIR__ . '/../view/email/layout.phtml'
+				]),
+		'template_path_stack' => [
 			__DIR__ . '/../view'
-		),
-		'strategies' => array(
-			'ViewJsonStrategy',
-		),
-	),
-	// Placeholder for console routes
-	'console' => array(
-		'router' => array(
-			'routes' => array()
-		)
-	)
-);
+		],
+		'strategies' => [
+			'ViewJsonStrategy'
+		]
+	]
+];

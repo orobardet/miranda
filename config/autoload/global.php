@@ -16,7 +16,24 @@ $app_key = 'application';
 $config = [
 	$app_key => [
 		'env' => $env,
-		'version' => '0.1',
+		'app' => [
+			'version' => '0.1',
+			'base_url' => 'http://manager.compagniemiranda.com'
+		],
+		'mailer' => [
+			'default_from_address' => 'info@compagniemiranda.com',
+			'default_from_name' => 'La Compagnie Miranda',
+			'noreply_from_address' => 'noreply@compagniemiranda.com',
+			'noreply_from_name' => 'La Compagnie Miranda',
+			'css' => 'public/css/email.css',
+			'embbeded_host' => 'miranda',
+			'embbeded_content' => [
+				'header.png' => [
+					'path' => 'public/img/email/miranda-logo.png',
+					'content_type' => 'text/png'
+				]
+			]
+		],
 		'layout' => [
 			'footer' => [
 				'url_label' => 'Compagnie Miranda',
@@ -88,8 +105,9 @@ $config = [
 		'database' => 'miranda',
 		'charset' => 'UTF8',
 		'options' => [
-			'buffer_results' => true // need for executing query while using results of an other query (else there'll be "commands out of sync" Mysql error
-		]
+			'buffer_results' => true
+		] // need for executing query while using results of an other query (else there'll be "commands out of sync" Mysql error
+
 	],
 	
 	'navigation' => [

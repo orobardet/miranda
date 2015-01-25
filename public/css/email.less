@@ -1,0 +1,45 @@
+@import "variables.less";
+@import "mixins.less";
+
+h1 {
+	margin: 0;
+}
+
+a {
+	text-decoration:none;
+	color: @mirandaBase;
+}
+
+#header {
+	padding-bottom:10px;
+	border-bottom: 1px solid @footerBackground;
+	color: @mirandaBase;
+}
+
+#content {
+	padding-top:10px;
+}
+
+#footer {
+	color: purple;
+	font-size:smaller;
+	padding-top:10px;
+	
+	p {
+		color: purple;
+		border-top: 1px solid @footerBackground;
+		padding-top:5px;
+		margin: 0;
+	}
+
+	a {
+		text-decoration:none;
+		color:purple;
+		border-bottom:dotted 1px purple;
+	}
+
+	a:hover, a:active {
+		text-decoration:none;
+		border-bottom-style:solid;
+	}
+}

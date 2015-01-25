@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-LESS_FILES="bootstrap.less style.less"
+LESS_FILES="bootstrap.less style.less email.less"
 LESS_DIR=$(dirname $0)/public/css
 CSS_DIR=$LESS_DIR
 

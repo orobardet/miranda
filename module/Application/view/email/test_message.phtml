@@ -1,0 +1,8 @@
+<?php $baseUrl = $this->config->get('app->base_url', 'http://localhost/'); ?>
+<h1><?php echo $this->translate('This is a test email.'); ?></h1>
+<p>
+<?php echo date($this->translate('full_text_date_time'), $this->sent_timestamp); ?>
+</p>
+<p>
+<a href="<?php echo $this->escapehtmlattr($baseUrl); ?>" target="_blank"><?php echo $this->escapehtml($baseUrl); ?></a>
+</p>

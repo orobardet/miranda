@@ -42,5 +42,11 @@ return array(
 	'No picture' => "Pas d'image",
 	
 	'Saving...' => 'Enregistrement...',
-	'Search' => 'Rechercher' 
+	'Search' => 'Rechercher' ,
+	
+	'No email address given.' => "Pas d'adresse email fournie.",
+	'Email address is invalid.' => "L'adresse email est invalide.",
+	'Test email' => "Email de test",
+	'This is a test email.' => 'Ceci est un email de test.',
+	'Test email sent to %email%.' => 'Email de test envoyé à %email%.'
 );
