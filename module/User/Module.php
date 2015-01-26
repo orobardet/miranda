@@ -138,6 +138,12 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 					$form->setInputFilter(new Form\LoginFilter());
 					return $form;
 				},
+				'User\Form\ForgotPassword' => function ($sm)
+				{
+					$form = new Form\ForgotPassword(null, $sm->get('translator'));
+					$form->setInputFilter(new Form\ForgotPasswordFilter());
+					return $form;
+				},
 				'User\Form\User' => function ($sm)
 				{
 					$roles = array();

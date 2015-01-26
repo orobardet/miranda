@@ -199,7 +199,9 @@ class UserTable extends User
 			'firstname' => $user->getFirstname(),
 			'lastname' => $user->getLastname(),
 			'active' => $user->isActive() ? 1 : 0,
-			'modification_ts' => time()
+			'modification_ts' => time(),
+			'password_token' => $user->getPasswordToken(),
+			'password_token_ts' => $user->getPasswordTokenDate()
 		);
 		
 		// Pas de date de création, on la défini à la date courane

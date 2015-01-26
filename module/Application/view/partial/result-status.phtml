@@ -1,15 +1,34 @@
 <?php if (count($this->results)):?>
 <div class="main-messages alert alert-<?php echo $this->type; ?>" id="main-<?php echo $this->type; ?>-messages">
 	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	<?php $autoHide = true; ?>
 	<?php if (count($this->results) > 1): ?>
 	<ul>
-	<?php foreach($this->results as $message): ?>
+	<?php foreach($this->results as $messageData): ?>
+		<?php if (is_array($messageData) && array_key_exists('message', $messageData)): ?>
+		<?php 
+			$message = $messageData['message'];
+			if (array_key_exists('auto_hide', $messageData) && !$messageData['auto_hide']) {
+				$autoHide = false;
+			}
+		?>
 		<li><?php echo $message; ?></li>
+		<?php endif; ?>
 	<?php endforeach;?>
 	</ul>
  	<?php else: ?>
-	<?php echo $this->results[0]; ?>
- 	<?php endif; ?>
+		<?php $messageData = $this->results[0]; ?>
+		<?php if (is_array($messageData) && array_key_exists('message', $messageData)): ?>
+		<?php 
+			$message = $messageData['message'];
+			if (array_key_exists('auto_hide', $messageData) && !$messageData['auto_hide']) {
+				$autoHide = false;
+			}
+		?>
+		<?php echo $message; ?>
+		<?php endif; ?>
+	<?php endif; ?>
+ 	<?php if ($autoHide): ?>
 	<script type="text/javascript">
 	$(document).ready(function() {
 		setTimeout(function() {
@@ -20,5 +39,6 @@
 	
 	});
 	</script>
+	<?php endif; ?>
 </div>
 <?php endif; ?>

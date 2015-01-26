@@ -1,166 +1,192 @@
 <?php
-return array(
-	'controllers' => array(
-		'invokables' => array(
+return [
+	'controllers' => [
+		'invokables' => [
 			'User\Controller\Auth' => 'User\Controller\AuthController',
 			'User\Controller\Admin' => 'User\Controller\AdminController',
 			'User\Controller\Profile' => 'User\Controller\ProfileController',
 			'User\Controller\Console' => 'User\Controller\ConsoleController'
-		)
-	),
+		]
+	],
 	
-	'router' => array(
-		'routes' => array(
-			'login' => array(
+	'router' => [
+		'routes' => [
+			'login' => [
 				'type' => 'Literal',
-				'options' => array(
+				'options' => [
 					'route' => '/login',
-					'defaults' => array(
+					'defaults' => [
 						'__NAMESPACE__' => 'User\Controller',
 						'controller' => 'Auth',
 						'action' => 'login'
-					)
-				)
-			),
-			'authenticate' => array(
+					]
+				]
+			],
+			'authenticate' => [
 				'type' => 'Literal',
-				'options' => array(
+				'options' => [
 					'route' => '/authenticate',
-					'defaults' => array(
+					'defaults' => [
 						'__NAMESPACE__' => 'User\Controller',
 						'controller' => 'Auth',
 						'action' => 'authenticate'
-					)
-				)
-			),
-			'logout' => array(
+					]
+				]
+			],
+			'logout' => [
 				'type' => 'Literal',
-				'options' => array(
+				'options' => [
 					'route' => '/logout',
-					'defaults' => array(
+					'defaults' => [
 						'__NAMESPACE__' => 'User\Controller',
 						'controller' => 'Auth',
 						'action' => 'logout'
-					)
-				)
-			),
-			'profile' => array(
+					]
+				]
+			],
+			'forgot-password' => [
 				'type' => 'segment',
-				'options' => array(
+				'options' => [
+					'route' => '/forgot-password',
+					'defaults' => [
+						'__NAMESPACE__' => 'User\Controller',
+						'controller' => 'Auth',
+						'action' => 'forgotpassword'
+					]
+				]
+			],
+			'reset-password' => [
+				'type' => 'segment',
+				'options' => [
+					'route' => '/reset-password[/:token]',
+					'constraints' => [
+						'token' => '[a-zA-Z0-9]{40}'
+					],
+					'defaults' => [
+						'__NAMESPACE__' => 'User\Controller',
+						'controller' => 'Auth',
+						'action' => 'resetpassword',
+						'token' => null
+					]
+				]
+			],
+			'profile' => [
+				'type' => 'segment',
+				'options' => [
 					'route' => '/profile[/][:action]',
-					'constraints' => array(
+					'constraints' => [
 						'action' => '[a-zA-Z][a-zA-Z0-9_-]*'
-					),
-					'defaults' => array(
+					],
+					'defaults' => [
 						'__NAMESPACE__' => 'User\Controller',
 						'controller' => 'Profile',
 						'action' => 'show'
-					)
-				)
-			)
-		)
-	),
+					]
+				]
+			]
+		]
+	],
 	
-	'console' => array(
-		'router' => array(
-			'routes' => array(
-				'user-list' => array(
-					'options' => array(
+	'console' => [
+		'router' => [
+			'routes' => [
+				'user-list' => [
+					'options' => [
 						'route' => '(show|list) [all|enabled|disabled]:type users',
-						'defaults' => array(
+						'defaults' => [
 							'controller' => 'User\Controller\Console',
 							'action' => 'list'
-						)
-					)
-				),
-				'user-simple-list' => array(
-					'options' => array(
+						]
+					]
+				],
+				'user-simple-list' => [
+					'options' => [
 						'route' => '(show|list) users',
-						'defaults' => array(
+						'defaults' => [
 							'controller' => 'User\Controller\Console',
 							'action' => 'list'
-						)
-					)
-				),
-				'user-search' => array(
-					'options' => array(
+						]
+					]
+				],
+				'user-search' => [
+					'options' => [
 						'route' => 'search user <search>',
-						'defaults' => array(
+						'defaults' => [
 							'controller' => 'User\Controller\Console',
 							'action' => 'search'
-						)
-					)
-				),
-				'user-show' => array(
-					'options' => array(
+						]
+					]
+				],
+				'user-show' => [
+					'options' => [
 						'route' => 'show user <id>',
-						'defaults' => array(
+						'defaults' => [
 							'controller' => 'User\Controller\Console',
 							'action' => 'show'
-						)
-					)
-				),
-				'user-disable' => array(
-					'options' => array(
+						]
+					]
+				],
+				'user-disable' => [
+					'options' => [
 						'route' => 'disable user <id>  [-y|--yes]:yes',
-						'defaults' => array(
+						'defaults' => [
 							'controller' => 'User\Controller\Console',
 							'action' => 'disable'
-						)
-					)
-				),
-				'user-enable' => array(
-					'options' => array(
+						]
+					]
+				],
+				'user-enable' => [
+					'options' => [
 						'route' => 'enable user <id> [-y|--yes]:yes',
-						'defaults' => array(
+						'defaults' => [
 							'controller' => 'User\Controller\Console',
 							'action' => 'enable'
-						)
-					)
-				),
-				'user-change-password' => array(
-					'options' => array(
+						]
+					]
+				],
+				'user-change-password' => [
+					'options' => [
 						'route' => 'change user password <id>',
-						'defaults' => array(
+						'defaults' => [
 							'controller' => 'User\Controller\Console',
 							'action' => 'changepassword'
-						)
-					)
-				),
-				'user-password' => array(
-					'options' => array(
+						]
+					]
+				],
+				'user-password' => [
+					'options' => [
 						'route' => 'user password <id>',
-						'defaults' => array(
+						'defaults' => [
 							'controller' => 'User\Controller\Console',
 							'action' => 'changepassword'
-						)
-					)
-				)
-			)
-		)
-	),
+						]
+					]
+				]
+			]
+		]
+	],
 	
-	'service_manager' => array(
-		'aliases' => array(
+	'service_manager' => [
+		'aliases' => [
 			'user_zend_db_adapter' => 'Zend\Db\Adapter\Adapter'
-		)
-	),
+		]
+	],
 	
-	'translator' => array(
+	'translator' => [
 		'locale' => 'fr_FR',
-		'translation_file_patterns' => array(
-			array(
+		'translation_file_patterns' => [
+			[
 				'type' => 'phparray',
 				'base_dir' => __DIR__ . '/../language',
 				'pattern' => '%s.lang.php'
-			)
-		)
-	),
+			]
+		]
+	],
 	
-	'view_manager' => array(
-		'template_path_stack' => array(
+	'view_manager' => [
+		'template_path_stack' => [
 			__DIR__ . '/../view'
-		),
-		'template_map' => include __DIR__  .'/../template_map.php',
-	)
-);
+		],
+		'template_map' => include __DIR__ . '/../template_map.php'
+	]
+];

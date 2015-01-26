@@ -2,7 +2,8 @@
 return array(
 	'Sign In' => 'Connexion',		
 	'Password' => 'Mot de passe',
-	'Login' => 'Connexion',		
+	'Login' => 'Connexion',	
+	'Forgot password?' => 'Mot de passe oublié ?',
     'Email or password are empty, malformed or invalid.' => "L'email ou le mot de passe sont manquants, malformés ou invalides.",
 	'Login failed' => 'Echec de la connexion',
 	'This user account is not activated.' => "Ce compte utilisateur n'est pas activé.",
@@ -38,6 +39,9 @@ return array(
 	'Activated' => 'Activé',
 	'Send an email' => 'Envoyer un email',
 	'User %name%' => 'Utilisateur %name%',
+	
+	"<b>You have forgot your password?</b><br/>Don't worry, we will help you recover your account, provided that you remember the email address, which must be valid." => "<b>Vous avez oublié votre mot de passe ?</b><br/>Pas d'inquiétude, nous allons vous aider à récupérer votre compte, à condition que vous vous souveniez de l'adresse email, et qu'elle soit valide.",
+	"<b>Recover process started!</b><br/>If the email address you gave was reconized, we sent a message with instructions to recover your account.<br/> Please check your mailbox." => "<b>Procédure de récupération lancée !</b><br/>Si l'adresse email que vous avez fournie a été reconnue, nous y avons envoyé un message contenant des instructions pour récupérer votre compte.<br/>Merci de consulter votre boite email.",
 	
 	'No users.' => 'Aucun utilisateurs.',
 	
@@ -79,4 +83,8 @@ return array(
 	'New password defined.' => 'Nouveau mot de passe défini.',
 	'No password change.' => 'Pas de changement du mot de passe.',
 	'Invalid password' => 'Mot de passe invalide',
+	
+	'Account recovery' => 'Récupération de compte',
+	"Your forgot your password and asked to recover your account.<br/>Please follow the link below to set a new password for your account: " => "Vous avez oublié votre mot de passe et demandé à récupérer votre compte.<br/>Veuillez suivre le lien ci-dessous pour choisir un nouveau mot de passe pour votre compte : ",
+	"Your forgot your password and asked to recover your account.<br/>Unfortunately, your account is disabled: you can't recover it this way. Please contact and administrator." => "Vous avez oublié votre mot de passe et demandé à récupérer votre compte.<br/>Malheureusement, votre compte est désactivé : vous ne pouvez le récupérer de cette manière. Merci de contacter un administrateur."
 );

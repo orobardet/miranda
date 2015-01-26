@@ -280,6 +280,11 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'itemsPerPage' => function (HelperPluginManager $pm)
 				{
 					return new \Application\View\Helper\ItemsPerPage($pm->getServiceLocator()->get('Miranda\Service\Paginator\ItemsPerPageManager'));
+				},
+				'baseUrl' => function (HelperPluginManager $pm)
+				{
+					return new \Application\View\Helper\BaseUrl(
+							$pm->getServiceLocator()->get('Miranda\Service\Config')->get('app->base_url', 'http://localhost'));
 				}
 			]
 		];

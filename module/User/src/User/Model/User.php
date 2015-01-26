@@ -86,6 +86,20 @@ class User extends ObjectModelBase
 	protected $roles;
 
 	/**
+	 * Token de récupération du mot de passe
+	 * 
+	 * @var string
+	 */
+	protected $password_token;
+	
+	/**
+	 * Timestamp de la date de création du token de récupération du mot de passe
+	 * 
+	 * @var integer
+	 */
+	protected $password_token_ts;
+	
+	/**
 	 *
 	 * @return integer $id
 	 */
@@ -254,7 +268,7 @@ class User extends ObjectModelBase
 	}
 
 	/**
-	 * Retourne une date stockée sous forme de timestampt, en lui appliquant un éventuelle formatage
+	 * Retourne la date de dernière connexion du compte, éventuellement formatée
 	 *
 	 * Si le paramètre $format est null ou faut, renvoi la date sous forme d'un timestamp (integer).
 	 * Sinon, renvoie une chaine représentant la date, formaté en utilisant la fonction PHP date()
@@ -266,28 +280,36 @@ class User extends ObjectModelBase
 	 * __Exemples :__
 	 *
 	 * ~~~~~~~~
-	 * $this->getFormatedDate(); // Retourne le timestamp
-	 * $this->getFormatedDate("d/m/Y H:i:s"); // Retourne une chaine "17/08/2013 10:16:27"
+	 * $this->getPasswordTokenDate(); // Retourne le timestamp
+	 * $this->getPasswordTokenDate("d/m/Y H:i:s"); // Retourne une chaine "17/08/2013 10:16:27"
 	 * ~~~~~~~~
 	 *
-	 * @param int $ts Le timestamp représentant la date.
 	 * @param string $format Une chaine de formatage de date accepté par la fonction PHP date()
 	 *       
 	 * @return string|int
 	 */
-	protected function getFormatedDate($ts, $format = null)
+	public function getPasswordTokenDate($format = null)
 	{
-		if (!$format) {
-			return $ts;
-		} else {
-			if ($ts > 0) {
-				return date($format, $ts);
-			} else {
-				return "N/A";
-			}
-		}
+		return $this->getFormatedDate($this->password_token_ts, $format);
 	}
 
+	public function getPasswordToken()
+	{
+		return $this->password_token;
+	}
+	
+	public function createPasswordToken()
+	{
+		$this->password_token = sha1($this->getEmail().uniqid());
+		$this->password_token_ts = time();
+	}
+	
+	public function resetPasswordToken() 
+	{
+		$this->password_token = null;
+		$this->password_token_ts = null;
+	}
+	
 	/**
 	 *
 	 * @return array $roles
@@ -402,6 +424,8 @@ class User extends ObjectModelBase
 		$this->modification_ts = (array_key_exists('modification_ts', $data)) ? $data['modification_ts'] : $this->modification_ts;
 		$this->last_activity_ts = (array_key_exists('last_activity_ts', $data)) ? $data['last_activity_ts'] : $this->last_activity_ts;
 		$this->last_login_ts = (array_key_exists('last_login_ts', $data)) ? $data['last_login_ts'] : $this->last_login_ts;
+		$this->password_token = (array_key_exists('password_token', $data)) ? $data['password_token'] : $this->password_token;
+		$this->password_token_ts = (array_key_exists('password_token_ts', $data)) ? $data['password_token_ts'] : $this->password_token_ts;
 	}
 
 	public function getArrayCopy()
@@ -412,7 +436,9 @@ class User extends ObjectModelBase
 			'firstname' => $this->firstname,
 			'lastname' => $this->lastname,
 			'active' => $this->isActive(),
-			'roles' => $this->roles
+			'roles' => $this->roles,
+			'password_token' => $this->password_token,
+			'password_token_ts' => $this->password_token_ts
 		);
 	}
 }

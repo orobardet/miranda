@@ -34,12 +34,12 @@ class AuthController extends AbstractUserController implements ConfigAwareInterf
 		unset($session->auth_error_message);
 		
 		return new ViewModel(
-				array(
+				[
 					'loginForm' => $form,
 					'redirect' => $redirect,
 					'error' => $request->getQuery()->get('e', 0),
 					'error_message' => $error_message
-				));
+				]);
 	}
 
 	public function authenticateAction()
@@ -56,7 +56,7 @@ class AuthController extends AbstractUserController implements ConfigAwareInterf
 		$request = $this->getRequest();
 		if ($request->isPost()) {
 			// Est-ce qu'on a reçu un paramètre de redirection après connexion dans le POST ?
-			$loginPageParameters = array();
+			$loginPageParameters = [];
 			$redirectUrl = $request->getPost('redirect', null);
 			if (!empty($redirectUrl)) {
 				$loginPageParameters['redirect'] = $redirectUrl;
@@ -104,16 +104,16 @@ class AuthController extends AbstractUserController implements ConfigAwareInterf
 					} else {
 						$session->auth_error_message = 'Email or password are empty, malformed or invalid.';
 					}
-					return $this->redirect()->toRoute('login', array(), array(
+					return $this->redirect()->toRoute('login', [], [
 						'query' => $loginPageParameters
-					));
+					]);
 				}
 			} else {
 				$session->auth_error_message = 'Email or password are empty, malformed or invalid.';
 				// Echec de validation du formulaire, on redirige vers la page de login avec une erreur
-				return $this->redirect()->toRoute('login', array(), array(
+				return $this->redirect()->toRoute('login', [], [
 					'query' => $loginPageParameters
-				));
+				]);
 			}
 		}
 		
@@ -127,17 +127,65 @@ class AuthController extends AbstractUserController implements ConfigAwareInterf
 		return $this->redirect()->toRoute('home');
 	}
 
-	public function getLoginForm()
+	public function forgotpasswordAction()
 	{
-		if (!$this->loginForm) {
-			$this->setLoginForm($this->getServiceLocator()->get('User\Form\Login'));
+		$request = $this->getRequest();
+		
+		$form = $this->getServiceLocator()->get('User\Form\ForgotPassword');
+		$form->prepare();
+		$form->setAttribute('method', 'post');
+		
+		if ($request->isPost()) {
+			$form->setData($request->getPost());
+			
+			if ($form->isValid()) {
+				$user = $this->getUserTable()->getUserByEmail($form->getInputFilter()->getValue('email'), false);
+				if ($user) {
+					/* @var $mailer \Application\Mail\Mailer  */
+					$mailer = $this->getServiceLocator()->get('Miranda\Service\Mailer');
+					$mailer->setFromNoReply();
+					$mailer->addTo($user->getEmail(), $user->getDisplayName());
+					$mailer->setSubject($this->getServiceLocator()->get('translator')->translate('Account recovery'));
+					
+					if ($user->isActive()) {
+						$user->createPasswordToken();
+						$this->getUserTable()->saveUser($user);
+						
+						$mailer->token = $user->getPasswordToken();
+						$mailer->setTemplate('password_recovery');
+					} else {
+						$mailer->setTemplate('password_recovery_disabled');
+					}
+					
+					$mailer->send();
+				}
+				
+				$this->resultStatus()->addResultStatus(
+						$this->getServiceLocator()->get('translator')->translate(
+								"<b>Recover process started!</b><br/>If the email address you gave was reconized, we sent a message with instructions to recover your account.<br/> Please check your mailbox."), 
+						'success', false);
+				return $this->redirect()->toRoute('login');
+			}
 		}
-		return $this->loginForm;
+		
+		return new ViewModel([
+			'forgotPasswordForm' => $form
+		]);
 	}
 
-	public function setLoginForm(Form $loginForm)
+	public function resetpasswordAction()
 	{
-		$this->loginForm = $loginForm;
-		return $this;
+		$request = $this->getRequest();
+		
+		return new ViewModel([]);		
+	}
+
+	protected function getLoginForm()
+	{
+		if (!$this->loginForm) {
+			$this->loginForm = $this->getServiceLocator()->get('User\Form\Login');
+		}
+		
+		return $this->loginForm;
 	}
 }

@@ -31,5 +31,10 @@ $form = $this->loginForm;
             <?php echo $this->formButton($form->get('submit')->setAttributes(array('class' => 'btn btn-primary btn-block'))); ?>
         </div>
         
+		<div class="forgot-password">
+			<a href="<?php echo $this->url('forgot-password'); ?>"><?php echo $this->translate('Forgot password?'); ?></a>
+		</div>
+
 <?php echo $this->form()->closeTag() ?>
+
 </div>

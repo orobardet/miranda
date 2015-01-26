@@ -25,28 +25,33 @@ class ResultStatus extends AbstractPlugin
 	 * @param string $message
 	 * @param string $type "success" ou "error" ou "warning"
 	 */
-	public function addResultStatus($message, $type = "success")
+	public function addResultStatus($message, $type = "success", $autoHide = true)
 	{
+		$messageData = [
+			'message' => $message,
+			'auto_hide' => $autoHide
+		];
+		
 		switch ($type) {
 			case "error":
 				if (!isset($this->session->errorResults)) {
 					$this->session->errorResults = array();
 				}
-				$this->session->errorResults[] = $message;
+				$this->session->errorResults[] = $messageData;
 				break;
 			
 			case "warning":
 				if (!isset($this->session->warningResults)) {
 					$this->session->warningResults = array();
 				}
-				$this->session->warningResults[] = $message;
+				$this->session->warningResults[] = $messageData;
 				break;
 			
 			case "info":
 				if (!isset($this->session->infoResults)) {
 					$this->session->infoResults = array();
 				}
-				$this->session->infoResults[] = $message;
+				$this->session->infoResults[] = $messageData;
 				break;
 			
 			case "success":
@@ -54,7 +59,7 @@ class ResultStatus extends AbstractPlugin
 				if (!isset($this->session->successResults)) {
 					$this->session->successResults = array();
 				}
-				$this->session->successResults[] = $message;
+				$this->session->successResults[] = $messageData;
 				break;
 		}
 	}
