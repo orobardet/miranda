@@ -11,4 +11,6 @@ return array(
     'error/404'                 => __DIR__ . '/view/error/404.phtml',
     'error/403'                 => __DIR__ . '/view/error/403.phtml',
     'layout/layout'             => __DIR__ . '/view/layout/layout.phtml',
+    'email/test_message'        => __DIR__ . '/view/email/test_message.phtml',
+    'email/layout'              => __DIR__ . '/view/email/layout.phtml',
 );

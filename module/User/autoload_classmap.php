@@ -4,6 +4,8 @@ return array(
     'User\Module'                                          => __DIR__ . '/Module.php',
     'User\Authentification\Adapter\DbCallbackCheckAdapter' => __DIR__ . '/src/User/Authentification/Adapter/DbCallbackCheckAdapter.php',
     'User\Authentification\Storage\Session'                => __DIR__ . '/src/User/Authentification/Storage/Session.php',
+    'User\Form\ForgotPasswordFilter'                       => __DIR__ . '/src/User/Form/ForgotPasswordFilter.php',
+    'User\Form\ForgotPassword'                             => __DIR__ . '/src/User/Form/ForgotPassword.php',
     'User\Form\UserFilter'                                 => __DIR__ . '/src/User/Form/UserFilter.php',
     'User\Form\PasswordFilter'                             => __DIR__ . '/src/User/Form/PasswordFilter.php',
     'User\Form\LoginFilter'                                => __DIR__ . '/src/User/Form/LoginFilter.php',

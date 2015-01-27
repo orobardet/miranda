@@ -350,6 +350,18 @@ body {
   margin: 30px auto;
   width: 250px;
 }
+#login-form-container .forgot-password {
+  text-align: right;
+  font-size: x-small;
+}
+#forgotpassword-form-container {
+  margin: 30px auto;
+  width: 300px;
+}
+#resetpassword-form-container {
+  margin: 30px auto;
+  width: 400px;
+}
 .form-horizontal .control-group {
   margin-bottom: 10px;
 }
