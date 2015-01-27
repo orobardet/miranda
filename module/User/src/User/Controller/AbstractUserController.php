@@ -7,6 +7,9 @@ use Zend\Config\Config as ZendConfig;
 
 abstract class AbstractUserController extends AbstractActionController implements ConfigAwareInterface
 {
+	/**
+	 * @var \Zend\Config\Config
+	 */
 	protected $config;
 
 	protected $userTable;
@@ -14,6 +17,14 @@ abstract class AbstractUserController extends AbstractActionController implement
 	public function setConfig(ZendConfig $config)
 	{
 		$this->config = $config;
+	}
+	
+	/**
+	 * @return \Zend\Config\Config
+	 */
+	public function getConfig()
+	{
+		return $this->config;
 	}
 
 	public function getUserTable()

@@ -164,7 +164,13 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'User\Form\Password' => function ($sm)
 				{
 					$form = new Form\Password(null, $sm->get('translator'));
-					$form->setInputFilter(new Form\PasswordFilter($sm->get('user_zend_db_adapter'), $sm->get('Miranda\Service\Config')));
+					$form->setInputFilter(new Form\PasswordFilter());
+					return $form;
+				},
+				'User\Form\ResetPassword' => function ($sm)
+				{
+					$form = new Form\Password(null, $sm->get('translator'), false);
+					$form->setInputFilter(new Form\PasswordFilter(false));
 					return $form;
 				},
 				'Miranda\Service\AuthService' => function ($sm)

@@ -60,13 +60,12 @@ return [
 				'options' => [
 					'route' => '/reset-password[/:token]',
 					'constraints' => [
-						'token' => '[a-zA-Z0-9]{40}'
+						'token' => '[a-zA-Z0-9]+'
 					],
 					'defaults' => [
 						'__NAMESPACE__' => 'User\Controller',
 						'controller' => 'Auth',
-						'action' => 'resetpassword',
-						'token' => null
+						'action' => 'resetpassword'
 					]
 				]
 			],

@@ -6,32 +6,26 @@ use Zend\Form\Form;
 class Password extends Form
 {
 
-	public function __construct($name = null, $translator = null)
+	public function __construct($name = null, $translator = null, $withCurrentPassword = true)
 	{
 		parent::__construct($name);
 		
 		$this->setAttribute('method', 'post');
 		
-		$this->add(array(
-			'name' => 'id',
-			'type' => 'Hidden',
-			'attributes' => array(
-				'id' => 'input-id'
-			)
-		));
-		
-		$this->add(
-				array(
-					'name' => 'current_password',
-					'type' => 'Password',
-					'options' => array(
-						'label' => 'Password: '
-					),
-					'attributes' => array(
-						'id' => 'input-current-password',
-						'title' => $translator->translate('Password')
-					)
-				));
+		if ($withCurrentPassword) {
+			$this->add(
+					array(
+						'name' => 'current_password',
+						'type' => 'Password',
+						'options' => array(
+							'label' => 'Password: '
+						),
+						'attributes' => array(
+							'id' => 'input-current-password',
+							'title' => $translator->translate('Password')
+						)
+					));
+		}
 		$this->add(
 				array(
 					'name' => 'password',

@@ -85,24 +85,17 @@ class UserTable extends User
 				});
 	}
 
-	/**
-	 *
-	 * @param integer $id
-	 *
-	 * @throws \Exception
-	 *
-	 * @return \User\Model\User
-	 */
-	public function getUser($id, $exceptionIfNotFound = true)
+	protected function _findUser(array $filterData, $exceptionIfNotFound = true, $exceptionMessage = null)
 	{
-		$id = (int)$id;
-		$rowset = $this->tableGateway->select(array(
-			'id' => $id
-		));
+		$rowset = $this->tableGateway->select($filterData);
+		
 		$row = $rowset->current();
 		if (!$row) {
 			if ($exceptionIfNotFound) {
-				throw new \Exception("Could not find user $id");
+				if (trim((string)$exceptionMessage) == '') {
+					$exceptionMessage = "Could not find user";
+				}
+				throw new \Exception($exceptionMessage);
 			} else {
 				return false;
 			}
@@ -120,6 +113,22 @@ class UserTable extends User
 		$row->setRoles($roles);
 		
 		return $row;
+	}
+
+	/**
+	 *
+	 * @param integer $id
+	 *
+	 * @throws \Exception
+	 *
+	 * @return \User\Model\User
+	 */
+	public function getUser($id, $exceptionIfNotFound = true)
+	{
+		$id = (int)$id;
+		return $this->_findUser([
+			'id' => $id
+		], $exceptionIfNotFound, "Could not find user $id");
 	}
 
 	/**
@@ -132,30 +141,24 @@ class UserTable extends User
 	 */
 	public function getUserByEmail($email, $exceptionIfNotFound = true)
 	{
-		$rowset = $this->tableGateway->select(array(
+		return $this->_findUser([
 			'email' => $email
-		));
-		$row = $rowset->current();
-		if (!$row) {
-			if ($exceptionIfNotFound) {
-				throw new \Exception("Could not find user with email '$email'");
-			} else {
-				return false;
-			}
-		}
-		
-		$roles = array();
-		if ($this->rolesTableGateway) {
-			$roleset = $this->rolesTableGateway->select(array(
-				'user_id' => $row->getId()
-			));
-			foreach ($roleset as $role) {
-				$roles[] = $role->role_id;
-			}
-		}
-		$row->setRoles($roles);
-		
-		return $row;
+		], $exceptionIfNotFound, "Could not find user with email '$email'");
+	}
+
+	/**
+	 *
+	 * @param string $token
+	 *
+	 * @throws \Exception
+	 *
+	 * @return \User\Model\User
+	 */
+	public function getUserByPasswordToken($token, $exceptionIfNotFound = true)
+	{
+		return $this->_findUser([
+			'password_token' => $token
+		], $exceptionIfNotFound, "Could not find user with password token '$token'");
 	}
 
 	/**
@@ -165,14 +168,18 @@ class UserTable extends User
 	public function enableUser($user)
 	{
 		if ($user instanceof User) {
-			$user = (int) $user->getId();
+			$user = (int)$user->getId();
 		}
-
+		
 		if (!is_integer($user) || ((int)$user <= 0)) {
 			throw new \Exception("Invalid user id");
 		}
 		
-		return (boolean) $this->tableGateway->update(['active' => 1], ['id' => $user]);
+		return (boolean)$this->tableGateway->update([
+			'active' => 1
+		], [
+			'id' => $user
+		]);
 	}
 
 	/**
@@ -182,16 +189,20 @@ class UserTable extends User
 	public function disableUser($user)
 	{
 		if ($user instanceof User) {
-			$user = (int) $user->getId();
+			$user = (int)$user->getId();
 		}
-
+		
 		if (!is_integer($user) || ((int)$user <= 0)) {
 			throw new \Exception("Invalid user id");
 		}
 		
-		return (boolean) $this->tableGateway->update(['active' => 0], ['id' => $user]);
+		return (boolean)$this->tableGateway->update([
+			'active' => 0
+		], [
+			'id' => $user
+		]);
 	}
-	
+
 	public function saveUser(User $user, $savePassword = false)
 	{
 		$data = array(

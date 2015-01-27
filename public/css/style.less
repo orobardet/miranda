@@ -4,9 +4,18 @@
 @import "bootstrap-fileupload.less";
 @import "bootstrap-multiple-tag-selector.less";
 
+pre {
+	margin: 10px;
+	
+	&:first-child {
+		margin-top: 60px;
+	}
+}
+
 html,body {
 	/* html et body doivent rester comme ça et sans padding ni margin, pour gérer le footer en bas de page */
 	height: 100%;
+	
 }
 
 .p {
@@ -200,6 +209,11 @@ html,body {
 #forgotpassword-form-container {
 	margin: 30px auto;
 	width: 300px;
+}
+
+#resetpassword-form-container {
+	margin: 30px auto;
+	width: 400px;
 }
 
 .form-horizontal .control-group {

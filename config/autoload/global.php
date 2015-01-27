@@ -79,7 +79,10 @@ $config = [
 			],
 			'bcrypt' => [
 				'cost' => 10
-			]
+			],
+			
+			// in minutes
+			'password_token_validity' => 180
 		],
 		'db' => [
 			'table_prefix' => ''
@@ -95,7 +98,9 @@ $config = [
 			'pictures' => [
 				'max_width' => 1000,
 				'max_height' => 1000,
-				'store_path' => 'pictures/costumes', // relative to data_storage->root_path
+				
+				// relative to data_storage->root_path
+				'store_path' => 'pictures/costumes',
 				'url_path' => '/pictures/costumes'
 			]
 		]
@@ -107,9 +112,9 @@ $config = [
 		'database' => 'miranda',
 		'charset' => 'UTF8',
 		'options' => [
+			// need for executing query while using results of an other query (else there'll be "commands out of sync" Mysql error
 			'buffer_results' => true
-		] // need for executing query while using results of an other query (else there'll be "commands out of sync" Mysql error
-
+		]
 	],
 	
 	'navigation' => [

@@ -83,8 +83,12 @@ return array(
 	'New password defined.' => 'Nouveau mot de passe défini.',
 	'No password change.' => 'Pas de changement du mot de passe.',
 	'Invalid password' => 'Mot de passe invalide',
+	'Invalid request.' => 'Demande non valide.',
+	'User not found.' => 'Utilisateur non trouvé.',
 	
 	'Account recovery' => 'Récupération de compte',
 	"Your forgot your password and asked to recover your account.<br/>Please follow the link below to set a new password for your account: " => "Vous avez oublié votre mot de passe et demandé à récupérer votre compte.<br/>Veuillez suivre le lien ci-dessous pour choisir un nouveau mot de passe pour votre compte : ",
-	"Your forgot your password and asked to recover your account.<br/>Unfortunately, your account is disabled: you can't recover it this way. Please contact and administrator." => "Vous avez oublié votre mot de passe et demandé à récupérer votre compte.<br/>Malheureusement, votre compte est désactivé : vous ne pouvez le récupérer de cette manière. Merci de contacter un administrateur."
+	"Your forgot your password and asked to recover your account.<br/>Unfortunately, your account is disabled: you can't recover it this way. Please contact and administrator." => "Vous avez oublié votre mot de passe et demandé à récupérer votre compte.<br/>Malheureusement, votre compte est désactivé : vous ne pouvez le récupérer de cette manière. Merci de contacter un administrateur.",
+	"Your account recovery request has expired. Please request a new one." => "Votre demande de récupération de compte a expiré. Merci de faire une nouvelle demande.",
+	"<b>Recover your account.</b><br/>You can recover your account by setting a new password below." => "<b>Récupérer votre compte.</b><br/>Vous pouvez récupérer votre compte en saisissant un nouveau mot de passe ci-dessous."
 );

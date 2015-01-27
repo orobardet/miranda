@@ -6,13 +6,15 @@ use Zend\InputFilter\InputFilter;
 class PasswordFilter extends InputFilter
 {
 
-	public function __construct()
+	public function __construct($withCurrentPassword = true)
 	{
-		$this->add(array(
-			'name' => 'current_password',
-			'required' => true
-		));
-		
+		if ($withCurrentPassword) {
+			$this->add(array(
+				'name' => 'current_password',
+				'required' => true
+			));
+		}
+				
 		$this->add(
 				array(
 					'name' => 'password',
