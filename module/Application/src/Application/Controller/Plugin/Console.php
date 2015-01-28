@@ -12,7 +12,7 @@ class Console extends AbstractPlugin
 	/**
 	 * Objet de session
 	 *
-	 * @var Zend\Console\Adapter\AdapterInterface
+	 * @var \Zend\Console\Adapter\AdapterInterface
 	 */
 	protected $console;
 

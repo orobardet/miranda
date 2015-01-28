@@ -298,6 +298,8 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 	public function getConsoleUsage(ConsoleAdapterInterface $console)
 	{
 		return [
+			'Application management',
+			'clean app cache' => 'Clear all application cache, force reloading conf',
 			'Tests',
 			'[send] test email [to] <email>' => 'Send a test email',
 			[

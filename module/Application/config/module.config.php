@@ -70,8 +70,16 @@ return [
 						'route' => 'send test email to <email>',
 						'defaults' => [
 							'controller' => 'Application\Controller\Console',
-							'action' => 'testemail',
-							'to' => 'a',
+							'action' => 'testemail'
+						]
+					]
+				],
+				'clean-app-cache' => [
+					'options' => [
+						'route' => 'clean app cache',
+						'defaults' => [
+							'controller' => 'Application\Controller\Console',
+							'action' => 'cleanappcache'
 						]
 					]
 				]

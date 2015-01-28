@@ -7,10 +7,17 @@ use Acl\Controller\AclConsoleControllerInterface;
 use Zend\Config\Config as ZendConfig;
 use Zend\Mvc\Controller\AbstractActionController;
 use Application\Toolbox\String as StringTools;
+use Application\TraversableConfig;
+use Zend\Console\ColorInterface;
+use Application\Toolbox\String as StringTool;
 
 class ConsoleController extends AbstractActionController implements ConfigAwareInterface, AclConsoleControllerInterface
 {
 
+	/**
+	 *
+	 * @var \Application\TraversableConfig
+	 */
 	protected $config;
 
 	public function setConfig(ZendConfig $config)
@@ -58,5 +65,53 @@ class ConsoleController extends AbstractActionController implements ConfigAwareI
 		$this->console()->writeLine(StringTools::varprintf($translator->translate('Test email sent to %email%.'), [
 			'email' => $email
 		]));
+	}
+
+	public function cleanappcacheAction()
+	{
+		$translator = $this->getServiceLocator()->get('translator');
+		$appConfig = new TraversableConfig($this->getServiceLocator()->get('ApplicationConfig', []));
+		$cache_dir = $appConfig->get('module_listener_options->cache_dir', null);
+		
+		if ($cache_dir) {
+			$fileFound = false;
+			$this->console()->writeLine();
+			$this->console()->writeLine($translator->translate("Cleaning '$cache_dir'..."), ColorInterface::CYAN);
+			
+			$configCacheKey = $appConfig->get('module_listener_options->config_cache_key', '');
+			$moduleMapCacheKey = $appConfig->get('module_listener_options->module_map_cache_key', '');
+			
+			foreach (glob($cache_dir . '/*' . $configCacheKey . '.php') as $filename) {
+				$fileFound = true;
+				$this->console()->write(StringTool::varprintf($translator->translate("   Deleting '%filename%'..."), [
+					'filename' => $filename
+				]));
+				if (unlink($filename)) {
+					$this->console()->writeLine($translator->translate(" OK"), ColorInterface::GREEN);
+				} else {
+					$this->console()->writeLine($translator->translate(" Failed"), ColorInterface::RED);
+				}
+			}
+			
+			foreach (glob($cache_dir . '/*' . $moduleMapCacheKey . '.php') as $filename) {
+				$fileFound = true;
+				$this->console()->write(StringTool::varprintf($translator->translate("   Deleting '%filename%'..."), [
+					'filename' => $filename
+				]));
+				if (unlink($filename)) {
+					$this->console()->writeLine($translator->translate(" OK"), ColorInterface::GREEN);
+				} else {
+					$this->console()->writeLine($translator->translate(" Failed"), ColorInterface::RED);
+				}
+			}
+			if ($fileFound) {
+				$this->console()->writeLine($translator->translate("Cache cleaned."), ColorInterface::GREEN);
+			} else {
+				$this->console()->writeLine($translator->translate("Nothing to clean."), ColorInterface::YELLOW);
+			}
+			$this->console()->writeLine();
+		} else {
+			$this->console()->writeLine($translator->translate("No cache directory found in application config."), ColorInterface::YELLOW);
+		}
 	}
 }
