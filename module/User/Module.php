@@ -273,7 +273,24 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'search terms',
 				'List of terms that can match users'
 			),
-			'Users manipulation',
+			'Users management',
+			'add user [<email>] [-f|--firstname=FIRSTNAME] [-l|--lastname=LASTNAME]' => '',
+			array(
+				'<email>',
+				'user email',
+				'Full email address of the user'
+			),
+			'user password <id>|<email>"' => 'Change the password of a given user',
+			array(
+				'<id>',
+				'user ID',
+				'ID of the user'
+			),
+			array(
+				'<email>',
+				'user email',
+				'Full email address of the user'
+			),
 			'enable|disable user <id>|<email> [-y|--yes]"' => 'Enable or disable a user account',
 			array(
 				'<id>',
@@ -289,17 +306,6 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'-y|--yes',
 				'no confirmation',
 				"You won't be asked for confirmation"
-			),
-			'user password <id>|<email>"' => 'Change the password of a given user',
-			array(
-				'<id>',
-				'user ID',
-				'ID of the user'
-			),
-			array(
-				'<email>',
-				'user email',
-				'Full email address of the user'
 			)
 		);
 	}

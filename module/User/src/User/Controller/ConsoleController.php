@@ -7,6 +7,7 @@ use Acl\Controller\AclConsoleControllerInterface;
 use Application\Toolbox\String as StringTools;
 use Zend\Console\ColorInterface;
 use Zend\Console\Prompt\Confirm;
+use Zend\Console\Prompt\Line;
 use Application\Console\Prompt\Password as PromptPassword;
 
 class ConsoleController extends AbstractUserController implements ConfigAwareInterface, AclConsoleControllerInterface
@@ -211,7 +212,7 @@ class ConsoleController extends AbstractUserController implements ConfigAwareInt
 			$this->console()->writeLine($translator->translate('User not found.'));
 		}
 	}
-	
+
 	public function changepasswordAction()
 	{
 		$translator = $this->getServiceLocator()->get('translator');
@@ -247,8 +248,73 @@ class ConsoleController extends AbstractUserController implements ConfigAwareInt
 			$user->setPassword($password, $this->getServiceLocator()->get('Miranda\Service\AuthBCrypt'));
 			$this->getUserTable()->saveUser($user, true);
 			
-			$this->console()->writeLine($translator->translate('Password changed.'));			
+			$this->console()->writeLine($translator->translate('Password changed.'));
 		} else {
 			$this->console()->writeLine($translator->translate('User not found.'));
 		}
-	}}
+	}
+
+	public function adduserAction()
+	{
+		$translator = $this->getServiceLocator()->get('translator');
+		
+		$email = $this->getRequest()->getParam('email', null);
+		$firstname = $this->getRequest()->getParam('firstname', null);
+		$lastname = $this->getRequest()->getParam('lastname', null);
+		
+		if (!$email || (trim($email) == '')) {
+			$email = Line::prompt($translator->translate('User email: '));
+		}
+		
+		$validator = new \Zend\Validator\EmailAddress([
+			'allow' => \Zend\Validator\Hostname::ALLOW_DNS,
+			'useMxCheck' => true,
+			'useDeepMxCheck' => true
+		]);
+		if (!$validator->isValid($email)) {
+			$this->console()->writeLine($translator->translate('Email address is invalid.'));
+			return;
+		}
+		
+		if ($this->getUserTable()->getUserByEmail($email, false)) {
+			$this->console()->writeLine($translator->translate('A user account already exists with this email.'), ColorInterface::RED);
+			return;
+		}
+		
+		if (!$firstname || (trim($firstname) == '')) {
+			$firstname = Line::prompt($translator->translate('Firstname: '), true);
+		}
+		
+		if (!$lastname || (trim($lastname) == '')) {
+			$lastname = Line::prompt($translator->translate('Lastname: '), true);
+		}
+		
+		$this->dbTransaction()->begin();
+		try {
+			$user = new User();
+			
+			$user->setEmail($email);
+			$user->setFirstname($firstname);
+			$user->setLastname($lastname);
+			$user->setPassword(sha1(uniqid()), $this->getServiceLocator()->get('Miranda\Service\AuthBCrypt'));
+			$user->setActive(true);
+			$user->createRegistrationToken();
+			$this->getUserTable()->saveUser($user, true);
+			
+			/* @var $mailer \Application\Mail\Mailer  */
+			$mailer = $this->getServiceLocator()->get('Miranda\Service\Mailer');
+			$mailer->setFromNoReply();
+			$mailer->addTo($user->getEmail(), $user->getDisplayName());
+			$mailer->setSubject($translator->translate('Creating your account'));
+			$mailer->token = $user->getRegistrationToken();
+			$mailer->setTemplate('account_creation');
+			$mailer->send();
+			$this->dbTransaction()->commit();
+			
+			$this->console()->writeLine($translator->translate('User created.'), ColorInterface::GREEN);
+		} catch (\Exception $ex) {
+			$this->dbTransaction()->rollback();
+			throw $ex;
+		}				
+	}
+}

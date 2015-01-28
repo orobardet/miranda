@@ -69,6 +69,20 @@ return [
 					]
 				]
 			],
+			'validate-account' => [
+				'type' => 'segment',
+				'options' => [
+					'route' => '/validate-account[/:token]',
+					'constraints' => [
+						'token' => '[a-zA-Z0-9]+'
+					],
+					'defaults' => [
+						'__NAMESPACE__' => 'User\Controller',
+						'controller' => 'Auth',
+						'action' => 'validateaccount'
+					]
+				]
+			],
 			'profile' => [
 				'type' => 'segment',
 				'options' => [
@@ -158,6 +172,15 @@ return [
 						'defaults' => [
 							'controller' => 'User\Controller\Console',
 							'action' => 'changepassword'
+						]
+					]
+				],
+				'add-user' => [
+					'options' => [
+						'route' => 'add user [<email>] [--firstname=] [--lastname=]',
+						'defaults' => [
+							'controller' => 'User\Controller\Console',
+							'action' => 'adduser'
 						]
 					]
 				]

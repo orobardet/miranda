@@ -90,5 +90,8 @@ return array(
 	"Your forgot your password and asked to recover your account.<br/>Please follow the link below to set a new password for your account: " => "Vous avez oublié votre mot de passe et demandé à récupérer votre compte.<br/>Veuillez suivre le lien ci-dessous pour choisir un nouveau mot de passe pour votre compte : ",
 	"Your forgot your password and asked to recover your account.<br/>Unfortunately, your account is disabled: you can't recover it this way. Please contact and administrator." => "Vous avez oublié votre mot de passe et demandé à récupérer votre compte.<br/>Malheureusement, votre compte est désactivé : vous ne pouvez le récupérer de cette manière. Merci de contacter un administrateur.",
 	"Your account recovery request has expired. Please request a new one." => "Votre demande de récupération de compte a expiré. Merci de faire une nouvelle demande.",
-	"<b>Recover your account.</b><br/>You can recover your account by setting a new password below." => "<b>Récupérer votre compte.</b><br/>Vous pouvez récupérer votre compte en saisissant un nouveau mot de passe ci-dessous."
+	"<b>Recover your account.</b><br/>You can recover your account by setting a new password below." => "<b>Récupérer votre compte.</b><br/>Vous pouvez récupérer votre compte en saisissant un nouveau mot de passe ci-dessous.",
+	
+	"Creating your account" => "Création de votre compte",
+	"An account has been created for you on our system.<br/>Please follow the link below to set a password for your account and so activate it: " => "Un compte a été créé pour vous sur notre système.<br/>Merci de suivre le lien ci-dessous pour choisir un mot de passe pour votre compte et ainsi l'activer : "
 );

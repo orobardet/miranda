@@ -212,7 +212,9 @@ class UserTable extends User
 			'active' => $user->isActive() ? 1 : 0,
 			'modification_ts' => time(),
 			'password_token' => $user->getPasswordToken(),
-			'password_token_ts' => $user->getPasswordTokenDate()
+			'password_token_ts' => $user->getPasswordTokenDate(),
+			'registration_token' => $user->getRegistrationToken(),
+			'registration_token_ts' => $user->getRegistrationTokenDate()
 		);
 		
 		// Pas de date de création, on la défini à la date courane
@@ -245,11 +247,13 @@ class UserTable extends User
 				'user_id' => $id
 			));
 			$roles = $user->getRoles();
-			foreach ($roles as $role_id) {
-				$this->rolesTableGateway->insert(array(
-					'user_id' => $id,
-					'role_id' => $role_id
-				));
+			if (count($roles)) {
+				foreach ($roles as $role_id) {
+					$this->rolesTableGateway->insert(array(
+						'user_id' => $id,
+						'role_id' => $role_id
+					));
+				}
 			}
 		}
 	}

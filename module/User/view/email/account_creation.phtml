@@ -1,0 +1,8 @@
+<h1><?php echo $this->translate('Creating your account'); ?></h1>
+<p>
+<?php echo $this->translate("An account has been created for you on our system.<br/>Please follow the link below to set a password for your account and so activate it: "); ?>
+</p>
+<center>
+<?php $recoverUrl = $this->baseUrl($this->url('validate-account', ['token' => $this->token])); ?>
+<a href="<?php echo $this->escapehtmlattr($recoverUrl); ?>"><?php echo $this->escapehtml($recoverUrl); ?></a>
+</center>

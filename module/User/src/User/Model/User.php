@@ -100,6 +100,20 @@ class User extends ObjectModelBase
 	protected $password_token_ts;
 	
 	/**
+	 * Token de création de compte
+	 * 
+	 * @var string
+	 */
+	protected $registration_token;
+	
+	/**
+	 * Timestamp de la date de création du token de création de compte
+	 * 
+	 * @var integer
+	 */
+	protected $registration_token_ts;
+	
+	/**
 	 *
 	 * @return integer $id
 	 */
@@ -133,7 +147,13 @@ class User extends ObjectModelBase
 	 */
 	public function getDisplayName()
 	{
-		return $this->firstname . ' ' . $this->lastname;
+		if ((trim($this->firstname) != '') && (trim($this->lastname) != '')) {
+			return $this->firstname . ' ' . $this->lastname;
+		} else if ((trim($this->lastname) != '')) {
+			return $this->lastname;
+		} else {
+			return $this->email;
+		}
 	}
 
 	/**
@@ -309,6 +329,50 @@ class User extends ObjectModelBase
 		$this->password_token = null;
 		$this->password_token_ts = null;
 	}
+
+	/**
+	 * Retourne la date de dernière connexion du compte, éventuellement formatée
+	 *
+	 * Si le paramètre $format est null ou faut, renvoi la date sous forme d'un timestamp (integer).
+	 * Sinon, renvoie une chaine représentant la date, formaté en utilisant la fonction PHP date()
+	 * et selon le format du paramètre $format.
+	 *
+	 * Si le timestamp est invalid ou null (pas un nombre positif) et qu'un format a été demandé,
+	 * retourne la chaine "N/A".
+	 *
+	 * __Exemples :__
+	 *
+	 * ~~~~~~~~
+	 * $this->getRegistrationTokenDate(); // Retourne le timestamp
+	 * $this->getRegistrationTokenDate("d/m/Y H:i:s"); // Retourne une chaine "17/08/2013 10:16:27"
+	 * ~~~~~~~~
+	 *
+	 * @param string $format Une chaine de formatage de date accepté par la fonction PHP date()
+	 *
+	 * @return string|int
+	 */
+	public function getRegistrationTokenDate($format = null)
+	{
+		return $this->getFormatedDate($this->registration_token_ts, $format);
+	}
+	
+	public function getRegistrationToken()
+	{
+		return $this->registration_token;
+	}
+	
+	public function createRegistrationToken()
+	{
+		$this->registration_token = sha1($this->getEmail().uniqid());
+		$this->registration_token_ts = time();
+	}
+	
+	public function resetRegistrationToken()
+	{
+		$this->registration_token = null;
+		$this->registration_token_ts = null;
+	}
+	
 	
 	/**
 	 *
@@ -426,6 +490,8 @@ class User extends ObjectModelBase
 		$this->last_login_ts = (array_key_exists('last_login_ts', $data)) ? $data['last_login_ts'] : $this->last_login_ts;
 		$this->password_token = (array_key_exists('password_token', $data)) ? $data['password_token'] : $this->password_token;
 		$this->password_token_ts = (array_key_exists('password_token_ts', $data)) ? $data['password_token_ts'] : $this->password_token_ts;
+		$this->registration_token = (array_key_exists('registration_token', $data)) ? $data['registration_token'] : $this->registration_token;
+		$this->registration_token_ts = (array_key_exists('registration_token_ts', $data)) ? $data['registration_token_ts'] : $this->registration_token_ts;
 	}
 
 	public function getArrayCopy()
@@ -438,7 +504,9 @@ class User extends ObjectModelBase
 			'active' => $this->isActive(),
 			'roles' => $this->roles,
 			'password_token' => $this->password_token,
-			'password_token_ts' => $this->password_token_ts
+			'password_token_ts' => $this->password_token_ts,
+			'registration_token' => $this->registration_token,
+			'registration_token_ts' => $this->registration_token_ts
 		);
 	}
 }
