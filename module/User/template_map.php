@@ -16,4 +16,5 @@ return array(
     'user/admin/show'                  => __DIR__ . '/view/user/admin/show.phtml',
     'email/password_recovery'          => __DIR__ . '/view/email/password_recovery.phtml',
     'email/password_recovery_disabled' => __DIR__ . '/view/email/password_recovery_disabled.phtml',
+    'email/account_creation'           => __DIR__ . '/view/email/account_creation.phtml',
 );
