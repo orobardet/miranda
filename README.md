@@ -5,8 +5,29 @@ Introduction
 ------------
 Gestionnaire de la compagnie Miranda
 
+Pré-requis
+----------
+
+- php5 >= 5.5
+- php5-intl
+- php5-xcache
+- git
+- composer
+  
+
+Pour développement :
+- Less CSS (npm install -g less)
+
+
 Installation
 ------------
+ 
+ git clone https://github.com/orobardet/miranda.git
+ cd miranda
+ composer update --no-dev -o
+
+
+
 
 VHost Apache :
 ```apache
