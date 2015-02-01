@@ -3217,7 +3217,7 @@ input[type="submit"].btn {
 .navbar-static-top .container,
 .navbar-fixed-top .container,
 .navbar-fixed-bottom .container {
-  #grid > .core > .span(@gridColumns);
+  width: (@gridColumnWidth * @gridColumns) + (@gridGutterWidth * (@gridColumns - 1));
 }
 
 // Fixed to top
