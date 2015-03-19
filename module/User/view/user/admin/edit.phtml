@@ -43,55 +43,12 @@ $form->setAttribute('id', 'user-form');
 			<?php if (count($element->getMessages())):?>
 			<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
 			<?php endif; ?>
+			<div class="help-block">
+			<?php echo $this->translate("The user will receive an email to validate its account and set the password."); ?>
+			</div>
 		</div>
 	</div>
 
-	<?php $element = $form->get('password'); ?>
-	<?php $password_errors = (count($element->getMessages())) || (count($form->get('password_verification')->getMessages())); ?>
-	<div class="control-group required<?php if ($password_errors) echo " error"; ?>">
-		<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
-		<div class="controls">
-			<?php echo $this->formElement($element->setAttribute('autocomplete', 'off')); ?>
-			<div class="help-inline" id="input-password-hint">
-			</div>
-			<?php if (count($element->getMessages())):?>
-			<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
-			<?php endif; ?>
-		</div>
-	</div>
-	
-	<?php $element = $form->get('password_verification'); ?>
-	<div class="control-group required<?php if ($password_errors) echo " error"; ?>">
-		<div class="controls">
-			<?php echo $this->formLabel($element->setLabelAttributes(array('style' => 'margin-top:0px;'))); ?>
-			<?php echo $this->formElement($element->setAttribute('autocomplete', 'off')) ?><span class="help-inline" id="input-password-verification-hint">
-			<span id="input-password-verification-hint-ok" style="display:none;">
-				<i class="icon-sprite icon-accepted"></i> <?php echo $this->translate('Same passwords'); ?>
-			</span>
-			<span id="input-password-verification-hint-ko" style="display:none;">
-				<i class="icon-sprite icon-exclamation"></i> <?php echo $this->translate('Passwords are differents'); ?>
-			</span>
-			</span>
-			<?php if (count($element->getMessages())):?>
-			<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
-			<?php endif; ?>
-		</div>
-	</div>
-	
-	<div class="control-group required">
-		<div class="controls">
-			<div class="help-block">
-			<?php echo $this->translate("Password must be at least 6 characters long, and fullfill at least 2 of the 4th following conditions ('Accepted' strength):"); ?>
-			<ul>
-				<li><?php echo $this->translate("A least one lower case letter"); ?></li>
-				<li><?php echo $this->translate("A least one upper case letter"); ?></li>
-				<li><?php echo $this->translate("A least one digit"); ?></li>
-				<li><?php echo $this->translate("A least one special characters (other than letters, digits and space"); ?></li>
-			</ul>
-			</div>
-		</div>
-	</div>
-	
 	<?php $element = $form->get('roles'); ?>
 	<div class="control-group<?php if (count($element->getMessages())) echo " error"; ?>">
 		<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
@@ -121,48 +78,3 @@ $form->setAttribute('id', 'user-form');
 	</div>
 
 <?php echo $this->form()->closeTag(); ?>
-
-<script type="text/javascript">
-$(document).ready(function() {
-	$("#input-password").passStrengthify({
-		element: $('#input-password-hint'),
-		minimum: 6,
-	    labels: { 
-      		passwordStrength : '<?php echo $this->translate('Strength:'); ?>',
-      		tooShort: '<?php echo $this->translate('Too short'); ?>'
-    	},
-    	levels: [
-    		'<?php echo $this->translate('Too short'); ?>', 
-    		'<?php echo $this->translate('Weak'); ?>', 
-    		'<?php echo $this->translate('Accepted'); ?>', 
-    		'<?php echo $this->translate('Good'); ?>', 
-    		'<?php echo $this->translate('Perfect!'); ?>'
-    	],
-        colours: ['gray', 'red', '#080', '#0B0', '#0F0'],
-        tests: [
-        	/[a-z]+/,		// Au moins une lettre minuscule 
-        	/[A-Z]+/,		// Au moins une lettre majuscule
-        	/[0-9]+/,   	// Au moins un chiffre
-   			/[^a-zA-Z0-9 ]/ // Au moins un caractère spécial (c-a-d hors chiffres et lettres et l'espace)
-        ]
-	});
-
-	$('#input-password, #input-password-verification').on('input', function() {
-		var pwd = $('#input-password');
-		var verif = $('#input-password-verification');
-		var hint = $('#input-password-verification-hint');
-		
-		$('#input-password-verification-hint-ok, #input-password-verification-hint-ko').hide();
-		hint.removeClass('state-success').removeClass('state-error');
-		if ((pwd.val() != '') && (verif.val() != '')) {
-			if (pwd.val() == verif.val()) {
-				hint.addClass('state-success');
-				$('#input-password-verification-hint-ok').show();
-			} else {
-				hint.addClass('state-error');
-				$('#input-password-verification-hint-ko').show();
-			}
-		}		
-	}).trigger('input');
-});
-</script>

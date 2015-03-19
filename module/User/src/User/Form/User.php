@@ -61,31 +61,31 @@ class User extends Form
 				));
 		
 		if ($formType == 'admin') {
-			$this->add(
-					array(
-						'name' => 'password',
-						'type' => 'Password',
-						'options' => array(
-							'label' => 'Password: '
-						),
-						'attributes' => array(
-							'id' => 'input-password',
-							'title' => $translator->translate('Password')
-						)
-					));
+// 			$this->add(
+// 					array(
+// 						'name' => 'password',
+// 						'type' => 'Password',
+// 						'options' => array(
+// 							'label' => 'Password: '
+// 						),
+// 						'attributes' => array(
+// 							'id' => 'input-password',
+// 							'title' => $translator->translate('Password')
+// 						)
+// 					));
 			
-			$this->add(
-					array(
-						'name' => 'password_verification',
-						'type' => 'Password',
-						'options' => array(
-							'label' => 'Password verification: '
-						),
-						'attributes' => array(
-							'id' => 'input-password-verification',
-							'title' => $translator->translate('Password verification')
-						)
-					));
+// 			$this->add(
+// 					array(
+// 						'name' => 'password_verification',
+// 						'type' => 'Password',
+// 						'options' => array(
+// 							'label' => 'Password verification: '
+// 						),
+// 						'attributes' => array(
+// 							'id' => 'input-password-verification',
+// 							'title' => $translator->translate('Password verification')
+// 						)
+// 					));
 			
 			$this->add(
 					array(

@@ -67,7 +67,8 @@ return array(
 	
 	"Are you sure that you want to delete user '%displayName%' (%email%)?" => "Etes-vous sûr de vouloir supprimer l'utilisateur '%displayName%' (%email%) ?",
 	"User '%name%' edited." => "Utilisateur '%name%' modifié.",
-	
+	"User '%name%' added." => "Utilisateur '%name%' ajouté.",
+		
 	'Users list:' => 'Liste des utilisateurs :',
 	'User is already enabled!' => "L'utilisateur est déjà activé !",
 	'User is already disabled!' => "L'utilisateur est déjà désactivé !",
@@ -86,6 +87,8 @@ return array(
 	'Invalid password' => 'Mot de passe invalide',
 	'Invalid request.' => 'Demande non valide.',
 	'User not found.' => 'Utilisateur non trouvé.',
+	
+	"The user will receive an email to validate its account and set the password." => "L'utilisateur va recevoir un email pour valider son compte et définir le mot de passe.",
 	
 	'Account recovery' => 'Récupération de compte',
 	"Your forgot your password and asked to recover your account.<br/>Please follow the link below to set a new password for your account: " => "Vous avez oublié votre mot de passe et demandé à récupérer votre compte.<br/>Veuillez suivre le lien ci-dessous pour choisir un nouveau mot de passe pour votre compte : ",

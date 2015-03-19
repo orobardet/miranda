@@ -99,9 +99,20 @@ class AdminController extends AbstractUserController implements AclControllerInt
 				
 				$user->exchangeArray($form->getData(), false);
 				$data = $form->getData();
-				$user->setPassword($data['password'], $this->getServiceLocator()->get('Miranda\Service\AuthBCrypt'));
-				$this->getUserTable()->saveUser($user, true);
+				if ($form->has('password')) {
+					$user->setPassword($data['password'], $this->getServiceLocator()->get('Miranda\Service\AuthBCrypt'));
+					$this->getUserTable()->saveUser($user, true);
+				} else {
+					$user->createRegistrationToken();
+					$this->getUserTable()->saveUser($user);
+					$this->sendAccountCreationMail($user);
+				}
 				
+				$this->resultStatus()->addResultStatus(
+						StringTools::varprintf($this->getServiceLocator()->get('translator')->translate("User '%name%' added."), 
+								array(
+									'name' => $user->getDisplayName()
+								)), "success");
 				return $this->redirect()->toRoute('admin/user');
 			}
 		} else {

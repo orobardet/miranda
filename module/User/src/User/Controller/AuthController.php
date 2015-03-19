@@ -175,6 +175,8 @@ class AuthController extends AbstractUserController implements ConfigAwareInterf
 
 	public function resetpasswordAction()
 	{
+		$this->userAuthentication()->clearIdentity();
+		
 		$token = $this->params()->fromRoute('token', null);
 		if (!$token) {
 			$this->resultStatus()->addResultStatus($this->getServiceLocator()->get('translator')->translate("Invalid request."), 'error');
@@ -229,6 +231,8 @@ class AuthController extends AbstractUserController implements ConfigAwareInterf
 
 	public function validateaccountAction()
 	{
+		$this->userAuthentication()->clearIdentity();
+		
 		$token = $this->params()->fromRoute('token', null);
 		if (!$token) {
 			$this->resultStatus()->addResultStatus($this->getServiceLocator()->get('translator')->translate("Invalid request."), 'error');
