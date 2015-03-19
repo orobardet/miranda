@@ -7,6 +7,7 @@ nbproject
 .project
 .externalToolBuilders
 .settings
+composer
 composer.lock
 composer.phar
 config/autoload/local.php

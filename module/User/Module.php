@@ -173,6 +173,12 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 					$form->setInputFilter(new Form\PasswordFilter(false));
 					return $form;
 				},
+				'User\Form\ValidateAccount' => function ($sm)
+				{
+					$form = new Form\ValidateAccount(null, $sm->get('translator'), false);
+					$form->setInputFilter(new Form\ValidateAccountFilter(false));
+					return $form;
+				},
 				'Miranda\Service\AuthService' => function ($sm)
 				{
 					return new AuthenticationService($sm->get('Miranda\Service\AuthSessionStorage'), $sm->get('Miranda\Service\AuthDb'));

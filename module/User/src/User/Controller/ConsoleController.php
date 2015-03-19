@@ -301,14 +301,8 @@ class ConsoleController extends AbstractUserController implements ConfigAwareInt
 			$user->createRegistrationToken();
 			$this->getUserTable()->saveUser($user, true);
 			
-			/* @var $mailer \Application\Mail\Mailer  */
-			$mailer = $this->getServiceLocator()->get('Miranda\Service\Mailer');
-			$mailer->setFromNoReply();
-			$mailer->addTo($user->getEmail(), $user->getDisplayName());
-			$mailer->setSubject($translator->translate('Creating your account'));
-			$mailer->token = $user->getRegistrationToken();
-			$mailer->setTemplate('account_creation');
-			$mailer->send();
+			$this->sendAccountCreationMail($user);
+			
 			$this->dbTransaction()->commit();
 			
 			$this->console()->writeLine($translator->translate('User created.'), ColorInterface::GREEN);

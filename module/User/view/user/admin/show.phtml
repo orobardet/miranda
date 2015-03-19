@@ -33,5 +33,9 @@ $this->headTitle($title);
 <?php if ($this->return_url): ?>
 <p>
 <a href="<?php echo $this->return_url; ?>" class="btn btn-primary"><?php echo $this->translate('Back'); ?></a>
+<?php if ($user->getRegistrationToken() && $this->acl()->isAllowed("admin_add_user")): ?>
+<a class="btn btn-secondary" href="<?php echo $this->url('admin/user',
+            array('action'=>'creation-email', 'id' => $this->user->getId()));?>"><i class="icon-envelope-alt icon-linkcolor"></i> <?php echo $this->translate('Resend account validation email'); ?></a>
+<?php endif; ?>
 </p>
 <?php endif; ?>

@@ -28,27 +28,43 @@ $this->headTitle($title);
 <tr>
     <td><?php echo $this->escapeHtml($user->getId());?></td>
 	<td>
+		<?php 
+			$name = $user->getLastname(); 
+			if (trim($this->escapeHtml($name)) == '') {
+				$name = $this->translate('<undefined>');
+			}
+		?>
 		<?php if ($this->acl()->isAllowed("admin_show_user")): ?>
-		<a href="<?php echo $this->url('admin/user', array('action'=>'show', 'id' => $user->getId()));?>"><?php echo $this->escapeHtml($user->getLastname());?></a>
+		<a href="<?php echo $this->url('admin/user', array('action'=>'show', 'id' => $user->getId()));?>"><?php echo $this->escapeHtml($name);?></a>
 		<?php else: ?>
-		<?php echo $this->escapeHtml($user->getLastname());?>
+		<?php  echo $this->escapeHtml($name);?>
 		<?php endif;?>
 		</td>
     <td>
-		<?php if ($this->acl()->isAllowed("admin_show_user")): ?>
-    	<a href="<?php echo $this->url('admin/user', array('action'=>'show', 'id' => $user->getId()));?>"><?php echo $this->escapeHtml($user->getFirstname());?></a>
+		<?php 
+			$name = $user->getFirstname(); 
+			if (trim($this->escapeHtml($name)) == '') {
+				$name = $this->translate('<undefined>');
+			}
+		?>
+    	<?php if ($this->acl()->isAllowed("admin_show_user")): ?>
+    	<a href="<?php echo $this->url('admin/user', array('action'=>'show', 'id' => $user->getId()));?>"><?php echo $this->escapeHtml($name);?></a>
 		<?php else: ?>
-		<?php echo $this->escapeHtml($user->getFirstname());?>
+		<?php echo $this->escapeHtml($name);?>
 		<?php endif;?>
     </td>
     <td><a href="mailto:<?php echo $this->escapeHtml($user->getEmail());?>" title="<?php echo $this->translate('Send an email'); ?>"><i class="icon-envelope icon-linkcolor"></i> <?php echo $this->escapeHtml($user->getEmail());?></a></td>
     <td>
-		<?php if ($user->isActive()):?>
-			<span class="label label-success" style="padding:5px;"><i class="icon-ok icon-white"></i> <?php echo $this->translate('Account enabled'); ?></span>
-		<?php else:?>
-			<span class="label label-important" style="padding:5px;"><i class="icon-ban-circle icon-white"></i> <?php echo $this->translate('Account disabled'); ?></span>
+    	<?php if ($user->getRegistrationToken()): ?>
+			<span class="label label-warning" style="padding:5px;"><i class="icon-legal"></i> <?php echo $this->translate('Awaiting validation'); ?></span>
+    	<?php else: ?>
+			<?php if ($user->isActive()):?>
+				<span class="label label-success" style="padding:5px;"><i class="icon-ok icon-white"></i> <?php echo $this->translate('Account enabled'); ?></span>
+			<?php else:?>
+				<span class="label label-important" style="padding:5px;"><i class="icon-ban-circle icon-white"></i> <?php echo $this->translate('Account disabled'); ?></span>
+			<?php endif;?>
 		<?php endif;?>
-    </td>
+	</td>
     <td class="text-right action-bar action-bar-container">
 		<?php if ($this->acl()->isAllowed("admin_edit_user")): ?>
 		<div class="action-bar-item">

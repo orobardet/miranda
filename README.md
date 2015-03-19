@@ -21,13 +21,13 @@ Pour développement :
 
 Installation
 ------------
- 
- git clone https://github.com/orobardet/miranda.git
- cd miranda
- composer update --no-dev -o
 
-
-
+```shell
+git clone https://github.com/orobardet/miranda.git
+cd miranda
+curl -sS https://getcomposer.org/installer | php -- --filename=composer
+composer update --no-dev -o
+```
 
 VHost Apache :
 ```apache

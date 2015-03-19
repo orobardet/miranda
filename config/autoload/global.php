@@ -75,7 +75,8 @@ $config = [
 				'authenticate',
 				'unauthorized',
 				'forgot-password',
-				'reset-password'
+				'reset-password',
+				'validate-account'
 			],
 			'bcrypt' => [
 				'cost' => 10

@@ -5,6 +5,7 @@ return array(
 	'y' => 'o',
 	'n' => 'n',
 	'Operation failed.' => "L'opération a échouée.",
+	'<undefined>' => '<non défini>',
 	
 	'Home' => 'Accueil',
 	'All rights reserved.' => 'Tous droits réservés.',
@@ -31,6 +32,7 @@ return array(
 	'Edit' => 'Modifier',
 	'Delete' => 'Supprimer',
 	'Cancel' => 'Annuler',
+	'Save' => 'Valider',
 	'Yes' => 'Oui',
 	'No' => 'Non',
 	'Back' => 'Retour',

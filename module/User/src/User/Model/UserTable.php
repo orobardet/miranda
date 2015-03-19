@@ -163,6 +163,21 @@ class UserTable extends User
 
 	/**
 	 *
+	 * @param string $token
+	 *
+	 * @throws \Exception
+	 *
+	 * @return \User\Model\User
+	 */
+	public function getUserByRegistrationToken($token, $exceptionIfNotFound = true)
+	{
+		return $this->_findUser([
+			'registration_token' => $token
+		], $exceptionIfNotFound, "Could not find user with password token '$token'");
+	}
+
+	/**
+	 *
 	 * @param \User\Model\User|integer $user
 	 */
 	public function enableUser($user)

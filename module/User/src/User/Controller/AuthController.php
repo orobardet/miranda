@@ -176,36 +176,38 @@ class AuthController extends AbstractUserController implements ConfigAwareInterf
 	public function resetpasswordAction()
 	{
 		$token = $this->params()->fromRoute('token', null);
- 		if (!$token) {
- 			$this->resultStatus()->addResultStatus($this->getServiceLocator()->get('translator')->translate("Invalid request."), 'error');
- 			return $this->redirect()->toRoute('login');
- 		}
- 		
- 		$user = $this->getUserTable()->getUserByPasswordToken($token, false);
- 		if (!$user) {
- 			$this->resultStatus()->addResultStatus($this->getServiceLocator()->get('translator')->translate("User not found."), 'error');
- 			return $this->redirect()->toRoute('login');
- 		}
+		if (!$token) {
+			$this->resultStatus()->addResultStatus($this->getServiceLocator()->get('translator')->translate("Invalid request."), 'error');
+			return $this->redirect()->toRoute('login');
+		}
 		
- 		$tokenValidity = (int)$this->getConfig()->get('authentification->password_token_validity', 60);
- 		if ($tokenValidity <= 0) {
- 			$tokenValidity = 60;
- 		}
- 		$tokenValidity *= 60;
- 		
- 		if ($user->getPasswordTokenDate() + $tokenValidity < time()) {
- 			$this->resultStatus()->addResultStatus($this->getServiceLocator()->get('translator')->translate("Your account recovery request has expired. Please request a new one."), 'warning', false);
- 			return $this->redirect()->toRoute('login');
- 		}
- 		
+		$user = $this->getUserTable()->getUserByPasswordToken($token, false);
+		if (!$user) {
+			$this->resultStatus()->addResultStatus($this->getServiceLocator()->get('translator')->translate("User not found."), 'error');
+			return $this->redirect()->toRoute('login');
+		}
+		
+		$tokenValidity = (int)$this->getConfig()->get('authentification->password_token_validity', 60);
+		if ($tokenValidity <= 0) {
+			$tokenValidity = 60;
+		}
+		$tokenValidity *= 60;
+		
+		if ($user->getPasswordTokenDate() + $tokenValidity < time()) {
+			$this->resultStatus()->addResultStatus(
+					$this->getServiceLocator()->get('translator')->translate("Your account recovery request has expired. Please request a new one."), 
+					'warning', false);
+			return $this->redirect()->toRoute('login');
+		}
+		
 		$form = $this->getServiceLocator()->get('User\Form\ResetPassword');
 		$form->setAttribute('method', 'post');
 		$form->get('submit')->setValue($this->getServiceLocator()->get('translator')->translate('Edit'));
- 		
+		
 		$request = $this->getRequest();
 		if ($request->isPost()) {
 			$form->setData($request->getPost());
-
+			
 			if ($form->isValid()) {
 				$bcrypt = $this->getServiceLocator()->get('Miranda\Service\AuthBCrypt');
 				
@@ -213,13 +215,57 @@ class AuthController extends AbstractUserController implements ConfigAwareInterf
 				$user->resetPasswordToken();
 				$this->getUserTable()->saveUser($user, true);
 				
-				$this->resultStatus()->addResultStatus($this->getServiceLocator()->get('translator')->translate("New password defined."), "success", true);
+				$this->resultStatus()->addResultStatus($this->getServiceLocator()->get('translator')->translate("New password defined."), "success", 
+						true);
 				return $this->redirect()->toRoute('login');
 			}
 		}
 		
 		return new ViewModel([
 			'form' => $form,
+			'cancel_url' => $this->url()->fromRoute('login')
+		]);
+	}
+
+	public function validateaccountAction()
+	{
+		$token = $this->params()->fromRoute('token', null);
+		if (!$token) {
+			$this->resultStatus()->addResultStatus($this->getServiceLocator()->get('translator')->translate("Invalid request."), 'error');
+			return $this->redirect()->toRoute('login');
+		}
+		
+		$user = $this->getUserTable()->getUserByRegistrationToken($token, false);
+		if (!$user) {
+			$this->resultStatus()->addResultStatus($this->getServiceLocator()->get('translator')->translate("User not found."), 'error');
+			return $this->redirect()->toRoute('login');
+		}
+		
+		$form = $this->getServiceLocator()->get('User\Form\ValidateAccount');
+		$form->setAttribute('method', 'post');
+		$form->bind($user);
+		$form->get('submit')->setValue($this->getServiceLocator()->get('translator')->translate('Save'));
+		
+		$request = $this->getRequest();
+		if ($request->isPost()) {
+			$form->setData($request->getPost());
+			
+			if ($form->isValid()) {
+				$bcrypt = $this->getServiceLocator()->get('Miranda\Service\AuthBCrypt');
+				
+				$user->setPassword($request->getPost('password'), $bcrypt);
+				$user->resetRegistrationToken();
+				$this->getUserTable()->saveUser($user, true);
+				
+				$this->resultStatus()->addResultStatus(
+						$this->getServiceLocator()->get('translator')->translate("Your account is validated. You can now log in."), "success", false);
+				return $this->redirect()->toRoute('login');
+			}
+		}
+		
+		return new ViewModel([
+			'form' => $form,
+			'email' => $user->getEmail(),
 			'cancel_url' => $this->url()->fromRoute('login')
 		]);
 	}

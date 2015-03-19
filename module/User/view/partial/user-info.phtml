@@ -1,10 +1,14 @@
 <div>
 	<h2 style="vertical-align:middle;display:inline-block;"><?php echo $this->user->getDisplayName(); ?></h2>
 	<p style="display:inline-block;padding-left:20px;">
-		<?php if ($this->user->isActive()):?>
-			<span class="label label-success" style="padding:5px;"><i class="icon-ok icon-white"></i> <?php echo $this->translate('Account enabled'); ?></span>
-		<?php else:?>
-			<span class="label label-important" style="padding:5px;"><i class="icon-ban-circle icon-white"></i> <?php echo $this->translate('Account disabled'); ?></span>
+    	<?php if ($user->getRegistrationToken()): ?>
+			<span class="label label-warning" style="padding:5px;"><i class="icon-legal"></i> <?php echo $this->translate('Awaiting validation'); ?></span>
+    	<?php else: ?>
+			<?php if ($this->user->isActive()):?>
+				<span class="label label-success" style="padding:5px;"><i class="icon-ok icon-white"></i> <?php echo $this->translate('Account enabled'); ?></span>
+			<?php else:?>
+				<span class="label label-important" style="padding:5px;"><i class="icon-ban-circle icon-white"></i> <?php echo $this->translate('Account disabled'); ?></span>
+			<?php endif;?>
 		<?php endif;?>
 	</p>
 </div>

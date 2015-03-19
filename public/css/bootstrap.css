@@ -76,16 +76,12 @@ sub {
 }
 img {
   /* Responsive images (ensure images don't scale beyond their parents) */
-
   max-width: 100%;
   /* Part 1: Set a maxium relative to the parent */
-
   width: auto\9;
   /* IE7-8 need help adjusting responsive images */
-
   height: auto;
   /* Part 2: Scale the height according to the width, otherwise you get stretching */
-
   vertical-align: middle;
   border: 0;
   -ms-interpolation-mode: bicubic;
@@ -180,7 +176,7 @@ textarea {
   img {
     max-width: 100% !important;
   }
-  @page  {
+  @page {
     margin: 0.5cm;
   }
   p,
@@ -335,134 +331,134 @@ a:focus {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   float: left;
-  margin-left: 2.564102564102564%;
+  margin-left: 2.56410256%;
   *margin-left: 2.5%;
 }
 .row-fluid [class*="span"]:first-child {
   margin-left: 0;
 }
 .row-fluid .controls-row [class*="span"] + [class*="span"] {
-  margin-left: 2.564102564102564%;
+  margin-left: 2.56410256%;
 }
 .row-fluid .span10 {
   width: 100%;
-  *width: 99.93589743589743%;
+  *width: 99.93589744%;
 }
 .row-fluid .span9 {
-  width: 89.74358974358974%;
-  *width: 89.67948717948717%;
+  width: 89.74358974%;
+  *width: 89.67948718%;
 }
 .row-fluid .span8 {
-  width: 79.48717948717949%;
-  *width: 79.42307692307692%;
+  width: 79.48717949%;
+  *width: 79.42307692%;
 }
 .row-fluid .span7 {
-  width: 69.23076923076923%;
-  *width: 69.16666666666666%;
+  width: 69.23076923%;
+  *width: 69.16666667%;
 }
 .row-fluid .span6 {
-  width: 58.97435897435897%;
-  *width: 58.91025641025641%;
+  width: 58.97435897%;
+  *width: 58.91025641%;
 }
 .row-fluid .span5 {
-  width: 48.717948717948715%;
-  *width: 48.65384615384615%;
+  width: 48.71794872%;
+  *width: 48.65384615%;
 }
 .row-fluid .span4 {
-  width: 38.46153846153846%;
-  *width: 38.3974358974359%;
+  width: 38.46153846%;
+  *width: 38.3974359%;
 }
 .row-fluid .span3 {
-  width: 28.205128205128204%;
-  *width: 28.14102564102564%;
+  width: 28.20512821%;
+  *width: 28.14102564%;
 }
 .row-fluid .span2 {
-  width: 17.94871794871795%;
-  *width: 17.884615384615383%;
+  width: 17.94871795%;
+  *width: 17.88461538%;
 }
 .row-fluid .span1 {
-  width: 7.6923076923076925%;
-  *width: 7.628205128205129%;
+  width: 7.69230769%;
+  *width: 7.62820513%;
 }
 .row-fluid .offset10 {
-  margin-left: 105.12820512820512%;
-  *margin-left: 104.99999999999999%;
+  margin-left: 105.12820513%;
+  *margin-left: 105%;
 }
 .row-fluid .offset10:first-child {
-  margin-left: 102.56410256410257%;
-  *margin-left: 102.43589743589743%;
+  margin-left: 102.56410256%;
+  *margin-left: 102.43589744%;
 }
 .row-fluid .offset9 {
-  margin-left: 94.87179487179486%;
-  *margin-left: 94.74358974358972%;
+  margin-left: 94.87179487%;
+  *margin-left: 94.74358974%;
 }
 .row-fluid .offset9:first-child {
-  margin-left: 92.3076923076923%;
-  *margin-left: 92.17948717948717%;
+  margin-left: 92.30769231%;
+  *margin-left: 92.17948718%;
 }
 .row-fluid .offset8 {
-  margin-left: 84.61538461538461%;
-  *margin-left: 84.48717948717947%;
+  margin-left: 84.61538462%;
+  *margin-left: 84.48717949%;
 }
 .row-fluid .offset8:first-child {
-  margin-left: 82.05128205128206%;
-  *margin-left: 81.92307692307692%;
+  margin-left: 82.05128205%;
+  *margin-left: 81.92307692%;
 }
 .row-fluid .offset7 {
-  margin-left: 74.35897435897435%;
-  *margin-left: 74.23076923076921%;
+  margin-left: 74.35897436%;
+  *margin-left: 74.23076923%;
 }
 .row-fluid .offset7:first-child {
-  margin-left: 71.7948717948718%;
-  *margin-left: 71.66666666666666%;
+  margin-left: 71.79487179%;
+  *margin-left: 71.66666667%;
 }
 .row-fluid .offset6 {
-  margin-left: 64.1025641025641%;
-  *margin-left: 63.97435897435897%;
+  margin-left: 64.1025641%;
+  *margin-left: 63.97435897%;
 }
 .row-fluid .offset6:first-child {
-  margin-left: 61.53846153846153%;
-  *margin-left: 61.41025641025641%;
+  margin-left: 61.53846154%;
+  *margin-left: 61.41025641%;
 }
 .row-fluid .offset5 {
-  margin-left: 53.84615384615384%;
-  *margin-left: 53.71794871794872%;
+  margin-left: 53.84615385%;
+  *margin-left: 53.71794872%;
 }
 .row-fluid .offset5:first-child {
-  margin-left: 51.28205128205128%;
-  *margin-left: 51.15384615384615%;
+  margin-left: 51.28205128%;
+  *margin-left: 51.15384615%;
 }
 .row-fluid .offset4 {
-  margin-left: 43.58974358974359%;
-  *margin-left: 43.46153846153846%;
+  margin-left: 43.58974359%;
+  *margin-left: 43.46153846%;
 }
 .row-fluid .offset4:first-child {
-  margin-left: 41.02564102564102%;
-  *margin-left: 40.8974358974359%;
+  margin-left: 41.02564103%;
+  *margin-left: 40.8974359%;
 }
 .row-fluid .offset3 {
-  margin-left: 33.33333333333333%;
-  *margin-left: 33.205128205128204%;
+  margin-left: 33.33333333%;
+  *margin-left: 33.20512821%;
 }
 .row-fluid .offset3:first-child {
-  margin-left: 30.769230769230766%;
-  *margin-left: 30.64102564102564%;
+  margin-left: 30.76923077%;
+  *margin-left: 30.64102564%;
 }
 .row-fluid .offset2 {
-  margin-left: 23.076923076923077%;
-  *margin-left: 22.948717948717945%;
+  margin-left: 23.07692308%;
+  *margin-left: 22.94871795%;
 }
 .row-fluid .offset2:first-child {
-  margin-left: 20.51282051282051%;
-  *margin-left: 20.384615384615383%;
+  margin-left: 20.51282051%;
+  *margin-left: 20.38461538%;
 }
 .row-fluid .offset1 {
-  margin-left: 12.820512820512821%;
-  *margin-left: 12.692307692307692%;
+  margin-left: 12.82051282%;
+  *margin-left: 12.69230769%;
 }
 .row-fluid .offset1:first-child {
-  margin-left: 10.256410256410255%;
-  *margin-left: 10.12820512820513%;
+  margin-left: 10.25641026%;
+  *margin-left: 10.12820513%;
 }
 [class*="span"].hide,
 .row-fluid [class*="span"].hide {
@@ -657,7 +653,6 @@ ol.inline > li {
   display: inline-block;
   *display: inline;
   /* IE7 inline-block hack */
-
   *zoom: 1;
   padding-left: 5px;
   padding-right: 5px;
@@ -936,7 +931,6 @@ input[type="color"]:focus,
   outline: 0;
   outline: thin dotted \9;
   /* IE6-9 */
-
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
   -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(82,168,236,.6);
@@ -946,10 +940,8 @@ input[type="checkbox"] {
   margin: 4px 0 0;
   *margin-top: 0;
   /* IE7 */
-
   margin-top: 1px \9;
   /* IE8-9 */
-
   line-height: normal;
 }
 input[type="file"],
@@ -965,10 +957,8 @@ select,
 input[type="file"] {
   height: 30px;
   /* In IE7, the height of the select element cannot be changed by height, only font-size */
-
   *margin-top: 4px;
   /* For IE7, add top margin to align select with labels */
-
   line-height: 30px;
 }
 select {
@@ -1356,7 +1346,6 @@ select:focus:invalid:focus {
   display: inline-block;
   *display: inline;
   /* IE7 inline-block hack */
-
   *zoom: 1;
   vertical-align: middle;
   padding-left: 5px;
@@ -1507,7 +1496,6 @@ input.search-query {
   padding-left: 14px;
   padding-left: 4px \9;
   /* IE7-8 doesn't have border-radius, so don't indent the padding */
-
   margin-bottom: 0;
   -webkit-border-radius: 15px;
   -moz-border-radius: 15px;
@@ -1564,7 +1552,6 @@ input.search-query {
   display: inline-block;
   *display: inline;
   /* IE7 inline-block hack */
-
   *zoom: 1;
   margin-bottom: 0;
   vertical-align: middle;
@@ -2630,7 +2617,6 @@ button.close {
   display: inline-block;
   *display: inline;
   /* IE7 inline-block hack */
-
   *zoom: 1;
   padding: 4px 12px;
   margin-bottom: 0;
@@ -2653,7 +2639,6 @@ button.close {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   *background-color: #e6e6e6;
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
-
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
   border: 1px solid #cccccc;
   *border: 0;
@@ -2789,7 +2774,6 @@ input[type="button"].btn-block {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   *background-color: #0066cc;
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
-
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
 .btn-primary:hover,
@@ -2821,7 +2805,6 @@ input[type="button"].btn-block {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   *background-color: #f89406;
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
-
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
 .btn-warning:hover,
@@ -2853,7 +2836,6 @@ input[type="button"].btn-block {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   *background-color: #bd362f;
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
-
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
 .btn-danger:hover,
@@ -2885,7 +2867,6 @@ input[type="button"].btn-block {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   *background-color: #51a351;
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
-
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
 .btn-success:hover,
@@ -2917,7 +2898,6 @@ input[type="button"].btn-block {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   *background-color: #2f96b4;
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
-
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
 .btn-info:hover,
@@ -2949,7 +2929,6 @@ input[type="button"].btn-block {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   *background-color: #222222;
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
-
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
 .btn-inverse:hover,
@@ -3024,7 +3003,6 @@ input[type="submit"].btn.btn-mini {
   display: inline-block;
   *display: inline;
   /* IE7 inline-block hack */
-
   *zoom: 1;
   font-size: 0;
   vertical-align: middle;
@@ -3200,7 +3178,6 @@ input[type="submit"].btn.btn-mini {
   display: inline-block;
   *display: inline;
   /* IE7 inline-block hack */
-
   *zoom: 1;
 }
 .btn-group-vertical > .btn {
@@ -3659,7 +3636,7 @@ input[type="submit"].btn.btn-mini {
   background-image: linear-gradient(to bottom, #931bbf, #5f127c);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff931bbf', endColorstr='#ff5f127c', GradientType=0);
-  border: 1px solid #800080;
+  border: 1px solid purple;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   border-radius: 4px;
@@ -3897,7 +3874,6 @@ input[type="submit"].btn.btn-mini {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   *background-color: #4e0e66;
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
-
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
   -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 1px 0 rgba(255,255,255,.075);
   -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 1px 0 rgba(255,255,255,.075);
@@ -4131,7 +4107,6 @@ input[type="submit"].btn.btn-mini {
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   *background-color: #040404;
   /* Darken IE7 buttons by default so they stand out more given they won't have borders */
-
   filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
 .navbar-inverse .btn-navbar:hover,
@@ -4161,7 +4136,6 @@ input[type="submit"].btn.btn-mini {
   display: inline-block;
   *display: inline;
   /* IE7 inline-block hack */
-
   *zoom: 1;
   text-shadow: 0 1px 0 #ffffff;
 }
@@ -4179,7 +4153,6 @@ input[type="submit"].btn.btn-mini {
   display: inline-block;
   *display: inline;
   /* IE7 inline-block hack */
-
   *zoom: 1;
   margin-left: 0;
   margin-bottom: 0;
@@ -4380,7 +4353,6 @@ input[type="submit"].btn.btn-mini {
   border: 1px solid rgba(0, 0, 0, 0.3);
   *border: 1px solid #999;
   /* IE6-7 */
-
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;

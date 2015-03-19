@@ -15,6 +15,7 @@ return array(
 	'Email: ' => 'Email : ',
 	'Account enabled' => 'Compte activé',
 	'Account disabled' => 'Compte desactivé',
+	'Awaiting validation' => 'En attente de validation',
 	'Last login: ' => 'Dernière connexion : ',
 	'Last activity: ' => 'Dernière activité : ',
 	'Add user' => 'Ajouter un utilisateur',
@@ -92,6 +93,11 @@ return array(
 	"Your account recovery request has expired. Please request a new one." => "Votre demande de récupération de compte a expiré. Merci de faire une nouvelle demande.",
 	"<b>Recover your account.</b><br/>You can recover your account by setting a new password below." => "<b>Récupérer votre compte.</b><br/>Vous pouvez récupérer votre compte en saisissant un nouveau mot de passe ci-dessous.",
 	
+	"<b>Validate your account.</b><br/>To validate and use your account, please complete the following information." => "<b>Valider votre compte.</b><br/>Pour valider et utiliser votre compte, merci de completer les informations suivantes.",
+	
 	"Creating your account" => "Création de votre compte",
-	"An account has been created for you on our system.<br/>Please follow the link below to set a password for your account and so activate it: " => "Un compte a été créé pour vous sur notre système.<br/>Merci de suivre le lien ci-dessous pour choisir un mot de passe pour votre compte et ainsi l'activer : "
+	"An account has been created for you on our system.<br/>Please follow the link below to set a password for your account and so activate it: " => "Un compte a été créé pour vous sur notre système.<br/>Merci de suivre le lien ci-dessous pour choisir un mot de passe pour votre compte et ainsi l'activer : ",
+	'Resend account validation email' => "Renvoyer l'email de validation du compte",
+	"Account validation email sent." => "Email de validation du compte envoyé.",
+	"Can't send account validation email." => "Impossible d'envoyer l'email de validation du compte."
 );

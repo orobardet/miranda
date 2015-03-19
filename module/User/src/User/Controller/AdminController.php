@@ -9,7 +9,7 @@ use Acl\Controller\AclControllerInterface;
 class AdminController extends AbstractUserController implements AclControllerInterface
 {
 
-	public function aclIsAllowed($action,\Zend\Permissions\Acl\Acl $acl, $user)
+	public function aclIsAllowed($action, \Zend\Permissions\Acl\Acl $acl, $user)
 	{
 		switch ($action) {
 			case "index":
@@ -18,6 +18,7 @@ class AdminController extends AbstractUserController implements AclControllerInt
 			case "show":
 				return "admin_show_user";
 				break;
+			case "creation-email":
 			case "add":
 				return "admin_add_user";
 				break;
@@ -65,6 +66,7 @@ class AdminController extends AbstractUserController implements AclControllerInt
 		$this->refererUrl()->setReferer('admin-user-edit');
 		$this->refererUrl()->setReferer('admin-user-delete');
 		$this->refererUrl()->setReferer('admin-role-show');
+		$this->refererUrl()->setReferer('admin-user-sent-account-validation-email');
 		
 		return new ViewModel(
 				array(
@@ -209,5 +211,38 @@ class AdminController extends AbstractUserController implements AclControllerInt
 			'id' => $id,
 			'user' => $this->getUserTable()->getUser($id)
 		);
+	}
+
+	public function creationEmailAction()
+	{
+		$id = (int)$this->params()->fromRoute('id', 0);
+		if (!$id) {
+			return $this->redirect()->toRoute('admin/user');
+		}
+		
+		try {
+			$user = $this->getUserTable()->getUser($id);
+			$this->sendAccountCreationMail($user);
+			$this->resultStatus()->addResultStatus(
+					StringTools::varprintf($this->getServiceLocator()->get('translator')->translate("Account validation email sent."), 
+							array(
+								'name' => $user->getDisplayName()
+							)), "success");
+
+		} catch (\Exception $ex) {
+			$this->resultStatus()->addResultStatus(
+					StringTools::varprintf($this->getServiceLocator()->get('translator')->translate("Can't send account validation email."), 
+							array(
+								'name' => $user->getDisplayName()
+							)), "error");
+			return $this->redirect()->toRoute('admin/user');
+		}
+		
+		$return_url = $this->refererUrl('admin-user-sent-account-validation-email');
+		if ($return_url) {
+			return $this->redirect()->toUrl($return_url);
+		} else {
+			return $this->redirect()->toRoute('admin/user');
+		}
 	}
 }

@@ -1,6 +1,9 @@
 <?php
 return array(
-	'miranda' => array(
+	'application' => array(
+		'app' => [
+			'base_url' => 'http://localhost/'
+		],
 		'layout' => array(
 			'compile_less' => false
 		)
@@ -8,5 +11,6 @@ return array(
 	'db' => array(
 			'username' => 'CHANGEME',
 			'password' => 'CHANGEME',
+			'table_prefix' => ''
 	),
 );
