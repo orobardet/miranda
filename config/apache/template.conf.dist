@@ -1,44 +1,10 @@
-Miranda
-=======
-
-Introduction
-------------
-Gestionnaire de la compagnie Miranda
-
-Pré-requis
-----------
-
-- php5 >= 5.5
-- php5-intl
-- php5-xcache
-- php5-mysql
-- une base de donnée MySQL
-- git
-- connexion internet
-  
-
-Pour développement :
-- Less CSS (npm install -g less)
-
-
-Installation
-------------
-
-```shell
-git clone https://github.com/orobardet/miranda.git
-cd miranda
-./install.sh
-```
-
-VHost Apache (peut-être généré par l'installeur) :
-```apache
 <VirtualHost *:80>
-    ServerName HOST
-    ServerAdmin webmaster@localhost
+    ServerName {{SERVER_NAME}}
+    ServerAdmin {{SERVER_ADMIN}}
 
-    DocumentRoot /home/miranda/www/public
+    DocumentRoot {{BASE_PATH}}/public
     # Uncomment if running in development environment (application will provide debugging features)
-    # SetEnv APPLICATION_ENV "dev"
+    SetEnv APPLICATION_ENV "{{ENV}}"
 
     AddDefaultCharset UTF-8
 
@@ -70,7 +36,7 @@ VHost Apache (peut-être généré par l'installeur) :
         RewriteRule ^(.*)$ %{ENV:BASE}index.php [NC,L]
     </Location>
 
-    <Directory /home/miranda/www/public>
+    <Directory {{BASE_PATH}}/public>
         Options Indexes FollowSymLinks MultiViews
         AllowOverride None
         Order allow,deny
@@ -78,8 +44,8 @@ VHost Apache (peut-être généré par l'installeur) :
         Require all granted
     </Directory>
 
-    Alias /pictures /home/miranda/data/pictures
-    <Directory /home/miranda/data/pictures>
+    Alias /pictures {{DATA_PATH}}/pictures
+    <Directory {{DATA_PATH}}/pictures>
         Options FollowSymLinks
         AllowOverride None
         Order allow,deny
@@ -87,4 +53,4 @@ VHost Apache (peut-être généré par l'installeur) :
         Require all granted
     </Directory>
 </VirtualHost>
-```
+    

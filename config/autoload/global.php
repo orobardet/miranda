@@ -92,8 +92,8 @@ $config = [
 			'namespace' => 'miranda'
 		],
 		'data_storage' => [
-			'root_path' => '../../data/miranda',
-			'temp_path' => '../../data/miranda/tmp'
+			'root_path' => 'data/miranda',
+			'temp_path' => 'data/miranda/tmp'
 		],
 		'costume' => [
 			'pictures' => [

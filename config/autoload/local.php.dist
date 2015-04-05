@@ -8,9 +8,13 @@ return array(
 			'compile_less' => false
 		)
 	),
-	'db' => array(
+	'db' => [
 			'username' => 'CHANGEME',
 			'password' => 'CHANGEME',
 			'table_prefix' => ''
-	),
+	],
+	'data_storage' => [
+		'root_path' => 'data/miranda',
+		'temp_path' => 'data/miranda/tmp'
+	]
 );
