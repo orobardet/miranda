@@ -177,7 +177,7 @@ return [
 				],
 				'add-user' => [
 					'options' => [
-						'route' => 'add user [<email>] [--firstname=] [--lastname=]',
+						'route' => 'add user [<email>] [--firstname=] [--lastname=] [--role=]',
 						'defaults' => [
 							'controller' => 'User\Controller\Console',
 							'action' => 'adduser'

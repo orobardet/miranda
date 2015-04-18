@@ -5,6 +5,7 @@ return array(
     'user/auth/login'                  => __DIR__ . '/view/user/auth/login.phtml',
     'user/auth/resetpassword'          => __DIR__ . '/view/user/auth/resetpassword.phtml',
     'user/auth/forgotpassword'         => __DIR__ . '/view/user/auth/forgotpassword.phtml',
+    'user/auth/validateaccount'        => __DIR__ . '/view/user/auth/validateaccount.phtml',
     'user/profile/show'                => __DIR__ . '/view/user/profile/show.phtml',
     'user/profile/profile-layout'      => __DIR__ . '/view/user/profile/profile-layout.phtml',
     'user/profile/edit'                => __DIR__ . '/view/user/profile/edit.phtml',

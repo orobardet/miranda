@@ -280,7 +280,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'List of terms that can match users'
 			),
 			'Users management',
-			'add user [<email>] [-f|--firstname=FIRSTNAME] [-l|--lastname=LASTNAME]' => '',
+			'add user [<email>] [--firstname=FIRSTNAME] [--lastname=LASTNAME] [--role=ROLE,ROLE,...]' => '',
 			array(
 				'<email>',
 				'user email',

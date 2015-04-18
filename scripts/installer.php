@@ -6,9 +6,8 @@ if (php_sapi_name() !== 'cli') {
 	echo "\033[31m*** Must be run on commande line.\033[0m\n";
 	exit(1);
 }
-/////////// TODO: A DECOMMENTER !!!
-//chdir( dirname(__DIR__));
-
+chdir(dirname(__DIR__));
+//chdir('/home/orobardet/www/miranda2');
 
 // On défini le fuseau horaire par défaut de l'application
 date_default_timezone_set('Europe/Paris');
@@ -72,12 +71,54 @@ function createDirectory($path, $mask, $recursive = false)
 	}
 	chmod($path, $mask);
 }
-$console = Console::getInstance();
 
+function loadSqlFile($db, $sqlFile, $tablePrefix)
+{
+	if (!file_exists($sqlFile)) {
+		exitWithError("SQL file $sqlFile does not exists.", 2);
+	}
+	
+	if (!is_file($sqlFile) || !is_readable($sqlFile)) {
+		exitWithError("SQL file $sqlFile is not a regular readable file.", 2);
+	}
+	
+	$sqlContent = file_get_contents($sqlFile);
+	$queries = array_filter(array_map('trim', preg_split('/\n;;;\n/', $sqlContent)), 
+			function ($value)
+			{
+				if (!$value || $value === '') {
+					return false;
+				}
+				
+				return true;
+			});
+	
+	if (count($queries)) {
+		if (!$db->query("SET FOREIGN_KEY_CHECKS=0;", DbAdapter::QUERY_MODE_EXECUTE)) {
+			throw new \Exception("Can't disable foreign key checks.");
+		}
+		foreach ($queries as $query) {
+			$query = str_replace('%{MIRANDA_TABLE_PREFIX}%', $tablePrefix, $query);
+			if (trim($query) !== '') {
+				if (!$db->query($query, DbAdapter::QUERY_MODE_EXECUTE)) {
+					throw new \Exception("Can't create a table.");
+				}
+			}
+		}
+		if (!$db->query("SET FOREIGN_KEY_CHECKS=1;", DbAdapter::QUERY_MODE_EXECUTE)) {
+			throw new \Exception("Can't disable foreign key checks.");
+		}
+	}
+	
+	return true;
+}
+
+$console = Console::getInstance();
 // Création data/cache dir
 $console->write('Creating cache directory data/cache... ');
 createDirectory('data', 0775);
 createDirectory('data/cache', 0777);
+
 $console->writeLine('OK!', ConsoleColorInterface::GREEN);
 $console->writeLine('Note: this directory MUST be accessible and writable by the websever.', ConsoleColorInterface::YELLOW);
 
@@ -95,15 +136,16 @@ if (!ConsoleConfirm::prompt("\n" . $console->colorize("Do you have all these inf
 }
 
 // Création BDD (demande conf accès puis création schéma)
-$dbConfig = array(
+$dbConfig = [
 	'driver' => 'Mysqli',
 	'hostname' => 'localhost',
 	'port' => '3306',
 	'database' => '',
 	'username' => '',
 	'password' => '',
-	'charset' => 'UTF8'
-);
+	'charset' => 'UTF8',
+	'table_prefix' => ''
+];
 
 $console->writeLine("\nDatabase configuration:", ConsoleColorInterface::CYAN);
 $dbConfig['hostname'] = trim(ConsoleInput::prompt($console->colorize("MySQL server host [localhost]: ", ConsoleColorInterface::LIGHT_WHITE), true));
@@ -121,6 +163,7 @@ $dbConfig['password'] = trim(ConsolePassword::prompt($console->colorize("Databas
 $console->write(
 		"Trying to connect to mysql://" . $dbConfig['username'] . ":***@" . $dbConfig['hostname'] . ":" . $dbConfig['port'] . "/" .
 				 $dbConfig['database'] . "... ");
+
 try {
 	$db = new DbAdapter($dbConfig);
 	$db->query("SELECT 1;");
@@ -131,8 +174,23 @@ try {
 $console->writeLine("OK!", ConsoleColorInterface::GREEN);
 $dbConfig['table_prefix'] = trim(
 		ConsoleInput::prompt($console->colorize("[OPTIONAL] Database table prefix []: ", ConsoleColorInterface::LIGHT_WHITE), true));
-// TODO: Peupler la base de données
 
+try {
+	$console->write('Creating database structure... ');
+	if (!loadSqlFile($db, 'sql/init/miranda.sql', $dbConfig['table_prefix'])) {
+		throw new \Exception("Can't create database structure");
+	}
+	$console->writeLine("OK!", ConsoleColorInterface::GREEN);
+	
+	$console->write('Populating database... ');
+	if (!loadSqlFile($db, 'sql/init/data.sql', $dbConfig['table_prefix'])) {
+		throw new \Exception("Can't populate database");
+	}
+	$console->writeLine("OK!", ConsoleColorInterface::GREEN);
+} catch (\Exception $e) {
+	$console->writeLine("KO!", ConsoleColorInterface::RED);
+	exitWithError($e->getMessage(), 1);
+}
 
 // Demande url d'accès
 $console->writeLine("\nAccess configuration:", ConsoleColorInterface::CYAN);
@@ -141,7 +199,7 @@ $validAccessUrlInput = false;
 while (!$validAccessUrlInput) {
 	$userAccessUrl = trim(
 			ConsoleInput::prompt(
-					$console->colorize("URL that will be used to access the website [http://localhost/]: ", ConsoleColorInterface::LIGHT_WHITE), false));
+					$console->colorize("URL that will be used to access the website [http://localhost/]: ", ConsoleColorInterface::LIGHT_WHITE), true));
 	if (!$userAccessUrl || $userAccessUrl === '') {
 		$validAccessUrlInput = true;
 	} else {
@@ -210,7 +268,7 @@ $console->writeLine("I can now generate the configuration file $configFileName w
 $console->writeLine($phpConfigString, ConsoleColorInterface::GRAY);
 $console->writeLine("But this will overwrite previously existing configuration file with the same name (if any).");
 
-if (!ConsoleConfirm::prompt($console->colorize("Do you want me to create the configuration file?", ConsoleColorInterface::LIGHT_WHITE) . " [y/n] ")) {
+if (ConsoleConfirm::prompt($console->colorize("Do you want me to create the configuration file?", ConsoleColorInterface::LIGHT_WHITE) . " [y/n] ")) {
 	$console->writeLine("Writing configuration file $configFileName... ");
 	if (file_put_contents($configFileName, $phpConfigString) !== false) {
 		$console->writeLine("OK!", ConsoleColorInterface::GREEN);
@@ -239,10 +297,10 @@ if (ConsoleConfirm::prompt(
 		'SERVER_NAME' => $uri->getHost(),
 		'SERVER_ADMIN' => 'root@localhost',
 		'BASE_PATH' => rtrim(getcwd(), '/'),
-		'DATA_PATH' => $storagePath 
+		'DATA_PATH' => $storagePath
 	];
 	foreach ($vars as $var => $value) {
-		$apacheConfigurationString = str_replace('{{'.$var.'}}', $value, $apacheConfigurationString);
+		$apacheConfigurationString = str_replace('{{' . $var . '}}', $value, $apacheConfigurationString);
 	}
 	$console->writeLine("Writing Apache VHost configuration file $apacheConfigurationFile... ");
 	if (file_put_contents($apacheConfigurationFile, $apacheConfigurationString) !== false) {
@@ -254,4 +312,51 @@ if (ConsoleConfirm::prompt(
 	}
 }
 
-// TODO: Création utilisateur admin principal
+// Création utilisateur admin principal
+$console->writeLine("\nAdministrator user:", ConsoleColorInterface::CYAN);
+$console->writeLine(
+		"I'll now create a new user with administrator privileges. For this, I need at least a VALID email adress (as user will have to validate its account with a validation email).");
+
+$emailValidator = new \Zend\Validator\EmailAddress();
+
+do {
+	do {
+		$userEmail = trim(ConsoleInput::prompt($console->colorize("Valid user email: ", ConsoleColorInterface::LIGHT_WHITE), false));
+		$isValid = $emailValidator->isValid($userEmail);
+		if (!$isValid) {
+			foreach ($emailValidator->getMessages() as $message) {
+				$console->writeLine($message, ConsoleColorInterface::RED);
+			}
+		}
+	} while (!$isValid);
+	
+	$userEmailConfirmation = trim(
+			ConsoleInput::prompt($console->colorize("Valid user email (confirmation): ", ConsoleColorInterface::LIGHT_WHITE), false));
+	
+	$areSame = ($userEmailConfirmation == $userEmail);
+	if (!$areSame) {
+		$console->writeLine("Email addresses must be identical.", ConsoleColorInterface::RED);
+	}
+} while (!$areSame);
+$userFirstname = trim(ConsoleInput::prompt($console->colorize("Firstname (optional)? ", ConsoleColorInterface::LIGHT_WHITE), true));
+$userLastname = trim(ConsoleInput::prompt($console->colorize("Lastname (optional)? ", ConsoleColorInterface::LIGHT_WHITE), true));
+
+if (!$userFirstname || (trim($userFirstname) == '')) {
+	$userFirstname = "admin";
+}
+if (!$userLastname || (trim($userLastname) == '')) {
+	$userLastname = "admin";
+}
+
+$console->writeLine("Creating administrator user... ");
+passthru(
+		"bin/debug_miranda.php add user " . escapeshellarg($userEmail) . " --firstname " . escapeshellarg($userFirstname) . " --lastname " .
+				 escapeshellarg($userLastname) . " --role Administrateur", $returnCode);
+if ($returnCode) {
+	$console->writeLine("KO!", ConsoleColorInterface::RED);
+	$console->writeLine("Please, create the user by yourself running : bin/debug_miranda.php add user --role Administrateur", 
+			ConsoleColorInterface::RED);
+}
+
+$console->writeLine();
+$console->writeLine("Installation is finished !", ConsoleColorInterface::GREEN);

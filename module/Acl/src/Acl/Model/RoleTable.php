@@ -63,6 +63,35 @@ class RoleTable extends Role
 		return $row;
 	}
 
+	public function getRoleByName($name, $exceptionIfNotFound = true)
+	{
+		$rowset = $this->tableGateway->select(function ($select) use($name)
+		{
+			$select->where->like('name', (string)$name);
+		});
+		$row = $rowset->current();
+		if (!$row) {
+			if ($exceptionIfNotFound) {
+				throw new \Exception("Could not find role $name");
+			} else {
+				return false;
+			}
+		}
+		
+		$rights = array();
+		if ($this->rightsTableGateway) {
+			$rightset = $this->rightsTableGateway->select(array(
+				'role_id' => $row->getId()
+			));
+			foreach ($rightset as $right) {
+				$rights[] = $right->right_id;
+			}
+		}
+		$row->setRights($rights);
+		
+		return $row;
+	}
+
 	public function saveRole(Role $role)
 	{
 		$data = array(

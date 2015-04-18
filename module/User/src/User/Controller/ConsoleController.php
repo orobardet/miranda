@@ -261,6 +261,28 @@ class ConsoleController extends AbstractUserController implements ConfigAwareInt
 		$email = $this->getRequest()->getParam('email', null);
 		$firstname = $this->getRequest()->getParam('firstname', null);
 		$lastname = $this->getRequest()->getParam('lastname', null);
+		$role = $this->getRequest()->getParam('role', null);
+		
+		$roleIds = array(); 
+		if ($role) {
+			$roleNames = explode(',', $role);
+			$roleNames = array_filter($roleNames, function ($value) {
+				return trim($value) != ''; 
+			});
+			if (count($roleNames)) {
+				/* @var $roleTable \Acl\Model\RoleTable */
+				$roleTable = $this->getServiceLocator()->get('Acl\Model\RoleTable');
+				foreach ($roleNames as $roleName) {
+					$role = $roleTable->getRoleByName($roleName, false);
+					if ($role) {
+						$roleIds[] = $role->getId();
+					} else {
+						$this->console()->writeLine($translator->translate("'$roleName' is not a known role, ignoring."), ColorInterface::YELLOW);
+						
+					}
+				} 	
+			}				
+		}
 		
 		if (!$email || (trim($email) == '')) {
 			$email = Line::prompt($translator->translate('User email: '));
@@ -298,6 +320,9 @@ class ConsoleController extends AbstractUserController implements ConfigAwareInt
 			$user->setLastname($lastname);
 			$user->setPassword(sha1(uniqid()), $this->getServiceLocator()->get('Miranda\Service\AuthBCrypt'));
 			$user->setActive(true);
+			if (count($roleIds)) {
+				$user->setRoles($roleIds);
+			}
 			$user->createRegistrationToken();
 			$this->getUserTable()->saveUser($user, true);
 			
