@@ -8,10 +8,12 @@ Gestionnaire de la compagnie Miranda
 Pré-requis
 ----------
 
+- webserver avec url rewriting
 - php5 >= 5.5
 - php5-intl
 - php5-xcache
 - php5-mysql
+- sendmail fonctionnel
 - une base de donnée MySQL
 - git
 - connexion internet

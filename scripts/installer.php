@@ -350,11 +350,11 @@ if (!$userLastname || (trim($userLastname) == '')) {
 
 $console->writeLine("Creating administrator user... ");
 passthru(
-		"bin/debug_miranda.php add user " . escapeshellarg($userEmail) . " --firstname " . escapeshellarg($userFirstname) . " --lastname " .
+		"bin/miranda.php add user " . escapeshellarg($userEmail) . " --firstname " . escapeshellarg($userFirstname) . " --lastname " .
 				 escapeshellarg($userLastname) . " --role Administrateur", $returnCode);
 if ($returnCode) {
 	$console->writeLine("KO!", ConsoleColorInterface::RED);
-	$console->writeLine("Please, create the user by yourself running : bin/debug_miranda.php add user --role Administrateur", 
+	$console->writeLine("Please, create the user by yourself running : bin/miranda.php add user --role Administrateur", 
 			ConsoleColorInterface::RED);
 }
 
