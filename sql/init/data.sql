@@ -35,11 +35,7 @@ INSERT INTO `%{MIRANDA_TABLE_PREFIX}%rights_groups` (`id`, `descr`, `ord`) VALUE
 ;;;
 
 INSERT INTO `%{MIRANDA_TABLE_PREFIX}%roles` (`id`, `name`, `descr`) VALUES
-(4, 'Administrateur', 'Administrateur général'),
-(5, 'Admin utilisateur', 'Ne peut que administrer les utilisateurs, et consulter les droits/rôles'),
-(8, 'Invité', ''),
-(9, 'Gestionnaire costumes', 'Peut gérer et administrer la base de costumes')
-
+(1, 'Administrateur', 'Administrateur général');
 ;;;
 
 INSERT INTO `%{MIRANDA_TABLE_PREFIX}%roles_rights` (`role_id`, `right_id`) VALUES
