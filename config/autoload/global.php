@@ -44,7 +44,6 @@ $config = [
 				'css/bootstrap.css',
 				'css/fuelux.css',
 				'css/bootstrap-responsive.min.css',
-				'css/font-awesome.min.css',
 				'css/style.css'
 			],
 			'compile_less' => false,
@@ -55,7 +54,6 @@ $config = [
 				'css/bootstrap.less',
 				'css/fuelux.less',
 				'css/bootstrap-responsive.min.css',
-				'css/font-awesome.min.css',
 				'css/style.less'
 			],
 			'js' => [

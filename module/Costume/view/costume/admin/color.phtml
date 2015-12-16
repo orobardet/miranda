@@ -13,7 +13,7 @@ if ($this->acl()->isAllowed("admin_costumes_colors")) {
 		<div class="p action-bar action-bar-container">
 			<?php if ($this->acl()->isAllowed("admin_costumes_colors")): ?>
 			<div class="action-bar-item">
-			<a href="#" id="add-color-link"><i class="icon-plus-sign icon-linkcolor"></i> <?php echo $this->translate('Add a color'); ?></a>
+			<a href="#" id="add-color-link"><i class="fa fa-plus-circle"></i> <?php echo $this->translate('Add a color'); ?></a>
 			</div>
 			<?php endif; ?>
 		</div>
@@ -27,7 +27,7 @@ if ($this->acl()->isAllowed("admin_costumes_colors")) {
 				<?php echo $this->escapeHtml($color->getName()); ?>
 			</td>
 			<td style="width:20px;background-color:#<?php echo $this->escapeHtmlAttr($color->getColorCode()); ?>;" class="color" title="#<?php echo $this->escapeHtmlAttr($color->getColorCode()); ?>"></td>
-			<td class="delete-color text-center" style="width:20px;"><a href="#"><i class="icon-trash icon-linkcolor"></i></a></td>
+			<td class="delete-color text-center" style="width:20px;"><a href="#"><i class="fa fa-trash-o"></i></a></td>
 		</tr>
 		<?php endforeach; ?>
 		<?php endif;?>
@@ -92,7 +92,7 @@ if ($this->acl()->isAllowed("admin_costumes_colors")) {
     	<h4 class="delete-color-name" style="display:inline-block;vertical-align:middle;"></h4>
     	<div class="delete-color-preview" style="display:inline-block;height:36px;width:36px;border:solid 1px #DDD;border-radius:4px;margin-left:10px;vertical-align:middle;"></div>
     </div>
-    <p class="alert alert-info" style="margin-bottom:0px;margin-top:20px;"><i class="icon-info-sign"></i> <?php echo $this->translate('The color will be removed from all costumes using it.'); ?></p>
+    <p class="alert alert-info" style="margin-bottom:0px;margin-top:20px;"><i class="fa fa-info-circle"></i> <?php echo $this->translate('The color will be removed from all costumes using it.'); ?></p>
   </div>
   <div class="modal-footer">
     <a href="#" class="btn" data-dismiss="modal" ><?php echo $this->translate('No'); ?></a>
@@ -107,6 +107,6 @@ if ($this->acl()->isAllowed("admin_costumes_colors")) {
 							'<td class="name">'+
 							'</td>'+
 							'<td style="width:20px;" class="color"></td>'+
-							'<td class="delete-color text-center" style="width:20px;"><a href="#"><i class="icon-trash icon-linkcolor"></i></a></td>' +
+							'<td class="delete-color text-center" style="width:20px;"><a href="#"><i class="fa fa-trash-o"></i></a></td>' +
 							'</tr>';
 </script>

@@ -5,14 +5,14 @@ if ($this->acl()->isAllowed("admin_costumes_parts")) {
 	$this->headscript()->offsetSetFile(101, $this->basePath() . '/js/costume/parts_admin.js');
 }
 ?>
-
+<h5><?php echo $this->translate('Double-clic a part name to edit.'); ?></h5>
 <?php if (count($this->parts)): ?>
 	<form id="part-edit-form-template" class="part-edit-form" style="display:none;margin-bottom:0px;">
 		<div class="input-append" style="margin-bottom:0px;">
 			<input type="hidden" name="id"/>
 			<input name="name" type="text"/>
-			<button class="btn btn-primary" type="submit"><i class="icon-ok icon-white"></i></button>
-			<button class="btn btn-default" type="button" name="cancel"><i class="icon-remove"></i></button>
+			<button class="btn btn-primary" type="submit"><i class="fa fa-check"></i></button>
+			<button class="btn btn-default" type="button" name="cancel"><i class="fa fa-times"></i></button>
 		</div>
 		<span class="text-error edit-error"></span>
 	</form>
@@ -24,7 +24,7 @@ if ($this->acl()->isAllowed("admin_costumes_parts")) {
 		<td class="name">
 			<?php echo $this->escapeHtml($part->getName()); ?>
 		</td>
-		<td class="delete-part text-center vertical-center" style="width:20px;"><a href="#"><i class="icon-trash icon-linkcolor"></i></a></td>
+		<td class="delete-part text-center vertical-center" style="width:20px;"><a href="#"><i class="fa fa-trash-o"></i></a></td>
 	</tr>
 	<?php endforeach; ?>
 	</tbody>
@@ -46,7 +46,7 @@ if ($this->acl()->isAllowed("admin_costumes_parts")) {
     <div class="text-center">
     	<h4 class="delete-part-name" style="display:inline-block;vertical-align:middle;"></h4>
     </div>
-    <p class="alert alert-info" style="margin-bottom:0px;margin-top:20px;"><i class="icon-info-sign"></i> <?php echo $this->translate('The part will be removed from all costumes using it, as type or part.'); ?></p>
+    <p class="alert alert-info" style="margin-bottom:0px;margin-top:20px;"><i class="fa fa-info-circle"></i> <?php echo $this->translate('The part will be removed from all costumes using it, as type or part.'); ?></p>
   </div>
   <div class="modal-footer">
     <a href="#" class="btn" data-dismiss="modal" ><?php echo $this->translate('No'); ?></a>

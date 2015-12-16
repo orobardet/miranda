@@ -103,7 +103,7 @@ $form->prepare();
 					<div class="parts-list-item" id="parts-list-item-template">
 						<span class="part-label"></span>
 						<input type="hidden" name="parts[]" value="" disabled="disabled"/>
-						<a href="#" class="btn-remove-part btn btn-mini"><i class="icon-remove"></i></a>
+						<a href="#" class="btn-remove-part btn btn-mini"><i class="fa fa-times"></i></a>
 					</div>
 					<?php if (count($element->getMessages())):?>
 					<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>
@@ -265,7 +265,7 @@ $form->prepare();
 				<div class="tags-list-item" id="tags-list-item-template">
 					<span class="tag-label"></span>
 					<input type="hidden" name="tags[]" value="" disabled="disabled"/>
-					<a href="#" class="btn-remove-tag btn btn-mini"><i class="icon-remove"></i></a>
+					<a href="#" class="btn-remove-tag btn btn-mini"><i class="fa fa-times"></i></a>
 				</div>
 				<?php if (count($element->getMessages())):?>
 				<span class="help-block"><?php echo $this->formElementErrors($element); ?></span>

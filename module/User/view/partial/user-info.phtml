@@ -2,12 +2,12 @@
 	<h2 style="vertical-align:middle;display:inline-block;"><?php echo $this->user->getDisplayName(); ?></h2>
 	<p style="display:inline-block;padding-left:20px;">
     	<?php if ($user->getRegistrationToken()): ?>
-			<span class="label label-warning" style="padding:5px;"><i class="icon-legal"></i> <?php echo $this->translate('Awaiting validation'); ?></span>
+			<span class="label label-warning" style="padding:5px;"><i class="fa fa-gavel"></i> <?php echo $this->translate('Awaiting validation'); ?></span>
     	<?php else: ?>
 			<?php if ($this->user->isActive()):?>
-				<span class="label label-success" style="padding:5px;"><i class="icon-ok icon-white"></i> <?php echo $this->translate('Account enabled'); ?></span>
+				<span class="label label-success" style="padding:5px;"><i class="fa fa-check"></i> <?php echo $this->translate('Account enabled'); ?></span>
 			<?php else:?>
-				<span class="label label-important" style="padding:5px;"><i class="icon-ban-circle icon-white"></i> <?php echo $this->translate('Account disabled'); ?></span>
+				<span class="label label-important" style="padding:5px;"><i class="fa fa-ban"></i> <?php echo $this->translate('Account disabled'); ?></span>
 			<?php endif;?>
 		<?php endif;?>
 	</p>
@@ -17,25 +17,25 @@
 		<?php if ($this->acl()->isAllowed("admin_edit_user")): ?>
 		<div class="action-bar-item">
     	<a href="<?php echo $this->url('admin/user',
-            array('action'=>'edit', 'id' => $this->user->getId()));?>"><i class="icon-edit icon-linkcolor"></i> <?php echo $this->translate('edit'); ?></a>
+            array('action'=>'edit', 'id' => $this->user->getId()));?>"><i class="fa fa-pencil"></i> <?php echo $this->translate('edit'); ?></a>
         </div> 
 		<?php endif;?>
     	<?php if ($this->acl()->isAllowed("admin_delete_user")): ?>
 		<div class="action-bar-item">
     	<a href="<?php echo $this->url('admin/user',
-            array('action'=>'delete', 'id' => $this->user->getId()));?>"><i class="icon-trash icon-linkcolor"></i> <?php echo $this->translate('delete'); ?></a>
+            array('action'=>'delete', 'id' => $this->user->getId()));?>"><i class="fa fa-trash-o"></i> <?php echo $this->translate('delete'); ?></a>
         </div> 
     	<?php endif;?>
 </div>
 <?php endif; ?>
 <p>
-<span class="muted"><i class="icon-time"></i> <?php echo $this->translate('Created on: '); ?></span><?php echo $this->user->getCreationDate($this->translate('full_text_date_time')); ?><br/>
-<span class="muted"><i class="icon-time"></i> <?php echo $this->translate('Last modified: '); ?></span><?php echo $this->user->getLastModificationDate($this->translate('full_text_date_time')); ?><br/>
+<span class="muted"><i class="fa fa-clock-o"></i> <?php echo $this->translate('Created on: '); ?></span><?php echo $this->user->getCreationDate($this->translate('full_text_date_time')); ?><br/>
+<span class="muted"><i class="fa fa-clock-o"></i> <?php echo $this->translate('Last modified: '); ?></span><?php echo $this->user->getLastModificationDate($this->translate('full_text_date_time')); ?><br/>
 </p>
 <p>
-<span class="muted"><i class="icon-time"></i> <?php echo $this->translate('Last login: '); ?></span><?php echo $this->user->getLastLoginDate($this->translate('full_text_date_time')); ?><br/>
-<span class="muted"><i class="icon-time"></i> <?php echo $this->translate('Last activity: '); ?></span><?php echo $this->user->getLastActivityDate($this->translate('full_text_date_time')); ?><br/>
+<span class="muted"><i class="fa fa-clock-o"></i> <?php echo $this->translate('Last login: '); ?></span><?php echo $this->user->getLastLoginDate($this->translate('full_text_date_time')); ?><br/>
+<span class="muted"><i class="fa fa-clock-o"></i> <?php echo $this->translate('Last activity: '); ?></span><?php echo $this->user->getLastActivityDate($this->translate('full_text_date_time')); ?><br/>
 </p>
 <p>
-<span class="muted"><i class="icon-envelope"></i> <?php echo $this->translate('Email: '); ?></span><a href="mailto:<?php echo $this->user->getEmail(); ?>"><?php echo $this->user->getEmail(); ?></a><br/>
+<span class="muted"><i class="fa fa-envelope-o"></i> <?php echo $this->translate('Email: '); ?></span><a href="mailto:<?php echo $this->user->getEmail(); ?>"><?php echo $this->user->getEmail(); ?></a><br/>
 </p>

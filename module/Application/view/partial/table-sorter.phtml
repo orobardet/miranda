@@ -16,15 +16,15 @@ if (isset($this->context)) {
 }
 $direction = 'up';
 $class_direction = 'none';
-$icon_class = 'icon-sort';
+$icon_class = 'fa-sort';
 if ($this->field == $this->sort) {
 	$class_direction = 'down';
-	$icon_class = 'icon-sort-down';
+	$icon_class = 'fa-sort-desc';
 	if ($this->direction == 'up') {
-		$icon_class = 'icon-sort-up';
+		$icon_class = 'fa-sort-asc';
 		$direction = 'down';
 		$class_direction = 'up';
 	}
 }
 ?>
-<a href="<?php echo $this->url($this->route, $route_parameters, array('query' => array_merge($get_parameters, array('sort' => $this->field, 'direction' => $direction)))); ?>" class="tablesorter-icon tablesorter-direction-<?php echo $this->escapehtmlattr($class_direction); ?>"><i class="<?php echo $this->escapehtmlattr($icon_class);?>"></i></a>  
+<a href="<?php echo $this->url($this->route, $route_parameters, array('query' => array_merge($get_parameters, array('sort' => $this->field, 'direction' => $direction)))); ?>" class="tablesorter-icon tablesorter-direction-<?php echo $this->escapehtmlattr($class_direction); ?>"><i class="fa <?php echo $this->escapehtmlattr($icon_class);?>"></i></a>

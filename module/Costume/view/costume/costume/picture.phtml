@@ -97,9 +97,9 @@ echo $this->form()->closeTag();
     <h3 id="myModalLabel"><?php echo $this->translate("File too big"); ?></h3>
   </div>
   <div class="modal-body">
-  <h1 class="icon-warning-sign text-error pull-left"></h1>
+  	<i class="fa fa-exclamation-triangle fa-3x text-error pull-left"></i>
     <p><?php echo $this->translateReplace("Maximum file size: %size% Mb", array('size' => round($this->max_upload_size / 1024 / 1024,2))); ?></p>
-    </div>
+  </div>
   <div class="modal-footer">
     <button class="btn btn-primary" data-dismiss="modal"><?php echo $this->translate('Ok'); ?></button>
   </div>
@@ -126,10 +126,10 @@ $(function() {
     <h3 id="myModalLabel"><?php echo $this->translate("Delete the costume's picture?"); ?></h3>
   </div>
   <div class="modal-body">
-  <h1 class="icon-warning-sign text-error pull-left"></h1>
+	<i class="fa fa-exclamation-triangle fa-3x text-error pull-left"></i>
     <p><?php echo $this->translate("You have not selected image. This will permanently delete the image already attached to the costume."); ?></p>
     <p><?php echo $this->translate("Do you really want to delete this picture?"); ?></p>
-    </div>
+  </div>
   <div class="modal-footer">
     <button class="btn" data-dismiss="modal"><?php echo $this->translate('No'); ?></button>
     <button class="btn btn-primary" id="delete-picture-confirm-yes"><?php echo $this->translate('Yes'); ?></button>

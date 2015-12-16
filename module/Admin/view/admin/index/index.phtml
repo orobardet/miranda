@@ -7,21 +7,21 @@ $this->headTitle($title);
 <?php if ($this->acl()->isAllowed("admin_list_users")): ?>
 <p style="margin-top:30px;">
 <a class="admin-btn btn" href="<?php echo $this->url('admin/user'); ?>">
-<i class="icon-user icon-3x"></i><br/>
+<i class="fa fa-users fa-3x"></i><br/>
 <span class="title"><?php echo $this->translate('Users'); ?></span>
 </a>
 <?php endif; ?>
 
 <?php if ($this->acl()->isAllowed("admin_list_roles")): ?>
 <a class="admin-btn btn" href="<?php echo $this->url('admin/role'); ?>">
-<i class="icon-suitcase icon-3x"></i><br/>
+<i class="fa fa-unlock fa-3x"></i><br/>
 <span class="title"><?php echo $this->translate('Roles'); ?></span>
 </a>
 <?php endif; ?>
 
 <?php if ($this->acl()->isAllowed("admin_list_rights")): ?>
 <a class="admin-btn btn" href="<?php echo $this->url('admin/right'); ?>">
-<i class="icon-key icon-3x"></i><br/>
+<i class="fa fa-key fa-3x"></i><br/>
 <span class="title"><?php echo $this->translate('Rights'); ?></span>
 </a>
 </p>

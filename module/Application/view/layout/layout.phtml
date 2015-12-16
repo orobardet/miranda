@@ -9,7 +9,6 @@
 
         <!-- CSS -->
         <?php $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico')); ?>
-	    <?php $this->headLink()->prependStylesheet($this->basePath() . '/css/font-awesome-ie7.min.css', 'screen', 'IE 7'); ?>
         <?php if (count($this->css)) foreach (array_reverse($this->css) as $css) $this->headLink()->prependStylesheet($this->basePath() . '/' . $css, 'all'); ?>
         <?php echo $this->headLink(); ?>
         
@@ -40,8 +39,8 @@
                             ->render(); 
                     ?>
                     <ul class="nav pull-right">
-                        <li><a href="<?php echo $this->url('profile') ?>"><i class="icon-user icon-white"></i>&nbsp;<?php echo $this->userIdentity()->getDisplayName(); ?></a></li>
-                        <li><a href="<?php echo $this->url('logout') ?>"><i class="icon-off icon-white"></i>&nbsp;Déconnexion</a></li>
+                        <li><a href="<?php echo $this->url('profile') ?>"><i class="fa fa-user"></i>&nbsp;<?php echo $this->userIdentity()->getDisplayName(); ?></a></li>
+                        <li><a href="<?php echo $this->url('logout') ?>"><i class="fa fa-sign-out"></i>&nbsp;Déconnexion</a></li>
                     </ul>
                     </div><!--/.nav-collapse -->
                 </div>

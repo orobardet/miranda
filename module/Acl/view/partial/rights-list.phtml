@@ -17,9 +17,9 @@
 			<label for="rights-group-right-<?php echo $right->id; ?>"><?php echo $this->translate($right->descr); ?></label>
 		<?php elseif ($this->show_checked_mode):?>
 			<?php if (in_array($right->id, $this->checked_rights)): ?>
-				<i class="icon-ok"></i> <?php echo $this->translate($right->descr); ?> 
+				<i class="fa fa-check fa-fw"></i> <?php echo $this->translate($right->descr); ?>
 			<?php else: ?>
-				<span class="muted"><i class="icon-empty"></i> <?php echo $this->translate($right->descr); ?></span>
+				<span class="muted"><i class="fa fa-fw"></i> <?php echo $this->translate($right->descr); ?></span>
 			<?php endif; ?>
 		<?php else:?>
 			<?php echo $this->translate($right->descr); ?>

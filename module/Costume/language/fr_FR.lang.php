@@ -110,5 +110,9 @@ return array(
 	'Picture upload completed!' => "Envoi de l'image terminé !",
 	'Show more search options...' => "Afficher plus d'options de recherche...",
 	'Cancel search' => 'Annuler la recherche',
+	'Creation date' => 'Date de création',
+	'Double-clic a material name to edit.' => 'Double-cliquez sur un nom de matière pour la modifier.',
+	'Double-clic a part name to edit.' => 'Double-cliquez sur un nom de pièce pour la modifier.',
+	'Double-clic a tag name to edit.' => "Double-cliquez sur un nom d'étiquette pour la modifier.",
 	'<none>' => '<aucun>'
 );

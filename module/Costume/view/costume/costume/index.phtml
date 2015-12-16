@@ -19,17 +19,17 @@ $form->prepare();
 	<div id="small-search-form" class="pull-right input-append">
 		<?php echo $this->formElement($element->setAttributes(array('class' => 'input-medium search-query'))); ?>
 		<span id="small-search-form-completion-loader"></span>
-		<button type="submit" id="small-search-button" class="btn" title="<?php echo $this->translate('Search'); ?>"><i class="icon-search"></i></button>
+		<button type="submit" id="small-search-button" class="btn" title="<?php echo $this->translate('Search'); ?>"><i class="fa fa-search"></i></button>
 		<?php if ($this->has_search): ?>
-		<a id="small-cancel-search-button" href="<?php echo $this->url(); ?>" class="btn btn-danger" title="<?php echo $this->translate('Cancel search'); ?>"><i class="icon-remove"></i></a>
+		<a id="small-cancel-search-button" href="<?php echo $this->url(); ?>" class="btn btn-danger" title="<?php echo $this->translate('Cancel search'); ?>"><i class="fa fa-times"></i></a>
 		<?php endif; ?>
-		<button type="button" id="more-search-form" class="btn" title="<?php echo $this->translate('Show more search options...'); ?>"><i class="caret"></i></button>
+		<button type="button" id="more-search-form" class="btn" title="<?php echo $this->translate('Show more search options...'); ?>"><i class="fa"></i></button>
 	</div>
 	
 	<div class="p action-bar action-bar-container">
 		<?php if ($this->acl()->isAllowed("add_costume")): ?>
 		<div class="action-bar-item">
-		<a href="<?php echo $this->url('costume', array('action'=>'add'));?>"><i class="icon-plus-sign icon-linkcolor"></i> <?php echo $this->translate('Add costume'); ?></a>
+		<a href="<?php echo $this->url('costume', array('action'=>'add'));?>"><i class="fa fa-plus-circle"></i> <?php echo $this->translate('Add costume'); ?></a>
 		</div>
 		<?php endif; ?>
 	</div>
@@ -117,7 +117,7 @@ $form->prepare();
 			<?php echo $this->formLabel($element->setLabelAttributes(array('class'=> 'control-label'))); ?>
 			<?php echo $this->formElement($element->setAttributes(array('class' => 'selectpicker', 'data-values' => json_encode($form->get('tags')->getValue()), 'data-live-search'=> 'true', 'data-combo-class' => 'input-small', 'data-style' => 'btn-mini', 'data-width' =>'160px', 'title' => $this->translate($element->getAttribute('placeholder')?:'')))); ?>
 	    </div>
-		<button type="submit" id="small-search-button" class="btn pull-right" title="<?php echo $this->translate('Search'); ?>"><i class="icon-search"></i> <?php echo $this->translate('Search'); ?></button>
+		<button type="submit" id="small-search-button" class="btn pull-right" title="<?php echo $this->translate('Search'); ?>"><i class="fa fa-search"></i> <?php echo $this->translate('Search'); ?></button>
     </div>
 </form>
 
@@ -219,13 +219,13 @@ $form->prepare();
 		<?php if ($this->acl()->isAllowed("edit_costume")): ?>
 		<div class="action-bar-item">
     	<a href="<?php echo $this->url('costume',
-            array('action'=>'edit', 'id' => $costume->getId()));?>" title="<?php echo $this->translate('edit'); ?>"><i class="icon-edit icon-linkcolor"></i></a>
+            array('action'=>'edit', 'id' => $costume->getId()));?>" title="<?php echo $this->translate('edit'); ?>"><i class="fa fa-pencil"></i></a>
         </div> 
 		<?php endif;?>
     	<?php if ($this->acl()->isAllowed("delete_costume")): ?>
 		<div class="action-bar-item">
     	<a href="<?php echo $this->url('costume',
-            array('action'=>'delete', 'id' => $costume->getId()));?>" title="<?php echo $this->translate('delete'); ?>"><i class="icon-trash icon-linkcolor"></i></a>
+            array('action'=>'delete', 'id' => $costume->getId()));?>" title="<?php echo $this->translate('delete'); ?>"><i class="fa fa-trash-o"></i></a>
         </div> 
     	<?php endif;?>
     </td>

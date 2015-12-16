@@ -1,11 +1,13 @@
 @import "variables.less";
 @import "mixins.less";
 
+@import "fontawesome/font-awesome.less";
+
 @import "bootstrap-fileupload.less";
 @import "bootstrap-multiple-tag-selector.less";
 
 html,body {
-	/* html et body doivent rester comme ça et sans padding ni margin, pour gérer le footer en bas de page */
+	/* html et body doivent rester comme ï¿½a et sans padding ni margin, pour gï¿½rer le footer en bas de page */
 	height: 100%;
 	
 }
@@ -159,7 +161,7 @@ html,body {
 	min-height: 100%;
 	height: auto !important;
 	height: 100%;
-	/* margin bottom négatif pour gérer le footeur, de la hauteur du footer (hauteur réelle = hauteur + border + padding ...) */
+	/* margin bottom nï¿½gatif pour gï¿½rer le footeur, de la hauteur du footer (hauteur rï¿½elle = hauteur + border + padding ...) */
 	margin: 0 auto -41px;
 	& > .container, & > .container-fluid {
 		padding-top: 65px;
@@ -630,22 +632,22 @@ label.radio.col2 {
 		padding-right:5px;
 		padding-left:5px;
 		width: 25px;
-		
+		>i:before {
+          content: @fa-var-caret-down;
+		}
 		&.active {
 			border-color:@btnBorder;
 			border-bottom-color: darken(@btnBorder, 10%);
 
-			.caret {
-				border-top: 0;
-				border-bottom: 4px solid @black;
-				content: "";
-			}		
+            >i:before {
+              content: @fa-var-caret-up;
+            }
 		}
 	}
 	button#small-search-button, button#small-cancel-search-button, a#small-cancel-search-button {
 		border-radius:0;
 	}
-	
+
 	#full-search-form {
   		border-radius: @inputBorderRadius 0;
 		border: 1px solid @inputBorder;

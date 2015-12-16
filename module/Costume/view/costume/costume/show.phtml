@@ -23,17 +23,17 @@ $this->headTitle($title);
 		<?php if ($this->acl()->isAllowed("edit_costume")): ?>
 		<div class="action-bar-item">
     	<a href="<?php echo $this->url('costume',
-            array('action'=>'edit', 'id' => $costume->getId()));?>"><i class="icon-edit icon-linkcolor"></i> <?php echo $this->translate('edit'); ?></a>
+            array('action'=>'edit', 'id' => $costume->getId()));?>"><i class="fa fa-pencil"></i> <?php echo $this->translate('edit'); ?></a>
         </div> 
 		<div class="action-bar-item">
         <a href="<?php echo $this->url('costume',
-            array('action'=>'picture', 'id' => $costume->getId()));?>"><i class="icon-picture icon-linkcolor"></i> <?php echo $this->translate('change picture'); ?></a>
+            array('action'=>'picture', 'id' => $costume->getId()));?>"><i class="fa fa-picture-o"></i> <?php echo $this->translate('change picture'); ?></a>
         </div> 
         <?php endif;?>
     	<?php if ($this->acl()->isAllowed("delete_costume")): ?>
 		<div class="action-bar-item">
     	<a href="<?php echo $this->url('costume',
-            array('action'=>'delete', 'id' => $costume->getId()));?>"><i class="icon-trash icon-linkcolor"></i> <?php echo $this->translate('delete'); ?></a>
+            array('action'=>'delete', 'id' => $costume->getId()));?>"><i class="fa fa-trash-o"></i> <?php echo $this->translate('delete'); ?></a>
         </div> 
     	<?php endif;?>
 </div>
@@ -59,7 +59,7 @@ $this->headTitle($title);
 		<?php if (count($tags)): ?>
 		<ul class="unstyled" style="margin-top:10px;">
 		<?php foreach ($tags as $tag): ?>
-		<li><i class="icon-tag"></i> <?php echo $this->escapeHtml($tag->getName()); ?></li>
+		<li><i class="fa fa-tags"></i> <?php echo $this->escapeHtml($tag->getName()); ?></li>
 		<?php endforeach; ?>
 		</ul>
 		<?php endif; ?>

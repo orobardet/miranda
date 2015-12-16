@@ -9,7 +9,7 @@ Pré-requis
 ----------
 
 - webserver avec url rewriting
-- php5 >= 5.5
+- php5 >= 5.6
 - php5-intl
 - php5-xcache
 - php5-mysql
@@ -90,3 +90,11 @@ VHost Apache (peut-être généré par l'installeur) :
     </Directory>
 </VirtualHost>
 ```
+
+
+Mise à jour de Font-awesome
+---------------------------
+
+- Remplacer les fichiers de font dans `public/font`
+- Remplacer les fichiers less de Fontawesome dans `public/css/fontawesome`
+- Editer `public/css/fontawesome/variables.less`, et retirer le `s` à la fin de la variable `@fa-font-path`

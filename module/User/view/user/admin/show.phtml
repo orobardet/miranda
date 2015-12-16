@@ -9,7 +9,7 @@ $this->headTitle($title);
 )); ?>
 <div class="p">
 <?php $user_roles = $user->getRoles(); ?>
-<span class="muted"><i class="icon-suitcase"></i> <?php echo $this->translate('Roles: '); ?></span>
+<span class="muted"><i class="fa fa-unlock"></i> <?php echo $this->translate('Roles: '); ?></span>
 <?php if (count($user_roles)): ?>
 <ul style="display:inline-block;vertical-align:top;">
 <?php foreach ($this->all_roles as $role): ?>
@@ -35,7 +35,7 @@ $this->headTitle($title);
 <a href="<?php echo $this->return_url; ?>" class="btn btn-primary"><?php echo $this->translate('Back'); ?></a>
 <?php if ($user->getRegistrationToken() && $this->acl()->isAllowed("admin_add_user")): ?>
 <a class="btn btn-secondary" href="<?php echo $this->url('admin/user',
-            array('action'=>'creation-email', 'id' => $this->user->getId()));?>"><i class="icon-envelope-alt icon-linkcolor"></i> <?php echo $this->translate('Resend account validation email'); ?></a>
+            array('action'=>'creation-email', 'id' => $this->user->getId()));?>"><i class="fa fa-envelope-o"></i> <?php echo $this->translate('Resend account validation email'); ?></a>
 <?php endif; ?>
 </p>
 <?php endif; ?>

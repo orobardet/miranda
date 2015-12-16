@@ -3,10 +3,10 @@
 		<div class="well" style="padding: 8px 0;">
 			<ul class="nav nav-list">
 				<li class="nav-header"><?php echo $this->user->getDisplayName(); ?></li>
-				<li<?php if ($this->profile_action == 'show') echo ' class="active"'; ?>><a href="<?php echo $this->url('profile'); ?>"><i class="icon-user icon-linkcolor"></i> <?php echo $this->translate('My profile'); ?></a></li>
+				<li<?php if ($this->profile_action == 'show') echo ' class="active"'; ?>><a href="<?php echo $this->url('profile'); ?>"><i class="fa fa-user"></i> <?php echo $this->translate('My profile'); ?></a></li>
 				<li class="divider"></li>
-				<li<?php if ($this->profile_action == 'edit') echo ' class="active"'; ?>><a href="<?php echo $this->url('profile', array('action'=>'edit')); ?>"><i class="icon-edit icon-linkcolor"></i> <?php echo $this->translate('Edit my profile'); ?></a></li>
-				<li<?php if ($this->profile_action == 'changepassword') echo ' class="active"'; ?>><a href="<?php echo $this->url('profile', array('action'=>'changepassword')); ?>"><i class="icon-lock icon-linkcolor"></i> <?php echo $this->translate('Change my password'); ?></a></li>
+				<li<?php if ($this->profile_action == 'edit') echo ' class="active"'; ?>><a href="<?php echo $this->url('profile', array('action'=>'edit')); ?>"><i class="fa fa-pencil"></i> <?php echo $this->translate('Edit my profile'); ?></a></li>
+				<li<?php if ($this->profile_action == 'changepassword') echo ' class="active"'; ?>><a href="<?php echo $this->url('profile', array('action'=>'changepassword')); ?>"><i class="fa fa-lock"></i> <?php echo $this->translate('Change my password'); ?></a></li>
 			</ul>
 		</div>
 	</div>
