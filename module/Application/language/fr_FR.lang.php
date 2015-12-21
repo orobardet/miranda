@@ -26,7 +26,8 @@ return array(
     'Controller' => 'Contrôleur ',
     'resolves to %s' => 'résout en %s',
     'Exception' => 'Exception ',
-	
+
+    'All of them' => 'Tous',
 	'Show' => 'Afficher',
 	'Add' => 'Ajouter',
 	'Edit' => 'Modifier',
@@ -50,5 +51,12 @@ return array(
 	'Email address is invalid.' => "L'adresse email est invalide.",
 	'Test email' => "Email de test",
 	'This is a test email.' => 'Ceci est un email de test.',
-	'Test email sent to %email%.' => 'Email de test envoyé à %email%.'
+	'Test email sent to %email%.' => 'Email de test envoyé à %email%.',
+	'Hello %name%!' => 'Bonjour %name% !',
+	"Maybe you'll be interested for the last %count% costumes created:" => 'Peut-être serez-vous intéressé par les %count% derniers costumes créés :',
+	'Show all costumes' => 'Voir tous les costumes',
+	'You have super powers!' => 'Vous avez des supers pouvoirs !',
+	'Add a new user' => 'Ajouter un nouvel utilisateur',
+	"Manage users' roles" => "Gérer les rôles utilisateurs",
+	'View access rights' => "Voir les droits d'accès"
 );

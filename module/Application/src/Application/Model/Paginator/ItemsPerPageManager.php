@@ -14,7 +14,7 @@ class ItemsPerPageManager
 		50 => '50',
 		75 => '75',
 		100 => '100',
-		null => 'All'		
+		null => 'All of them'
 	);
 	
 	protected $contextItemsPerPage = array();

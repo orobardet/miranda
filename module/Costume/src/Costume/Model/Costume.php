@@ -259,17 +259,7 @@ class Costume extends ObjectModelBase
 	protected $parts;
 
 	/**
-	 * Origine du costume (creation, achat, .
-	 *
-	 *
-	 *
-	 *
-	 *
-	 *
-	 *
-	 *
-	 *
-	 * ..)
+	 * Origine du costume (creation, achat, ...)
 	 *
 	 * Peut prendre comme valeur les constantes :
 	 * - ORIGIN_CREATION

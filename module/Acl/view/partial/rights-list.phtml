@@ -1,3 +1,7 @@
+<?php if ($this->show_names): ?>
+<a class="right-btn-show-name btn" href="#"><i class="fa fa-code"></i></a><br/><br/>
+<?php endif; ?>
+
 <ul class="rights-group">
 <?php foreach($this->rights as $group): ?>
 	<li>
@@ -23,6 +27,9 @@
 			<?php endif; ?>
 		<?php else:?>
 			<?php echo $this->translate($right->descr); ?>
+			<?php if ($this->show_names): ?>
+            <div class="rights-show-name"><?php echo $this->translate($right->name); ?></div>
+            <?php endif; ?>
 		<?php endif; ?>
 		</li>
 		<?php endforeach; ?>
@@ -30,6 +37,38 @@
 	</li>
 <?php endforeach;?>
 </ul>
+
+<?php if ($this->show_names): ?>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.rights-show-name').hide().dblclick(function(e) {
+                e.preventDefault();
+                var $this = $(this);
+                if (document.selection) {
+                    var range = document.body.createTextRange();
+                    range.moveToElementText($this.get(0));
+                    range.select();
+                } else if (window.getSelection) {
+                    var range = document.createRange();
+                    range.selectNodeContents($this.get(0));
+                    window.getSelection().addRange(range);
+                }
+            });
+
+            $('.right-btn-show-name').click(function(e) {
+                e.preventDefault();
+                var $this = $(this);
+                if ($this.hasClass('active')) {
+                    $('.rights-show-name').hide();
+                    $this.removeClass('active');
+                } else {
+                    $('.rights-show-name').show();
+                    $this.addClass('active');
+                }
+            });
+        });
+    </script>
+<?php endif; ?>
 
 <?php if ($this->edit_mode): ?>
 <script type="text/javascript">

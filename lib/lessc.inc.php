@@ -2206,9 +2206,9 @@ class lessc_parser {
 
 	// these properties will supress division unless it's inside parenthases
 	static protected $supressDivisionProps =
-		array('/border-radius$/i', '/^font$/i');
+		array('/border-radius$/i', '/^fonts$/i');
 
-	protected $blockDirectives = array("font-face", "keyframes", "page", "-moz-document", "viewport", "-moz-viewport", "-o-viewport", "-ms-viewport");
+	protected $blockDirectives = array("fonts-face", "keyframes", "page", "-moz-document", "viewport", "-moz-viewport", "-o-viewport", "-ms-viewport");
 	protected $lineDirectives = array("charset");
 
 	/**

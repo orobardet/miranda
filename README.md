@@ -97,4 +97,3 @@ Mise à jour de Font-awesome
 
 - Remplacer les fichiers de font dans `public/font`
 - Remplacer les fichiers less de Fontawesome dans `public/css/fontawesome`
-- Editer `public/css/fontawesome/variables.less`, et retirer le `s` à la fin de la variable `@fa-font-path`

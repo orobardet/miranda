@@ -1,7 +1,8 @@
-@import "variables.less";
-@import "mixins.less";
+@import "bootstrap.less";
+@import "fuelux.less";
 
 @import "fontawesome/font-awesome.less";
+@import "ort-font/style.less";
 
 @import "bootstrap-fileupload.less";
 @import "bootstrap-multiple-tag-selector.less";
@@ -71,6 +72,21 @@ html,body {
 	.navbar-inner {
 		border-width: 0px;
 	}
+	.brand {
+      background-image: url("../img/miranda-logo-white.png");
+      background-position: 0 7px;
+      background-repeat: no-repeat;
+      background-size: auto 25px;
+      height: 30px;
+      margin-left: 0;
+      padding: 10px 0 0;
+      width: 215px;
+
+      >span {
+        display:none;
+      }
+    }
+
 	.nav > li > a {
 		text-shadow: none;
 	}
@@ -83,7 +99,10 @@ html,body {
 	
 		ul.nav li {
 	    	line-height: 2px;
-		}
+            > a > i {
+                line-height: inherit;
+            }
+        }
 	
 		.nav > .active > a,  .nav > :hover > a {
 			background-color: white;
@@ -236,11 +255,32 @@ form .control-group {
 	color: @successText !important;
 }
 
-.admin-btn {
-	height:65px;
-	min-width:130px;
+.admin-index-block {
+    margin-top: 15px;
+
+    &:first-child {
+        margin-top: 30px;
+    }
+
+    &:not(:first-child) {
+        border-top: #CCCCCC dashed 1px;
+        padding-top: 20px;
+    }
+
+    .markdown ul {
+        margin-bottom: 0;
+    }
+}
+
+.admin-index-btn {
+    .pull-left;
+    .btn;
+    .btn-block;
+    .btn-large;
+	padding: 10px;
 	margin:0px 20px 20px 0px;
-	
+
+
 	& > img {
 		margin:5px;
 	}
@@ -249,6 +289,7 @@ form .control-group {
 		font-size: @baseFontSize * 1.25;
 	}
 }
+
 .rights-group {
 	list-style: none outside none;
 	margin-left:0px;
@@ -284,6 +325,18 @@ form .control-group {
 		margin-left:0px;
 		padding-left:5px;
 		border-left:solid 3px @linkColor;
+
+		.rights-show-name {
+            color: gray;
+		    font-family: "Monospaced, Courier, Consolas, Monotype";
+            font-size: 12pt;
+            margin-left:10px;
+            &:before {
+                .fa;
+                content: @fa-var-caret-right;
+                margin-right:3px;
+            }
+		}
 	}
 }
 

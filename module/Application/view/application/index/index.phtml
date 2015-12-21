@@ -1,22 +1,107 @@
-<h1>Bienvenue sur le backoffice de la Compagnie Miranda</h1>
+<h3><?php echo $this->translateReplace('Hello %name%!', ['name' => $this->userIdentity()->getDisplayName(false)]); ?></h3>
 
+<div class="row-fluid">
 
-<big class="text-warning text-lg" style="font-style:italic;"><i class="icon-warning-sign"></i> Page temporaire, contenu à définir (dashboard, message d'accueil). <i class="icon-warning-sign"></i></big>
+<div class="span9">
+<?php if ($this->lastCostumes): ?>
+    <h4><i class="iort iort-tshirt"></i>&nbsp;<?php echo $this->translateReplace("Maybe you'll be interested for the last %count% costumes created:", ['count' => count($this->lastCostumes)]); ?></h4>
 
+    <table id="costumes-table-list" class="table table-hover">
+        <thead>
+        <tr>
+            <th>
+                <?php echo $this->translate('Name'); ?>
+            </th>
+            <th class="text-center">
+                <?php echo $this->translate('Type'); ?>
+            </th>
+            <th class="text-center">
+                <?php echo $this->translate('Gender'); ?>
+            </th>
+            <th class="text-center">
+                <?php echo $this->translate('Size'); ?>
+            </th>
+            <th class="text-center"><?php echo $this->translate('Colors'); ?></th>
+            <th class="text-center"><?php echo $this->translate('Materials'); ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php /* @var $costume \Costume\Model\Costume */
+        foreach ($this->lastCostumes as $costume) : ?>
+            <tr class="costume-preview-data-container" data-costume-id="<?php echo $this->escapehtmlattr($costume->getId()); ?>">
+                <td>
+                    <?php if ($this->acl()->isAllowed("show_costume")): ?>
+                        <a href="<?php echo $this->url('costume', array('action'=>'show', 'id' => $costume->getId()));?>" class="costume-preview-trigger"><?php echo $this->escapeHtml($costume->getLabel());?></a>
+                    <?php else: ?>
+                        <?php echo $this->escapeHtml($costume->getLabel());?>
+                    <?php endif;?>
+                </td>
+                <td class="text-center">
+                    <?php $type = $costume->getType(); ?>
+                    <?php if ($type): ?>
+                        <?php echo $this->escapeHtml($type->getName()); ?>
+                    <?php endif; ?>
+                </td>
+                <td class="text-center">
+                    <?php echo $this->costumeGender($costume->getGender());?>
+                </td>
+                <td class="text-center">
+                    <?php echo $this->escapeHtml($costume->getSize());?>
+                </td>
+                <td class="text-center">
+                    <?php $primaryColor = $costume->getPrimaryColor();?>
+                    <?php if ($primaryColor): ?>
+                        <div class="costume-color-preview no-margin" style="background-color:#<?php echo $primaryColor->getColorCode(); ?>;" title="<?php echo $this->escapeHtmlAttr($this->translate($primaryColor->getName())); ?>"></div>
+                    <?php else: ?>
+                        <div class="costume-color-preview no-margin no-color" title="<?php echo $this->escapeHtmlAttr($this->translate('No color')); ?>"></div>
+                    <?php endif;?>
+                    <?php $secondaryColor = $costume->getSecondaryColor();?>
+                    <?php if ($secondaryColor): ?>
+                        <div class="costume-color-preview no-margin" style="background-color:#<?php echo $secondaryColor->getColorCode(); ?>;" title="<?php echo $this->escapeHtmlAttr($this->translate($secondaryColor->getName())); ?>"></div>
+                    <?php else: ?>
+                        <div class="costume-color-preview no-margin no-color" title="<?php echo $this->escapeHtmlAttr($this->translate('No color')); ?>"></div>
+                    <?php endif;?>
+                </td>
+                <td class="text-center">
+                    <?php $materials = array();
+                    $primaryMaterial = $costume->getPrimaryMaterial();
+                    if ($primaryMaterial) {
+                        $materials[] = $this->escapeHtml($primaryMaterial->getName());
+                    }
+                    $secondaryMaterial = $costume->getSecondaryMaterial();
+                    if ($secondaryMaterial) {
+                        if (!$primaryMaterial) {
+                            $materials[] = $this->translate('N/A');
+                        }
+                        $materials[] = $this->escapeHtml($secondaryMaterial->getName());
+                    } ?>
+                    <small><?php echo join(' / ', $materials); ?></small>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
 
-<?php if ($this->acl()->isAllowed("list_costumes")): ?>
-<p style="margin-top:30px;">
-<a class="admin-btn btn" href="<?php echo $this->url('costume'); ?>">
-<i class="icon-list icon-3x"></i><br/>
-<span class="title">Consulter le catalog des costumes</span>
+<a class="btn btn-primary btn-large btn-success pull-right" href="<?php echo $this->url('costume'); ?>">
+    <?php echo $this->translate("Show all costumes"); ?>&nbsp;<i class="fa fa-caret-right"></i>
 </a>
 <?php endif; ?>
+</div> <!-- span9 -->
 
+<div class="span3">
+    <?php if ($this->acl()->isAllowed("admin_access")): ?>
+        <h4><i class="iort iort-superman fa-3x pull-left"></i><a href="<?php echo $this->url('admin'); ?>"><?php echo $this->translate("You have super powers!"); ?></a></h4>
+        <br/>
+        <?php if ($this->acl()->isAllowed("admin_add_user")): ?>
+        <p><a href="<?php echo $this->url('admin/user', ['action' => 'add']); ?>" class="btn btn-block btn-large"><i class="fa fa-user"></i>&nbsp;<?php echo $this->translate("Add a new user"); ?></a></p>
+        <?php endif; ?>
+        <?php if ($this->acl()->isAllowed("admin_list_roles")): ?>
+        <p><a href="<?php echo $this->url('admin/role'); ?>" class="btn btn-block btn-large"><i class="fa fa-unlock"></i>&nbsp;<?php echo $this->translate("Manage users' roles"); ?></a></p>
+        <?php endif; ?>
+        <?php if ($this->acl()->isAllowed("developer") && $this->acl()->isAllowed("admin_list_rights")): ?>
+        <p><a href="<?php echo $this->url('admin/right'); ?>" class="btn btn-block btn-large"><i class="fa fa-key"></i>&nbsp;<?php echo $this->translate("View access rights"); ?></a></p>
+        <?php endif; ?>
+    <?php endif; ?>
+</div>
 
-<?php if ($this->acl()->isAllowed("admin_access")): ?>
-<p style="margin-top:30px;">
-<a class="admin-btn btn" href="<?php echo $this->url('admin'); ?>">
-<i class="icon-gears icon-3x"></i><br/>
-<span class="title">Administrer le site</span>
-</a>
-<?php endif; ?>
+</div> <!-- row-fluid -->

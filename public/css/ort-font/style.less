@@ -1,0 +1,49 @@
+@import "variables";
+
+@font-face {
+	font-family: 'icon-ort';
+	src:url('fonts/icon-ort.eot?ec6hf3');
+	src:url('fonts/icon-ort.eot?ec6hf3#iefix') format('embedded-opentype'),
+		url('fonts/icon-ort.ttf?ec6hf3') format('truetype'),
+		url('fonts/icon-ort.woff?ec6hf3') format('woff'),
+		url('fonts/icon-ort.svg?ec6hf3#icon-ort') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="iort-"], [class*=" iort-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+	font-family: 'icon-ort' !important;
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.iort-superman {
+	&:before {
+		content: @iort-superman;
+	}
+}
+.iort-shirt {
+	&:before {
+		content: @iort-shirt;
+	}
+}
+.iort-tshirt {
+	&:before {
+		content: @iort-tshirt;
+	}
+}
+.iort-clothes {
+	&:before {
+		content: @iort-clothes;
+	}
+}
+

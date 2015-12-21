@@ -1,3 +1,11 @@
+INSERT INTO `%{MIRANDA_TABLE_PREFIX}%rights_groups` (`id`, `descr`, `ord`) VALUES
+(3, 'Admin - Users', 10),
+(4, 'Admin - Roles', 11),
+(5, 'Common rights', 1),
+(6, 'Costumes', 2),
+(7, 'Admin - Costumes', 3)
+;;;
+
 INSERT INTO `%{MIRANDA_TABLE_PREFIX}%rights` (`id`, `name`, `descr`, `group_id`, `ord`) VALUES
 (1, 'admin_list_users', 'List users', 3, 1),
 (2, 'admin_show_user', 'Display user', 3, 2),
@@ -22,17 +30,9 @@ INSERT INTO `%{MIRANDA_TABLE_PREFIX}%rights` (`id`, `name`, `descr`, `group_id`,
 (22, 'admin_costumes_tags', 'Tags', 7, 4),
 (23, 'admin_costumes_parts', 'Parts & types', 7, 5),
 (24, 'admin_update_acl', 'Update ACL', 4, 7)
-
+(25, 'developer', 'Developer', '5', '2');
 ;;;
 
-INSERT INTO `%{MIRANDA_TABLE_PREFIX}%rights_groups` (`id`, `descr`, `ord`) VALUES
-(3, 'Admin - Users', 10),
-(4, 'Admin - Roles', 11),
-(5, 'Common rights', 1),
-(6, 'Costumes', 2),
-(7, 'Admin - Costumes', 3)
-
-;;;
 
 INSERT INTO `%{MIRANDA_TABLE_PREFIX}%roles` (`id`, `name`, `descr`) VALUES
 (1, 'Administrateur', 'Administrateur général');

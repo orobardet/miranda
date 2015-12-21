@@ -25,6 +25,13 @@ class IndexController extends AbstractActionController implements ConfigAwareInt
     
     public function indexAction()
     {
-        return new ViewModel();
+        $view = new ViewModel();
+
+        if ($this->acl()->isAllowed('list_costumes')) {
+            $costumeTable = $this->getServiceLocator()->get('Costume\Model\CostumeTable');
+            $view->lastCostumes = $costumeTable->getLastCreatedCostumes(5);
+        }
+
+        return $view;
     }
 }

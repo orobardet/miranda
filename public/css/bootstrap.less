@@ -328,7 +328,7 @@ p {
 // Emphasis & misc
 // -------------------------
 
-// Ex: 14px base font * 85% = about 12px
+// Ex: 14px base fonts * 85% = about 12px
 small   { font-size: 85%; }
 
 strong  { font-weight: bold; }
@@ -651,7 +651,7 @@ legend {
   }
 }
 
-// Set font for forms
+// Set fonts for forms
 label,
 input,
 button,
@@ -663,7 +663,7 @@ input,
 button,
 select,
 textarea {
-  font-family: @baseFontFamily; // And only set font-family here for those that need it (note the missing label element)
+  font-family: @baseFontFamily; // And only set fonts-family here for those that need it (note the missing label element)
 }
 
 // Identify controls by their labels
@@ -769,7 +769,7 @@ input[type="checkbox"] {
 // Set the height of select and file controls to match text inputs
 select,
 input[type="file"] {
-  height: @inputHeight; /* In IE7, the height of the select element cannot be changed by height, only font-size */
+  height: @inputHeight; /* In IE7, the height of the select element cannot be changed by height, only fonts-size */
   *margin-top: 4px; /* For IE7, add top margin to align select with labels */
   line-height: @inputHeight;
 }
@@ -2312,8 +2312,8 @@ input[type="submit"].btn {
   position: relative;
   display: inline-block;
   .ie7-inline-block();
-  font-size: 0; // remove as part 1 of font-size inline-block hack
-  vertical-align: middle; // match .btn alignment given font-size hack above
+  font-size: 0; // remove as part 1 of fonts-size inline-block hack
+  vertical-align: middle; // match .btn alignment given fonts-size hack above
   white-space: nowrap; // prevent buttons from wrapping when in tight spaces (e.g., the table on the tests page)
   .ie7-restore-left-whitespace();
 }
@@ -2346,7 +2346,7 @@ input[type="submit"].btn {
 .btn-group > .btn,
 .btn-group > .dropdown-menu,
 .btn-group > .popover {
-  font-size: @baseFontSize; // redeclare as part 2 of font-size inline-block hack
+  font-size: @baseFontSize; // redeclare as part 2 of fonts-size inline-block hack
 }
 
 // Reset fonts for other sizes

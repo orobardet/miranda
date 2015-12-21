@@ -51,10 +51,8 @@ $config = [
 			'less_compiler' => 'lessphp',
 			'less' => [
 				'css/jquery-ui-bootstrap/jquery-ui.css',
-				'css/bootstrap.less',
-				'css/fuelux.less',
-				'css/bootstrap-responsive.min.css',
-				'css/style.less'
+				'css/style.less',
+				'css/bootstrap-responsive.min.css'
 			],
 			'js' => [
 				'js/jquery.min.js',
@@ -120,21 +118,25 @@ $config = [
 		'default' => [
 			[
 				'label' => 'Home',
+                'icon' => 'fa fa-home',
 				'route' => 'home'
 			],
 			[
 				'label' => 'Costumes',
+                'icon' => 'iort iort-tshirt',
 				'route' => 'costume',
 				'resource' => 'list_costumes',
 				'pages' => [
 					[
 						'label' => 'Catalog',
+						'icon' => 'fa fa-list',
 						'route' => 'costume',
 						'action' => 'index',
 						'resource' => 'list_costumes',
 						'pages' => [
 							[
 								'label' => 'Show',
+								'icon' => 'fa fa-eye',
 								'route' => 'costume',
 								'action' => 'show',
 								'resource' => 'show_costume',
@@ -142,6 +144,7 @@ $config = [
 							],
 							[
 								'label' => 'Add',
+								'icon' => 'fa fa-plus-circle',
 								'route' => 'costume',
 								'action' => 'add',
 								'resource' => 'add_costume',
@@ -149,6 +152,7 @@ $config = [
 							],
 							[
 								'label' => 'Edit',
+								'icon' => 'fa fa-pencil',
 								'route' => 'costume',
 								'action' => 'edit',
 								'resource' => 'edit_costume',
@@ -156,6 +160,7 @@ $config = [
 							],
 							[
 								'label' => 'Delete',
+								'icon' => 'fa fa-trash-o',
 								'route' => 'costume',
 								'action' => 'delete',
 								'resource' => 'delete_costume',
@@ -165,30 +170,35 @@ $config = [
 					],
 					[
 						'label' => 'Management',
+						'icon' => 'fa fa-wrench',
 						'route' => 'costume-admin',
 						'action' => 'index',
 						'resource' => 'admin_costumes',
 						'pages' => [
 							[
 								'label' => 'Colors',
+								'icon' => 'fa fa-tint',
 								'route' => 'costume-admin/color',
 								'action' => 'index',
 								'resource' => 'admin_costumes_colors'
 							],
 							[
 								'label' => 'Materials',
+								'icon' => 'fa fa-leaf',
 								'route' => 'costume-admin/material',
 								'action' => 'index',
 								'resource' => 'admin_costumes_materials'
 							],
 							[
 								'label' => 'Tags',
+								'icon' => 'fa fa-tags',
 								'route' => 'costume-admin/tag',
 								'action' => 'index',
 								'resource' => 'admin_costumes_tags'
 							],
 							[
 								'label' => 'Parts & types',
+								'icon' => 'fa fa-puzzle-piece',
 								'route' => 'costume-admin/part',
 								'action' => 'index',
 								'resource' => 'admin_costumes_parts'
@@ -199,34 +209,40 @@ $config = [
 			],
 			[
 				'label' => 'Admin',
+                'icon' => 'fa fa-cog',
 				'route' => 'admin',
 				'resource' => 'admin_access',
 				'pages' => [
 					[
 						'label' => 'Users',
 						'route' => 'admin/user',
+						'icon' => 'fa fa-users',
 						'resource' => 'admin_list_users',
 						'pages' => [
 							[
 								'label' => 'Show',
+								'icon' => 'fa fa-eye',
 								'route' => 'admin/user',
 								'action' => 'show',
 								'resource' => 'admin_show_user'
 							],
 							[
 								'label' => 'Add',
+								'icon' => 'fa fa-plus-circle',
 								'route' => 'admin/user',
 								'action' => 'add',
 								'resource' => 'admin_add_user'
 							],
 							[
 								'label' => 'Edit',
+								'icon' => 'fa fa-pencil',
 								'route' => 'admin/user',
 								'action' => 'edit',
 								'resource' => 'admin_edit_user'
 							],
 							[
 								'label' => 'Delete',
+								'icon' => 'fa fa-trash-o',
 								'route' => 'admin/user',
 								'action' => 'delete',
 								'resource' => 'admin_delete_user'
@@ -235,29 +251,34 @@ $config = [
 					],
 					[
 						'label' => 'Roles',
+						'icon' => 'fa fa-unlock',
 						'route' => 'admin/role',
 						'resource' => 'admin_list_roles',
 						'pages' => [
 							[
 								'label' => 'Show',
+								'icon' => 'fa fa-eye',
 								'route' => 'admin/role',
 								'action' => 'show',
 								'resource' => 'admin_show_role'
 							],
 							[
 								'label' => 'Add',
+								'icon' => 'fa fa-plus-circle',
 								'route' => 'admin/role',
 								'action' => 'add',
 								'resource' => 'admin_add_role'
 							],
 							[
 								'label' => 'Edit',
+								'icon' => 'fa fa-pencil',
 								'route' => 'admin/role',
 								'action' => 'edit',
 								'resource' => 'admin_edit_role'
 							],
 							[
 								'label' => 'Delete',
+								'icon' => 'fa fa-trash-o',
 								'route' => 'admin/role',
 								'action' => 'delete',
 								'resource' => 'admin_delete_role'
@@ -266,6 +287,7 @@ $config = [
 					],
 					[
 						'label' => 'Rights',
+						'icon' => 'fa fa-key',
 						'route' => 'admin/right',
 						'resource' => 'admin_list_rights'
 					]

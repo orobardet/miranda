@@ -37,7 +37,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 	/**
 	 * Method où ajouter toutes les variables à passer à la vue du layout
 	 *
-	 * @param Zend\Mvc\MvcEvent $e
+	 * @param \Zend\Mvc\MvcEvent $e
 	 */
 	public function addLayoutViewVariables($e)
 	{
@@ -269,8 +269,10 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		return [
 			'invokables' => [
 				'text2Html' => 'Application\View\Helper\Text2Html',
+				'markdown' => 'Application\View\Helper\Markdown',
 				'translateReplace' => 'Application\View\Helper\TranslateReplace',
-				'formUxSpinner' => 'Application\Form\View\Helper\FormUxSpinner'
+				'formUxSpinner' => 'Application\Form\View\Helper\FormUxSpinner',
+				'iconMenu' => 'Application\View\Helper\IconMenu',
 			],
 			'factories' => [
 				'resultStatus' => function (HelperPluginManager $pm)

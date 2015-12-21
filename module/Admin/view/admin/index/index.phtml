@@ -3,26 +3,46 @@ $title = $this->translate('Admin');
 $this->headTitle($title);
 ?>
 <h1><?php echo $this->escapeHtml($title); ?></h1>
-
+<div>
 <?php if ($this->acl()->isAllowed("admin_list_users")): ?>
-<p style="margin-top:30px;">
-<a class="admin-btn btn" href="<?php echo $this->url('admin/user'); ?>">
-<i class="fa fa-users fa-3x"></i><br/>
-<span class="title"><?php echo $this->translate('Users'); ?></span>
-</a>
+<div class="row-fluid admin-index-block">
+    <div class="span2">
+        <a class="admin-index-btn" href="<?php echo $this->url('admin/user'); ?>">
+        <i class="fa fa-users fa-3x"></i><br/>
+        <span class="title"><?php echo $this->translate('Users'); ?></span>
+        </a>
+    </div>
+    <div class="span10">
+        <?php echo $this->markdown($this->translate("**Manage users**"), true); ?>
+    </div>
+</div>
 <?php endif; ?>
 
 <?php if ($this->acl()->isAllowed("admin_list_roles")): ?>
-<a class="admin-btn btn" href="<?php echo $this->url('admin/role'); ?>">
-<i class="fa fa-unlock fa-3x"></i><br/>
-<span class="title"><?php echo $this->translate('Roles'); ?></span>
-</a>
+<div class="row-fluid admin-index-block">
+    <div class="span2">
+        <a class="admin-index-btn" href="<?php echo $this->url('admin/role'); ?>">
+        <i class="fa fa-unlock fa-3x"></i><br/>
+        <span class="title"><?php echo $this->translate('Roles'); ?></span>
+        </a>
+    </div>
+    <div class="span10">
+        <?php echo $this->markdown($this->translate("**Roles are used to organize the access rights**"), true); ?>
+    </div>
+</div>
 <?php endif; ?>
 
 <?php if ($this->acl()->isAllowed("admin_list_rights")): ?>
-<a class="admin-btn btn" href="<?php echo $this->url('admin/right'); ?>">
-<i class="fa fa-key fa-3x"></i><br/>
-<span class="title"><?php echo $this->translate('Rights'); ?></span>
-</a>
-</p>
+<div class="row-fluid admin-index-block">
+    <div class="span2">
+        <a class="admin-index-btn" href="<?php echo $this->url('admin/right'); ?>">
+        <i class="fa fa-key fa-3x"></i><br/>
+        <span class="title"><?php echo $this->translate('Rights'); ?></span>
+        </a>
+    </div>
+    <div class="span10">
+        <?php echo $this->markdown($this->translate("**View available access rights**"), true); ?>
+    </div>
+</div>
+</div>
 <?php endif; ?>

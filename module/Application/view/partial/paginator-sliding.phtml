@@ -29,9 +29,9 @@
 				<?php foreach ($itemsPerPageList as $value => $label): ?>
 					<?php if ($value == null): ?>
 					<li class="divider"></li>
-					<li<?php if (($value == $this->itemCountPerPage) || ($this->itemCountPerPage == $this->totalItemCount)) echo ' class="active"'; ?>><a tabindex="-1" href="<?php echo $this->url('application/set-items-per-page', array('context' => $context, 'items' => 0, 'redirect' => base64_encode($redirect_url))); ?>"><?php echo $label; ?></a></li>
+					<li<?php if (($value == $this->itemCountPerPage) || ($this->itemCountPerPage == $this->totalItemCount)) echo ' class="active"'; ?>><a tabindex="-1" href="<?php echo $this->url('application/set-items-per-page', array('context' => $context, 'items' => 0, 'redirect' => base64_encode($redirect_url))); ?>"><?php echo $this->translate($label); ?></a></li>
 					<?php else: ?>
-					<li<?php if ($value == $this->itemCountPerPage) echo ' class="active"'; ?>><a tabindex="-1" href="<?php echo $this->url('application/set-items-per-page', array('context' => $context, 'items' => $value, 'redirect' => base64_encode($redirect_url))); ?>"><?php echo $label; ?></a></li>
+					<li<?php if ($value == $this->itemCountPerPage) echo ' class="active"'; ?>><a tabindex="-1" href="<?php echo $this->url('application/set-items-per-page', array('context' => $context, 'items' => $value, 'redirect' => base64_encode($redirect_url))); ?>"><?php echo $this->translate($label); ?></a></li>
 					<?php endif; ?>
 				<?php endforeach; ?>
 			</ul>

@@ -19,7 +19,7 @@ return [
 	'Add role' => 'Ajouter un rôle',
 	'Edit role' => 'Modifier un rôle',
 	'Delete role' => 'Supprimer un rôle',
-	'Update ACL' => 'Mettre à jour les ACL',
+	'Update ACL in cache' => 'Mettre à jour les ACL dans le cache',
 
 	'No roles.' => 'Aucun rôles.',
 	
@@ -45,5 +45,5 @@ return [
 	"Users having this role:" => 'Utilisateurs possédants ce rôle :',
 	'Warning, this role is assigned to some users.<br/>Deleting this role will remove it and all associated access right from these users.' => "Attention, ce rôle est possédé par certains utilisateurs.<br/>Supprimer ce rôle le retirera de ces utilisateurs, ainsi que tous les droits d'accès correspondants.",
 	'Rights changed: ' => 'Droits modifiés : ',
-	'ACL updated' => 'ACL mises à jour'		
+	'ACL updated' => 'ACL mises à jour'
 ];

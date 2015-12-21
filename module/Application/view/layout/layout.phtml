@@ -25,18 +25,17 @@
             <div class="navbar-inner">
                 <div class="container">
                 <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-                    <a class="brand" href="<?php echo $this->url('home') ?>">Miranda</a>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </a>
+                    <a class="brand" href="<?php echo $this->url('home') ?>" title="Miranda" alt="Miranda"><span>Miranda</span></a>
                     <div class="nav-collapse collapse">
-                    <?php echo $this->navigation('navigation')
-                    		->menu()
+                    <?php echo $this->iconMenu($this->navigation('navigation')->getContainer())
                             ->setMinDepth(0)
                             ->setMaxDepth(0)
-                            ->setUlClass('nav')
-                            ->render(); 
+                            ->setUlClass('nav main-menu')
+                            ->render();
                     ?>
                     <ul class="nav pull-right">
                         <li><a href="<?php echo $this->url('profile') ?>"><i class="fa fa-user"></i>&nbsp;<?php echo $this->userIdentity()->getDisplayName(); ?></a></li>
@@ -46,8 +45,7 @@
                 </div>
             </div> <!-- /navbar-inner -->
             <?php
-            $submenu = $this->navigation('navigation')
-	       		->menu()
+            $submenu = $this->iconMenu($this->navigation('navigation')->getContainer())
 	            ->setOnlyActiveBranch(true)
 	            ->setRenderParents(false)
 	            ->setMinDepth(1)
@@ -68,7 +66,7 @@
             <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
-                    <a class="brand" href="<?php echo $this->url('login') ?>"><?php echo $this->translate('Login'); ?></a>
+                    <a class="brand" href="<?php echo $this->url('login') ?>" title="<?php echo $this->translate('Login'); ?>" alt="<?php echo $this->translate('Login'); ?>"><span><?php echo $this->translate('Login'); ?></span></a>
                 </div>
             </div>
             </div>        

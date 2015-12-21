@@ -203,7 +203,8 @@ class Module implements AutoloaderProviderInterface, ConsoleUsageProviderInterfa
 	{
 		return array(
 			'invokables' => array(
-				'formColorSelect' => 'Costume\Form\View\Helper\FormColorSelect'
+				'formColorSelect' => 'Costume\Form\View\Helper\FormColorSelect',
+				'costumeGender' => 'Costume\View\Helper\CostumeGender'
 			)
 		);
 	}

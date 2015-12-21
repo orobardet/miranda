@@ -10,7 +10,7 @@ class ItemsPerPage extends AbstractHelper
 	/**
 	 * Manager d'item par page
 	 *
-	 * @var Application\Model\Paginator\ItemsPerPageManager
+	 * @var \Application\Model\Paginator\ItemsPerPageManager
 	 */
 	protected $manager;
 

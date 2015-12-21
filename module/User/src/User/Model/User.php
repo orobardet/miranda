@@ -143,11 +143,20 @@ class User extends ObjectModelBase
 	/**
 	 * Retourne le nom d'affichage : "prenom nom"
 	 *
+     * Si $withLastName = false et qu'il y a un prénom, retourne "prenom"
+     * Sinon s'il y a un prénom et un nom, retourne "prenom nom"
+     * Sinon s'il y a un nom retourne "nom"
+     * En dernier recours retourne l'adresse email
+     *
+     * @param boolean $withLastName Si false, le prenom est retourné sans le nom (dans le cas où il y a un prénom)
+     *
 	 * @return string Nom d'affichage
 	 */
-	public function getDisplayName()
+	public function getDisplayName($withLastName = true)
 	{
-		if ((trim($this->firstname) != '') && (trim($this->lastname) != '')) {
+		if (!$withLastName && (trim($this->firstname) != '')) {
+			return $this->firstname;
+		} else if ((trim($this->firstname) != '') && (trim($this->lastname) != '')) {
 			return $this->firstname . ' ' . $this->lastname;
 		} else if ((trim($this->lastname) != '')) {
 			return $this->lastname;
