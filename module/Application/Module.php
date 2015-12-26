@@ -92,6 +92,15 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 		$viewModel->setVariable('js', $config->get('layout->js', [])->toArray());
 		
 		$viewModel->setVariable('config', $config);
+
+        // get navigation plugin from service manager
+        $viewManager = $e->getApplication()->getServiceManager()->get('viewmanager');
+        $navigation = $viewManager->getRenderer()->plugin('navigation');
+
+        // overwrite default menu plugin
+        $navigation->getPluginManager()->setInvokableClass(
+            'menu', 'Application\View\Helper\Navigation\IconMenu', true
+        );
 	}
 
 	public function bootstrapSession($e)
@@ -271,8 +280,7 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'text2Html' => 'Application\View\Helper\Text2Html',
 				'markdown' => 'Application\View\Helper\Markdown',
 				'translateReplace' => 'Application\View\Helper\TranslateReplace',
-				'formUxSpinner' => 'Application\Form\View\Helper\FormUxSpinner',
-				'iconMenu' => 'Application\View\Helper\IconMenu',
+				'formUxSpinner' => 'Application\Form\View\Helper\FormUxSpinner'
 			],
 			'factories' => [
 				'resultStatus' => function (HelperPluginManager $pm)

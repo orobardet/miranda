@@ -1,5 +1,5 @@
 <?php
-namespace Application\View\Helper;
+namespace Application\View\Helper\Navigation;
 
 use Zend\View\Helper\Navigation\Menu;
 
@@ -59,5 +59,4 @@ class IconMenu extends Menu
 
         return $html;
     }
-
 }

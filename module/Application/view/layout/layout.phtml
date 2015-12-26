@@ -31,11 +31,12 @@
                   </a>
                     <a class="brand" href="<?php echo $this->url('home') ?>" title="Miranda" alt="Miranda"><span>Miranda</span></a>
                     <div class="nav-collapse collapse">
-                    <?php echo $this->iconMenu($this->navigation('navigation')->getContainer())
-                            ->setMinDepth(0)
-                            ->setMaxDepth(0)
-                            ->setUlClass('nav main-menu')
-                            ->render();
+                    <?php echo $this->navigation('navigation')
+                        ->menu()
+                        ->setMinDepth(0)
+                        ->setMaxDepth(0)
+                        ->setUlClass('nav main-menu')
+                        ->render();
                     ?>
                     <ul class="nav pull-right">
                         <li><a href="<?php echo $this->url('profile') ?>"><i class="fa fa-user"></i>&nbsp;<?php echo $this->userIdentity()->getDisplayName(); ?></a></li>
@@ -45,7 +46,8 @@
                 </div>
             </div> <!-- /navbar-inner -->
             <?php
-            $submenu = $this->iconMenu($this->navigation('navigation')->getContainer())
+            $submenu = $this->navigation('navigation')
+                ->menu()
 	            ->setOnlyActiveBranch(true)
 	            ->setRenderParents(false)
 	            ->setMinDepth(1)
