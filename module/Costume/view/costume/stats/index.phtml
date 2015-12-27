@@ -1,0 +1,33 @@
+<?php
+$this->headTitle($this->translate("Costumes statistics"));
+?>
+
+<?php if (isset($this->costumes)): ?>
+<p>
+    <?php echo $this->escapeHtml($this->costumes->count); ?> costumes
+</p>
+<?php endif; ?>
+
+<?php if (isset($this->colors)): ?>
+<p>
+    <?php echo $this->escapeHtml($this->colors->count); ?> couleurs
+</p>
+<?php endif; ?>
+
+<?php if (isset($this->materials)): ?>
+<p>
+    <?php echo $this->escapeHtml($this->materials->count); ?> matières
+</p>
+<?php endif; ?>
+
+<?php if (isset($this->tags)): ?>
+<p>
+    <?php echo $this->escapeHtml($this->tags->count); ?> étiquettes
+</p>
+<?php endif; ?>
+
+<?php if (isset($this->parts)): ?>
+<p>
+    <?php echo $this->escapeHtml($this->parts->count); ?> pièces et types
+</p>
+<?php endif; ?>

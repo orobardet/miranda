@@ -1,157 +1,172 @@
 <?php
-return array(
-	'controllers' => array(
-		'invokables' => array(
+return [
+	'controllers' => [
+		'invokables' => [
 			'Costume\Controller\Console' => 'Costume\Controller\ConsoleController',
 			'Costume\Controller\Costume' => 'Costume\Controller\CostumeController',
-			'Costume\Controller\Admin' => 'Costume\Controller\AdminController',
+			'Costume\Controller\Stats' => 'Costume\Controller\StatsController',
+            'Costume\Controller\Admin' => 'Costume\Controller\AdminController',
 			'Costume\Controller\AdminColor' => 'Costume\Controller\AdminColorController',
 			'Costume\Controller\AdminMaterial' => 'Costume\Controller\AdminMaterialController',
 			'Costume\Controller\AdminTag' => 'Costume\Controller\AdminTagController',
 			'Costume\Controller\AdminPart' => 'Costume\Controller\AdminPartController'
-		)
-	),
+        ]
+    ],
 	
-	'router' => array(
-		'routes' => array(
-			'costume' => array(
+	'router' => [
+		'routes' => [
+			'costume' => [
 				'type' => 'segment',
-				'options' => array(
+				'options' => [
 					'route' => '/costume[/][:action][/:id]',
-					'constraints' => array(
+					'constraints' => [
 						'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
 						'id' => '[0-9]+'
-					),
-					'defaults' => array(
+                    ],
+					'defaults' => [
 						'__NAMESPACE__' => 'Costume\Controller',
 						'controller' => 'Costume',
 						'action' => 'index'
-					)
-				)
-			),
-			'costume-admin' => array(
+                    ]
+                ]
+			],
+            'costume-stats' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/costume-stats[/][:action]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ],
+                    'defaults' => [
+                        '__NAMESPACE__' => 'Costume\Controller',
+                        'controller' => 'Costume\Controller\Stats',
+                        'action' => 'index'
+                    ]
+                ]
+            ],
+			'costume-admin' => [
 				'type' => 'Literal',
-				'options' => array(
+				'options' => [
 					'route' => '/costume-admin',
-					'defaults' => array(
+					'defaults' => [
 						'__NAMESPACE__' => 'Costume\Controller',
 						'controller' => 'Admin',
 						'action' => 'index'
-					)
-				),
+                    ]
+                ],
 				'may_terminate' => true,
-				'child_routes' => array(
-					'color' => array(
+				'child_routes' => [
+					'color' => [
 						'type' => 'segment',
-						'options' => array(
+						'options' => [
 							'route' => '/color[/][:action][/:id]',
-							'constraints' => array(
+							'constraints' => [
 								'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
 								'id' => '[0-9]+'
-							),
-							'defaults' => array(
+                            ],
+							'defaults' => [
 								'__NAMESPACE__' => 'Costume\Controller',
 								'controller' => 'Costume\Controller\AdminColor',
 								'action' => 'index'
-							)
-						)
-					),
-					'material' => array(
+                            ]
+                        ]
+                    ],
+					'material' => [
 						'type' => 'segment',
-						'options' => array(
+						'options' => [
 							'route' => '/material[/][:action][/:id]',
-							'constraints' => array(
+							'constraints' => [
 								'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
 								'id' => '[0-9]+'
-							),
-							'defaults' => array(
+                            ],
+							'defaults' => [
 								'__NAMESPACE__' => 'Costume\Controller',
 								'controller' => 'Costume\Controller\AdminMaterial',
 								'action' => 'index'
-							)
-						)
-					),
-					'tag' => array(
+                            ]
+                        ]
+                    ],
+					'tag' => [
 						'type' => 'segment',
-						'options' => array(
+						'options' => [
 							'route' => '/tag[/][:action][/:id]',
-							'constraints' => array(
+							'constraints' => [
 								'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
 								'id' => '[0-9]+'
-							),
-							'defaults' => array(
+                            ],
+							'defaults' => [
 								'__NAMESPACE__' => 'Costume\Controller',
 								'controller' => 'Costume\Controller\AdminTag',
 								'action' => 'index'
-							)
-						)
-					),
-					'part' => array(
+                            ]
+                        ]
+                    ],
+					'part' => [
 						'type' => 'segment',
-						'options' => array(
+						'options' => [
 							'route' => '/part[/][:action][/:id]',
-							'constraints' => array(
+							'constraints' => [
 								'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
 								'id' => '[0-9]+'
-							),
-							'defaults' => array(
+                            ],
+							'defaults' => [
 								'__NAMESPACE__' => 'Costume\Controller',
 								'controller' => 'Costume\Controller\AdminPart',
 								'action' => 'index'
-							)
-						)
-					)
-				)
-			)
-		)
-	),
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+		]
+    ],
 	
-	'console' => array(
-		'router' => array(
-			'routes' => array(
-				'costume-import' => array(
-					'options' => array(
+	'console' => [
+		'router' => [
+			'routes' => [
+				'costume-import' => [
+					'options' => [
 						'route' => 'import (costume|costumes) <csv_file> [--picture-dir=] [--log-file=] [--error-file=] [--tags=]',
-						'defaults' => array(
+						'defaults' => [
 							'controller' => 'Costume\Controller\Console',
 							'action' => 'import'
-						)
-					)
-				),
-				'costume-preprare-picture' => array(
-					'options' => array(
+                        ]
+                    ]
+                ],
+				'costume-preprare-picture' => [
+					'options' => [
 						'route' => 'prepare costume (picture|pictures) <input_dir> <output_dir>',
-						'defaults' => array(
+						'defaults' => [
 							'controller' => 'Costume\Controller\Console',
 							'action' => 'preparepictures'
-						)
-					)
-				)
-			)
-		)
-	),
+                        ]
+                    ]
+                ]
+            ]
+        ]
+    ],
 	
-	'service_manager' => array(
-		'aliases' => array(
+	'service_manager' => [
+		'aliases' => [
 			'costume_zend_db_adapter' => 'Zend\Db\Adapter\Adapter'
-		)
-	),
+        ]
+    ],
 	
-	'translator' => array(
+	'translator' => [
 		'locale' => 'fr_FR',
-		'translation_file_patterns' => array(
-			array(
+		'translation_file_patterns' => [
+			[
 				'type' => 'phparray',
 				'base_dir' => __DIR__ . '/../language',
 				'pattern' => '%s.lang.php'
-			)
-		)
-	),
+            ]
+        ]
+    ],
 	
-	'view_manager' => array(
-		'template_path_stack' => array(
+	'view_manager' => [
+		'template_path_stack' => [
 			__DIR__ . '/../view'
-		),
+        ],
 		'template_map' => include __DIR__ . '/../template_map.php'
-	)
-);
+    ]
+];

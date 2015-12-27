@@ -29,8 +29,9 @@ INSERT INTO `%{MIRANDA_TABLE_PREFIX}%rights` (`id`, `name`, `descr`, `group_id`,
 (20, 'admin_costumes_materials', 'Materials', 7, 3),
 (22, 'admin_costumes_tags', 'Tags', 7, 4),
 (23, 'admin_costumes_parts', 'Parts & types', 7, 5),
-(24, 'admin_update_acl', 'Update ACL', 4, 7)
-(25, 'developer', 'Developer', '5', '2');
+(24, 'admin_update_acl', 'Update ACL', 4, 7),
+(25, 'developer', 'Developer', 5, 2),
+(26, 'stats_costumes', 'Costumes statistics', 6, 6);
 ;;;
 
 

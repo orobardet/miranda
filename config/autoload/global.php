@@ -169,6 +169,13 @@ $config = [
 						]
 					],
 					[
+						'label' => 'Stats',
+						'icon' => 'fa fa-bar-chart',
+						'route' => 'costume-stats',
+						'action' => 'index',
+						'resource' => 'stats_costumes'
+					],
+					[
 						'label' => 'Management',
 						'icon' => 'fa fa-wrench',
 						'route' => 'costume-admin',

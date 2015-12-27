@@ -29,6 +29,7 @@ return [
 	'Add costume' => 'Ajouter un costume',
 	'Edit costume' => 'Modifier un costume',
 	'Delete costume' => 'Supprimer un costume',
+	'Costumes statistics' => 'Statistiques des costumes',
 	
 	'Description: ' => 'Description : ',
 	'Description' => 'Description',
