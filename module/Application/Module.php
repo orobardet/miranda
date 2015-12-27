@@ -146,8 +146,9 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 				'Miranda\Service\Cache' => function ($sm)
 				{
 					$config = $sm->get('Miranda\Service\Config');
-					return StorageFactory::factory(
-							[
+
+					try {
+						$storageCache = StorageFactory::factory([
 								'adapter' => [
 									'name' => 'xcache',
 									'options' => [
@@ -155,6 +156,18 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Se
 									]
 								]
 							]);
+					} catch (\Zend\Cache\Exception\ExtensionNotLoadedException $e) {
+                        $storageCache = StorageFactory::factory([
+                                'adapter' => [
+                                    'name' => 'memory',
+                                    'options' => [
+                                        'namespace' => $config->get('cache->namespace', 'miranda')
+                                    ]
+                                ]
+                            ]);
+					}
+
+					return $storageCache;
 				},
 				'Miranda\Service\Mailer' => function ($sm)
 				{
